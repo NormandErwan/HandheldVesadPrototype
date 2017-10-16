@@ -9,8 +9,10 @@ public class ContainersLayout : MonoBehaviour
     // Editor fields
 
     public Camera mainCamera;
-
     public Canvas canvas;
+    public GridLayout grid;
+    public Vector2 gridSize = new Vector2(8, 4);
+    public GameObject containerPrefab;
 
     // Variables
 
@@ -20,15 +22,17 @@ public class ContainersLayout : MonoBehaviour
 
     protected void Start()
     {
-        Setup();
+        SetupLayoutSize();
+
+
     }
 
     protected void OnValidate()
     {
-        Setup();
+        SetupLayoutSize();
     }
 
-    protected void Setup()
+    protected void SetupLayoutSize()
     {
         if (mainCamera == null)
         {
