@@ -1,1 +1,1 @@
-# ets-master-prototype-pc
+# Erwan Normand's master thesis prototype
