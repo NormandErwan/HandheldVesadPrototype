@@ -16,17 +16,12 @@ namespace NormandErwan.MasterThesisExperiment.Utilities
         /// <summary>
         /// Minimum value of the range.
         /// </summary>
-        public virtual T Minimum { get { return minimum; } set { minimum = value; CheckValidity(); } }
+        public virtual T Minimum { get; protected set; }
 
         /// <summary>
         /// Maximum value of the range.
         /// </summary>
-        public virtual T Maximum { get { return maximum; } set { maximum = value; CheckValidity(); } }
-
-        // Variables
-
-        protected T minimum;
-        protected T maximum;
+        public virtual T Maximum { get; protected set; }
 
         // Constructors
 
@@ -35,6 +30,10 @@ namespace NormandErwan.MasterThesisExperiment.Utilities
             Minimum = minimum;
             Maximum = maximum;
             CheckValidity();
+        }
+
+        protected Range() : base()
+        {
         }
 
         // Methods

@@ -1,4 +1,4 @@
-﻿using NormandErwan.MasterThesisExperiment.Conditions;
+﻿using NormandErwan.MasterThesisExperiment.IndependentVariables;
 using UnityEngine;
 using UnityEngine.UI;
 
