@@ -1,105 +1,135 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
-public class ContainersLayout : MonoBehaviour
+namespace NormandErwan.MasterThesisExperiment
 {
-    // Constants
-
-    public const float scale = 0.0005f;
-
-    // Editor fields
-
-    public Camera mainCamera;
-    public Canvas canvas;
-    public GridLayoutGroup grid;
-    public Vector2Int gridSize = new Vector2Int(8, 4);
-    public int containerMargins = 1;
-    public GameObject containerPrefab;
-
-    // Variables
-
-    private RectTransform rect;
-
-    // Methods
-
-    protected void Start()
+    [RequireComponent(typeof(Canvas))]
+    [RequireComponent(typeof(ContentSizeFitter))]
+    public class ContainersLayout : MonoBehaviour
     {
-        SetupLayout();
-        SetupContainers();
-    }
+        // Editor fields
 
-    protected void OnValidate()
-    {
-        SetupLayout();
-        SetupContainers();
-    }
+        public Camera mainCamera;
+        public Vector2Int deviceSize;
+        public float scale = 0.0001f;
+        public GridLayoutGroup grid;
+        public Vector2Int gridSize = new Vector2Int(8, 4);
+        public int containerMargins = 1;
+        public GameObject containerPrefab;
 
-    protected void SetupLayout()
-    {
-        if (mainCamera == null)
+        // Variables
+
+        private Canvas canvas;
+        private RectTransform rect;
+        private ContentSizeFitter sizeFitter;
+
+        // Methods
+
+        protected void Start()
         {
-            mainCamera = Camera.main;
+            SetupContainers();
+            StartCoroutine(SetupCameraCoroutine());
         }
 
-        if (canvas == null)
+#if UNITY_EDITOR
+        protected void OnValidate()
         {
-            canvas = GetComponent<Canvas>();
-        }
-
-        if (mainCamera != null && canvas != null)
-        {
-            if (rect == null)
+            SetupContainers();
+            UnityEditor.EditorApplication.delayCall += () =>
             {
+                UnityEditor.EditorApplication.delayCall += () => // We must wait the first delay call in SetupContainers to finish
+                {
+                    SetupCamera();
+                };
+            };
+        }
+#endif
+
+        protected void SetupContainers()
+        {
+            if (canvas == null)
+            {
+                canvas = GetComponent<Canvas>();
                 rect = canvas.gameObject.GetComponent<RectTransform>();
             }
-
             canvas.renderMode = RenderMode.WorldSpace;
             rect.localScale = scale * Vector3.one;
-            rect.localPosition = new Vector3(mainCamera.transform.localPosition.x, mainCamera.transform.localPosition.y, rect.localPosition.z);
 
-            float distance = Mathf.Abs(rect.localPosition.z - mainCamera.transform.localPosition.z);
-            float heigth = 2 * distance * Mathf.Tan(mainCamera.fieldOfView / 2 * Mathf.Deg2Rad) / scale;
-            float width = heigth * mainCamera.aspect;
-            rect.sizeDelta = new Vector2(width, heigth);
-        }
-    }
-
-    protected void SetupContainers()
-    {
-        if (grid != null)
-        {
-            grid.padding = new RectOffset(containerMargins, containerMargins, containerMargins, containerMargins);
-            grid.spacing = containerMargins * Vector2.one;
-
-            Vector2 gridSizeInverse = new Vector2(1f / gridSize.x, 1f / gridSize.y);
-            /*float cellWidth = rect.sizeDelta.x / gridSize.x - (1 + 1 / (float)gridSize.x) * containerMargins;
-            float cellHeigth = rect.sizeDelta.y / gridSize.y - (1 + 1 / (float)gridSize.y ) * containerMargins;
-            grid.cellSize = new Vector2(cellWidth, cellHeigth);*/
-            grid.cellSize = Vector2.Scale(rect.sizeDelta, gridSizeInverse) - (Vector2.one + gridSizeInverse) * containerMargins;
-
-            int containerNumber = (int)gridSize.x * (int)gridSize.y;
-            if (containerNumber != grid.transform.childCount)
+            if (grid != null)
             {
-                foreach (Transform container in grid.transform)
+                GetComponent<ContentSizeFitter>().enabled = true;
+
+                grid.padding = new RectOffset(containerMargins, containerMargins, containerMargins, containerMargins);
+                grid.spacing = containerMargins * Vector2.one;
+                grid.cellSize = deviceSize;
+                grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+                grid.constraintCount = gridSize.x;
+
+                int containerNumber = gridSize.x * gridSize.y;
+                if (containerNumber != grid.transform.childCount)
                 {
-                    if (Application.isPlaying)
+                    foreach (Transform container in grid.transform)
                     {
-                        Destroy(container.gameObject);
-                    }
-                    else
-                    {
-                        UnityEditor.EditorApplication.delayCall += () =>
+#if UNITY_EDITOR
+                        if (Application.isPlaying)
                         {
-                            DestroyImmediate(container.gameObject);
-                        };
+                            Destroy(container.gameObject);
+                        }
+                        else
+                        {
+                            UnityEditor.EditorApplication.delayCall += () =>
+                            {
+                                DestroyImmediate(container.gameObject);
+                            };
+                        }
+#else
+                    Destroy(container.gameObject);
+#endif
+                    }
+
+                    for (int i = 0; i < containerNumber; i++)
+                    {
+                        Instantiate(containerPrefab, grid.transform);
                     }
                 }
 
-                for (int i = 0; i < containerNumber; i++)
+                if (gridSize.x == 0 || gridSize.y == 0)
                 {
-                    Instantiate(containerPrefab, grid.transform);
+                    sizeFitter.enabled = false;
+                    rect.sizeDelta = deviceSize;
                 }
             }
+        }
+
+        protected IEnumerator SetupCameraCoroutine()
+        {
+            yield return null;
+            SetupCamera();
+        }
+
+        protected void SetupCamera()
+        {
+            if (mainCamera == null)
+            {
+                mainCamera = Camera.main;
+            }
+
+#if UNITY_ANDROID
+            // TODO: if in phone only condition
+            if (mainCamera != null && deviceSize.x > 0 && deviceSize.y > 0)
+            {
+                mainCamera.aspect = deviceSize.x / (float)deviceSize.y;
+                float maxSideLength = Mathf.Max(rect.rect.width / mainCamera.aspect, rect.rect.height);
+                float distance = -maxSideLength * scale / (2 * Mathf.Tan(mainCamera.fieldOfView / 2 * Mathf.Deg2Rad));
+                mainCamera.transform.localPosition = new Vector3(rect.transform.localPosition.x, rect.transform.localPosition.y, distance);
+            }
+#endif
+
+            // Hacky, but prevent bugs in the Unity Editor caused by ContentSizeFitter in prefabs
+            Vector2 rectSize = rect.sizeDelta;
+            GetComponent<ContentSizeFitter>().enabled = false;
+            rect.sizeDelta = rectSize;
         }
     }
 }

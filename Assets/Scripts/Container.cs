@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
-public class Container : MonoBehaviour
+namespace NormandErwan.MasterThesisExperiment
 {
+    public class Container : MonoBehaviour
+    {
+    }
 }
