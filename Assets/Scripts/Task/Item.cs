@@ -1,4 +1,4 @@
-﻿using NormandErwan.MasterThesisExperiment.IndependentVariables;
+﻿using NormandErwan.MasterThesisExperiment.Variables;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,7 +40,7 @@ namespace NormandErwan.MasterThesisExperiment.Task
         // Editor fields
 
         public Class currentClass = Class.A;
-        public TextSize classTextSize = TextSize.Large;
+        public TextSize classTextSize;
         public Text classText;
 
         public Color correctClassColor = new Color(81 / 255f, 229 / 255f, 81 / 255f);
@@ -51,7 +51,7 @@ namespace NormandErwan.MasterThesisExperiment.Task
 
         public void UpdateInfo(Color classColor)
         {
-            classText.fontSize = (int)classTextSize;
+            classText.fontSize = classTextSize.fontSize;
             classText.text = new string((char)((int)currentClass + 65), 1);
 
             background.color = classColor;

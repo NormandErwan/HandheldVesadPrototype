@@ -1,36 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace NormandErwan.MasterThesisExperiment.States
 {
     public class StatesManager : MonoBehaviour
     {
-        // Editor fields managed by StatesManagerEditor
+        // Editor fields
 
-        public string[] stateTitles;
-        public string[] stateInstructions;
+        [Header("Experiment States")]
+        public State[] experimentBeginStates;
+        public State[] experimentEndStates;
+
+        [Header("Task States")]
+        public State[] taskBeginStates;
+        public State[] taskTrialStates;
+        public int TrialsPerTask = 1;
+        public State[] taskEndStates;
 
         // Properties
 
-        public static Dictionary<State, string> StateTitles { get; protected set; }
-        public static Dictionary<State, string> StateInstructions { get; protected set; }
-        
+        public State CurrentState { get; protected set; }
+        public int TaskTrialsTotal { get; protected set; }
+        public int TaskTrialsProgress { get; protected set; }
+
+        public int CurrentTrial { get; protected set; }
+
         // Methods
 
-        protected void Awake()
+        public State NextState()
         {
-            var states = Enum.GetValues(typeof(State));
+            return CurrentState;
+        }
 
-            StateTitles = new Dictionary<State, string>(states.Length);
-            StateInstructions = new Dictionary<State, string>(states.Length);
-
-            for (int i = 0; i < states.Length; i++)
-            {
-                var state = (State)states.GetValue(i);
-                StateTitles[state] = stateTitles[i];
-                StateInstructions[state] = stateInstructions[i];
-            }
+        protected virtual void Awake()
+        {
+            CurrentState = experimentBeginStates[0];
         }
     }
 }

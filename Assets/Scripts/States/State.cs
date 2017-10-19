@@ -1,17 +1,14 @@
-﻿namespace NormandErwan.MasterThesisExperiment.States
+﻿using UnityEngine;
+
+namespace NormandErwan.MasterThesisExperiment.States
 {
-    /// <summary>
-    /// The different states of the experiment.
-    /// </summary>
-    public enum State
+    public class State : MonoBehaviour
     {
-        Introduction,
-        Preparation,
-        Training,
-        Trial,
-        TrialCompleted,
-        TrialCanceled,
-        Rest,
-        Finished
+        // Editor fields
+
+        public string title;
+
+        [TextArea]
+        public string instructions;
     }
 }
