@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
-  deviceSize: {x: 720, y: 1250}
+  mobileDeviceSize: {x: 0, y: 0}
   scale: 0.0001
   grid: {fileID: 114565965427399152}
   gridSize: {x: 5, y: 3}
