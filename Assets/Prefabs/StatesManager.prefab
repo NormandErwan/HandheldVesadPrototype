@@ -256,6 +256,10 @@ MonoBehaviour:
   TrialsPerTask: 4
   taskEndStates:
   - {fileID: 114011724467028828}
+  independentVariableManager:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &114406056564576534
 MonoBehaviour:
   m_ObjectHideFlags: 1

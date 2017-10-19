@@ -1,14 +1,14 @@
-﻿using UnityEngine;
-
-namespace NormandErwan.MasterThesisExperiment.Variables
+﻿namespace NormandErwan.MasterThesisExperiment.Variables
 {
-    public abstract class IndependantVariableManager<T> : MonoBehaviour where T : IndependantVariable
+    public abstract class IndependantVariableManager<T> : IIndependentVariableManager where T : IndependantVariable
     {
         // Editor Fields
 
         public T[] conditions;
 
         // Properties
+
+        public override int ConditionsCount { get { return conditions.Length; } }
 
         public T CurrentCondition { get; protected set; }
 
@@ -18,11 +18,10 @@ namespace NormandErwan.MasterThesisExperiment.Variables
 
         // Methods
 
-        public T NextCondition()
+        public override void NextCondition()
         {
-            currentConditionId = (currentConditionId + 1) % conditions.Length;
+            currentConditionId = (currentConditionId + 1) % ConditionsCount;
             CurrentCondition = conditions[(uint)currentConditionId];
-            return CurrentCondition;
         }
     }
 }

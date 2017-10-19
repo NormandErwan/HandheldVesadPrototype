@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using NormandErwan.MasterThesisExperiment.Variables;
+using UnityEngine;
 
 namespace NormandErwan.MasterThesisExperiment.States
 {
@@ -15,6 +16,9 @@ namespace NormandErwan.MasterThesisExperiment.States
         public State[] taskTrialStates;
         public int TrialsPerTask = 1;
         public State[] taskEndStates;
+
+        [Header("Independent Variables")]
+        public IIndependentVariableManager[] independentVariableManagers;
 
         // Properties
 
@@ -34,6 +38,16 @@ namespace NormandErwan.MasterThesisExperiment.States
         protected virtual void Awake()
         {
             CurrentState = experimentBeginStates[0];
+
+            TaskTrialsTotal = 1;
+            foreach (var IVManager in independentVariableManagers)
+            {
+                TaskTrialsTotal *= IVManager.ConditionsCount;
+            }
+            TaskTrialsTotal *= TrialsPerTask;
+
+            TaskTrialsProgress = 0;
+            CurrentTrial = 0;
         }
     }
 }
