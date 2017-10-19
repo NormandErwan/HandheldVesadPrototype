@@ -4,27 +4,6 @@ using UnityEngine;
 
 namespace NormandErwan.MasterThesisExperiment.IndependentVariables
 {
-    public enum ClassificationDistance
-    {
-        Near,
-        Far
-    }
-
-    public enum Technique
-    {
-        MobileDeviceOnly,
-        Peephole,
-        MobileDeviceInput_VESADOutput,
-        DirectInput_VESADOuput,
-        IndirectInput_VESADOutput
-    }
-
-    public enum TextSize
-    {
-        Small,
-        Large
-    }
-
     public class IndependentVariablesManager : MonoBehaviour
     {
         // Editor fields
@@ -41,17 +20,19 @@ namespace NormandErwan.MasterThesisExperiment.IndependentVariables
 
         // Properties
 
-        public static Range<float> ClassificationDistanceNearRange { get; protected set; }
-        public static Range<float> ClassificationDistanceFarRange { get; protected set; }
-
+        public static Dictionary<ClassificationDistance, Range<float>> ClassificationDistanceRanges { get; protected set; }
         public static Dictionary<TextSize, int> TextSizes { get; protected set; }
 
         // Methods
 
         protected void Start()
         {
-            ClassificationDistanceNearRange = new Range<float>(MinNearClassificationDistance, MaxNearClassificationDistance);
-            ClassificationDistanceFarRange = new Range<float>(MinFarClassificationDistance, MaxFarClassificationDistance);
+            ClassificationDistanceRanges = new Dictionary<ClassificationDistance, Range<float>>()
+            {
+                { ClassificationDistance.Near, new Range<float>(MinNearClassificationDistance, MaxNearClassificationDistance) },
+                { ClassificationDistance.Far, new Range<float>(MinFarClassificationDistance, MaxFarClassificationDistance) }
+            };
+
             TextSizes = new Dictionary<TextSize, int>()
             {
                 { TextSize.Small, SmallTextSize },

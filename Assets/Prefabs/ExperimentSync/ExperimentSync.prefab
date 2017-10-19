@@ -19,7 +19,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4205441858109082}
-  - component: {fileID: 114714636391909022}
   - component: {fileID: 114375741622359004}
   - component: {fileID: 114738464587669038}
   m_Layer: 0
@@ -35,7 +34,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1929511577455258}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -55,23 +54,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   networkManager: {fileID: 0}
   syncMode: 0
---- !u!114 &114714636391909022
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1929511577455258}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aae8c657dfd980248bf4f39e50f63262, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MinNearClassificationDistance: 1.25
-  MaxNearClassificationDistance: 1.45
-  MinFarClassificationDistance: 2.5
-  MaxFarClassificationDistance: 2.7
-  SmallTextSize: 12
-  LargeTextSize: 24
 --- !u!114 &114738464587669038
 MonoBehaviour:
   m_ObjectHideFlags: 1

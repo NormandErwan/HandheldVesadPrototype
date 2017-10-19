@@ -1,19 +1,8 @@
 ﻿using DevicesSyncUnity.Messages;
+using NormandErwan.MasterThesisExperiment.States;
 
-namespace NormandErwan.MasterThesisExperiment.States
+namespace NormandErwan.MasterThesisExperiment.ExperimentSync
 {
-    /// <summary>
-    /// The different states of the experiment.
-    /// </summary>
-    public enum State
-    {
-        Preparation,
-        Training,
-        Trial,
-        Rest,
-        Complete
-    }
-
     /// <summary>
     /// Message that contains the new current state of the experiment.
     /// </summary>
