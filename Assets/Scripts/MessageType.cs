@@ -1,4 +1,5 @@
-﻿using UnityEngine.Networking;
+﻿using System.Collections.Generic;
+using UnityEngine.Networking;
 
 namespace NormandErwan.MasterThesisExperiment
 {
@@ -15,18 +16,28 @@ namespace NormandErwan.MasterThesisExperiment
         public static new short Smallest { get { return smallest; } set { smallest = value; } }
 
         /// <summary>
-        /// Networking message for communicating <see cref="States.StateMessage"/>
+        /// Networking message for communicating <see cref="ExperimentSync.StateMessage"/>
         /// </summary>
         public static short State { get { return (short)(Smallest + 1); } }
 
         /// <summary>
+        /// Networking message for communicating <see cref="ExperimentSync.ReadyNextStateMessage"/>
+        /// </summary>
+        public static short ReadyNextState { get { return (short)(Smallest + 2); } }
+
+        /// <summary>
         /// See <see cref="DevicesSyncUnity.Messages.MessageType.Highest"/>.
         /// </summary>
-        public static new short Highest { get { return State; } }
+        public static new short Highest { get { return ReadyNextState; } }
 
         // Variables
 
         private static short smallest = (short)(DevicesSyncUnity.Examples.Messages.MessageType.Highest + 1);
+        private static Dictionary<short, string> messageTypeStrings = new Dictionary<short, string>()
+        {
+            { State, "State" },
+            { ReadyNextState, "ReadyNextState" }
+        };
 
         // Methods
 
@@ -35,14 +46,12 @@ namespace NormandErwan.MasterThesisExperiment
         /// </summary>
         public static new string MsgTypeToString(short value)
         {
-            if (value == State)
+            string messageTypeString;
+            if (messageTypeStrings.TryGetValue(value, out messageTypeString))
             {
-                return "State";
+                return messageTypeString;
             }
-            else
-            {
-                return MsgType.MsgTypeToString(value);
-            }
+            return MsgType.MsgTypeToString(value);
         }
     }
 }

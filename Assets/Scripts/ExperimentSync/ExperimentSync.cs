@@ -25,12 +25,23 @@ namespace NormandErwan.MasterThesisExperiment.ExperimentSync
         /// </summary>
         public event Action<StateMessage> StateUpdated = delegate { };
 
+        /// <summary>
+        /// Called on server when a <see cref="ReadyNextStateMessage"/> has been received.
+        /// </summary>
+        public event Action<ReadyNextStateMessage> ReadyNextStateReceived = delegate { };
+
         // Variables
 
         protected StateMessage latestStateMessage = new StateMessage();
         protected StateMessage sendStateMessage = new StateMessage();
+        protected ReadyNextStateMessage readyNextStateMessage = new ReadyNextStateMessage();
 
         // Methods
+
+        public virtual void ReadyForNextState()
+        {
+            SendToServer(readyNextStateMessage);
+        }
 
         /// <summary>
         /// Initializes the properties.
@@ -40,6 +51,7 @@ namespace NormandErwan.MasterThesisExperiment.ExperimentSync
             base.Awake();
 
             MessageTypes.Add(latestStateMessage.MessageType);
+            MessageTypes.Add(readyNextStateMessage.MessageType);
         }
 
         /// <summary>
@@ -55,32 +67,31 @@ namespace NormandErwan.MasterThesisExperiment.ExperimentSync
             }
         }
 
-        /// <summary>
-        /// Calls <see cref="ProcessMessageReceived(NetworkMessage)"/>.
-        /// </summary>
+
         protected override DevicesSyncMessage OnServerMessageReceived(NetworkMessage netMessage)
         {
-            return ProcessMessageReceived(netMessage);
+            if (netMessage.msgType == latestStateMessage.MessageType)
+            {
+                latestStateMessage = netMessage.ReadMessage<StateMessage>();
+                StateUpdated.Invoke(latestStateMessage);
+                return latestStateMessage;
+            }
+            else if (netMessage.msgType == readyNextStateMessage.MessageType)
+            {
+                // TODO : send the next state
+            }
+            return null;
         }
-
-        /// <summary>
-        /// Calls <see cref="ProcessMessageReceived(NetworkMessage)"/>.
-        /// </summary>
+        
         protected override DevicesSyncMessage OnClientMessageReceived(NetworkMessage netMessage)
         {
-            return ProcessMessageReceived(netMessage);
-        }
-
-        /// <summary>
-        /// Updates <see cref="State"/> and invokes <see cref="StateUpdated"/>.
-        /// </summary>
-        /// <param name="netMessage">The received networking message.</param>
-        /// <returns>The typed network message extracted.</returns>
-        protected virtual DevicesSyncMessage ProcessMessageReceived(NetworkMessage netMessage)
-        {
-            latestStateMessage = netMessage.ReadMessage<StateMessage>();
-            StateUpdated.Invoke(latestStateMessage);
-            return latestStateMessage;
+            if (netMessage.msgType == latestStateMessage.MessageType)
+            {
+                latestStateMessage = netMessage.ReadMessage<StateMessage>();
+                StateUpdated.Invoke(latestStateMessage);
+                return latestStateMessage;
+            }
+            return null;
         }
 
         /// <summary>
