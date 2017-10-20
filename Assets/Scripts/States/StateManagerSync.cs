@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 namespace NormandErwan.MasterThesisExperiment.States
 {
     /// <summary>
-    /// Synchronize the experiment between devices with <see cref="StateMessage"/>.
+    /// Synchronize the experiment between devices with <see cref="StateManagerSyncMessage"/>.
     /// </summary>
     public class StateManagerSync : DevicesSync
     {
@@ -19,7 +19,7 @@ namespace NormandErwan.MasterThesisExperiment.States
 
         // Variables
 
-        protected StateMessage currentStateMessage = new StateMessage();
+        protected StateManagerSyncMessage currentStateMessage = new StateManagerSyncMessage();
 
         // Methods
 
@@ -43,14 +43,14 @@ namespace NormandErwan.MasterThesisExperiment.States
 
         protected override DevicesSyncMessage OnServerMessageReceived(NetworkMessage netMessage)
         {
-            currentStateMessage = netMessage.ReadMessage<StateMessage>();
+            currentStateMessage = netMessage.ReadMessage<StateManagerSyncMessage>();
             currentStateMessage.Restore(stateManager);
             return currentStateMessage;
         }
 
         protected override DevicesSyncMessage OnClientMessageReceived(NetworkMessage netMessage)
         {
-            var stateMessage = netMessage.ReadMessage<StateMessage>();
+            var stateMessage = netMessage.ReadMessage<StateManagerSyncMessage>();
             if (!isServer) // Don't update twice if the device is a host
             {
                 currentStateMessage = stateMessage;
