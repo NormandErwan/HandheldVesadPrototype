@@ -20,6 +20,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4497984525368612}
   - component: {fileID: 114343814640682756}
+  - component: {fileID: 114495959195748250}
+  - component: {fileID: 114798882843681932}
   m_Layer: 0
   m_Name: StatesManager
   m_TagString: Untagged
@@ -222,6 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5627d38ddd87084e825a08a58aef09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: ExperimentBeginState
   title: "D\xE9but de l'exp\xE9rience"
   instructions: 
 --- !u!114 &114429863715970740
@@ -235,8 +238,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5627d38ddd87084e825a08a58aef09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: TaskTrainingState
   title: "Entrainement sur une nouvelle t\xE2che"
   instructions: 
+--- !u!114 &114495959195748250
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1156087050389640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62950d3d141fa6f4792244ce24d2ee8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  networkManager: {fileID: 0}
+  syncMode: 0
+  stateManager: {fileID: 114343814640682756}
 --- !u!114 &114558040002357160
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -248,6 +266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5627d38ddd87084e825a08a58aef09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: TaskTrialCompleteState
   title: "Essai termin\xE9"
   instructions: 
 --- !u!114 &114661546425955246
@@ -261,8 +280,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5627d38ddd87084e825a08a58aef09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: TaskTrialState
   title: "Essai sur la t\xE2che courante"
   instructions: 
+--- !u!114 &114798882843681932
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1156087050389640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 237
+    i1: 74
+    i2: 169
+    i3: 0
+    i4: 102
+    i5: 101
+    i6: 216
+    i7: 100
+    i8: 234
+    i9: 100
+    i10: 22
+    i11: 147
+    i12: 235
+    i13: 177
+    i14: 181
+    i15: 117
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114855766242606984
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -274,5 +326,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5627d38ddd87084e825a08a58aef09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: ExperimentEndState
   title: "Fin de l'exp\xE9rience"
   instructions: 

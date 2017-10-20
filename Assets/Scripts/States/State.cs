@@ -6,6 +6,7 @@ namespace NormandErwan.MasterThesisExperiment.States
     {
         // Editor fields
 
+        public string id;
         public string title;
 
         [TextArea]
