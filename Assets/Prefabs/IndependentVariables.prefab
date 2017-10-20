@@ -424,7 +424,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: MobileDeviceOnly
+  title: 
 --- !u!114 &114158752525081080
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -450,7 +450,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: DirectInput_AROutput
+  title: 
 --- !u!114 &114376850109258518
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -476,7 +476,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: MobileDeviceInput_AROutput
+  title: 
 --- !u!114 &114501037082189576
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -505,7 +505,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: Peephole
+  title: 
 --- !u!114 &114712957325740358
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -544,7 +544,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: IndirectInput_AROutput
+  title: 
 --- !u!114 &114940950492825338
 MonoBehaviour:
   m_ObjectHideFlags: 1

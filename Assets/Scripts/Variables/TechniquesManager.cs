@@ -1,6 +1,6 @@
 ﻿namespace NormandErwan.MasterThesisExperiment.Variables
 {
-    public class TechniquesManager : IndependantVariableManager<Technique>
+    public class TechniquesManager : IndependentVariableManager<Technique>
     {
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace NormandErwan.MasterThesisExperiment.Variables
 {
-    public abstract class IndependantVariableManager<T> : IIndependentVariableManager where T : IndependantVariable
+    public abstract class IndependentVariableManager<T> : IIndependentVariableManager where T : IndependantVariable
     {
         // Editor Fields
 
@@ -14,7 +14,7 @@
 
         // Variables
 
-        public static int currentConditionId = -1;
+        protected int currentConditionId = -1;
 
         // Methods
 

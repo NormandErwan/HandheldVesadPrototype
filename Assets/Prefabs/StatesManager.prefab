@@ -147,7 +147,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4497984525368612}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4497984525368612
 Transform:
@@ -160,11 +160,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4167809727996952}
-  - {fileID: 4498937642446358}
   - {fileID: 4797026070379418}
   - {fileID: 4477986500262952}
   - {fileID: 4821446599834676}
   - {fileID: 4500970430446390}
+  - {fileID: 4498937642446358}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -179,7 +179,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4497984525368612}
-  m_RootOrder: 1
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4500970430446390
 Transform:
@@ -192,7 +192,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4497984525368612}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4797026070379418
 Transform:
@@ -205,7 +205,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4497984525368612}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4821446599834676
 Transform:
@@ -218,7 +218,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4497984525368612}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &114011724467028828
 MonoBehaviour:
@@ -231,7 +231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5627d38ddd87084e825a08a58aef09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: 
+  title: "Tache {0} termin\xE9e"
   instructions: 
 --- !u!114 &114343814640682756
 MonoBehaviour:
@@ -253,13 +253,9 @@ MonoBehaviour:
   taskTrialStates:
   - {fileID: 114661546425955246}
   - {fileID: 114558040002357160}
-  TrialsPerTask: 4
+  TrialsPerTask: 2
   taskEndStates:
   - {fileID: 114011724467028828}
-  independentVariableManager:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!114 &114406056564576534
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -284,7 +280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5627d38ddd87084e825a08a58aef09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: 
+  title: Entrainement sur la tache {0}
   instructions: 
 --- !u!114 &114558040002357160
 MonoBehaviour:
@@ -297,8 +293,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5627d38ddd87084e825a08a58aef09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: 
-  instructions: 
+  title: "Essai termin\xE9"
+  instructions: Il reste encore {0} essais pour la tache {1}.
 --- !u!114 &114661546425955246
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -310,7 +306,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5627d38ddd87084e825a08a58aef09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: 
+  title: Essai {0} sur la tache {1}
   instructions: 
 --- !u!114 &114855766242606984
 MonoBehaviour:

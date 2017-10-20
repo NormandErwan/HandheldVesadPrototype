@@ -1,6 +1,6 @@
 ﻿namespace NormandErwan.MasterThesisExperiment.Variables
 {
-    public class ClassificationDistancesManager : IndependantVariableManager<ClassificationDistance>
+    public class ClassificationDistancesManager : IndependentVariableManager<ClassificationDistance>
     {
     }
 }

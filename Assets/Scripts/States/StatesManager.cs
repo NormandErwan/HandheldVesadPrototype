@@ -23,9 +23,12 @@ namespace NormandErwan.MasterThesisExperiment.States
         // Properties
 
         public State CurrentState { get; protected set; }
-        public int TaskTrialsTotal { get; protected set; }
-        public int TaskTrialsProgress { get; protected set; }
 
+        public int TasksTotal { get; protected set; }
+        public int TasksProgress { get; protected set; }
+
+        public int TrialsTotal { get; protected set; }
+        public int TrialsProgress { get; protected set; }
         public int CurrentTrial { get; protected set; }
 
         // Methods
@@ -39,14 +42,15 @@ namespace NormandErwan.MasterThesisExperiment.States
         {
             CurrentState = experimentBeginStates[0];
 
-            TaskTrialsTotal = 1;
+            TasksTotal = 1;
             foreach (var IVManager in independentVariableManagers)
             {
-                TaskTrialsTotal *= IVManager.ConditionsCount;
+                TasksTotal *= IVManager.ConditionsCount;
             }
-            TaskTrialsTotal *= TrialsPerTask;
+            TrialsTotal = TasksTotal * TrialsPerTask;
 
-            TaskTrialsProgress = 0;
+            TasksProgress = 0;
+            TrialsProgress = 0;
             CurrentTrial = 0;
         }
     }
