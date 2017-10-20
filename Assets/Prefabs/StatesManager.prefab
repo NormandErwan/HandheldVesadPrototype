@@ -231,7 +231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5627d38ddd87084e825a08a58aef09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: "Tache {0} termin\xE9e"
+  title: "T\xE2che termin\xE9e"
   instructions: 
 --- !u!114 &114343814640682756
 MonoBehaviour:
@@ -256,6 +256,7 @@ MonoBehaviour:
   TrialsPerTask: 2
   taskEndStates:
   - {fileID: 114011724467028828}
+  independentVariableManagers: []
 --- !u!114 &114406056564576534
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -280,7 +281,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5627d38ddd87084e825a08a58aef09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: Entrainement sur la tache {0}
+  title: "Entrainement sur une nouvelle t\xE2che"
   instructions: 
 --- !u!114 &114558040002357160
 MonoBehaviour:
@@ -294,7 +295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: "Essai termin\xE9"
-  instructions: Il reste encore {0} essais pour la tache {1}.
+  instructions: 
 --- !u!114 &114661546425955246
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -306,7 +307,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5627d38ddd87084e825a08a58aef09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: Essai {0} sur la tache {1}
+  title: "Essai sur la t\xE2che courante"
   instructions: 
 --- !u!114 &114855766242606984
 MonoBehaviour:

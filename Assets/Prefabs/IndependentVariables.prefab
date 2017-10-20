@@ -424,7 +424,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: 
+  title: Cellulaire seul
+  instructions: 
 --- !u!114 &114158752525081080
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -450,7 +451,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: 
+  title: "R\xE9alit\xE9 Augment\xE9e - Interactions directes"
+  instructions: 
 --- !u!114 &114376850109258518
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -476,7 +478,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: 
+  title: "R\xE9alit\xE9 Augment\xE9e - Interactions sur le cellulaire"
+  instructions: 
 --- !u!114 &114501037082189576
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -505,7 +508,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: 
+  title: "Cellulaire comme fen\xEAtre sur la R\xE9alit\xE9 Augment\xE9e"
+  instructions: 
 --- !u!114 &114712957325740358
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -544,7 +548,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: 
+  title: "R\xE9alit\xE9 Augment\xE9e - Interactions indirectes"
+  instructions: 
 --- !u!114 &114940950492825338
 MonoBehaviour:
   m_ObjectHideFlags: 1

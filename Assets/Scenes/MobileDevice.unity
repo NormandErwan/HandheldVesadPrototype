@@ -246,6 +246,12 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 65265300}
+--- !u!114 &76266070 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114501037082189576, guid: a3b64898f2954384a989df0bbfd40e80,
+    type: 2}
+  m_PrefabInternal: {fileID: 1408397270}
+  m_Script: {fileID: 11500000, guid: 54d15ff0339d5724b8195e2f7e966243, type: 3}
 --- !u!1 &97196090
 GameObject:
   m_ObjectHideFlags: 0
@@ -357,6 +363,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 41638041}
     m_Modifications:
+    - target: {fileID: 114343814640682756, guid: ed4aa9006665d864ea641693ebb1b575,
+        type: 2}
+      propertyPath: independentVariableManagers.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4497984525368612, guid: ed4aa9006665d864ea641693ebb1b575, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -389,29 +400,30 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114429863715970740, guid: ed4aa9006665d864ea641693ebb1b575,
+    - target: {fileID: 114343814640682756, guid: ed4aa9006665d864ea641693ebb1b575,
         type: 2}
-      propertyPath: title
-      value: "Entrainement sur la t\xE2che {0}"
-      objectReference: {fileID: 0}
-    - target: {fileID: 114661546425955246, guid: ed4aa9006665d864ea641693ebb1b575,
+      propertyPath: independentVariableManagers.Array.data[0]
+      value: 
+      objectReference: {fileID: 76266070}
+    - target: {fileID: 114343814640682756, guid: ed4aa9006665d864ea641693ebb1b575,
         type: 2}
-      propertyPath: title
-      value: "Essai {0} sur la t\xE2che {1}"
-      objectReference: {fileID: 0}
-    - target: {fileID: 114558040002357160, guid: ed4aa9006665d864ea641693ebb1b575,
+      propertyPath: independentVariableManagers.Array.data[1]
+      value: 
+      objectReference: {fileID: 1189171530}
+    - target: {fileID: 114343814640682756, guid: ed4aa9006665d864ea641693ebb1b575,
         type: 2}
-      propertyPath: instructions
-      value: "Il reste encore {0} essais pour la t\xE2che {1}."
-      objectReference: {fileID: 0}
-    - target: {fileID: 114011724467028828, guid: ed4aa9006665d864ea641693ebb1b575,
-        type: 2}
-      propertyPath: title
-      value: "T\xE2che {0} termin\xE9e"
-      objectReference: {fileID: 0}
+      propertyPath: independentVariableManagers.Array.data[2]
+      value: 
+      objectReference: {fileID: 204920262}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ed4aa9006665d864ea641693ebb1b575, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &204920262 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114376850109258518, guid: a3b64898f2954384a989df0bbfd40e80,
+    type: 2}
+  m_PrefabInternal: {fileID: 1408397270}
+  m_Script: {fileID: 11500000, guid: 213dae45aa3411e4bb9d4c23cb1fa4c8, type: 3}
 --- !u!1 &260034220
 GameObject:
   m_ObjectHideFlags: 0
@@ -1114,6 +1126,12 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224572699303344656, guid: 4abd66a68bffa4e48887f56d1bc92850,
     type: 2}
   m_PrefabInternal: {fileID: 1143083903}
+--- !u!114 &1189171530 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114158752525081080, guid: a3b64898f2954384a989df0bbfd40e80,
+    type: 2}
+  m_PrefabInternal: {fileID: 1408397270}
+  m_Script: {fileID: 11500000, guid: e5be6052bc8aff549bf21aea2eaf95e7, type: 3}
 --- !u!20 &1248386480
 Camera:
   m_ObjectHideFlags: 0
