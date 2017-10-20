@@ -10,18 +10,19 @@
 
         public override int ConditionsCount { get { return conditions.Length; } }
 
-        public T CurrentCondition { get; protected set; }
+        public override int CurrentConditionId { get { return currentConditionId; } }
+
+        public T CurrentCondition { get { return conditions[(uint)currentConditionId]; } }
 
         // Variables
 
-        protected int currentConditionId = -1;
+        protected int currentConditionId = 0;
 
         // Methods
 
         public override void NextCondition()
         {
             currentConditionId = (currentConditionId + 1) % ConditionsCount;
-            CurrentCondition = conditions[(uint)currentConditionId];
         }
     }
 }

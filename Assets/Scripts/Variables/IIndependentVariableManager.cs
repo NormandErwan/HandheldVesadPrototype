@@ -7,6 +7,7 @@ namespace NormandErwan.MasterThesisExperiment.Variables
         // Properties
 
         public abstract int ConditionsCount { get; }
+        public abstract int CurrentConditionId { get; }
 
         // Methods
 

@@ -107,22 +107,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1967891317426102
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4500970430446390}
-  - component: {fileID: 114011724467028828}
-  m_Layer: 0
-  m_Name: TaskCompleteState
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!4 &4167809727996952
 Transform:
   m_ObjectHideFlags: 1
@@ -163,7 +147,6 @@ Transform:
   - {fileID: 4797026070379418}
   - {fileID: 4477986500262952}
   - {fileID: 4821446599834676}
-  - {fileID: 4500970430446390}
   - {fileID: 4498937642446358}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -174,19 +157,6 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1712282661785322}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4497984525368612}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4500970430446390
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1967891317426102}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -220,19 +190,6 @@ Transform:
   m_Father: {fileID: 4497984525368612}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114011724467028828
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1967891317426102}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5627d38ddd87084e825a08a58aef09b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  title: "T\xE2che termin\xE9e"
-  instructions: 
 --- !u!114 &114343814640682756
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -244,19 +201,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f836802674503449e925cf3e374774, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  experimentBeginStates:
-  - {fileID: 114406056564576534}
-  experimentEndStates:
-  - {fileID: 114855766242606984}
-  taskBeginStates:
-  - {fileID: 114429863715970740}
-  taskTrialStates:
-  - {fileID: 114661546425955246}
-  - {fileID: 114558040002357160}
-  TrialsPerTask: 2
-  taskEndStates:
-  - {fileID: 114011724467028828}
-  independentVariableManagers: []
+  experimentBeginState: {fileID: 114406056564576534}
+  experimentEndState: {fileID: 114855766242606984}
+  taskBeginState: {fileID: 114429863715970740}
+  taskTrialState: {fileID: 114661546425955246}
+  TrialsPerCondition: 2
+  taskEndState: {fileID: 114558040002357160}
+  independentVariableManagers:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &114406056564576534
 MonoBehaviour:
   m_ObjectHideFlags: 1
