@@ -1,6 +1,8 @@
-﻿namespace NormandErwan.MasterThesisExperiment.Variables
+﻿using System;
+
+namespace NormandErwan.MasterThesisExperiment.Variables
 {
-    public abstract class IndependentVariableManager<T> : IIndependentVariableManager where T : IndependantVariable
+    public abstract class IndependentVariableManager<T> : IIndependentVariableManager where T : IndependentVariable
     {
         // Editor Fields
 
@@ -8,21 +10,42 @@
 
         // Properties
 
+        public T CurrentCondition { get; protected set; }
         public override int ConditionsCount { get { return conditions.Length; } }
+        public override int CurrentConditionIndex
+        {
+            get { return currentConditionIndex; }
+            internal set
+            {
+                currentConditionIndex = value;
+                CurrentCondition = conditions[currentConditionIndex];
+                CurrentConditionUpdated(CurrentCondition);
+            }
+        }
 
-        public override int CurrentConditionId { get { return currentConditionId; } }
+        // Events
 
-        public T CurrentCondition { get { return conditions[(uint)currentConditionId]; } }
+        public Action<T> CurrentConditionUpdated = delegate { };
 
         // Variables
 
-        protected int currentConditionId = 0;
+        private int currentConditionIndex;
 
         // Methods
 
+        void Start()
+        {
+            // TODO: remove
+            CurrentConditionUpdated += (currentcondtiion) =>
+            {
+                print(typeof(T) + " updated : " + CurrentCondition.title);
+            };
+        }
+
         public override void NextCondition()
         {
-            currentConditionId = (currentConditionId + 1) % ConditionsCount;
+            CurrentConditionIndex = (CurrentConditionIndex + 1) % ConditionsCount;
+            RequestCurrentConditionSync(id);
         }
     }
 }

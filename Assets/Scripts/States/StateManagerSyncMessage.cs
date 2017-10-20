@@ -17,7 +17,7 @@ namespace NormandErwan.MasterThesisExperiment.States
         /// <summary>
         /// See <see cref="DevicesSyncMessage.MessageType"/>.
         /// </summary>
-        public override short MessageType { get { return MasterThesisExperiment.MessageType.State; } }
+        public override short MessageType { get { return MasterThesisExperiment.MessageType.StateManager; } }
 
         // Variables
 

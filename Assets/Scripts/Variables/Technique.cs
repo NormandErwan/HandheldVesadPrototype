@@ -2,7 +2,7 @@
 
 namespace NormandErwan.MasterThesisExperiment.Variables
 {
-    public class Technique : IndependantVariable
+    public class Technique : IndependentVariable
     {
         // Editor Fields
 

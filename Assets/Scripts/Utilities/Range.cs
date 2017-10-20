@@ -16,12 +16,12 @@ namespace NormandErwan.MasterThesisExperiment.Utilities
         /// <summary>
         /// Minimum value of the range.
         /// </summary>
-        public virtual T Minimum { get; protected set; }
+        public virtual T Minimum { get; set; }
 
         /// <summary>
         /// Maximum value of the range.
         /// </summary>
-        public virtual T Maximum { get; protected set; }
+        public virtual T Maximum { get; set; }
 
         // Constructors
 
@@ -29,11 +29,6 @@ namespace NormandErwan.MasterThesisExperiment.Utilities
         {
             Minimum = minimum;
             Maximum = maximum;
-            CheckValidity();
-        }
-
-        protected Range() : base()
-        {
         }
 
         // Methods
@@ -67,12 +62,9 @@ namespace NormandErwan.MasterThesisExperiment.Utilities
             return ContainsValue(range.Minimum) && ContainsValue(range.Maximum);
         }
 
-        protected virtual void CheckValidity()
+        protected virtual bool IsValid()
         {
-            if (Minimum.CompareTo(Maximum) > 0)
-            {
-                throw new ArgumentOutOfRangeException("minimum should be smaller or equal to maximum.");
-            }
+            return Minimum.CompareTo(Maximum) > 0;
         }
     }
 }

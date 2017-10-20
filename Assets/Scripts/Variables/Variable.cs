@@ -6,6 +6,7 @@ namespace NormandErwan.MasterThesisExperiment.Variables
     {
         // Editor Fields
 
+        public string id;
         public string title;
     }
 }

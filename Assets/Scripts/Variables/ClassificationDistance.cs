@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NormandErwan.MasterThesisExperiment.Variables
 {
-    public class ClassificationDistance : IndependantVariable
+    public class ClassificationDistance : IndependentVariable
     {
         // Editor Fields
 

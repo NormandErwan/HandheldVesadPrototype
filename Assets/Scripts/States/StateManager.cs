@@ -60,11 +60,11 @@ namespace NormandErwan.MasterThesisExperiment.States
                     for (int indeVarId = lastIndeVarId; indeVarId >= 0; indeVarId--)
                     {
                         int nextIndeVarId = indeVarId + 1;
-                        if (nextIndeVarId == lastIndeVarId && independentVariableManagers[lastIndeVarId].CurrentConditionId != 0)
+                        if (nextIndeVarId == lastIndeVarId && independentVariableManagers[lastIndeVarId].CurrentConditionIndex != 0)
                         {
                             break;
                         }
-                        else if (indeVarId == lastIndeVarId || independentVariableManagers[nextIndeVarId].CurrentConditionId == 0)
+                        else if (indeVarId == lastIndeVarId || independentVariableManagers[nextIndeVarId].CurrentConditionIndex == 0)
                         {
                             independentVariableManagers[indeVarId].NextCondition();
                         }
@@ -117,8 +117,23 @@ namespace NormandErwan.MasterThesisExperiment.States
                 + ", Overall progress: " + (StatesProgress * 100f / StatesTotal).ToString("F1") + "%]";
         }
 
+        // TODO: remove
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                NextState();
+            }
+        }
+
         protected virtual void Awake()
         {
+            // TODO: remove
+            CurrentStateUpdated += (state) =>
+            {
+                print("StateManager " + ToString());
+            };
+
             ConditionsTotal = 1;
             foreach (var independentVariableManager in independentVariableManagers)
             {

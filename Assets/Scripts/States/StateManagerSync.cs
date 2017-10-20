@@ -77,7 +77,5 @@ namespace NormandErwan.MasterThesisExperiment.States
             currentStateMessage.Update(stateManager);
             SendToServer(currentStateMessage);
         }
-
-        
     }
 }
