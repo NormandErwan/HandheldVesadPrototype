@@ -63,7 +63,7 @@ namespace NormandErwan.MasterThesisExperiment.States
         {
             if (deviceId != NetworkManager.client.connection.connectionId)
             {
-                currentStateMessage.Update(stateManager);
+                currentStateMessage.Update(stateManager.CurrentState);
                 SendToClient(deviceId, currentStateMessage);
             }
         }
@@ -74,7 +74,7 @@ namespace NormandErwan.MasterThesisExperiment.States
 
         protected virtual void StateManager_RequestCurrentStateSync(State currentState)
         {
-            currentStateMessage.Update(stateManager);
+            currentStateMessage.Update(currentState);
             SendToServer(currentStateMessage);
         }
     }

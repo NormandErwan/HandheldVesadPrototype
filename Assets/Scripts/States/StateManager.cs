@@ -1,5 +1,6 @@
 ﻿using NormandErwan.MasterThesisExperiment.Variables;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace NormandErwan.MasterThesisExperiment.States
@@ -26,7 +27,8 @@ namespace NormandErwan.MasterThesisExperiment.States
 
         // Properties
 
-        public State CurrentState { get { return currentState; } internal set { currentState = value; CurrentStateUpdated.Invoke(currentState); } }
+        public Dictionary<string, State> States { get; protected set; }
+        public State CurrentState { get; protected set; }
         public int CurrentTrial { get; internal set; }
 
         public int StatesTotal { get; internal set; }
@@ -43,16 +45,15 @@ namespace NormandErwan.MasterThesisExperiment.States
         public Action<State> RequestCurrentStateSync = delegate { };
         public Action<State> CurrentStateUpdated = delegate { };
 
-        // Variables
-
-        private State currentState;
-
         // Methods
 
         public void NextState()
         {
-            if (CurrentState.id == experimentBeginState.id 
-                || (CurrentState.id == taskEndState.id && ConditionsProgress < ConditionsTotal))
+            if (CurrentState.id == experimentBeginState.id)
+            {
+                RequestCurrentStateSync.Invoke(taskBeginState);
+            }
+            else if (CurrentState.id == taskBeginState.id)
             {
                 if (ConditionsProgress > 1)
                 {
@@ -70,40 +71,18 @@ namespace NormandErwan.MasterThesisExperiment.States
                         }
                     }
                 }
-
-                ConditionsProgress++;
-                StatesProgress++;
-                RequestCurrentStateSync.Invoke(taskBeginState);
-            }
-            else if (CurrentState.id == taskBeginState.id)
-            {
-                TrialsProgress++;
-                CurrentTrial++;
-                StatesProgress++;
                 RequestCurrentStateSync.Invoke(taskTrialState);
             }
             else if (CurrentState.id == taskTrialState.id)
             {
-                StatesProgress++;
-                if (CurrentTrial < TrialsPerCondition)
-                {
-                    TrialsProgress++;
-                    CurrentTrial++;
-                }
-                else
-                {
-                    CurrentTrial = 0;
-                    RequestCurrentStateSync.Invoke(taskEndState);
-                }
+                RequestCurrentStateSync.Invoke((CurrentTrial < TrialsPerCondition) ? taskTrialState : taskEndState);
             }
             else if (CurrentState.id == taskEndState.id)
             {
-                StatesProgress = StatesTotal;
-                RequestCurrentStateSync.Invoke(experimentEndState);
+                RequestCurrentStateSync.Invoke((ConditionsProgress < ConditionsTotal) ? taskBeginState : experimentEndState);
             }
             else if (CurrentState.id == experimentEndState.id)
             {
-                ResetProgress();
                 RequestCurrentStateSync.Invoke(experimentBeginState);
             }
         }
@@ -115,6 +94,37 @@ namespace NormandErwan.MasterThesisExperiment.States
                 + ", TrialsProgress: " + TrialsProgress + "/" + TrialsTotal 
                 + " (current trial: " + CurrentTrial + "/" + TrialsPerCondition + ")"
                 + ", Overall progress: " + (StatesProgress * 100f / StatesTotal).ToString("F1") + "%]";
+        }
+
+        internal virtual void SetCurrentState(string currentStateId)
+        {
+            CurrentState = States[currentStateId];
+            if (CurrentState.id == experimentBeginState.id)
+            {
+                ResetProgress();
+            }
+            else if (CurrentState.id == taskBeginState.id)
+            {
+                ConditionsProgress++;
+                CurrentTrial = 0;
+                StatesProgress++;
+            }
+            else if (CurrentState.id == taskTrialState.id)
+            {
+                TrialsProgress++;
+                CurrentTrial++;
+                StatesProgress++;
+            }
+            else if (CurrentState.id == taskEndState.id)
+            {
+                StatesProgress++;
+            }
+            else if (CurrentState.id == experimentEndState.id)
+            {
+                StatesProgress = StatesTotal;
+                RequestCurrentStateSync.Invoke(experimentEndState);
+            }
+            CurrentStateUpdated.Invoke(CurrentState);
         }
 
         // TODO: remove
@@ -144,8 +154,16 @@ namespace NormandErwan.MasterThesisExperiment.States
                 + 2 * ConditionsTotal // taskBeginState and taskEndState
                 + TrialsTotal;
 
-            ResetProgress();
-            CurrentState = experimentBeginState;
+            States = new Dictionary<string, State>()
+            {
+                { experimentBeginState.id, experimentBeginState },
+                { taskBeginState.id, taskBeginState },
+                { taskTrialState.id, taskTrialState },
+                { taskEndState.id, taskEndState },
+                { experimentEndState.id, experimentEndState }
+            };
+
+            SetCurrentState(experimentBeginState.id);
         }
 
         protected virtual void ResetProgress()
