@@ -5,6 +5,7 @@
 /[Bb]uilds/
 /Assets/AssetStoreTools*
 /Assets/DevicesSyncUnity*
+/Assets/Hover*
 /Assets/LeanTouch*
 
 # Visual Studio 2015 cache directory
