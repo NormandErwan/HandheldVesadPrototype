@@ -412,7 +412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 932582d0b9ea20f4ca0cd4d85719337b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: Far
+  id: 2_Far
   title: Difficile
   minimum: 2.5
   maximum: 2.7
@@ -427,7 +427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: MobileDeviceOnly
+  id: A_MobileDeviceOnly
   title: "T\xE9l\xE9phone seul"
   instructions: 
 --- !u!114 &114158752525081080
@@ -457,7 +457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: DirectInput_AROutput
+  id: D_DirectInput_AROutput
   title: "R\xE9alit\xE9 augment\xE9e, interactions directes"
   instructions: 
 --- !u!114 &114303898851726862
@@ -519,7 +519,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: MobileDeviceInput_AROutput
+  id: C_MobileDeviceInput_AROutput
   title: "R\xE9alit\xE9 augment\xE9e, interactions sur le t\xE9l\xE9phone"
   instructions: 
 --- !u!114 &114501037082189576
@@ -552,7 +552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: Peephole
+  id: B_Peephole
   title: "R\xE9alit\xE9 augment\xE9e \xE0 travers le t\xE9l\xE9phone"
   instructions: 
 --- !u!114 &114712957325740358
@@ -566,7 +566,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 932582d0b9ea20f4ca0cd4d85719337b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: Near
+  id: 1_Near
   title: Facile
   minimum: 1.25
   maximum: 1.45
@@ -581,7 +581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc14585ef5e6c0f4e992ca1bb6cf090e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: Large
+  id: 2_Large
   title: Grand
   fontSize: 24
 --- !u!114 &114784559623597272
@@ -595,7 +595,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: IndirectInput_AROutput
+  id: E_IndirectInput_AROutput
   title: "R\xE9alit\xE9 augment\xE9e, interactions indirectes"
   instructions: 
 --- !u!114 &114940950492825338
@@ -609,7 +609,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc14585ef5e6c0f4e992ca1bb6cf090e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: Small
+  id: 1_Small
   title: Petit
   fontSize: 12
 --- !u!114 &114999698179949338

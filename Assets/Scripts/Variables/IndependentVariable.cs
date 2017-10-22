@@ -20,20 +20,7 @@ namespace NormandErwan.MasterThesisExperiment.Variables
 
         public Action<T> CurrentConditionUpdated = delegate { };
 
-        // Variables
-
-        private int currentConditionIndex;
-
         // Methods
-
-        void Start()
-        {
-            // TODO: remove
-            CurrentConditionUpdated += (currentcondtiion) =>
-            {
-                print(typeof(T) + " updated : " + CurrentCondition.title);
-            };
-        }
 
         public override void NextCondition()
         {
@@ -41,7 +28,7 @@ namespace NormandErwan.MasterThesisExperiment.Variables
             RequestCurrentConditionSync(id, Conditions.Values[requestConditionIndex].id);
         }
 
-        internal override void SetCondition(string currentConditionId)
+        internal override void SetCurrentCondition(string currentConditionId)
         {
             CurrentCondition = Conditions[currentConditionId];
             CurrentConditionIndex = Conditions.IndexOfKey(CurrentCondition.id);
@@ -57,6 +44,9 @@ namespace NormandErwan.MasterThesisExperiment.Variables
                 Conditions.Add(condition.id, condition);
             }
             ConditionsCount = Conditions.Count;
+            CurrentConditionIndex = 0;
+            CurrentConditionId = Conditions.Values[CurrentConditionIndex].id;
+            SetCurrentCondition(CurrentConditionId);
         }
     }
 }

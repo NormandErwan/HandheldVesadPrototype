@@ -17,6 +17,6 @@ namespace NormandErwan.MasterThesisExperiment.Variables
         // Methods
 
         public abstract void NextCondition();
-        internal abstract void SetCondition(string currentConditionId);
+        internal abstract void SetCurrentCondition(string currentConditionId);
     }
 }

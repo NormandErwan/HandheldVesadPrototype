@@ -1771,12 +1771,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 719bee7f119dfeb48b86ba9fc4096477, type: 2}
   m_IsPrefabParent: 0
---- !u!114 &1577657333 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114794518334252844, guid: 719bee7f119dfeb48b86ba9fc4096477,
-    type: 2}
-  m_PrefabInternal: {fileID: 1577657332}
-  m_Script: {fileID: 11500000, guid: ef52308fe3f684048ad19f9926e15bcc, type: 3}
 --- !u!4 &1577657334 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4233150891322868, guid: 719bee7f119dfeb48b86ba9fc4096477,
@@ -1948,14 +1942,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5f82274025161741847a4180bc8fe5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leanTouchSync: {fileID: 1577657333}
-  Camera: {fileID: 1248386480}
-  IgnoreGuiFingers: 1
-  RequiredFingerCount: 0
-  Distance: 1
-  Sensitivity: 1
-  Dampening: 10
-  remainingDelta: {x: 0, y: 0, z: 0}
 --- !u!114 &1781447630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1968,17 +1954,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7940f4b21014a64181fecfe22b4483c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leanTouchSync: {fileID: 1577657333}
-  Camera: {fileID: 1248386480}
-  IgnoreGuiFingers: 1
-  RequiredFingerCount: 0
-  WheelSensitivity: 0
-  Zoom: 50
-  ZoomClamp: 0
-  ZoomMin: 10
-  ZoomMax: 60
-  Dampening: 10
-  currentZoom: 50
 --- !u!81 &1781447631
 AudioListener:
   m_ObjectHideFlags: 0

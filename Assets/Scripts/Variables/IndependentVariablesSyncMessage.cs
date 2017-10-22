@@ -41,7 +41,7 @@ namespace NormandErwan.MasterThesisExperiment.Variables
             {
                 if (independentVariable.id == independentVariableId)
                 {
-                    independentVariable.SetCondition(currentConditionId);
+                    independentVariable.SetCurrentCondition(currentConditionId);
                 }
             }
         }

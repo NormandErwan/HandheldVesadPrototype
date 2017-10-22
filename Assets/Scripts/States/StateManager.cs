@@ -55,23 +55,6 @@ namespace NormandErwan.MasterThesisExperiment.States
             }
             else if (CurrentState.id == taskBeginState.id)
             {
-                if (ConditionsProgress > 1) // Don't update the IV for the first serie of trials
-                {
-                    // Update last IVManager in list each task begin, and other managers only if the next in list is on first condition
-                    int lastIndex = independentVariables.Length - 1;
-                    for (int index = lastIndex; index >= 0; index--)
-                    {
-                        int nextIndex = index + 1;
-                        if (nextIndex == lastIndex && independentVariables[lastIndex].CurrentConditionIndex != 0)
-                        {
-                            break;
-                        }
-                        else if (index == lastIndex || independentVariables[nextIndex].CurrentConditionIndex == 0)
-                        {
-                            independentVariables[index].NextCondition();
-                        }
-                    }
-                }
                 RequestCurrentStateSync.Invoke(taskTrialState);
             }
             else if (CurrentState.id == taskTrialState.id)
@@ -80,10 +63,20 @@ namespace NormandErwan.MasterThesisExperiment.States
             }
             else if (CurrentState.id == taskEndState.id)
             {
-                RequestCurrentStateSync.Invoke((ConditionsProgress < ConditionsTotal) ? taskBeginState : experimentEndState);
+
+                if (ConditionsProgress < ConditionsTotal)
+                {
+                    UpdateIndependentVariablesCurrentCondition();
+                    RequestCurrentStateSync.Invoke(taskBeginState);
+                }
+                else
+                {
+                    RequestCurrentStateSync.Invoke(experimentEndState);
+                }
             }
             else if (CurrentState.id == experimentEndState.id)
             {
+                UpdateIndependentVariablesCurrentCondition();
                 RequestCurrentStateSync.Invoke(experimentBeginState);
             }
         }
@@ -106,15 +99,15 @@ namespace NormandErwan.MasterThesisExperiment.States
             }
             else if (CurrentState.id == taskBeginState.id)
             {
+                StatesProgress++;
                 ConditionsProgress++;
                 CurrentTrial = 0;
-                StatesProgress++;
             }
             else if (CurrentState.id == taskTrialState.id)
             {
+                StatesProgress++;
                 TrialsProgress++;
                 CurrentTrial++;
-                StatesProgress++;
             }
             else if (CurrentState.id == taskEndState.id)
             {
@@ -123,7 +116,8 @@ namespace NormandErwan.MasterThesisExperiment.States
             else if (CurrentState.id == experimentEndState.id)
             {
                 StatesProgress = StatesTotal;
-                RequestCurrentStateSync.Invoke(experimentEndState);
+                ConditionsProgress = ConditionsTotal;
+                TrialsProgress = TrialsTotal;
             }
             CurrentStateUpdated.Invoke(CurrentState);
         }
@@ -145,6 +139,18 @@ namespace NormandErwan.MasterThesisExperiment.States
                 print("StateManager " + ToString());
             };
 
+            States = new Dictionary<string, State>()
+            {
+                { experimentBeginState.id, experimentBeginState },
+                { taskBeginState.id, taskBeginState },
+                { taskTrialState.id, taskTrialState },
+                { taskEndState.id, taskEndState },
+                { experimentEndState.id, experimentEndState }
+            };
+        }
+
+        protected virtual void Start()
+        {
             ConditionsTotal = 1;
             foreach (var independentVariable in independentVariables)
             {
@@ -155,16 +161,28 @@ namespace NormandErwan.MasterThesisExperiment.States
                 + 2 * ConditionsTotal // taskBeginState and taskEndState
                 + TrialsTotal;
 
-            States = new Dictionary<string, State>()
-            {
-                { experimentBeginState.id, experimentBeginState },
-                { taskBeginState.id, taskBeginState },
-                { taskTrialState.id, taskTrialState },
-                { taskEndState.id, taskEndState },
-                { experimentEndState.id, experimentEndState }
-            };
-
             SetCurrentState(experimentBeginState.id);
+        }
+
+        /// <summary>
+        /// Update last IVManager in list each task begin, and other managers only if the next in list is on first condition
+        /// </summary>
+        protected virtual void UpdateIndependentVariablesCurrentCondition()
+        {
+            int lastIVIndex = independentVariables.Length - 1;
+            bool nextIVRequestedFirstCondition = false;
+            for (int index = lastIVIndex; index >= 0; index--)
+            {
+                if (index == lastIVIndex || nextIVRequestedFirstCondition)
+                {
+                    nextIVRequestedFirstCondition = (independentVariables[index].CurrentConditionIndex == independentVariables[index].ConditionsCount - 1);
+                    independentVariables[index].NextCondition();
+                }
+                else if (index != lastIVIndex && !nextIVRequestedFirstCondition)
+                {
+                    break;
+                }
+            }
         }
 
         protected virtual void ResetProgress()
