@@ -1,6 +1,6 @@
 ﻿namespace NormandErwan.MasterThesisExperiment.Variables
 {
-    public class TextSize : IndependentVariable
+    public class IVTextSizeCondition : IndependentVariableCondition
     {
         // Editor Fields
 

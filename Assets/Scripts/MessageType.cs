@@ -21,7 +21,7 @@ namespace NormandErwan.MasterThesisExperiment
         public static short StateManager { get { return (short)(Smallest + 1); } }
 
         /// <summary>
-        /// Networking message for communicating <see cref="Variables.IndependentVariableManagersSyncMessage"/>
+        /// Networking message for communicating <see cref="Variables.IndependentVariablesSyncMessage"/>
         /// </summary>
         public static short IndependentVariableManagers { get { return (short)(Smallest + 2); } }
 

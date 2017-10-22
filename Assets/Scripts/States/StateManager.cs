@@ -23,7 +23,7 @@ namespace NormandErwan.MasterThesisExperiment.States
         public State taskEndState;
 
         [Header("Independent Variables")]
-        public IIndependentVariableManager[] independentVariableManagers;
+        public IIndependentVariable[] independentVariables;
 
         // Properties
 
@@ -55,19 +55,20 @@ namespace NormandErwan.MasterThesisExperiment.States
             }
             else if (CurrentState.id == taskBeginState.id)
             {
-                if (ConditionsProgress > 1)
+                if (ConditionsProgress > 1) // Don't update the IV for the first serie of trials
                 {
-                    int lastIndeVarId = independentVariableManagers.Length - 1;
-                    for (int indeVarId = lastIndeVarId; indeVarId >= 0; indeVarId--)
+                    // Update last IVManager in list each task begin, and other managers only if the next in list is on first condition
+                    int lastIndex = independentVariables.Length - 1;
+                    for (int index = lastIndex; index >= 0; index--)
                     {
-                        int nextIndeVarId = indeVarId + 1;
-                        if (nextIndeVarId == lastIndeVarId && independentVariableManagers[lastIndeVarId].CurrentConditionIndex != 0)
+                        int nextIndex = index + 1;
+                        if (nextIndex == lastIndex && independentVariables[lastIndex].CurrentConditionIndex != 0)
                         {
                             break;
                         }
-                        else if (indeVarId == lastIndeVarId || independentVariableManagers[nextIndeVarId].CurrentConditionIndex == 0)
+                        else if (index == lastIndex || independentVariables[nextIndex].CurrentConditionIndex == 0)
                         {
-                            independentVariableManagers[indeVarId].NextCondition();
+                            independentVariables[index].NextCondition();
                         }
                     }
                 }
@@ -145,9 +146,9 @@ namespace NormandErwan.MasterThesisExperiment.States
             };
 
             ConditionsTotal = 1;
-            foreach (var independentVariableManager in independentVariableManagers)
+            foreach (var independentVariable in independentVariables)
             {
-                ConditionsTotal *= independentVariableManager.ConditionsCount;
+                ConditionsTotal *= independentVariable.ConditionsCount;
             }
             TrialsTotal = ConditionsTotal * (int)TrialsPerCondition;
             StatesTotal = 2 // experimentBeginState and experimentEndState

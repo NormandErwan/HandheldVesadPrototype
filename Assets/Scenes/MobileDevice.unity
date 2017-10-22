@@ -1532,6 +1532,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 41638041}
     m_Modifications:
+    - target: {fileID: 114343814640682756, guid: ed4aa9006665d864ea641693ebb1b575,
+        type: 2}
+      propertyPath: independentVariables.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4497984525368612, guid: ed4aa9006665d864ea641693ebb1b575, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1588,6 +1593,21 @@ Prefab:
       propertyPath: m_Name
       value: StateManager
       objectReference: {fileID: 0}
+    - target: {fileID: 114343814640682756, guid: ed4aa9006665d864ea641693ebb1b575,
+        type: 2}
+      propertyPath: independentVariables.Array.data[0]
+      value: 
+      objectReference: {fileID: 76266070}
+    - target: {fileID: 114343814640682756, guid: ed4aa9006665d864ea641693ebb1b575,
+        type: 2}
+      propertyPath: independentVariables.Array.data[1]
+      value: 
+      objectReference: {fileID: 1189171530}
+    - target: {fileID: 114343814640682756, guid: ed4aa9006665d864ea641693ebb1b575,
+        type: 2}
+      propertyPath: independentVariables.Array.data[2]
+      value: 
+      objectReference: {fileID: 204920262}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ed4aa9006665d864ea641693ebb1b575, type: 2}
   m_IsPrefabParent: 0
@@ -1935,6 +1955,7 @@ MonoBehaviour:
   Distance: 1
   Sensitivity: 1
   Dampening: 10
+  remainingDelta: {x: 0, y: 0, z: 0}
 --- !u!114 &1781447630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1957,6 +1978,7 @@ MonoBehaviour:
   ZoomMin: 10
   ZoomMax: 60
   Dampening: 10
+  currentZoom: 50
 --- !u!81 &1781447631
 AudioListener:
   m_ObjectHideFlags: 0

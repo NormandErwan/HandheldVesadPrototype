@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4162387300961746}
   - component: {fileID: 114158752525081080}
   m_Layer: 0
-  m_Name: TextSizes
+  m_Name: TextSize
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 4195540278244426}
   - component: {fileID: 114501037082189576}
   m_Layer: 0
-  m_Name: Techniques
+  m_Name: Technique
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 4437069565568174}
   - component: {fileID: 114376850109258518}
   m_Layer: 0
-  m_Name: ClassificationDistances
+  m_Name: ClassificationDistance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -412,8 +412,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 932582d0b9ea20f4ca0cd4d85719337b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 
-  title: Far
+  id: Far
+  title: Difficile
   minimum: 2.5
   maximum: 2.7
 --- !u!114 &114102835371396286
@@ -427,8 +427,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 
-  title: Cellulaire seul
+  id: MobileDeviceOnly
+  title: "T\xE9l\xE9phone seul"
   instructions: 
 --- !u!114 &114158752525081080
 MonoBehaviour:
@@ -441,7 +441,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5be6052bc8aff549bf21aea2eaf95e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
+  id: TextSize
+  title: Taille du texte
   conditions:
   - {fileID: 114940950492825338}
   - {fileID: 114759187420252978}
@@ -456,8 +457,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 
-  title: "R\xE9alit\xE9 Augment\xE9e - Interactions directes"
+  id: DirectInput_AROutput
+  title: "R\xE9alit\xE9 augment\xE9e, interactions directes"
   instructions: 
 --- !u!114 &114303898851726862
 MonoBehaviour:
@@ -502,7 +503,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 213dae45aa3411e4bb9d4c23cb1fa4c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
+  id: ClassificationDistance
+  title: "Difficult\xE9 de la t\xE2che"
   conditions:
   - {fileID: 114712957325740358}
   - {fileID: 114002735001638114}
@@ -517,8 +519,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 
-  title: "R\xE9alit\xE9 Augment\xE9e - Interactions sur le cellulaire"
+  id: MobileDeviceInput_AROutput
+  title: "R\xE9alit\xE9 augment\xE9e, interactions sur le t\xE9l\xE9phone"
   instructions: 
 --- !u!114 &114501037082189576
 MonoBehaviour:
@@ -531,7 +533,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54d15ff0339d5724b8195e2f7e966243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
+  id: Technique
+  title: "Syst\xE8me utilis\xE9"
   conditions:
   - {fileID: 114102835371396286}
   - {fileID: 114623683837749356}
@@ -549,8 +552,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 
-  title: "Cellulaire comme fen\xEAtre sur la R\xE9alit\xE9 Augment\xE9e"
+  id: Peephole
+  title: "R\xE9alit\xE9 augment\xE9e \xE0 travers le t\xE9l\xE9phone"
   instructions: 
 --- !u!114 &114712957325740358
 MonoBehaviour:
@@ -563,8 +566,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 932582d0b9ea20f4ca0cd4d85719337b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 
-  title: Near
+  id: Near
+  title: Facile
   minimum: 1.25
   maximum: 1.45
 --- !u!114 &114759187420252978
@@ -578,8 +581,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc14585ef5e6c0f4e992ca1bb6cf090e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 
-  title: Large
+  id: Large
+  title: Grand
   fontSize: 24
 --- !u!114 &114784559623597272
 MonoBehaviour:
@@ -592,8 +595,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 
-  title: "R\xE9alit\xE9 Augment\xE9e - Interactions indirectes"
+  id: IndirectInput_AROutput
+  title: "R\xE9alit\xE9 augment\xE9e, interactions indirectes"
   instructions: 
 --- !u!114 &114940950492825338
 MonoBehaviour:
@@ -606,8 +609,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc14585ef5e6c0f4e992ca1bb6cf090e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 
-  title: Small
+  id: Small
+  title: Petit
   fontSize: 12
 --- !u!114 &114999698179949338
 MonoBehaviour:
@@ -622,7 +625,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   networkManager: {fileID: 0}
   syncMode: 0
-  independentVariableManagers:
+  independentVariables:
   - {fileID: 114501037082189576}
   - {fileID: 114158752525081080}
   - {fileID: 114376850109258518}

@@ -1,13 +1,11 @@
-﻿using UnityEngine;
+﻿using NormandErwan.MasterThesisExperiment.Variables;
+using UnityEngine;
 
 namespace NormandErwan.MasterThesisExperiment.States
 {
-    public class State : MonoBehaviour
+    public class State : Variable
     {
         // Editor fields
-
-        public string id;
-        public string title;
 
         [TextArea]
         public string instructions;

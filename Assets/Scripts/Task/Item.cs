@@ -40,7 +40,7 @@ namespace NormandErwan.MasterThesisExperiment.Task
         // Editor fields
 
         public Class currentClass = Class.A;
-        public TextSize classTextSize;
+        public IVTextSizeCondition classTextSize;
         public Text classText;
 
         public Color correctClassColor = new Color(81 / 255f, 229 / 255f, 81 / 255f);

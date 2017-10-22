@@ -1,6 +1,6 @@
 ﻿namespace NormandErwan.MasterThesisExperiment.Variables
 {
-    public class TextSizesManager : IndependentVariableManager<TextSize>
+    public abstract class IndependentVariableCondition : Variable
     {
     }
 }
