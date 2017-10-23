@@ -2,7 +2,7 @@
 
 namespace NormandErwan.MasterThesisExperiment.Variables
 {
-    public class IndependentVariablesSyncMessage : DevicesSyncMessage
+    public class IndependentVariablesMessage : DevicesSyncMessage
     {
         // Properties
 

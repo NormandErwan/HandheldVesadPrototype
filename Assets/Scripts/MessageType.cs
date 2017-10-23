@@ -16,12 +16,12 @@ namespace NormandErwan.MasterThesisExperiment
         public static new short Smallest { get { return smallest; } set { smallest = value; } }
 
         /// <summary>
-        /// Networking message for communicating <see cref="States.StateManagerSyncMessage"/>
+        /// Networking message for communicating <see cref="States.StateManagerMessage"/>
         /// </summary>
         public static short StateManager { get { return (short)(Smallest + 1); } }
 
         /// <summary>
-        /// Networking message for communicating <see cref="Variables.IndependentVariablesSyncMessage"/>
+        /// Networking message for communicating <see cref="Variables.IndependentVariablesMessage"/>
         /// </summary>
         public static short IndependentVariableManagers { get { return (short)(Smallest + 2); } }
 

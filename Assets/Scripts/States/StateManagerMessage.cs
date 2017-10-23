@@ -5,7 +5,7 @@ namespace NormandErwan.MasterThesisExperiment.States
     /// <summary>
     /// Message that contains the new current state of the experiment.
     /// </summary>
-    public class StateManagerSyncMessage : DevicesSyncMessage
+    public class StateManagerMessage : DevicesSyncMessage
     {
         // Properties
 

@@ -16,7 +16,7 @@ namespace NormandErwan.MasterThesisExperiment.Variables
 
         // Variables
 
-        protected IndependentVariablesSyncMessage currentIVMessage = new IndependentVariablesSyncMessage();
+        protected IndependentVariablesMessage currentIVMessage = new IndependentVariablesMessage();
 
         // Methods
 
@@ -46,14 +46,14 @@ namespace NormandErwan.MasterThesisExperiment.Variables
 
         protected override DevicesSyncMessage OnServerMessageReceived(NetworkMessage netMessage)
         {
-            currentIVMessage = netMessage.ReadMessage<IndependentVariablesSyncMessage>();
+            currentIVMessage = netMessage.ReadMessage<IndependentVariablesMessage>();
             currentIVMessage.Restore(independentVariables);
             return currentIVMessage;
         }
 
         protected override DevicesSyncMessage OnClientMessageReceived(NetworkMessage netMessage)
         {
-            var stateMessage = netMessage.ReadMessage<IndependentVariablesSyncMessage>();
+            var stateMessage = netMessage.ReadMessage<IndependentVariablesMessage>();
             if (!isServer) // Don't update twice if the device is a host
             {
                 currentIVMessage = stateMessage;
