@@ -7,6 +7,7 @@
 /Assets/DevicesSyncUnity*
 /Assets/Hover*
 /Assets/LeanTouch*
+/Assets/LeapMotion*
 
 # Visual Studio 2015 cache directory
 /.vs/
