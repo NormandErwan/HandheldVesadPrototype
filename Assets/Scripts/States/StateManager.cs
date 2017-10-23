@@ -148,14 +148,6 @@ namespace NormandErwan.MasterThesisExperiment.States
             SetCurrentState(experimentBeginState.id);
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyUp(KeyCode.Space))
-            {
-                NextState();
-            }
-        }
-
         /// <summary>
         /// Update last IVManager in list each task begin, and other managers only if the next in list is on first condition
         /// </summary>

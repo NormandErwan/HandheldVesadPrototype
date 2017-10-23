@@ -5,77 +5,59 @@ using UnityEngine.UI;
 
 namespace NormandErwan.MasterThesisExperiment.GUI
 {
-    public class DeviceGUI : MonoBehaviour
+    public class DeviceGUI : ServerGUI
     {
         // Editor Fields
 
-        public StateManager stateManager;
-        public Text progressText;
+        public GameObject stateTextsParent;
         public Text stateTitleText;
         public Text stateInstructionsText;
-        public Button okButton;
 
         // Methods
 
-        protected virtual void Start()
+        protected override void StateManager_CurrentStateUpdated(State currentState)
         {
-            if (stateManager.CurrentState != null)
-            {
-                StateManager_CurrentStateUpdated(stateManager.CurrentState);
-            }
-            stateManager.CurrentStateUpdated += StateManager_CurrentStateUpdated;
+            progressText.text = "État courant : " + stateManager.CurrentState.title + " - "
+                + "Progression : " + (stateManager.StatesProgress * 100f / stateManager.StatesTotal).ToString("F1") + "%";
 
-            okButton.onClick.AddListener(okButton_onClik);
-        }
-
-        protected virtual void OnDestroy()
-        {
-            stateManager.CurrentStateUpdated -= StateManager_CurrentStateUpdated;
-            okButton.onClick.RemoveListener(okButton_onClik);
-        }
-
-        protected virtual void StateManager_CurrentStateUpdated(State currentState)
-        {
-            progressText.text = "Progression : " + (stateManager.StatesProgress * 100f / stateManager.StatesTotal).ToString("F1") + "%";
-
-            stateTitleText.gameObject.SetActive(true);
-            stateInstructionsText.gameObject.SetActive(true);
-            okButton.gameObject.SetActive(true);
-
+            stateTextsParent.SetActive(true);
             stateTitleText.text = stateManager.CurrentState.title;
             stateInstructionsText.text = stateManager.CurrentState.instructions;
 
-            stateInstructionsText.text += "\n\n";
-            foreach (var independentVariable in stateManager.independentVariables)
+            if (currentState.id == stateManager.taskBeginState.id || currentState.id == stateManager.taskTrialState.id)
             {
-                var ivDistance = independentVariable as IVClassificationDistance;
-                if (ivDistance != null)
+                foreach (var independentVariable in stateManager.independentVariables)
                 {
-                    stateInstructionsText.text += " - " + ivDistance.title + " : " + ivDistance.CurrentCondition.title + "\n\n";
-                }
+                    var ivDistance = independentVariable as IVClassificationDistance;
+                    if (ivDistance != null)
+                    {
+                        stateInstructionsText.text += "\n\n" + ivDistance.title + " : " + ivDistance.CurrentCondition.title;
+                    }
 
-                var ivTextSize = independentVariable as IVTextSize;
-                if (ivTextSize != null)
-                {
-                    stateInstructionsText.text += " - " + ivTextSize.title + " : " + ivTextSize.CurrentCondition.title + "\n\n";
-                }
+                    var ivTextSize = independentVariable as IVTextSize;
+                    if (ivTextSize != null)
+                    {
+                        stateInstructionsText.text += "\n\n" + ivTextSize.title + " : " + ivTextSize.CurrentCondition.title;
+                    }
 
-                var ivTechnique = independentVariable as IVTechnique;
-                if (ivTechnique != null)
-                {
-                    stateInstructionsText.text += " - " + ivTechnique.title + " : " + ivTechnique.CurrentCondition.title + "\n";
-                    stateInstructionsText.text += "   " + ivTechnique.CurrentCondition.instructions + "\n\n";
+                    var ivTechnique = independentVariable as IVTechnique;
+                    if (ivTechnique != null)
+                    {
+                        stateInstructionsText.text += "\n\n" + ivTechnique.title + " : " + ivTechnique.CurrentCondition.title;
+                        if (ivTechnique.CurrentCondition.instructions.Length > 0)
+                        {
+                            stateInstructionsText.text += "\n" + ivTechnique.CurrentCondition.instructions;
+                        }
+                    }
                 }
             }
         }
 
-        protected virtual void okButton_onClik()
+        protected override void validateStateButton_onClik()
         {
             if (stateManager.CurrentState.id == stateManager.taskTrialState.id)
             {
-                stateTitleText.gameObject.SetActive(false);
-                stateInstructionsText.gameObject.SetActive(false);
-                okButton.gameObject.SetActive(false);
+                stateTextsParent.SetActive(false);
             }
             else
             {
