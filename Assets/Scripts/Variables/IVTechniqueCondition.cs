@@ -4,7 +4,7 @@ namespace NormandErwan.MasterThesisExperiment.Variables
 {
     public class IVTechniqueCondition : IndependentVariableCondition
     {
-        // Editor Fields
+        // Editor fields
 
         [TextArea]
         public string instructions;

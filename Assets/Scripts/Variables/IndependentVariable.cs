@@ -13,7 +13,7 @@ namespace NormandErwan.MasterThesisExperiment.Variables
 
         // Properties
 
-        public SortedList<string, T> Conditions;
+        public SortedList<string, T> Conditions { get; protected set; }
         public T CurrentCondition { get; protected set; }
 
         // Events
@@ -32,7 +32,6 @@ namespace NormandErwan.MasterThesisExperiment.Variables
         {
             CurrentCondition = Conditions[currentConditionId];
             CurrentConditionIndex = Conditions.IndexOfKey(CurrentCondition.id);
-            CurrentConditionId = currentConditionId;
             CurrentConditionUpdated.Invoke(CurrentCondition);
         }
 
@@ -45,8 +44,7 @@ namespace NormandErwan.MasterThesisExperiment.Variables
             }
             ConditionsCount = Conditions.Count;
             CurrentConditionIndex = 0;
-            CurrentConditionId = Conditions.Values[CurrentConditionIndex].id;
-            SetCurrentCondition(CurrentConditionId);
+            SetCurrentCondition(Conditions.Values[CurrentConditionIndex].id);
         }
     }
 }

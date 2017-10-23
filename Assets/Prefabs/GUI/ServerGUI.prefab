@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 222143520433792138}
   - component: {fileID: 114303804054235966}
   m_Layer: 5
-  m_Name: Progress
+  m_Name: ProgressText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,7 +77,7 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: Progress
 --- !u!114 &114524138550517152
@@ -104,7 +104,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1478388577239016}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9dfa0d50e6525444d90b090e1a636aca, type: 3}
+  m_Script: {fileID: 11500000, guid: 71a5f9bc9771d1a409574dec9f3fc14b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   stateManager: {fileID: 0}
@@ -120,12 +120,12 @@ MonoBehaviour:
   m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96

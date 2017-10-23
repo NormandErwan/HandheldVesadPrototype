@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace NormandErwan.MasterThesisExperiment.GUI
 {
-    public class DeviceServerGUI : MonoBehaviour
+    public abstract class DeviceServerGUI : MonoBehaviour
     {
         // Editor Fields
 
@@ -27,10 +27,6 @@ namespace NormandErwan.MasterThesisExperiment.GUI
             stateManager.CurrentStateUpdated -= StateManager_CurrentStateUpdated;
         }
 
-        private void StateManager_CurrentStateUpdated(State currentState)
-        {
-            progressText.text = "État actuel : " + stateManager.CurrentState.title
-                + ". Progression : " + (stateManager.StatesProgress * 100f / stateManager.StatesTotal).ToString("F1") + "%";
-        }
+        protected abstract void StateManager_CurrentStateUpdated(State currentState);
     }
 }

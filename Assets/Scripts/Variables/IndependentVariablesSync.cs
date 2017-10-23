@@ -1,5 +1,6 @@
 ﻿using DevicesSyncUnity;
 using DevicesSyncUnity.Messages;
+using System.Collections.Generic;
 using UnityEngine.Networking;
 
 namespace NormandErwan.MasterThesisExperiment.Variables
@@ -16,22 +17,22 @@ namespace NormandErwan.MasterThesisExperiment.Variables
 
         // Variables
 
-        protected IndependentVariablesMessage currentIVMessage = new IndependentVariablesMessage();
+        protected IndependentVariablesMessage currentMessage = new IndependentVariablesMessage();
 
         // Methods
 
         protected override void Awake()
         {
             base.Awake();
-            MessageTypes.Add(currentIVMessage.MessageType);
+            MessageTypes.Add(currentMessage.MessageType);
         }
 
         protected override void Start()
         {
             base.Start();
-            foreach (var indeVarManager in independentVariables)
+            foreach (var independentVariable in independentVariables)
             {
-                indeVarManager.RequestCurrentConditionSync += IndependentVariableManager_RequestCurrentConditionSync;
+                independentVariable.RequestCurrentConditionSync += IndependentVariableManager_RequestCurrentConditionSync;
             }
         }
 
@@ -46,9 +47,9 @@ namespace NormandErwan.MasterThesisExperiment.Variables
 
         protected override DevicesSyncMessage OnServerMessageReceived(NetworkMessage netMessage)
         {
-            currentIVMessage = netMessage.ReadMessage<IndependentVariablesMessage>();
-            currentIVMessage.Restore(independentVariables);
-            return currentIVMessage;
+            currentMessage = netMessage.ReadMessage<IndependentVariablesMessage>();
+            currentMessage.Restore(independentVariables);
+            return currentMessage;
         }
 
         protected override DevicesSyncMessage OnClientMessageReceived(NetworkMessage netMessage)
@@ -56,8 +57,8 @@ namespace NormandErwan.MasterThesisExperiment.Variables
             var stateMessage = netMessage.ReadMessage<IndependentVariablesMessage>();
             if (!isServer) // Don't update twice if the device is a host
             {
-                currentIVMessage = stateMessage;
-                currentIVMessage.Restore(independentVariables);
+                currentMessage = stateMessage;
+                currentMessage.Restore(independentVariables);
             }
             return stateMessage;
         }
@@ -68,8 +69,8 @@ namespace NormandErwan.MasterThesisExperiment.Variables
             {
                 foreach (var independentVariable in independentVariables)
                 {
-                    currentIVMessage.Update(independentVariable.id, independentVariable.CurrentConditionId);
-                    SendToClient(deviceId, currentIVMessage);
+                    currentMessage.Update(independentVariable.id, independentVariable.CurrentConditionId);
+                    SendToClient(deviceId, currentMessage);
                 }
             }
         }
@@ -80,8 +81,8 @@ namespace NormandErwan.MasterThesisExperiment.Variables
 
         protected virtual void IndependentVariableManager_RequestCurrentConditionSync(string independentVariableManagerId, string currentConditionId)
         {
-            currentIVMessage.Update(independentVariableManagerId, currentConditionId);
-            SendToServer(currentIVMessage);
+            currentMessage.Update(independentVariableManagerId, currentConditionId);
+            SendToServer(currentMessage);
         }
     }
 }

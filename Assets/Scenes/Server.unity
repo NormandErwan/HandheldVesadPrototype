@@ -407,7 +407,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1001 &1298358755
+--- !u!1001 &1436898016
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -514,6 +514,16 @@ Prefab:
       propertyPath: stateManager
       value: 
       objectReference: {fileID: 653876119}
+    - target: {fileID: 114855397749884724, guid: 517af9da8c963144497d68effeeded6e,
+        type: 2}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114855397749884724, guid: 517af9da8c963144497d68effeeded6e,
+        type: 2}
+      propertyPath: m_MatchWidthOrHeight
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 517af9da8c963144497d68effeeded6e, type: 2}
   m_IsPrefabParent: 0
@@ -556,10 +566,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 1011339397371906, guid: 7f6074db1a11a634ba35581561604324, type: 2}
-      propertyPath: m_Name
-      value: NetworkManager
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7f6074db1a11a634ba35581561604324, type: 2}
   m_IsPrefabParent: 0
@@ -601,10 +607,6 @@ Prefab:
     - target: {fileID: 4936913098733220, guid: 1ad71a978cae89b44a1af2d2d284d1e0, type: 2}
       propertyPath: m_RootOrder
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1907928725716900, guid: 1ad71a978cae89b44a1af2d2d284d1e0, type: 2}
-      propertyPath: m_Name
-      value: Camera
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1ad71a978cae89b44a1af2d2d284d1e0, type: 2}

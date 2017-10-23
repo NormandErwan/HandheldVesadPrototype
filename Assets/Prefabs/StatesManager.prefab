@@ -209,7 +209,7 @@ MonoBehaviour:
   taskTrialState: {fileID: 114661546425955246}
   TrialsPerCondition: 2
   taskEndState: {fileID: 114558040002357160}
-  independentVariableManagers:
+  independentVariables:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -226,7 +226,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: ExperimentBeginState
   title: "D\xE9but de l'exp\xE9rience"
-  instructions: 
+  instructions: TODO instruction state
 --- !u!114 &114429863715970740
 MonoBehaviour:
   m_ObjectHideFlags: 1

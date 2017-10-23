@@ -429,7 +429,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: A_MobileDeviceOnly
   title: "T\xE9l\xE9phone seul"
-  instructions: 
+  instructions: TODO Instructions Input Output
 --- !u!114 &114158752525081080
 MonoBehaviour:
   m_ObjectHideFlags: 1
