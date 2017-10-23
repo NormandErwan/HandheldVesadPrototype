@@ -18,14 +18,14 @@ namespace NormandErwan.MasterThesisExperiment.Variables
 
         // Events
 
-        public Action<T> CurrentConditionUpdated = delegate { };
+        public event Action<T> CurrentConditionUpdated = delegate { };
 
         // Methods
 
         public override void NextCondition()
         {
             int requestConditionIndex = (CurrentConditionIndex + 1) % Conditions.Count;
-            RequestCurrentConditionSync(id, Conditions.Values[requestConditionIndex].id);
+            OnRequestCurrentConditionSync(id, Conditions.Values[requestConditionIndex].id);
         }
 
         internal override void SetCurrentCondition(string currentConditionId)
@@ -33,7 +33,7 @@ namespace NormandErwan.MasterThesisExperiment.Variables
             CurrentCondition = Conditions[currentConditionId];
             CurrentConditionIndex = Conditions.IndexOfKey(CurrentCondition.id);
             CurrentConditionId = currentConditionId;
-            CurrentConditionUpdated(CurrentCondition);
+            CurrentConditionUpdated.Invoke(CurrentCondition);
         }
 
         protected virtual void Awake()

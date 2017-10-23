@@ -42,8 +42,8 @@ namespace NormandErwan.MasterThesisExperiment.States
 
         // Events
 
-        public Action<State> RequestCurrentStateSync = delegate { };
-        public Action<State> CurrentStateUpdated = delegate { };
+        public event Action<State> RequestCurrentStateSync = delegate { };
+        public event Action<State> CurrentStateUpdated = delegate { };
 
         // Methods
 
@@ -122,23 +122,8 @@ namespace NormandErwan.MasterThesisExperiment.States
             CurrentStateUpdated.Invoke(CurrentState);
         }
 
-        // TODO: remove
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                NextState();
-            }
-        }
-
         protected virtual void Awake()
         {
-            // TODO: remove
-            CurrentStateUpdated += (state) =>
-            {
-                print("StateManager " + ToString());
-            };
-
             States = new Dictionary<string, State>()
             {
                 { experimentBeginState.id, experimentBeginState },
@@ -160,8 +145,15 @@ namespace NormandErwan.MasterThesisExperiment.States
             StatesTotal = 2 // experimentBeginState and experimentEndState
                 + 2 * ConditionsTotal // taskBeginState and taskEndState
                 + TrialsTotal;
-
             SetCurrentState(experimentBeginState.id);
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                NextState();
+            }
         }
 
         /// <summary>
