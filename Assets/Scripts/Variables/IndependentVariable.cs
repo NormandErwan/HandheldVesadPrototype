@@ -31,6 +31,7 @@ namespace NormandErwan.MasterThesisExperiment.Variables
         internal override void SetCurrentCondition(string currentConditionId)
         {
             CurrentCondition = Conditions[currentConditionId];
+            CurrentConditionId = CurrentCondition.id;
             CurrentConditionIndex = Conditions.IndexOfKey(CurrentCondition.id);
             CurrentConditionUpdated.Invoke(CurrentCondition);
         }
@@ -44,7 +45,8 @@ namespace NormandErwan.MasterThesisExperiment.Variables
             }
             ConditionsCount = Conditions.Count;
             CurrentConditionIndex = 0;
-            SetCurrentCondition(Conditions.Values[CurrentConditionIndex].id);
+            CurrentConditionId = Conditions.Values[CurrentConditionIndex].id;
+            SetCurrentCondition(CurrentConditionId);
         }
     }
 }

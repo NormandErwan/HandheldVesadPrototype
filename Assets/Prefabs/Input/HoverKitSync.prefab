@@ -2115,6 +2115,7 @@ GameObject:
   - component: {fileID: 114826611859209594}
   - component: {fileID: 114421339427083914}
   - component: {fileID: 114202745155139392}
+  - component: {fileID: 114851269167887240}
   m_Layer: 0
   m_Name: HoverKitSync
   m_TagString: Untagged
@@ -19381,6 +19382,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HighlightProgress: 0
   SelectionProgress: 0
+--- !u!114 &114851269167887240
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1581309049496696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8318f7ce19ac9e489d35c7d54723f3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftHand: {fileID: 1629620267028648}
 --- !u!114 &114851341029425378
 MonoBehaviour:
   m_ObjectHideFlags: 1
