@@ -1,32 +1,40 @@
 ﻿using NormandErwan.MasterThesisExperiment.States;
 using NormandErwan.MasterThesisExperiment.Variables;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace NormandErwan.MasterThesisExperiment.GUI
 {
-    public class DeviceGUI : DeviceServerGUI
+    public class DeviceGUI : MonoBehaviour
     {
         // Editor Fields
 
+        public StateManager stateManager;
+        public Text progressText;
         public Text stateTitleText;
         public Text stateInstructionsText;
         public Button okButton;
 
         // Methods
 
-        protected override void Start()
+        protected virtual void Start()
         {
-            base.Start();
+            if (stateManager.CurrentState != null)
+            {
+                StateManager_CurrentStateUpdated(stateManager.CurrentState);
+            }
+            stateManager.CurrentStateUpdated += StateManager_CurrentStateUpdated;
+
             okButton.onClick.AddListener(okButton_onClik);
         }
 
-        protected override void OnDestroy()
+        protected virtual void OnDestroy()
         {
-            base.OnDestroy();
+            stateManager.CurrentStateUpdated -= StateManager_CurrentStateUpdated;
             okButton.onClick.RemoveListener(okButton_onClik);
         }
 
-        protected override void StateManager_CurrentStateUpdated(State currentState)
+        protected virtual void StateManager_CurrentStateUpdated(State currentState)
         {
             progressText.text = "Progression : " + (stateManager.StatesProgress * 100f / stateManager.StatesTotal).ToString("F1") + "%";
 
