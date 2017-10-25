@@ -1,6 +1,5 @@
 ﻿using DevicesSyncUnity;
 using DevicesSyncUnity.Messages;
-using System.Collections.Generic;
 using UnityEngine.Networking;
 
 namespace NormandErwan.MasterThesisExperiment.Variables
@@ -24,21 +23,19 @@ namespace NormandErwan.MasterThesisExperiment.Variables
         protected override void Awake()
         {
             base.Awake();
-            MessageTypes.Add(currentMessage.MessageType);
-        }
 
-        protected override void Start()
-        {
-            base.Start();
+            DeviceConnected += DevicesInfoSync_DeviceConnected;
             foreach (var independentVariable in independentVariables)
             {
                 independentVariable.RequestCurrentConditionSync += IndependentVariableManager_RequestCurrentConditionSync;
             }
+
+            MessageTypes.Add(currentMessage.MessageType);
         }
 
-        protected override void OnDestroy()
+        protected virtual void OnDestroy()
         {
-            base.OnDestroy();
+            DeviceConnected -= DevicesInfoSync_DeviceConnected;
             foreach (var indeVarManager in independentVariables)
             {
                 indeVarManager.RequestCurrentConditionSync -= IndependentVariableManager_RequestCurrentConditionSync;
@@ -55,7 +52,7 @@ namespace NormandErwan.MasterThesisExperiment.Variables
         protected override DevicesSyncMessage OnClientMessageReceived(NetworkMessage netMessage)
         {
             var stateMessage = netMessage.ReadMessage<IndependentVariablesMessage>();
-            if (!isServer) // Don't update twice if the device is a host
+            if (!isServer)
             {
                 currentMessage = stateMessage;
                 currentMessage.Restore(independentVariables);
@@ -63,7 +60,7 @@ namespace NormandErwan.MasterThesisExperiment.Variables
             return stateMessage;
         }
 
-        protected override void OnClientDeviceConnected(int deviceId)
+        protected virtual void DevicesInfoSync_DeviceConnected(int deviceId)
         {
             if (deviceId != NetworkManager.client.connection.connectionId)
             {
@@ -73,10 +70,6 @@ namespace NormandErwan.MasterThesisExperiment.Variables
                     SendToClient(deviceId, currentMessage);
                 }
             }
-        }
-
-        protected override void OnClientDeviceDisconnected(int deviceId)
-        {
         }
 
         protected virtual void IndependentVariableManager_RequestCurrentConditionSync(string independentVariableManagerId, string currentConditionId)

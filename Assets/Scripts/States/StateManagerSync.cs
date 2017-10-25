@@ -26,18 +26,16 @@ namespace NormandErwan.MasterThesisExperiment.States
         protected override void Awake()
         {
             base.Awake();
+
+            DeviceDisconnected += DevicesInfoSync_DeviceDisconnected;
+            stateManager.RequestCurrentStateSync += StateManager_RequestCurrentStateSync;
+
             MessageTypes.Add(currentStateMessage.MessageType);
         }
 
-        protected override void Start()
+        protected virtual void OnDestroy()
         {
-            base.Start();
-            stateManager.RequestCurrentStateSync += StateManager_RequestCurrentStateSync;
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
+            DeviceDisconnected -= DevicesInfoSync_DeviceDisconnected;
             stateManager.RequestCurrentStateSync -= StateManager_RequestCurrentStateSync;
         }
 
@@ -51,7 +49,7 @@ namespace NormandErwan.MasterThesisExperiment.States
         protected override DevicesSyncMessage OnClientMessageReceived(NetworkMessage netMessage)
         {
             var stateMessage = netMessage.ReadMessage<StateManagerMessage>();
-            if (!isServer) // Don't update twice if the device is a host
+            if (!isServer)
             {
                 currentStateMessage = stateMessage;
                 currentStateMessage.Restore(stateManager);
@@ -59,17 +57,13 @@ namespace NormandErwan.MasterThesisExperiment.States
             return stateMessage;
         }
 
-        protected override void OnClientDeviceConnected(int deviceId)
+        protected virtual void DevicesInfoSync_DeviceDisconnected(int deviceId)
         {
             if (deviceId != NetworkManager.client.connection.connectionId)
             {
                 currentStateMessage.Update(stateManager.CurrentState);
                 SendToClient(deviceId, currentStateMessage);
             }
-        }
-
-        protected override void OnClientDeviceDisconnected(int deviceId)
-        {
         }
 
         protected virtual void StateManager_RequestCurrentStateSync(State currentState)
