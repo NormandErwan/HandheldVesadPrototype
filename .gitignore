@@ -1,13 +1,18 @@
+/App/
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
 /[Bb]uild/
 /[Bb]uilds/
 /Assets/AssetStoreTools*
+/Assets/ArucoUnity*
+/Assets/ArucoUnityForOvrvision*
 /Assets/DevicesSyncUnity*
 /Assets/Hover*
 /Assets/LeanTouch*
 /Assets/LeapMotion*
+/Assets/OvrvisionPro*
+/Assets/*.rsp*
 
 # Visual Studio 2015 cache directory
 /.vs/
