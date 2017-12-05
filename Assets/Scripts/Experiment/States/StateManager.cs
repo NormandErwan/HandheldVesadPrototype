@@ -81,6 +81,19 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.States
             }
         }
 
+        public T GetIndependentVariable<T>() where T : IIndependentVariable
+        {
+            foreach (var independentVariable in independentVariables)
+            {
+                var ivT = independentVariable as T;
+                if (ivT != null)
+                {
+                    return ivT;
+                }
+            }
+            return null;
+        }
+
         public override string ToString()
         {
             return "StatesManager: [CurrentState: '" + CurrentState.id 

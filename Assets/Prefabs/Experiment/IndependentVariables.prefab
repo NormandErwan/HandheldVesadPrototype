@@ -416,6 +416,7 @@ MonoBehaviour:
   title: Difficile
   minimum: 2.5
   maximum: 2.7
+  incorrectlyClassifiedCellsFraction: 0.5
 --- !u!114 &114102835371396286
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -570,6 +571,7 @@ MonoBehaviour:
   title: Facile
   minimum: 1.25
   maximum: 1.45
+  incorrectlyClassifiedCellsFraction: 0.5
 --- !u!114 &114759187420252978
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -583,7 +585,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2_Large
   title: Grand
-  fontSize: 24
+  fontSize: 40
 --- !u!114 &114784559623597272
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -611,7 +613,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1_Small
   title: Petit
-  fontSize: 12
+  fontSize: 28
 --- !u!114 &114999698179949338
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -20,74 +20,84 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     // Variables
 
-    IVTextSize ivTextSize;
+    protected IVTextSize ivTextSize;
+    protected IVClassificationDistance iVClassificationDistance;
 
     // Methods
-
-    public override void ConfigureGrid()
-    {
-      base.ConfigureGrid();
-
-      // Subscribe to ivTextSize
-      if (ivTextSize != null)
-      {
-        ivTextSize.CurrentConditionUpdated -= IvTextSize_CurrentConditionUpdated;
-      }
-
-      foreach (var independentVariable in stateManager.independentVariables)
-      {
-        ivTextSize = independentVariable as IVTextSize;
-        if (ivTextSize != null)
-        {
-          ivTextSize.CurrentConditionUpdated += IvTextSize_CurrentConditionUpdated;
-          break;
-        }
-      }
-
-      // Scales the canvas as it's in world reference
-      canvas.GetComponent<RectTransform>().localScale = scale * Vector3.one;
-
-      // Setup the cells
-      foreach (var cell in GetCells())
-      {
-        cell.ItemFontSize = ivTextSize.CurrentCondition.fontSize;
-        cell.ConfigureGrid();
-      }
-    }
 
     /// <summary>
     /// Calls <see cref="CleanConfigureGrid"/>.
     /// </summary>
-    protected virtual void Start()
+    public override void ConfigureGrid()
     {
       StartCoroutine(CleanConfigureGrid());
     }
 
     /// <summary>
-    /// Removes the cells in the <see cref="GridLayoutController.GridLayout"/> then calls <see cref="ConfigureGrid"/>.
+    /// Gets and subscribes to the independent variables, and calls <see cref="ConfigureGrid"/>.
     /// </summary>
-    /// <returns></returns>
-    protected virtual IEnumerator CleanConfigureGrid()
+    protected virtual void Start()
     {
-      foreach (Transform cell in GridLayout.transform)
+      ivTextSize = stateManager.GetIndependentVariable<IVTextSize>();
+      iVClassificationDistance = stateManager.GetIndependentVariable<IVClassificationDistance>();
+
+      foreach (var independentVariable in stateManager.independentVariables)
       {
-        Destroy(cell.gameObject);
+        independentVariable.CurrentConditionUpdated += IIndependentVariable_CurrentConditionUpdated;
       }
 
-      yield return null;
+      canvas.GetComponent<RectTransform>().localScale = scale * Vector3.one; // Scales the canvas as it's in world reference
 
       ConfigureGrid();
     }
 
     /// <summary>
-    /// Updates the <see cref="Item.FontSize"/> when the <see cref="IVTextSize"/> current condition has been updated.
+    /// Removes the cells in the <see cref="GridLayoutController.GridLayout"/>, calls <see cref="ConfigureGrid"/> and setup the cells with a
+    /// <see cref="GridGenerator"/>.
     /// </summary>
-    protected virtual void IvTextSize_CurrentConditionUpdated(IVTextSizeCondition condition)
+    /// <returns></returns>
+    protected virtual IEnumerator CleanConfigureGrid()
     {
+      // Removes the previous cells
+      foreach (Transform cell in GridLayout.transform)
+      {
+        Destroy(cell.gameObject);
+      }
+      yield return null;
+
+      // Configure the default grid one frame later after previous cells have been removed
+      base.ConfigureGrid();
+
+      // Generates a grid generator with average distance in current condition classification distance range
+      GridGenerator gridGenerator;
+      do
+      {
+        gridGenerator = new GridGenerator(GridSize.y, GridSize.x, CellPrefab.GetCellsNumber(),
+        iVClassificationDistance.CurrentCondition.IncorrectlyClassifiedCellsFraction,
+        (GridGenerator.DistanceTypes)iVClassificationDistance.CurrentConditionIndex);
+      }
+      while (!iVClassificationDistance.CurrentCondition.Range.ContainsValue(gridGenerator.AverageDistance));
+
+      // Configures each cell
+      int cellRow = 0, cellColumn = 0;
       foreach (var cell in GetCells())
       {
+        cell.ItemClass = (ItemClass)gridGenerator.Cells[cellRow, cellColumn].GetMainItemId();
         cell.ItemFontSize = ivTextSize.CurrentCondition.fontSize;
+        cell.ConfigureGrid();
+        cell.ConfigureItems(gridGenerator.Cells[cellRow, cellColumn].items);
+
+        cellColumn = (cellColumn + 1) % GridSize.x;
+        if (cellColumn == 0)
+        {
+          cellRow = (cellRow + 1) % GridSize.y;
+        }
       }
+    }
+
+    private void IIndependentVariable_CurrentConditionUpdated()
+    {
+      ConfigureGrid();
     }
   }
 }

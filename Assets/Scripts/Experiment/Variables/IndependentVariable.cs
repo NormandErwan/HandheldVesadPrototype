@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace NormandErwan.MasterThesisExperiment.Experiment.Variables
@@ -16,10 +15,6 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Variables
         public SortedList<string, T> Conditions { get; protected set; }
         public T CurrentCondition { get; protected set; }
 
-        // Events
-
-        public event Action<T> CurrentConditionUpdated = delegate { };
-
         // Methods
 
         public override void NextCondition()
@@ -33,7 +28,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Variables
             CurrentCondition = Conditions[currentConditionId];
             CurrentConditionId = CurrentCondition.id;
             CurrentConditionIndex = Conditions.IndexOfKey(CurrentCondition.id);
-            CurrentConditionUpdated.Invoke(CurrentCondition);
+            OnCurrentConditionUpdated();
         }
 
         protected virtual void Awake()

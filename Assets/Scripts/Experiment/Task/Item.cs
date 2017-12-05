@@ -46,16 +46,18 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       }
     }
 
+    public bool CorrectlyClassified { get; protected set; }
+
     // Variables
 
     private ItemClass itemClass;
 
     // Methods
-    
 
     public void SetCorrectlyClassified(bool value)
     {
-      background.material = value == true ? correctlyClassifiedMaterial : incorrectlyClassifiedMaterial;
+      CorrectlyClassified = value;
+      background.material = (CorrectlyClassified) ? correctlyClassifiedMaterial : incorrectlyClassifiedMaterial;
     }
   }
 }

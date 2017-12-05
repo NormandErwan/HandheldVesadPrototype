@@ -333,7 +333,7 @@ Prefab:
     - target: {fileID: 224663951439573798, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 356.5
+      value: 334
       objectReference: {fileID: 0}
     - target: {fileID: 224663951439573798, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
@@ -423,7 +423,7 @@ Prefab:
     - target: {fileID: 224474842046837874, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: -97.60732
+      value: -97.299255
       objectReference: {fileID: 0}
     - target: {fileID: 114979179449275544, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
@@ -433,12 +433,12 @@ Prefab:
     - target: {fileID: 224556241811007488, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: -437.5271
+      value: -452.35535
       objectReference: {fileID: 0}
     - target: {fileID: 224556241811007488, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 263.14017
+      value: 254.54065
       objectReference: {fileID: 0}
     - target: {fileID: 224762782251708384, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
@@ -448,12 +448,12 @@ Prefab:
     - target: {fileID: 224936207022536966, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: -50.085857
+      value: -49.528576
       objectReference: {fileID: 0}
     - target: {fileID: 224538788333267750, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 218.1401
+      value: 209.54059
       objectReference: {fileID: 0}
     - target: {fileID: 224280364903364314, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
@@ -1409,7 +1409,7 @@ Prefab:
     - target: {fileID: 114389004116975652, guid: 23f663053c34e3f4bbe0d9ebe3c30cc4,
         type: 2}
       propertyPath: autoStart
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 23f663053c34e3f4bbe0d9ebe3c30cc4, type: 2}
@@ -2191,10 +2191,29 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114999698179949338, guid: a3b64898f2954384a989df0bbfd40e80,
+    - target: {fileID: 114265026425476688, guid: a3b64898f2954384a989df0bbfd40e80,
         type: 2}
-      propertyPath: networkManager
-      value: 
+      propertyPath: title
+      value: "R\xE9alit\xE9 augment\xE9e, interactions avec la main"
+      objectReference: {fileID: 0}
+    - target: {fileID: 1309221417637962, guid: a3b64898f2954384a989df0bbfd40e80, type: 2}
+      propertyPath: m_Name
+      value: GazeInput_AROutput
+      objectReference: {fileID: 0}
+    - target: {fileID: 114784559623597272, guid: a3b64898f2954384a989df0bbfd40e80,
+        type: 2}
+      propertyPath: title
+      value: "R\xE9alit\xE9 augment\xE9e, interactions HoloLens"
+      objectReference: {fileID: 0}
+    - target: {fileID: 114784559623597272, guid: a3b64898f2954384a989df0bbfd40e80,
+        type: 2}
+      propertyPath: id
+      value: E_GazeInput_AROutput
+      objectReference: {fileID: 0}
+    - target: {fileID: 114265026425476688, guid: a3b64898f2954384a989df0bbfd40e80,
+        type: 2}
+      propertyPath: id
+      value: D_HandsInput_AROutput
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a3b64898f2954384a989df0bbfd40e80, type: 2}

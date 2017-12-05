@@ -39,7 +39,7 @@ namespace NormandErwan.MasterThesisExperiment.Utilities
         /// <returns>String representation of the Range</returns>
         public override string ToString()
         {
-            return string.Format("[{0} - {1}]", Minimum, Maximum);
+            return string.Format("[{0}, {1}]", Minimum, Maximum);
         }
 
         /// <summary>

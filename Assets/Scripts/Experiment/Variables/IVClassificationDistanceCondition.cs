@@ -13,9 +13,14 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Variables
         [SerializeField]
         private float maximum;
 
+        [SerializeField]
+        [Range(0f, 1f)]
+        private float incorrectlyClassifiedCellsFraction = 0.5f;
+
         // Properties
 
         public Range<float> Range { get; protected set; }
+        public float IncorrectlyClassifiedCellsFraction { get { return incorrectlyClassifiedCellsFraction; } protected set { incorrectlyClassifiedCellsFraction = value; } }
 
         // Methods
 

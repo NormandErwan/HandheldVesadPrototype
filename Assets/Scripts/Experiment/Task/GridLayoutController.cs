@@ -33,6 +33,8 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     public int CellMargins { get { return cellMargins; } protected set { cellMargins = value; } }
 
+    public T CellPrefab { get { return cellPrefab; } protected set { cellPrefab = value; } }
+
     // Methods
 
     public virtual void ConfigureGrid()
@@ -45,8 +47,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       gridLayout.constraintCount = gridSize.x;
 
       // Creates the cells
-      int cellNumber = gridSize.x * gridSize.y;
-      for (int i = 0; i < cellNumber; i++)
+      for (int i = 0; i < GetCellsNumber(); i++)
       {
         Instantiate(cellPrefab, gridLayout.transform);
       }
@@ -55,6 +56,11 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     public virtual T[] GetCells()
     {
       return GridLayout.transform.GetComponentsInChildren<T>();
+    }
+
+    public virtual int GetCellsNumber()
+    {
+      return gridSize.x * gridSize.y;
     }
   }
 }

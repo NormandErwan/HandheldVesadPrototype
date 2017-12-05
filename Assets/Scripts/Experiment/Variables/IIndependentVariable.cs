@@ -16,6 +16,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Variables
         // Events
 
         public event Action<string, string> RequestCurrentConditionSync = delegate { };
+        public event Action CurrentConditionUpdated = delegate { };
 
         // Methods
 
@@ -25,6 +26,11 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Variables
         protected virtual void OnRequestCurrentConditionSync(string independentVariableId, string currentConditionId)
         {
             RequestCurrentConditionSync.Invoke(independentVariableId, currentConditionId);
+        }
+
+        protected virtual void OnCurrentConditionUpdated()
+        {
+            CurrentConditionUpdated.Invoke();
         }
     }
 }
