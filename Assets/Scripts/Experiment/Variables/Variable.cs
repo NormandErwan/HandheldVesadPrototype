@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace NormandErwan.MasterThesisExperiment.Variables
+namespace NormandErwan.MasterThesisExperiment.Experiment.Variables
 {
     public abstract class Variable : MonoBehaviour
     {

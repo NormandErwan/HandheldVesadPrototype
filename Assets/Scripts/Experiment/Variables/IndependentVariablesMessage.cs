@@ -1,6 +1,6 @@
 ﻿using DevicesSyncUnity.Messages;
 
-namespace NormandErwan.MasterThesisExperiment.Variables
+namespace NormandErwan.MasterThesisExperiment.Experiment.Variables
 {
     public class IndependentVariablesMessage : DevicesSyncMessage
     {

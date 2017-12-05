@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NormandErwan.MasterThesisExperiment.Task
+namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 {
     [RequireComponent(typeof(Canvas))]
     [RequireComponent(typeof(ContentSizeFitter))]

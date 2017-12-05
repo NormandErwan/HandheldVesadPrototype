@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace NormandErwan.MasterThesisExperiment.Task
+namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 {
     public class Container : MonoBehaviour
     {

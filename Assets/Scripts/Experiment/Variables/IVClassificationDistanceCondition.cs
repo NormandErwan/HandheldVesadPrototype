@@ -1,7 +1,7 @@
 ﻿using NormandErwan.MasterThesisExperiment.Utilities;
 using UnityEngine;
 
-namespace NormandErwan.MasterThesisExperiment.Variables
+namespace NormandErwan.MasterThesisExperiment.Experiment.Variables
 {
     public class IVClassificationDistanceCondition : IndependentVariableCondition
     {

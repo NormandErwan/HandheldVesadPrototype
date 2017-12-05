@@ -1,6 +1,6 @@
 ﻿using DevicesSyncUnity.Messages;
 
-namespace NormandErwan.MasterThesisExperiment.States
+namespace NormandErwan.MasterThesisExperiment.Experiment.States
 {
     /// <summary>
     /// Message that contains the new current state of the experiment.

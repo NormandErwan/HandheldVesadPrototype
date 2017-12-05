@@ -1,5 +1,5 @@
-﻿using NormandErwan.MasterThesisExperiment.States;
-using NormandErwan.MasterThesisExperiment.Variables;
+﻿using NormandErwan.MasterThesisExperiment.Experiment.States;
+using NormandErwan.MasterThesisExperiment.Experiment.Variables;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -252,7 +252,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62950d3d141fa6f4792244ce24d2ee8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkManager: {fileID: 0}
   syncMode: 0
   stateManager: {fileID: 114343814640682756}
 --- !u!114 &114558040002357160

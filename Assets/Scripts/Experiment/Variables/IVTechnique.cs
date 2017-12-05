@@ -1,4 +1,4 @@
-﻿namespace NormandErwan.MasterThesisExperiment.Variables
+﻿namespace NormandErwan.MasterThesisExperiment.Experiment.Variables
 {
     public class IVTechnique : IndependentVariable<IVTechniqueCondition>
     {

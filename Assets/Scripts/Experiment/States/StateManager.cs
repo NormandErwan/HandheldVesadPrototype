@@ -1,9 +1,9 @@
-﻿using NormandErwan.MasterThesisExperiment.Variables;
+﻿using NormandErwan.MasterThesisExperiment.Experiment.Variables;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NormandErwan.MasterThesisExperiment.States
+namespace NormandErwan.MasterThesisExperiment.Experiment.States
 {
     // TODO: supports State[] in editor fields
     // TODO: supports that there is no states in editor fields (e.g. supports only states for trials)

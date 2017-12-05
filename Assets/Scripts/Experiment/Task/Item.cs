@@ -1,8 +1,8 @@
-﻿using NormandErwan.MasterThesisExperiment.Variables;
+﻿using NormandErwan.MasterThesisExperiment.Experiment.Variables;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NormandErwan.MasterThesisExperiment.Task
+namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 {
     public class Item : MonoBehaviour
     {

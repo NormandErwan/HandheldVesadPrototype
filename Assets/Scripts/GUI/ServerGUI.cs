@@ -1,4 +1,4 @@
-﻿using NormandErwan.MasterThesisExperiment.States;
+﻿using NormandErwan.MasterThesisExperiment.Experiment.States;
 using UnityEngine;
 using UnityEngine.UI;
 

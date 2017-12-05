@@ -1,7 +1,7 @@
-﻿using NormandErwan.MasterThesisExperiment.Variables;
+﻿using NormandErwan.MasterThesisExperiment.Experiment.Variables;
 using UnityEngine;
 
-namespace NormandErwan.MasterThesisExperiment.States
+namespace NormandErwan.MasterThesisExperiment.Experiment.States
 {
     public class State : Variable
     {
