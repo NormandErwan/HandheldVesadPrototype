@@ -2,7 +2,7 @@
 
 namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 {
-    public class Container : MonoBehaviour
+    public class Cell : MonoBehaviour
     {
     }
 }

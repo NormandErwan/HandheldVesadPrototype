@@ -6,7 +6,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 {
     [RequireComponent(typeof(Canvas))]
     [RequireComponent(typeof(ContentSizeFitter))]
-    public class ContainersLayout : MonoBehaviour
+    public class Grid : MonoBehaviour
     {
         // Editor fields
 
