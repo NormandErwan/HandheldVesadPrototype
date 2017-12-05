@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 222967314119045084}
   - component: {fileID: 114230485758492408}
   m_Layer: 5
-  m_Name: ClassText
+  m_Name: ItemClassText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -224,7 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 0a9e0615156122744a2ab6908e34133e, type: 2}
   m_Color: {r: 0.31764707, g: 0.8980392, b: 0.31764707, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
@@ -251,11 +251,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51d04981baca3da42b3e939a64eec146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentClass: 0
-  classTextSize: 24
-  classText: {fileID: 114230485758492408}
-  correctClassColor: {r: 0.31764707, g: 0.8980392, b: 0.31764707, a: 1}
-  incorrectClassColor: {r: 0.8862745, g: 0.32941177, b: 0.3254902, a: 1}
+  itemClassText: {fileID: 114230485758492408}
+  correctlyClassifiedMaterial: {fileID: 2100000, guid: 0a9e0615156122744a2ab6908e34133e,
+    type: 2}
+  incorrectlyClassifiedMaterial: {fileID: 2100000, guid: 57c7d98b1acef0f49967632816a6cedb,
+    type: 2}
   background: {fileID: 114527948453479742}
 --- !u!114 &114620539117845372
 MonoBehaviour:

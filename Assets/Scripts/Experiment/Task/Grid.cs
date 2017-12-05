@@ -1,77 +1,93 @@
-﻿using System.Collections;
+﻿using NormandErwan.MasterThesisExperiment.Experiment.States;
+using NormandErwan.MasterThesisExperiment.Experiment.Variables;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 {
-    [RequireComponent(typeof(Canvas))]
-    [RequireComponent(typeof(ContentSizeFitter))]
-    public class Grid : MonoBehaviour
+  public class Grid : GridLayoutController<Cell>
+  {
+    // Editor fields
+
+    [SerializeField]
+    private Canvas canvas;
+
+    [SerializeField]
+    private float scale = 0.0001f;
+
+    [SerializeField]
+    private StateManager stateManager;
+
+    // Variables
+
+    IVTextSize ivTextSize;
+
+    // Methods
+
+    public override void ConfigureGrid()
     {
-        // Editor fields
+      base.ConfigureGrid();
 
-        public Camera mainCamera;
-        public Vector2Int mobileDeviceSize;
-        public float scale = 0.0001f;
-        public GridLayoutGroup grid;
-        public Vector2Int gridSize = new Vector2Int(8, 4);
-        public int containerMargins = 1;
-        public GameObject containerPrefab;
+      // Subscribe to ivTextSize
+      if (ivTextSize != null)
+      {
+        ivTextSize.CurrentConditionUpdated -= IvTextSize_CurrentConditionUpdated;
+      }
 
-        // Variables
-
-        private RectTransform rect;
-        private ContentSizeFitter sizeFitter;
-
-        // Methods
-
-        protected void Awake()
+      foreach (var independentVariable in stateManager.independentVariables)
+      {
+        ivTextSize = independentVariable as IVTextSize;
+        if (ivTextSize != null)
         {
-            rect = GetComponent<RectTransform>();
+          ivTextSize.CurrentConditionUpdated += IvTextSize_CurrentConditionUpdated;
+          break;
         }
+      }
 
-        protected void Start()
-        {
-            SetupContainers();
-            StartCoroutine(SetupCamera());
-        }
+      // Scales the canvas as it's in world reference
+      canvas.GetComponent<RectTransform>().localScale = scale * Vector3.one;
 
-        protected void SetupContainers()
-        {
-            rect.localScale = scale * Vector3.one;
-
-            grid.padding = new RectOffset(containerMargins, containerMargins, containerMargins, containerMargins);
-            grid.spacing = containerMargins * Vector2.one;
-            grid.cellSize = mobileDeviceSize;
-            grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-            grid.constraintCount = gridSize.x;
-
-            foreach (Transform container in grid.transform)
-            {
-                Destroy(container.gameObject);
-            }
-
-            int containerNumber = gridSize.x * gridSize.y;
-            for (int i = 0; i < containerNumber; i++)
-            {
-                Instantiate(containerPrefab, grid.transform);
-            }
-        }
-
-        protected IEnumerator SetupCamera()
-        {
-            yield return null;
-
-#if UNITY_ANDROID
-            // TODO: if in phone only condition
-            if (mobileDeviceSize.x > 0 && mobileDeviceSize.y > 0)
-            {
-                mainCamera.aspect = mobileDeviceSize.x / (float)mobileDeviceSize.y;
-                float maxSideLength = Mathf.Max(rect.rect.width / mainCamera.aspect, rect.rect.height);
-                float distance = -maxSideLength * scale / (2 * Mathf.Tan(mainCamera.fieldOfView / 2 * Mathf.Deg2Rad));
-                mainCamera.transform.localPosition = new Vector3(rect.transform.localPosition.x, rect.transform.localPosition.y, distance);
-            }
-#endif
-        }
+      // Setup the cells
+      foreach (var cell in GetCells())
+      {
+        cell.ItemFontSize = ivTextSize.CurrentCondition.fontSize;
+        cell.ConfigureGrid();
+      }
     }
+
+    /// <summary>
+    /// Calls <see cref="CleanConfigureGrid"/>.
+    /// </summary>
+    protected virtual void Start()
+    {
+      StartCoroutine(CleanConfigureGrid());
+    }
+
+    /// <summary>
+    /// Removes the cells in the <see cref="GridLayoutController.GridLayout"/> then calls <see cref="ConfigureGrid"/>.
+    /// </summary>
+    /// <returns></returns>
+    protected virtual IEnumerator CleanConfigureGrid()
+    {
+      foreach (Transform cell in GridLayout.transform)
+      {
+        Destroy(cell.gameObject);
+      }
+
+      yield return null;
+
+      ConfigureGrid();
+    }
+
+    /// <summary>
+    /// Updates the <see cref="Item.FontSize"/> when the <see cref="IVTextSize"/> current condition has been updated.
+    /// </summary>
+    protected virtual void IvTextSize_CurrentConditionUpdated(IVTextSizeCondition condition)
+    {
+      foreach (var cell in GetCells())
+      {
+        cell.ItemFontSize = ivTextSize.CurrentCondition.fontSize;
+      }
+    }
+  }
 }
