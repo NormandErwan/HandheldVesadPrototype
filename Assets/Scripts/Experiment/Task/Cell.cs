@@ -4,6 +4,12 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 {
   public class Cell : GridLayoutController<Item>
   {
+    // Editor fields
+
+    [Header("References")]
+    [SerializeField]
+    private new BoxCollider collider;
+
     // Properties
 
     public ItemClass ItemClass { get; set; }
@@ -14,12 +20,17 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     public override void ConfigureGrid()
     {
-      // Computes the item size
-      Vector2 sizeDelta = GetComponent<RectTransform>().sizeDelta;
-      int cellSize = Mathf.Min((int)sizeDelta.x / GridSize.x, (int)sizeDelta.y / GridSize.y) - 2 * CellMargins;
+      // Compute the item size
+      var rectSizeDelta = GetComponent<RectTransform>().sizeDelta;
+      int cellSize = Mathf.Min((int)rectSizeDelta.x / GridSize.x, (int)rectSizeDelta.y / GridSize.y) - 2 * CellMargins;
       CellSize = new Vector2Int(cellSize, cellSize);
 
-      // Configures the grid
+      // Configure the collider
+      collider.center = Vector3.zero;
+      collider.size =  new Vector3(rectSizeDelta.x, rectSizeDelta.y, 0.5f * cellSize);
+
+      // Configure the grid
+      CellsNumberInstantiatedAtConfigure = (GridSize.x * GridSize.y) - 1; // -1 because we want to let space for the user to replace each item in its good cell
       base.ConfigureGrid();
     }
 
@@ -30,14 +41,10 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       {
         item.ItemClass = (ItemClass)itemValues[index];
         item.FontSize = ItemFontSize;
+        item.Configure();
         item.SetCorrectlyClassified(item.ItemClass == ItemClass);
         index++;
       }
-    }
-
-    public override int GetCellsNumber()
-    {
-      return (GridSize.x * GridSize.y) - 1; // -1 because we want to let space for the user to replace each item in its good cell
     }
   }
 }

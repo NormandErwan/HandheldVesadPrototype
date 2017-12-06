@@ -10,11 +10,16 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     // Editor fields
 
     [SerializeField]
+    private Vector2Int cellGridSize;
+
+    [Header("Canvas")]
+    [SerializeField]
     private Canvas canvas;
 
     [SerializeField]
-    private float scale = 0.0001f;
+    private float cavnasScale = 0.0001f;
 
+    [Header("References")]
     [SerializeField]
     private StateController stateController;
 
@@ -22,6 +27,10 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     protected IVTextSize ivTextSize;
     protected IVClassificationDifficulty iVClassificationDifficulty;
+
+    // Properties
+
+    public Item SelectedItem { get; protected set; }
 
     // Methods
 
@@ -31,6 +40,32 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     public override void ConfigureGrid()
     {
       StartCoroutine(CleanConfigureGrid());
+    }
+
+    public virtual void SetSelectedItem(Item item)
+    {
+      if (SelectedItem != null)
+      {
+        SelectedItem.ToggleSelected();
+      }
+
+      SelectedItem = item;
+
+      if (SelectedItem != null)
+      {
+        item.ToggleSelected();
+      }
+    }
+
+    public virtual void MoveCurrentItemSelected(Cell newCell)
+    {
+      int itemsMaxNumber = newCell.GridSize.x * newCell.GridSize.y;
+      if (newCell.GetCells().Length < itemsMaxNumber)
+      {
+        SelectedItem.transform.SetParent(newCell.GridLayout.transform);
+        SelectedItem.SetCorrectlyClassified(SelectedItem.ItemClass == newCell.ItemClass);
+      }
+      SetSelectedItem(null);
     }
 
     /// <summary>
@@ -46,7 +81,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
         independentVariable.CurrentConditionUpdated += IIndependentVariable_CurrentConditionUpdated;
       }
 
-      canvas.GetComponent<RectTransform>().localScale = scale * Vector3.one; // Scales the canvas as it's in world reference
+      canvas.GetComponent<RectTransform>().localScale = cavnasScale * Vector3.one; // Scales the canvas as it's in world reference
 
       ConfigureGrid();
     }
@@ -59,32 +94,42 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     protected virtual IEnumerator CleanConfigureGrid()
     {
       // Removes the previous cells
-      foreach (Transform cell in GridLayout.transform)
+      foreach (var cell in GetCells())
       {
         Destroy(cell.gameObject);
       }
       yield return null;
 
-      // Configure the default grid one frame later after previous cells have been removed
+      // Configure the grid
       base.ConfigureGrid();
+      yield return null;
 
-      // Generates a grid generator with average distance in current condition classification distance range
+      // Configure the grid of each cell
+      var itemsPerCell = 0;
+      foreach (var cell in GetCells())
+      {
+        cell.GridSize = cellGridSize;
+        cell.ConfigureGrid();
+        itemsPerCell = cell.CellsNumberInstantiatedAtConfigure;
+      }
+      yield return null;
+
+      // Generate a grid generator with average distance in current condition classification distance range
       GridGenerator gridGenerator;
       do
       {
-        gridGenerator = new GridGenerator(GridSize.y, GridSize.x, CellPrefab.GetCellsNumber(),
+        gridGenerator = new GridGenerator(GridSize.y, GridSize.x, itemsPerCell,
         iVClassificationDifficulty.CurrentCondition.IncorrectlyClassifiedCellsFraction,
         (GridGenerator.DistanceTypes)iVClassificationDifficulty.CurrentConditionIndex);
       }
       while (!iVClassificationDifficulty.CurrentCondition.Range.ContainsValue(gridGenerator.AverageDistance));
 
-      // Configures each cell
+      // Configure the items of each cell
       int cellRow = 0, cellColumn = 0;
       foreach (var cell in GetCells())
       {
         cell.ItemClass = (ItemClass)gridGenerator.Cells[cellRow, cellColumn].GetMainItemId();
         cell.ItemFontSize = ivTextSize.CurrentCondition.fontSize;
-        cell.ConfigureGrid();
         cell.ConfigureItems(gridGenerator.Cells[cellRow, cellColumn].items);
 
         cellColumn = (cellColumn + 1) % GridSize.x;

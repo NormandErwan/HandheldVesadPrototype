@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace NormandErwan.MasterThesisExperiment.Experiment.Task
@@ -8,12 +7,14 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
   {
     // Editor fields
 
+    [Header("Grid")]
     [SerializeField]
     private GridLayoutGroup gridLayout;
 
     [SerializeField]
     private Vector2Int gridSize;
 
+    [Header("Cell")]
     [SerializeField]
     private Vector2Int cellSize;
 
@@ -23,17 +24,19 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     [SerializeField]
     private T cellPrefab;
 
-    // Methods
+    // Properties
 
-    public GridLayoutGroup GridLayout { get { return gridLayout; } protected set { gridLayout = value; } }
+    public GridLayoutGroup GridLayout { get { return gridLayout; } set { gridLayout = value; } }
 
-    public Vector2Int GridSize { get { return gridSize; } protected set { gridSize = value; } }
+    public Vector2Int GridSize { get { return gridSize; } set { gridSize = value; } }
 
-    public Vector2Int CellSize { get { return cellSize; } protected set { cellSize = value; } }
+    public Vector2Int CellSize { get { return cellSize; } set { cellSize = value; } }
 
-    public int CellMargins { get { return cellMargins; } protected set { cellMargins = value; } }
+    public int CellMargins { get { return cellMargins; } set { cellMargins = value; } }
 
-    public T CellPrefab { get { return cellPrefab; } protected set { cellPrefab = value; } }
+    public T CellPrefab { get { return cellPrefab; } set { cellPrefab = value; } }
+
+    public int CellsNumberInstantiatedAtConfigure { get; set; }
 
     // Methods
 
@@ -47,7 +50,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       gridLayout.constraintCount = gridSize.x;
 
       // Creates the cells
-      for (int i = 0; i < GetCellsNumber(); i++)
+      for (int i = 0; i < CellsNumberInstantiatedAtConfigure; i++)
       {
         Instantiate(cellPrefab, gridLayout.transform);
       }
@@ -58,9 +61,21 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       return GridLayout.transform.GetComponentsInChildren<T>();
     }
 
-    public virtual int GetCellsNumber()
+    public virtual bool Contains(T cell)
     {
-      return gridSize.x * gridSize.y;
+      foreach (var currentCell in GetCells())
+      {
+        if (currentCell == cell)
+        {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    protected virtual void Awake()
+    {
+      CellsNumberInstantiatedAtConfigure = GridSize.x * GridSize.y;
     }
   }
 }

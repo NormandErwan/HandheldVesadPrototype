@@ -227,8 +227,9 @@ MonoBehaviour:
   cellMargins: 10
   cellPrefab: {fileID: 114874126541826584, guid: 7a138894bb6d7a849b21914c87e8d9c8,
     type: 2}
+  cellGridSize: {x: 2, y: 3}
   canvas: {fileID: 223257008643290306}
-  scale: 0.0001
+  cavnasScale: 0.0001
   stateController: {fileID: 0}
 --- !u!114 &114739051112555216
 MonoBehaviour:
