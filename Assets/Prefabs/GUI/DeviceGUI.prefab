@@ -586,7 +586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b4f70b3924f7a745838414fcbcd86d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateManager: {fileID: 0}
+  stateController: {fileID: 0}
   progressText: {fileID: 114648467909148332}
   validateStateButton: {fileID: 114759140451930050}
   stateTextsParent: {fileID: 1085049916172156}

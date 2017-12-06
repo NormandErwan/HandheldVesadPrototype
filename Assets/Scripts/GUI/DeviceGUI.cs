@@ -17,16 +17,16 @@ namespace NormandErwan.MasterThesisExperiment.GUI
 
     protected override void StateManager_CurrentStateUpdated(State currentState)
     {
-      progressText.text = "État courant : " + stateManager.CurrentState.title + " - "
-          + "Progression : " + (stateManager.StatesProgress * 100f / stateManager.StatesTotal).ToString("F1") + "%";
+      progressText.text = "État courant : " + stateController.CurrentState.title + " - "
+          + "Progression : " + (stateController.StatesProgress * 100f / stateController.StatesTotal).ToString("F1") + "%";
 
       stateTextsParent.SetActive(true);
-      stateTitleText.text = stateManager.CurrentState.title;
-      stateInstructionsText.text = stateManager.CurrentState.instructions;
+      stateTitleText.text = stateController.CurrentState.title;
+      stateInstructionsText.text = stateController.CurrentState.instructions;
 
-      if (currentState.id == stateManager.taskBeginState.id || currentState.id == stateManager.taskTrialState.id)
+      if (currentState.id == stateController.taskBeginState.id || currentState.id == stateController.taskTrialState.id)
       {
-        foreach (var independentVariable in stateManager.independentVariables)
+        foreach (var independentVariable in stateController.independentVariables)
         {
           var ivClassificationDifficulty = independentVariable as IVClassificationDifficulty;
           if (ivClassificationDifficulty != null)
@@ -55,13 +55,13 @@ namespace NormandErwan.MasterThesisExperiment.GUI
 
     protected override void validateStateButton_onClik()
     {
-      if (stateManager.CurrentState.id == stateManager.taskTrialState.id)
+      if (stateController.CurrentState.id == stateController.taskTrialState.id)
       {
         stateTextsParent.SetActive(false);
       }
       else
       {
-        stateManager.NextState();
+        stateController.NextState();
       }
     }
   }

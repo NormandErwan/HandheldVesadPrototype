@@ -8,7 +8,7 @@ namespace NormandErwan.MasterThesisExperiment.GUI
   {
     // Editor Fields
 
-    public StateManager stateManager;
+    public StateController stateController;
     public Text progressText;
     public Button validateStateButton;
 
@@ -16,29 +16,29 @@ namespace NormandErwan.MasterThesisExperiment.GUI
 
     protected virtual void Start()
     {
-      if (stateManager.CurrentState != null)
+      if (stateController.CurrentState != null)
       {
-        StateManager_CurrentStateUpdated(stateManager.CurrentState);
+        StateManager_CurrentStateUpdated(stateController.CurrentState);
       }
-      stateManager.CurrentStateUpdated += StateManager_CurrentStateUpdated;
+      stateController.CurrentStateUpdated += StateManager_CurrentStateUpdated;
 
       validateStateButton.onClick.AddListener(validateStateButton_onClik);
     }
 
     protected virtual void OnDestroy()
     {
-      stateManager.CurrentStateUpdated -= StateManager_CurrentStateUpdated;
+      stateController.CurrentStateUpdated -= StateManager_CurrentStateUpdated;
       validateStateButton.onClick.RemoveListener(validateStateButton_onClik);
     }
 
     protected virtual void StateManager_CurrentStateUpdated(State currentState)
     {
-      progressText.text = stateManager.ToString();
+      progressText.text = stateController.ToString();
     }
 
     protected virtual void validateStateButton_onClik()
     {
-      stateManager.NextState();
+      stateController.NextState();
     }
   }
 }

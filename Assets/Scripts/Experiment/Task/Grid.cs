@@ -16,7 +16,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     private float scale = 0.0001f;
 
     [SerializeField]
-    private StateManager stateManager;
+    private StateController stateController;
 
     // Variables
 
@@ -38,10 +38,10 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     /// </summary>
     protected virtual void Start()
     {
-      ivTextSize = stateManager.GetIndependentVariable<IVTextSize>();
-      iVClassificationDifficulty = stateManager.GetIndependentVariable<IVClassificationDifficulty>();
+      ivTextSize = stateController.GetIndependentVariable<IVTextSize>();
+      iVClassificationDifficulty = stateController.GetIndependentVariable<IVClassificationDifficulty>();
 
-      foreach (var independentVariable in stateManager.independentVariables)
+      foreach (var independentVariable in stateController.independentVariables)
       {
         independentVariable.CurrentConditionUpdated += IIndependentVariable_CurrentConditionUpdated;
       }

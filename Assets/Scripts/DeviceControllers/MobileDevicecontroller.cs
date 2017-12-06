@@ -12,7 +12,7 @@ namespace NormandErwan.MasterThesisExperiment.DeviceControllers
     private new Camera camera;
 
     [SerializeField]
-    private StateManager stateManager;
+    private StateController stateController;
 
     [SerializeField]
     private Experiment.Task.Grid grid;

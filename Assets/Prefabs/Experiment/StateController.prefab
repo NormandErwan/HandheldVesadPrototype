@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114495959195748250}
   - component: {fileID: 114798882843681932}
   m_Layer: 0
-  m_Name: StatesManager
+  m_Name: StateController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -253,7 +253,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  stateManager: {fileID: 114343814640682756}
+  stateController: {fileID: 114343814640682756}
 --- !u!114 &114558040002357160
 MonoBehaviour:
   m_ObjectHideFlags: 1

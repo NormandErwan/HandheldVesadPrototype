@@ -8,7 +8,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.States
   // TODO: supports State[] in editor fields
   // TODO: supports that there is no states in editor fields (e.g. supports only states for trials)
   // TOOD: supports multiple tasks by creating a TaskManager and add in editor fields a TaskManager[]
-  public class StateManager : MonoBehaviour
+  public class StateController : MonoBehaviour
   {
     // Editor fields
 

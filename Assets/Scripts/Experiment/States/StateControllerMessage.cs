@@ -5,7 +5,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.States
   /// <summary>
   /// Message that contains the new current state of the experiment.
   /// </summary>
-  public class StateManagerMessage : DevicesSyncMessage
+  public class StateControllerMessage : DevicesSyncMessage
   {
     // Properties
 
@@ -35,9 +35,9 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.States
       currentStateId = currentState.id;
     }
 
-    public void Restore(StateManager stateManager)
+    public void Restore(StateController stateController)
     {
-      stateManager.SetCurrentState(currentStateId);
+      stateController.SetCurrentState(currentStateId);
     }
   }
 }
