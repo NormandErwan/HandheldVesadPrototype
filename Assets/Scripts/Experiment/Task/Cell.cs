@@ -2,19 +2,18 @@
 
 namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 {
+  [RequireComponent(typeof(BoxCollider))]
   public class Cell : GridLayoutController<Item>
   {
-    // Editor fields
-
-    [Header("References")]
-    [SerializeField]
-    private new BoxCollider collider;
-
     // Properties
 
     public ItemClass ItemClass { get; set; }
 
     public int ItemFontSize { get; set; }
+
+    // Variables
+
+    protected new BoxCollider collider;
 
     // Methods
 
@@ -45,6 +44,12 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
         item.SetCorrectlyClassified(item.ItemClass == ItemClass);
         index++;
       }
+    }
+
+    protected override void Awake()
+    {
+      base.Awake();
+      collider = GetComponent<BoxCollider>();
     }
   }
 }

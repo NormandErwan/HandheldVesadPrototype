@@ -1,37 +1,56 @@
 ﻿using Hover.Core.Cursors;
 using NormandErwan.MasterThesisExperiment.Experiment.Task;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace NormandErwan.MasterThesisExperiment.Utilities
+namespace NormandErwan.MasterThesisExperiment.Inputs
 {
   [RequireComponent(typeof(HoverCursorData))]
   [RequireComponent(typeof(Collider))]
   public class HoverCursorController : MonoBehaviour
   {
+    // Constants
+
+    public static readonly float longPressTimeout = 0.5f; // in seconds
+
     // Editor fields
 
     [SerializeField]
     private Experiment.Task.Grid grid;
 
+    // Properties
+
+    public HoverCursorData HoverCursorData { get; protected set; }
+
+    public bool IsFinger { get { return HoverCursorData.Type != CursorType.Look; } }
+    public bool IsIndex { get { return HoverCursorData.Type == CursorType.LeftIndex || HoverCursorData.Type == CursorType.RightIndex; } }
+    public bool IsThumb { get { return HoverCursorData.Type == CursorType.LeftThumb || HoverCursorData.Type == CursorType.RightThumb; } }
+    public bool IsMiddle { get { return HoverCursorData.Type == CursorType.LeftMiddle || HoverCursorData.Type == CursorType.RightMiddle; } }
+
     // Variables
 
-    protected HoverCursorData hoverCursorData;
+    protected Dictionary<Item, float> longPressTimers = new Dictionary<Item, float>();
 
     // Methods
 
     protected void Awake()
     {
-      hoverCursorData = GetComponent<HoverCursorData>();
+      HoverCursorData = GetComponent<HoverCursorData>();
     }
 
     protected virtual void OnTriggerEnter(Collider other)
     {
-      if (IsIndex())
+      if (!grid.Zooming)
       {
         var item = other.GetComponent<Item>();
         if (item != null)
         {
-          item.ToggleFocused();
+          item.SetFocused(true);
+
+          if (IsFinger)
+          {
+            longPressTimers[item] = 0;
+          }
         }
 
         var cell = other.GetComponent<Cell>();
@@ -43,32 +62,62 @@ namespace NormandErwan.MasterThesisExperiment.Utilities
           }
           else
           {
-            grid.MoveCurrentItemSelected(cell);
+            grid.MoveSelectedItemTo(cell);
           }
         }
+      }
+    }
+
+    protected virtual void OnTriggerStay(Collider other)
+    {
+      var item = other.GetComponent<Item>();
+      if (item != null)
+      {
       }
     }
 
     protected virtual void OnTriggerExit(Collider other)
     {
-      if (IsIndex())
+      var item = other.GetComponent<Item>();
+      if (item != null)
       {
-        var item = other.GetComponent<Item>();
-        if (item != null)
-        {
-          item.ToggleFocused();
+        item.SetFocused(false);
 
-          if (!item.CorrectlyClassified)
+        if (longPressTimers.ContainsKey(item))
+        {
+          if (item.Selected && longPressTimers[item] < longPressTimeout)
           {
-            grid.SetSelectedItem(item);
+            grid.SetSelectedItem(null);
           }
+          longPressTimers.Remove(item);
         }
       }
     }
 
-    protected virtual bool IsIndex()
+    protected virtual void Update()
     {
-      return hoverCursorData.Type == CursorType.LeftIndex || hoverCursorData.Type == CursorType.RightIndex;
+      if (!grid.Zooming && longPressTimers.Count > 0)
+      {
+        foreach (var item in new List<Item>(longPressTimers.Keys))
+        {
+          if (longPressTimers[item] < longPressTimeout)
+          {
+            longPressTimers[item] += Time.deltaTime;
+          }
+          else 
+          {
+            if (!item.Selected)
+            {
+              grid.SetSelectedItem(item);
+            }
+            else
+            {
+              grid.SetSelectedItem(null);
+            }
+            longPressTimers.Remove(item);
+          }
+        }
+      }
     }
   }
 }

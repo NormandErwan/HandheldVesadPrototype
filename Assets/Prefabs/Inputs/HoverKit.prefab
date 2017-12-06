@@ -170,7 +170,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1072125228892890
 GameObject:
   m_ObjectHideFlags: 1
@@ -189,7 +189,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1072941336301324
 GameObject:
   m_ObjectHideFlags: 1
@@ -620,7 +620,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1149543659100736
 GameObject:
   m_ObjectHideFlags: 1
@@ -934,7 +934,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1198572857045304
 GameObject:
   m_ObjectHideFlags: 1
@@ -1015,7 +1015,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1209530648759878
 GameObject:
   m_ObjectHideFlags: 1
@@ -1034,7 +1034,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1216256633063910
 GameObject:
   m_ObjectHideFlags: 1
@@ -1902,7 +1902,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1380506483831054
 GameObject:
   m_ObjectHideFlags: 1
@@ -2496,7 +2496,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1503264819702060
 GameObject:
   m_ObjectHideFlags: 1
@@ -2912,7 +2912,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1587516197912736
 GameObject:
   m_ObjectHideFlags: 1
@@ -3276,7 +3276,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1671131976466108
 GameObject:
   m_ObjectHideFlags: 1
@@ -3671,7 +3671,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1728632735127206
 GameObject:
   m_ObjectHideFlags: 1
@@ -4062,7 +4062,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1820618644259988
 GameObject:
   m_ObjectHideFlags: 1
@@ -13814,7 +13814,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Type: 10
-  _Capability: 2
+  _Capability: 0
   _IsRaycast: 0
   _RaycastLocalDirection: {x: 0, y: 1, z: 0}
   _Size: 0.01
@@ -18373,8 +18373,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CursorDataProvider: {fileID: 114052440748445006}
   CursorType: 1
-  FollowCursorActive: 0
-  ObjectsToActivate: []
+  FollowCursorActive: 1
+  ObjectsToActivate:
+  - {fileID: 1820656534094552}
   FollowCursorPosition: 1
   FollowCursorRotation: 1
   ScaleUsingCursorSize: 1
@@ -19194,7 +19195,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Type: 11
-  _Capability: 2
+  _Capability: 0
   _IsRaycast: 0
   _RaycastLocalDirection: {x: 0, y: 1, z: 0}
   _Size: 0.008
@@ -20180,8 +20181,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CursorDataProvider: {fileID: 114052440748445006}
   CursorType: 3
-  FollowCursorActive: 0
-  ObjectsToActivate: []
+  FollowCursorActive: 1
+  ObjectsToActivate:
+  - {fileID: 1087224607244024}
   FollowCursorPosition: 1
   FollowCursorRotation: 1
   ScaleUsingCursorSize: 1
@@ -21196,8 +21198,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CursorDataProvider: {fileID: 114052440748445006}
   CursorType: 8
-  FollowCursorActive: 0
-  ObjectsToActivate: []
+  FollowCursorActive: 1
+  ObjectsToActivate:
+  - {fileID: 1691409152958516}
   FollowCursorPosition: 1
   FollowCursorRotation: 1
   ScaleUsingCursorSize: 1
@@ -21844,8 +21847,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CursorDataProvider: {fileID: 114052440748445006}
   CursorType: 2
-  FollowCursorActive: 0
-  ObjectsToActivate: []
+  FollowCursorActive: 1
+  ObjectsToActivate:
+  - {fileID: 1782621544743506}
   FollowCursorPosition: 1
   FollowCursorRotation: 1
   ScaleUsingCursorSize: 1
@@ -25010,8 +25014,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CursorDataProvider: {fileID: 114052440748445006}
   CursorType: 9
-  FollowCursorActive: 0
-  ObjectsToActivate: []
+  FollowCursorActive: 1
+  ObjectsToActivate:
+  - {fileID: 1563605129950090}
   FollowCursorPosition: 1
   FollowCursorRotation: 1
   ScaleUsingCursorSize: 1
@@ -25250,7 +25255,8 @@ MonoBehaviour:
   CursorDataProvider: {fileID: 114052440748445006}
   CursorType: 7
   FollowCursorActive: 0
-  ObjectsToActivate: []
+  ObjectsToActivate:
+  - {fileID: 1987428159605030}
   FollowCursorPosition: 1
   FollowCursorRotation: 1
   ScaleUsingCursorSize: 1
@@ -26818,7 +26824,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Type: 4
-  _Capability: 2
+  _Capability: 0
   _IsRaycast: 0
   _RaycastLocalDirection: {x: 0, y: 1, z: 0}
   _Size: 0.01
@@ -27242,7 +27248,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Type: 5
-  _Capability: 2
+  _Capability: 0
   _IsRaycast: 0
   _RaycastLocalDirection: {x: 0, y: 1, z: 0}
   _Size: 0.008

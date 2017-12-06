@@ -3,15 +3,13 @@ using UnityEngine.UI;
 
 namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 {
+  [RequireComponent(typeof(SphereCollider))]
   public class Item : MonoBehaviour
   {
     // Editor fields
 
     [SerializeField]
     private Text itemClassText;
-
-    [SerializeField]
-    private new SphereCollider collider;
 
     [SerializeField]
     private Image border;
@@ -36,6 +34,10 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     [SerializeField]
     private Material incorrectlyClassifiedMaterial_Focused;
+
+    // Variables
+
+    protected new SphereCollider collider;
 
     // Properties
 
@@ -92,9 +94,9 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       background.material = (CorrectlyClassified) ? correctlyClassifiedMaterial : incorrectlyClassifiedMaterial;
     }
 
-    public void ToggleFocused()
+    public void SetFocused(bool value)
     {
-      Focused = !Focused;
+      Focused = value;
       if (CorrectlyClassified)
       {
         background.material = (Focused) ? correctlyClassifiedMaterial_Focused : correctlyClassifiedMaterial;
@@ -105,10 +107,15 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       }
     }
 
-    public void ToggleSelected()
+    public void SetSelected(bool value)
     {
-      Selected = !Selected;
+      Selected = value;
       border.material = (Selected) ? borderMaterial_Selected : borderMaterial;
+    }
+
+    protected virtual void Awake()
+    {
+      collider = GetComponent<SphereCollider>();
     }
   }
 }

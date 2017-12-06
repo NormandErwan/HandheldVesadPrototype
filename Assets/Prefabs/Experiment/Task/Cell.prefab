@@ -88,7 +88,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 720, y: 1250, z: 150}
+  m_Size: {x: 720, y: 1250, z: 180}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114594284510159826
 MonoBehaviour:
@@ -176,7 +176,6 @@ MonoBehaviour:
   cellMargins: 0
   cellPrefab: {fileID: 114569634914202616, guid: b5e1e2337fe75ed47825691f1c159606,
     type: 2}
-  collider: {fileID: 65341343503703380}
 --- !u!222 &222530579431176398
 CanvasRenderer:
   m_ObjectHideFlags: 1

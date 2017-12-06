@@ -1,10 +1,13 @@
 ﻿using NormandErwan.MasterThesisExperiment.Experiment.States;
 using NormandErwan.MasterThesisExperiment.Experiment.Variables;
+using NormandErwan.MasterThesisExperiment.Inputs;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 {
+  [RequireComponent(typeof(BoxCollider))]
   public class Grid : GridLayoutController<Cell>
   {
     // Editor fields
@@ -17,20 +20,26 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     private Canvas canvas;
 
     [SerializeField]
-    private float cavnasScale = 0.0001f;
+    private float canvasScaleFactor = 0.0001f;
 
     [Header("References")]
     [SerializeField]
     private StateController stateController;
 
+    // Properties
+
+    public bool Zooming { get; protected set; }
+
+    public Item SelectedItem { get; protected set; }
+
     // Variables
+
+    protected new BoxCollider collider;
+    protected List<HoverCursorController> triggeredFingers = new List<HoverCursorController>();
+    protected Vector3 fingerPanningLastPosition;
 
     protected IVTextSize ivTextSize;
     protected IVClassificationDifficulty iVClassificationDifficulty;
-
-    // Properties
-
-    public Item SelectedItem { get; protected set; }
 
     // Methods
 
@@ -42,30 +51,46 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       StartCoroutine(CleanConfigureGrid());
     }
 
+    /// <summary>
+    /// Calls <see cref="Item.SetSelected"/> on the previous selected item, set the <see cref="SelectedItem"/> property with the new value and
+    /// calls <see cref="Item.SetSelected"/> on it if not null.
+    /// </summary>
+    /// <param name="item"></param>
     public virtual void SetSelectedItem(Item item)
     {
       if (SelectedItem != null)
       {
-        SelectedItem.ToggleSelected();
+        SelectedItem.SetSelected(false);
       }
 
       SelectedItem = item;
 
       if (SelectedItem != null)
       {
-        item.ToggleSelected();
+        item.SetSelected(true);
       }
     }
 
-    public virtual void MoveCurrentItemSelected(Cell newCell)
+    /// <summary>
+    /// Moves the <see cref="SelectedItem"/> to the <paramref name="cell"/> if not full, and deselect the selected item.
+    /// </summary>
+    /// <param name="cell"></param>
+    public virtual void MoveSelectedItemTo(Cell cell)
     {
-      int itemsMaxNumber = newCell.GridSize.x * newCell.GridSize.y;
-      if (newCell.GetCells().Length < itemsMaxNumber)
+      int itemsMaxNumber = cell.GridSize.x * cell.GridSize.y;
+      if (cell.GetCells().Length < itemsMaxNumber)
       {
-        SelectedItem.transform.SetParent(newCell.GridLayout.transform);
-        SelectedItem.SetCorrectlyClassified(SelectedItem.ItemClass == newCell.ItemClass);
+        SelectedItem.transform.SetParent(cell.GridLayout.transform);
+        SelectedItem.SetCorrectlyClassified(SelectedItem.ItemClass == cell.ItemClass);
       }
       SetSelectedItem(null);
+    }
+
+    protected override void Awake()
+    {
+      base.Awake();
+      collider = GetComponent<BoxCollider>();
+      Zooming = false;
     }
 
     /// <summary>
@@ -81,9 +106,58 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
         independentVariable.CurrentConditionUpdated += IIndependentVariable_CurrentConditionUpdated;
       }
 
-      canvas.GetComponent<RectTransform>().localScale = cavnasScale * Vector3.one; // Scales the canvas as it's in world reference
+      canvas.GetComponent<RectTransform>().localScale = canvasScaleFactor * Vector3.one; // Scales the canvas as it's in world reference
 
       ConfigureGrid();
+    }
+
+    protected virtual void OnTriggerEnter(Collider other)
+    {
+      var cursor = other.GetComponent<HoverCursorController>();
+      if (cursor != null && cursor.IsFinger)
+      {
+        triggeredFingers.Add(cursor);
+        if (triggeredFingers.Count == 1)
+        {
+          fingerPanningLastPosition = Vector3.ProjectOnPlane(cursor.transform.position, transform.up);
+        }
+        if (triggeredFingers.Count >= 2)
+        {
+          Zooming = true;
+        }
+      }
+    }
+
+    protected virtual void OnTriggerStay(Collider other)
+    {
+      var cursor = other.GetComponent<HoverCursorController>();
+      if (cursor != null && cursor.IsFinger && triggeredFingers.Count == 1)
+      {
+        var fingerPanningPosition = Vector3.ProjectOnPlane(cursor.transform.position, transform.up);
+        transform.position += (fingerPanningPosition - fingerPanningLastPosition);
+        fingerPanningLastPosition = fingerPanningPosition;
+      }
+    }
+
+    protected virtual void OnTriggerExit(Collider other)
+    {
+      var cursor = other.GetComponent<HoverCursorController>();
+      if (cursor != null && cursor.IsFinger)
+      {
+        triggeredFingers.Remove(cursor);
+        if (triggeredFingers.Count == 0) // Deactivates zooming only when all the fingers have released from the grid
+        {
+          Zooming = false;
+        }
+      }
+    }
+
+    protected virtual void Update()
+    {
+      if (Zooming)
+      {
+        // TODO
+      }
     }
 
     /// <summary>
@@ -105,14 +179,21 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       yield return null;
 
       // Configure the grid of each cell
-      var itemsPerCell = 0;
+      int itemsPerCell = 0, itemSize = 0;
       foreach (var cell in GetCells())
       {
         cell.GridSize = cellGridSize;
         cell.ConfigureGrid();
+
         itemsPerCell = cell.CellsNumberInstantiatedAtConfigure;
+        itemSize = cell.CellSize.x;
       }
       yield return null;
+
+      // Configure the collider
+      var rectSizeDelta = canvas.GetComponent<RectTransform>().sizeDelta;
+      collider.center = Vector3.zero;
+      collider.size = canvasScaleFactor * new Vector3(rectSizeDelta.x, 0.5f * itemSize, rectSizeDelta.y);
 
       // Generate a grid generator with average distance in current condition classification distance range
       GridGenerator gridGenerator;
@@ -140,7 +221,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       }
     }
 
-    private void IIndependentVariable_CurrentConditionUpdated()
+    protected virtual void IIndependentVariable_CurrentConditionUpdated()
     {
       ConfigureGrid();
     }
