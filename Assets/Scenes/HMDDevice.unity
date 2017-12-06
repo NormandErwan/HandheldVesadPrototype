@@ -2191,30 +2191,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114265026425476688, guid: a3b64898f2954384a989df0bbfd40e80,
-        type: 2}
-      propertyPath: title
-      value: "R\xE9alit\xE9 augment\xE9e, interactions avec la main"
-      objectReference: {fileID: 0}
-    - target: {fileID: 1309221417637962, guid: a3b64898f2954384a989df0bbfd40e80, type: 2}
-      propertyPath: m_Name
-      value: GazeInput_AROutput
-      objectReference: {fileID: 0}
-    - target: {fileID: 114784559623597272, guid: a3b64898f2954384a989df0bbfd40e80,
-        type: 2}
-      propertyPath: title
-      value: "R\xE9alit\xE9 augment\xE9e, interactions HoloLens"
-      objectReference: {fileID: 0}
-    - target: {fileID: 114784559623597272, guid: a3b64898f2954384a989df0bbfd40e80,
-        type: 2}
-      propertyPath: id
-      value: E_GazeInput_AROutput
-      objectReference: {fileID: 0}
-    - target: {fileID: 114265026425476688, guid: a3b64898f2954384a989df0bbfd40e80,
-        type: 2}
-      propertyPath: id
-      value: D_HandsInput_AROutput
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a3b64898f2954384a989df0bbfd40e80, type: 2}
   m_IsPrefabParent: 0

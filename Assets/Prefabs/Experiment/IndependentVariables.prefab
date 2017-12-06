@@ -69,7 +69,7 @@ GameObject:
   - component: {fileID: 4753534011137922}
   - component: {fileID: 114712957325740358}
   m_Layer: 0
-  m_Name: Near
+  m_Name: Easy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -85,7 +85,7 @@ GameObject:
   - component: {fileID: 4633448848570030}
   - component: {fileID: 114784559623597272}
   m_Layer: 0
-  m_Name: IndirectInput_AROutput
+  m_Name: GazeInput_AROutput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -198,7 +198,7 @@ GameObject:
   - component: {fileID: 4477437883708588}
   - component: {fileID: 114002735001638114}
   m_Layer: 0
-  m_Name: Far
+  m_Name: Hard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 4437069565568174}
   - component: {fileID: 114376850109258518}
   m_Layer: 0
-  m_Name: ClassificationDistance
+  m_Name: ClassificationDifficulty
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -412,7 +412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 932582d0b9ea20f4ca0cd4d85719337b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 2_Far
+  id: 2_Hard
   title: Difficile
   minimum: 2.5
   maximum: 2.7
@@ -458,8 +458,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: D_DirectInput_AROutput
-  title: "R\xE9alit\xE9 augment\xE9e, interactions directes"
+  id: D_HandsInput_AROutput
+  title: "R\xE9alit\xE9 augment\xE9e, interactions avec la main"
   instructions: 
 --- !u!114 &114303898851726862
 MonoBehaviour:
@@ -504,7 +504,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 213dae45aa3411e4bb9d4c23cb1fa4c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: ClassificationDistance
+  id: ClassificationDifficulty
   title: "Difficult\xE9 de la t\xE2che"
   conditions:
   - {fileID: 114712957325740358}
@@ -567,7 +567,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 932582d0b9ea20f4ca0cd4d85719337b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 1_Near
+  id: 1_Easy
   title: Facile
   minimum: 1.25
   maximum: 1.45
@@ -597,8 +597,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: E_IndirectInput_AROutput
-  title: "R\xE9alit\xE9 augment\xE9e, interactions indirectes"
+  id: E_GazeInput_AROutput
+  title: "R\xE9alit\xE9 augment\xE9e, interactions HoloLens"
   instructions: 
 --- !u!114 &114940950492825338
 MonoBehaviour:
@@ -629,4 +629,4 @@ MonoBehaviour:
   independentVariables:
   - {fileID: 114501037082189576}
   - {fileID: 114158752525081080}
-  - {fileID: 114376850109258518}
+  - {fileID: 0}

@@ -21,7 +21,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     // Variables
 
     protected IVTextSize ivTextSize;
-    protected IVClassificationDistance iVClassificationDistance;
+    protected IVClassificationDifficulty iVClassificationDifficulty;
 
     // Methods
 
@@ -39,7 +39,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     protected virtual void Start()
     {
       ivTextSize = stateManager.GetIndependentVariable<IVTextSize>();
-      iVClassificationDistance = stateManager.GetIndependentVariable<IVClassificationDistance>();
+      iVClassificationDifficulty = stateManager.GetIndependentVariable<IVClassificationDifficulty>();
 
       foreach (var independentVariable in stateManager.independentVariables)
       {
@@ -73,10 +73,10 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       do
       {
         gridGenerator = new GridGenerator(GridSize.y, GridSize.x, CellPrefab.GetCellsNumber(),
-        iVClassificationDistance.CurrentCondition.IncorrectlyClassifiedCellsFraction,
-        (GridGenerator.DistanceTypes)iVClassificationDistance.CurrentConditionIndex);
+        iVClassificationDifficulty.CurrentCondition.IncorrectlyClassifiedCellsFraction,
+        (GridGenerator.DistanceTypes)iVClassificationDifficulty.CurrentConditionIndex);
       }
-      while (!iVClassificationDistance.CurrentCondition.Range.ContainsValue(gridGenerator.AverageDistance));
+      while (!iVClassificationDifficulty.CurrentCondition.Range.ContainsValue(gridGenerator.AverageDistance));
 
       // Configures each cell
       int cellRow = 0, cellColumn = 0;
