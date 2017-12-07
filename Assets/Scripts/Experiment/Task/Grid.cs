@@ -27,16 +27,15 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     [SerializeField]
     private StateController stateController;
 
+    [Header("References")]
+    [SerializeField]
+    private float zoomFactor = 1f;
+
     // Interfaces properties
 
+    public bool IsZooming { get; protected set; }
     public bool IsDragging { get; protected set; }
     public float DistanceToStartDragging { get; protected set; }
-    public Vector3 PlaneNormal { get { return transform.up; } }
-
-    public bool IsZooming { get; protected set; }
-
-    IEnumerable<ICursor> IInteractable.InteractingCursors { get { return InteractingCursors; } }
-    public List<ICursor> InteractingCursors { get; protected set; }
 
     // Interfaces events
 
@@ -47,9 +46,6 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     public event Action<IZoomable> ZoomingStarted = delegate { };
     public event Action<IZoomable> Zooming = delegate { };
     public event Action<IZoomable> ZoomingStopped = delegate { };
-
-    public event Action<IInteractable> CursorAdded = delegate { };
-    public event Action<IInteractable> CursorRemoved = delegate { };
 
     // Variables
 
@@ -67,7 +63,6 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     protected override void Awake()
     {
       base.Awake();
-      InteractingCursors = new List<ICursor>();
       collider = GetComponent<BoxCollider>();
     }
 
@@ -133,7 +128,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     public void Drag(Vector3 movement)
     {
-      transform.position += movement;
+      transform.position += Vector3.ProjectOnPlane(movement, transform.up);
     }
 
     public void SetZooming(bool value)
@@ -149,21 +144,14 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       }
     }
 
-    public void Zoom()
+    public void Zoom(Vector3 distance, Vector3 previousDistance, Vector3 movement)
     {
-      
-    }
+      var distanceProjected = Vector3.ProjectOnPlane(distance, transform.up);
+      var previousDistanceProjected = Vector3.ProjectOnPlane(previousDistance, transform.up);
+      var distanceDifference = zoomFactor * (distanceProjected.magnitude / previousDistanceProjected.magnitude);
+      transform.localScale = new Vector3(transform.localScale.x * distanceDifference, transform.localScale.y, transform.localScale.z * distanceDifference);
 
-    public void AddCursor(ICursor cursor)
-    {
-      InteractingCursors.Add(cursor);
-      CursorAdded(this);
-    }
-
-    public void RemoveCursor(ICursor cursor)
-    {
-      InteractingCursors.Remove(cursor);
-      CursorRemoved(this);
+      transform.position += distanceDifference * Vector3.ProjectOnPlane(movement, transform.up);
     }
 
     // Methods
@@ -201,7 +189,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       // Configure the collider
       var rectSizeDelta = canvas.GetComponent<RectTransform>().sizeDelta;
       collider.center = Vector3.zero;
-      collider.size = canvasScaleFactor * new Vector3(rectSizeDelta.x, 0.5f * itemSize, rectSizeDelta.y);
+      collider.size = canvasScaleFactor * new Vector3(rectSizeDelta.x, 2f / 3f * itemSize, rectSizeDelta.y);
 
       DistanceToStartDragging = 0.5f * canvasScaleFactor * itemSize; // Activate panning only if the finger has moved more than half the size of an item
 

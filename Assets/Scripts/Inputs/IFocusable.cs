@@ -2,7 +2,7 @@
 
 namespace NormandErwan.MasterThesisExperiment.Inputs
 {
-  public interface IFocusable
+  public interface IFocusable : IInteractable
   {
     // Properties
 

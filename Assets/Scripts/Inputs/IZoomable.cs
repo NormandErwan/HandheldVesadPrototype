@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace NormandErwan.MasterThesisExperiment.Inputs
 {
@@ -17,6 +18,6 @@ namespace NormandErwan.MasterThesisExperiment.Inputs
     // Methods
 
     void SetZooming(bool value);
-    void Zoom();
+    void Zoom(Vector3 distance, Vector3 previousDistance, Vector3 movement);
   }
 }

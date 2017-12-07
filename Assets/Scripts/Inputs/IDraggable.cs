@@ -3,13 +3,12 @@ using UnityEngine;
 
 namespace NormandErwan.MasterThesisExperiment.Inputs
 {
-  public interface IDraggable
+  public interface IDraggable : IInteractable
   {
     // Properties
 
     bool IsDragging { get; }
     float DistanceToStartDragging { get; }
-    Vector3 PlaneNormal { get; }
 
     // Events
 

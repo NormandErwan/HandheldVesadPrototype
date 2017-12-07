@@ -2,7 +2,7 @@
 
 namespace NormandErwan.MasterThesisExperiment.Inputs
 {
-  public interface ISelectable
+  public interface ISelectable : IInteractable
   {
     // Properties
 
