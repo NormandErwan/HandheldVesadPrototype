@@ -832,7 +832,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1193453973212608
 GameObject:
   m_ObjectHideFlags: 1
@@ -2267,7 +2267,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1470081717755536
 GameObject:
   m_ObjectHideFlags: 1
@@ -2873,7 +2873,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1579444554892738
 GameObject:
   m_ObjectHideFlags: 1
@@ -4852,7 +4852,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1974392312396414
 GameObject:
   m_ObjectHideFlags: 1
@@ -14727,7 +14727,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1984105366470484}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd3454111211c7c4798b7d2b559328eb, type: 3}
   m_Name: 
@@ -16468,7 +16468,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1984105366470484}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 105c6ad2463691f49a5f764f28d63f34, type: 3}
   m_Name: 
@@ -18281,7 +18281,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Type: 9
-  _Capability: 2
+  _Capability: 0
   _IsRaycast: 0
   _RaycastLocalDirection: {x: 0, y: 1, z: 0}
   _Size: 0.01
@@ -18555,7 +18555,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1984105366470484}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd33372a5f7bc9c46b5f7dd102b04449, type: 3}
   m_Name: 
@@ -19161,7 +19161,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Type: 3
-  _Capability: 2
+  _Capability: 0
   _IsRaycast: 0
   _RaycastLocalDirection: {x: 0, y: 1, z: 0}
   _Size: 0.01
@@ -20235,7 +20235,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1984105366470484}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d9133cfb250b64b489f23035a03ca605, type: 3}
   m_Name: 
@@ -21536,7 +21536,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1984105366470484}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90dc5c953d544204491f2890e08fc117, type: 3}
   m_Name: 
@@ -25254,7 +25254,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CursorDataProvider: {fileID: 114052440748445006}
   CursorType: 7
-  FollowCursorActive: 0
+  FollowCursorActive: 1
   ObjectsToActivate:
   - {fileID: 1987428159605030}
   FollowCursorPosition: 1

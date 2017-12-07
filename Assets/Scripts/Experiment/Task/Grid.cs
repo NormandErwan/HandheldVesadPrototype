@@ -1,6 +1,7 @@
 ﻿using NormandErwan.MasterThesisExperiment.Experiment.States;
 using NormandErwan.MasterThesisExperiment.Experiment.Variables;
 using NormandErwan.MasterThesisExperiment.Inputs;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,15 +9,8 @@ using UnityEngine;
 namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 {
   [RequireComponent(typeof(BoxCollider))]
-  public class Grid : GridLayoutController<Cell>
+  public class Grid : GridLayoutController<Cell>, IDraggable, IZoomable
   {
-    public enum Mode
-    {
-      Idle,
-      Panning,
-      Zooming
-    }
-
     // Editor fields
 
     [SerializeField]
@@ -33,11 +27,29 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     [SerializeField]
     private StateController stateController;
 
-    // Properties
+    // Interfaces properties
 
-    public Mode CurrentMode { get; protected set; }
+    public bool IsDragging { get; protected set; }
+    public float DistanceToStartDragging { get; protected set; }
+    public Vector3 PlaneNormal { get { return transform.up; } }
 
-    public Item SelectedItem { get; protected set; }
+    public bool IsZooming { get; protected set; }
+
+    IEnumerable<ICursor> IInteractable.InteractingCursors { get { return InteractingCursors; } }
+    public List<ICursor> InteractingCursors { get; protected set; }
+
+    // Interfaces events
+
+    public event Action<IDraggable> DraggingStarted = delegate { };
+    public event Action<IDraggable> Dragging = delegate { };
+    public event Action<IDraggable> DraggingStopped = delegate { };
+
+    public event Action<IZoomable> ZoomingStarted = delegate { };
+    public event Action<IZoomable> Zooming = delegate { };
+    public event Action<IZoomable> ZoomingStopped = delegate { };
+
+    public event Action<IInteractable> CursorAdded = delegate { };
+    public event Action<IInteractable> CursorRemoved = delegate { };
 
     // Variables
 
@@ -45,61 +57,18 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     protected List<HoverCursorController> triggeredFingers = new List<HoverCursorController>();
     protected Vector3 fingerPanningLastPosition;
 
-    protected int cellItemSize;
+    protected Item selectedItem;
 
     protected IVTextSize ivTextSize;
     protected IVClassificationDifficulty iVClassificationDifficulty;
 
-    // Methods
-
-    /// <summary>
-    /// Calls <see cref="CleanConfigureGrid"/>.
-    /// </summary>
-    public override void ConfigureGrid()
-    {
-      StartCoroutine(CleanConfigureGrid());
-    }
-
-    /// <summary>
-    /// Calls <see cref="Item.SetSelected"/> on the previous selected item, set the <see cref="SelectedItem"/> property with the new value and
-    /// calls <see cref="Item.SetSelected"/> on it if not null.
-    /// </summary>
-    /// <param name="item"></param>
-    public virtual void SetSelectedItem(Item item)
-    {
-      if (SelectedItem != null)
-      {
-        SelectedItem.SetSelected(false);
-      }
-
-      SelectedItem = item;
-
-      if (SelectedItem != null)
-      {
-        item.SetSelected(true);
-      }
-    }
-
-    /// <summary>
-    /// Moves the <see cref="SelectedItem"/> to the <paramref name="cell"/> if not full, and deselect the selected item.
-    /// </summary>
-    /// <param name="cell"></param>
-    public virtual void MoveSelectedItemTo(Cell cell)
-    {
-      int itemsMaxNumber = cell.GridSize.x * cell.GridSize.y;
-      if (cell.GetCells().Length < itemsMaxNumber)
-      {
-        SelectedItem.transform.SetParent(cell.GridLayout.transform);
-        SelectedItem.SetCorrectlyClassified(SelectedItem.ItemClass == cell.ItemClass);
-      }
-      SetSelectedItem(null);
-    }
+    // MonoBehaviour methods
 
     protected override void Awake()
     {
       base.Awake();
+      InteractingCursors = new List<ICursor>();
       collider = GetComponent<BoxCollider>();
-      CurrentMode = Mode.Idle;
     }
 
     /// <summary>
@@ -117,67 +86,87 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
       canvas.GetComponent<RectTransform>().localScale = canvasScaleFactor * Vector3.one; // Scales the canvas as it's in world reference
 
-      ConfigureGrid();
+      ConfigureGrid(); // TODO: remove, only call when state is training or trial
     }
 
-    protected virtual void OnTriggerEnter(Collider other)
+    protected virtual void OnDestroy()
     {
-      var cursor = other.GetComponent<HoverCursorController>();
-      if (cursor != null && cursor.IsFinger)
+      foreach (var independentVariable in stateController.independentVariables)
       {
-        triggeredFingers.Add(cursor);
-        if (triggeredFingers.Count == 1)
+        independentVariable.CurrentConditionUpdated -= IIndependentVariable_CurrentConditionUpdated;
+      }
+
+      foreach (var cell in GetCells())
+      {
+        cell.SelectedCell -= Cell_Selected;
+        foreach (var item in cell.GetCells())
         {
-          fingerPanningLastPosition = Vector3.ProjectOnPlane(cursor.transform.position, transform.up);
-        }
-        if (triggeredFingers.Count >= 2)
-        {
-          CurrentMode = Mode.Zooming;
+          item.SelectedItem -= Item_Selected;
         }
       }
     }
 
-    protected virtual void OnTriggerStay(Collider other)
-    {
-      var cursor = other.GetComponent<HoverCursorController>();
-      if (cursor != null && cursor.IsFinger && triggeredFingers.Count == 1)
-      {
-        var fingerPanningPosition = Vector3.ProjectOnPlane(cursor.transform.position, transform.up);
-        var fingerPanningVector = fingerPanningPosition - fingerPanningLastPosition;
+    // GridLayoutController methods
 
-        if (CurrentMode == Mode.Panning)
-        {
-          transform.position += fingerPanningVector;
-          fingerPanningLastPosition = fingerPanningPosition;
-        }
-        else if (fingerPanningVector.magnitude > 0.5f * canvasScaleFactor * cellItemSize) // Activate panning only if the finger has moved more than half the size of an item
-        {
-          CurrentMode = Mode.Panning;
-          fingerPanningLastPosition = fingerPanningPosition;
-        }
+    /// <summary>
+    /// Calls <see cref="CleanConfigureGrid"/>.
+    /// </summary>
+    public override void ConfigureGrid()
+    {
+      StartCoroutine(CleanConfigureGrid());
+    }
+
+    // Interfaces methods
+
+    public void SetDragging(bool value)
+    {
+      IsDragging = value;
+      if (IsDragging)
+      {
+        DraggingStarted(this);
+      }
+      else
+      {
+        DraggingStopped(this);
       }
     }
 
-    protected virtual void OnTriggerExit(Collider other)
+    public void Drag(Vector3 movement)
     {
-      var cursor = other.GetComponent<HoverCursorController>();
-      if (cursor != null && cursor.IsFinger)
+      transform.position += movement;
+    }
+
+    public void SetZooming(bool value)
+    {
+      IsZooming = value;
+      if (IsZooming)
       {
-        triggeredFingers.Remove(cursor);
-        if (triggeredFingers.Count == 0) // Go back to idle mode only when all the fingers have released from the grid
-        {
-          CurrentMode = Mode.Idle;
-        }
+        ZoomingStarted(this);
+      }
+      else
+      {
+        ZoomingStopped(this);
       }
     }
 
-    protected virtual void Update()
+    public void Zoom()
     {
-      if (CurrentMode == Mode.Zooming) // In update and not in OnTriggerStay to execute only once per frame
-      {
-        // TODO
-      }
+      
     }
+
+    public void AddCursor(ICursor cursor)
+    {
+      InteractingCursors.Add(cursor);
+      CursorAdded(this);
+    }
+
+    public void RemoveCursor(ICursor cursor)
+    {
+      InteractingCursors.Remove(cursor);
+      CursorRemoved(this);
+    }
+
+    // Methods
 
     /// <summary>
     /// Removes the cells in the <see cref="GridLayoutController.GridLayout"/>, calls <see cref="ConfigureGrid"/> and setup the cells with a
@@ -198,21 +187,23 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       yield return null;
 
       // Configure the grid of each cell
-      int itemsPerCell = 0;
+      int itemsPerCell = 0, itemSize = 0;
       foreach (var cell in GetCells())
       {
         cell.GridSize = cellGridSize;
         cell.ConfigureGrid();
 
         itemsPerCell = cell.CellsNumberInstantiatedAtConfigure;
-        cellItemSize = cell.CellSize.x;
+        itemSize = cell.CellSize.x;
       }
       yield return null;
 
       // Configure the collider
       var rectSizeDelta = canvas.GetComponent<RectTransform>().sizeDelta;
       collider.center = Vector3.zero;
-      collider.size = canvasScaleFactor * new Vector3(rectSizeDelta.x, 0.5f * cellItemSize, rectSizeDelta.y);
+      collider.size = canvasScaleFactor * new Vector3(rectSizeDelta.x, 0.5f * itemSize, rectSizeDelta.y);
+
+      DistanceToStartDragging = 0.5f * canvasScaleFactor * itemSize; // Activate panning only if the finger has moved more than half the size of an item
 
       // Generate a grid generator with average distance in current condition classification distance range
       GridGenerator gridGenerator;
@@ -224,13 +215,19 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       }
       while (!iVClassificationDifficulty.CurrentCondition.Range.ContainsValue(gridGenerator.AverageDistance));
 
-      // Configure the items of each cell
+      // Configure the items of each cell and subscribes to cell and items
       int cellRow = 0, cellColumn = 0;
       foreach (var cell in GetCells())
       {
         cell.ItemClass = (ItemClass)gridGenerator.Cells[cellRow, cellColumn].GetMainItemId();
         cell.ItemFontSize = ivTextSize.CurrentCondition.fontSize;
         cell.ConfigureItems(gridGenerator.Cells[cellRow, cellColumn].items);
+
+        cell.SelectedCell += Cell_Selected;
+        foreach (var item in cell.GetCells())
+        {
+          item.SelectedItem += Item_Selected;
+        }
 
         cellColumn = (cellColumn + 1) % GridSize.x;
         if (cellColumn == 0)
@@ -240,9 +237,41 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       }
     }
 
+    protected virtual void Cell_Selected(Cell cell)
+    {
+      if (selectedItem != null)
+      {
+        foreach (var previouCell in GetCells())
+        {
+          if (previouCell.Contains(selectedItem))
+          {
+            previouCell.RemoveItem(selectedItem);
+          }
+        }
+
+        int itemsMaxNumber = cell.GridSize.x * cell.GridSize.y;
+        if (cell.GetCells().Length < itemsMaxNumber)
+        {
+          cell.AddItem(selectedItem);
+        }
+
+        selectedItem.SetSelected(false);
+        selectedItem = null;
+      }
+    }
+
+    protected virtual void Item_Selected(Item item)
+    {
+      if (selectedItem != null)
+      {
+        selectedItem.SetSelected(false);
+      }
+      selectedItem = item;
+    }
+
     protected virtual void IIndependentVariable_CurrentConditionUpdated()
     {
-      ConfigureGrid();
+      ConfigureGrid(); // TODO: only call when state is training or trial
     }
   }
 }

@@ -176,6 +176,10 @@ MonoBehaviour:
   cellMargins: 0
   cellPrefab: {fileID: 114569634914202616, guid: b5e1e2337fe75ed47825691f1c159606,
     type: 2}
+  background: {fileID: 114868045386867448}
+  backgroundMaterial: {fileID: 2100000, guid: c9457f952e56b0749a7d861d78907922, type: 2}
+  backgroundMaterial_Focused: {fileID: 2100000, guid: ee9e3ce13d60e834094b6714ca4a0801,
+    type: 2}
 --- !u!222 &222530579431176398
 CanvasRenderer:
   m_ObjectHideFlags: 1

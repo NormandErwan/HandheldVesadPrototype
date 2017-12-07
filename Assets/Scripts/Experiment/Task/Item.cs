@@ -1,16 +1,20 @@
-﻿using UnityEngine;
+﻿using NormandErwan.MasterThesisExperiment.Inputs;
+using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 {
   [RequireComponent(typeof(SphereCollider))]
-  public class Item : MonoBehaviour
+  public class Item : MonoBehaviour, IFocusable, ILongPressable
   {
     // Editor fields
 
+    [Header("Text")]
     [SerializeField]
     private Text itemClassText;
 
+    [Header("Border")]
     [SerializeField]
     private Image border;
 
@@ -20,6 +24,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     [SerializeField]
     private Material borderMaterial_Selected;
 
+    [Header("Background")]
     [SerializeField]
     private Image background;
 
@@ -35,9 +40,10 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     [SerializeField]
     private Material incorrectlyClassifiedMaterial_Focused;
 
-    // Variables
+    // Interfaces properties
 
-    protected new SphereCollider collider;
+    public bool IsFocused { get; protected set; }
+    public bool IsSelected { get; protected set; }
 
     // Properties
 
@@ -68,13 +74,48 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     public bool CorrectlyClassified { get; protected set; }
 
-    public bool Focused { get; protected set; }
+    // Events
 
-    public bool Selected { get; protected set; }
+    public event Action<IFocusable> Focused = delegate { };
+    public event Action<ISelectable> Selected = delegate { };
+    public event Action<Item> SelectedItem = delegate { };
 
     // Variables
 
+    protected new SphereCollider collider;
     private ItemClass itemClass;
+
+    // MonoBehaviour methods
+
+    protected virtual void Awake()
+    {
+      collider = GetComponent<SphereCollider>();
+      SetFocused(false);
+      SetSelected(false);
+    }
+
+    // Interfaces methods
+
+    public void SetFocused(bool value)
+    {
+      IsFocused = value;
+      if (IsFocused)
+      {
+        Focused(this);
+      }
+      UpdateBackgroundMaterial();
+    }
+
+    public void SetSelected(bool value)
+    {
+      IsSelected = value & !IsSelected;
+      if (IsSelected)
+      {
+        Selected(this);
+        SelectedItem(this);
+      }
+      border.material = (IsSelected) ? borderMaterial_Selected : borderMaterial;
+    }
 
     // Methods
 
@@ -83,39 +124,24 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       var rectSizeDelta = GetComponent<RectTransform>().sizeDelta;
       collider.center = 0.5f * new Vector3(rectSizeDelta.x, -rectSizeDelta.y, 0);
       collider.radius = 0.5f * rectSizeDelta.x;
-
-      background.material = correctlyClassifiedMaterial;
-      border.material = borderMaterial;
     }
 
     public void SetCorrectlyClassified(bool value)
     {
       CorrectlyClassified = value;
-      background.material = (CorrectlyClassified) ? correctlyClassifiedMaterial : incorrectlyClassifiedMaterial;
+      UpdateBackgroundMaterial();
     }
 
-    public void SetFocused(bool value)
+    protected virtual void UpdateBackgroundMaterial()
     {
-      Focused = value;
       if (CorrectlyClassified)
       {
-        background.material = (Focused) ? correctlyClassifiedMaterial_Focused : correctlyClassifiedMaterial;
+        background.material = (IsFocused) ? correctlyClassifiedMaterial_Focused : correctlyClassifiedMaterial;
       }
       else
       {
-        background.material = (Focused) ? incorrectlyClassifiedMaterial_Focused : incorrectlyClassifiedMaterial;
+        background.material = (IsFocused) ? incorrectlyClassifiedMaterial_Focused : incorrectlyClassifiedMaterial;
       }
-    }
-
-    public void SetSelected(bool value)
-    {
-      Selected = value;
-      border.material = (Selected) ? borderMaterial_Selected : borderMaterial;
-    }
-
-    protected virtual void Awake()
-    {
-      collider = GetComponent<SphereCollider>();
     }
   }
 }

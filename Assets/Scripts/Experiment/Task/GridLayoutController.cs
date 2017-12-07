@@ -38,6 +38,13 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     public int CellsNumberInstantiatedAtConfigure { get; set; }
 
+    // MonoBehaviour methods
+
+    protected virtual void Awake()
+    {
+      CellsNumberInstantiatedAtConfigure = GridSize.x * GridSize.y;
+    }
+
     // Methods
 
     public virtual void ConfigureGrid()
@@ -71,11 +78,6 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
         }
       }
       return false;
-    }
-
-    protected virtual void Awake()
-    {
-      CellsNumberInstantiatedAtConfigure = GridSize.x * GridSize.y;
     }
   }
 }
