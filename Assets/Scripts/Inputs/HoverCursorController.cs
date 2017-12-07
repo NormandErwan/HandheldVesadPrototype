@@ -40,7 +40,7 @@ namespace NormandErwan.MasterThesisExperiment.Inputs
 
     protected virtual void OnTriggerEnter(Collider other)
     {
-      if (!grid.Zooming)
+      if (grid.CurrentMode == Experiment.Task.Grid.Mode.Idle)
       {
         var item = other.GetComponent<Item>();
         if (item != null)
@@ -96,7 +96,7 @@ namespace NormandErwan.MasterThesisExperiment.Inputs
 
     protected virtual void Update()
     {
-      if (!grid.Zooming && longPressTimers.Count > 0)
+      if (grid.CurrentMode == Experiment.Task.Grid.Mode.Idle && longPressTimers.Count > 0)
       {
         foreach (var item in new List<Item>(longPressTimers.Keys))
         {

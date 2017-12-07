@@ -10,6 +10,13 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
   [RequireComponent(typeof(BoxCollider))]
   public class Grid : GridLayoutController<Cell>
   {
+    public enum Mode
+    {
+      Idle,
+      Panning,
+      Zooming
+    }
+
     // Editor fields
 
     [SerializeField]
@@ -28,7 +35,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     // Properties
 
-    public bool Zooming { get; protected set; }
+    public Mode CurrentMode { get; protected set; }
 
     public Item SelectedItem { get; protected set; }
 
@@ -37,6 +44,8 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     protected new BoxCollider collider;
     protected List<HoverCursorController> triggeredFingers = new List<HoverCursorController>();
     protected Vector3 fingerPanningLastPosition;
+
+    protected int cellItemSize;
 
     protected IVTextSize ivTextSize;
     protected IVClassificationDifficulty iVClassificationDifficulty;
@@ -90,7 +99,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     {
       base.Awake();
       collider = GetComponent<BoxCollider>();
-      Zooming = false;
+      CurrentMode = Mode.Idle;
     }
 
     /// <summary>
@@ -123,7 +132,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
         }
         if (triggeredFingers.Count >= 2)
         {
-          Zooming = true;
+          CurrentMode = Mode.Zooming;
         }
       }
     }
@@ -134,8 +143,18 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       if (cursor != null && cursor.IsFinger && triggeredFingers.Count == 1)
       {
         var fingerPanningPosition = Vector3.ProjectOnPlane(cursor.transform.position, transform.up);
-        transform.position += (fingerPanningPosition - fingerPanningLastPosition);
-        fingerPanningLastPosition = fingerPanningPosition;
+        var fingerPanningVector = fingerPanningPosition - fingerPanningLastPosition;
+
+        if (CurrentMode == Mode.Panning)
+        {
+          transform.position += fingerPanningVector;
+          fingerPanningLastPosition = fingerPanningPosition;
+        }
+        else if (fingerPanningVector.magnitude > 0.5f * canvasScaleFactor * cellItemSize) // Activate panning only if the finger has moved more than half the size of an item
+        {
+          CurrentMode = Mode.Panning;
+          fingerPanningLastPosition = fingerPanningPosition;
+        }
       }
     }
 
@@ -145,16 +164,16 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       if (cursor != null && cursor.IsFinger)
       {
         triggeredFingers.Remove(cursor);
-        if (triggeredFingers.Count == 0) // Deactivates zooming only when all the fingers have released from the grid
+        if (triggeredFingers.Count == 0) // Go back to idle mode only when all the fingers have released from the grid
         {
-          Zooming = false;
+          CurrentMode = Mode.Idle;
         }
       }
     }
 
     protected virtual void Update()
     {
-      if (Zooming)
+      if (CurrentMode == Mode.Zooming) // In update and not in OnTriggerStay to execute only once per frame
       {
         // TODO
       }
@@ -179,21 +198,21 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       yield return null;
 
       // Configure the grid of each cell
-      int itemsPerCell = 0, itemSize = 0;
+      int itemsPerCell = 0;
       foreach (var cell in GetCells())
       {
         cell.GridSize = cellGridSize;
         cell.ConfigureGrid();
 
         itemsPerCell = cell.CellsNumberInstantiatedAtConfigure;
-        itemSize = cell.CellSize.x;
+        cellItemSize = cell.CellSize.x;
       }
       yield return null;
 
       // Configure the collider
       var rectSizeDelta = canvas.GetComponent<RectTransform>().sizeDelta;
       collider.center = Vector3.zero;
-      collider.size = canvasScaleFactor * new Vector3(rectSizeDelta.x, 0.5f * itemSize, rectSizeDelta.y);
+      collider.size = canvasScaleFactor * new Vector3(rectSizeDelta.x, 0.5f * cellItemSize, rectSizeDelta.y);
 
       // Generate a grid generator with average distance in current condition classification distance range
       GridGenerator gridGenerator;
