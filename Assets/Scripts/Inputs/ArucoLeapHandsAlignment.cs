@@ -40,14 +40,14 @@ namespace NormandErwan.MasterThesisExperiment.Inputs
       LeapHandArucoMarkerPositionOffset = defaultLeapHandControllerOffset;
     }
 
+    protected virtual void Start()
+    {
+      leapHandController.transform.position += LeapHandArucoMarkerPositionOffset;
+    }
+
     protected virtual void Update()
     {
       if (Input.GetKeyUp(aligningKey))
-      {
-        Aligning = !Aligning;
-      }
-
-      if (Aligning)
       {
         leapHandController.transform.position -= LeapHandArucoMarkerPositionOffset;
         LeapHandArucoMarkerPositionOffset = targetSphere.position - leapHandRight_IndexEnd.position;

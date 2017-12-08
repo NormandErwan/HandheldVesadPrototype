@@ -27,10 +27,6 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     [SerializeField]
     private StateController stateController;
 
-    [Header("References")]
-    [SerializeField]
-    private float zoomFactor = 1f;
-
     // Interfaces properties
 
     public bool IsInteractable { get; protected set; }
@@ -167,8 +163,8 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     {
       var distanceProjected = Vector3.ProjectOnPlane(distance, transform.up);
       var previousDistanceProjected = Vector3.ProjectOnPlane(previousDistance, transform.up);
-      var distanceDifference = zoomFactor * (distanceProjected.magnitude / previousDistanceProjected.magnitude);
-      transform.localScale = new Vector3(transform.localScale.x * distanceDifference, transform.localScale.y, transform.localScale.z * distanceDifference);
+      var scaleFactor = distanceProjected.magnitude / previousDistanceProjected.magnitude;
+      transform.localScale = new Vector3(transform.localScale.x * scaleFactor, transform.localScale.y, transform.localScale.z * scaleFactor);
 
       var translationProjected = Vector3.ProjectOnPlane(translation, transform.up);
       var previousTranslationProjected = Vector3.ProjectOnPlane(previousTranslation, transform.up);

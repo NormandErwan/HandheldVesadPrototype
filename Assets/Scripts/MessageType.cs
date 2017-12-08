@@ -32,7 +32,7 @@ namespace NormandErwan.MasterThesisExperiment
 
         // Variables
 
-        private static short smallest = (short)(DevicesSyncUnity.Examples.Messages.MessageType.Highest + 1);
+        private static short smallest = (short)(DevicesSyncUnity.Messages.MessageType.Highest + 1);
         private static Dictionary<short, string> messageTypeStrings = new Dictionary<short, string>()
         {
             { StateManager, "State" },
