@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NormandErwan.MasterThesisExperiment.Inputs
 {
-  public interface IZoomable : IInteractable
+  public interface IZoomable : ITransformable
   {
     // Properties
 
@@ -18,6 +18,6 @@ namespace NormandErwan.MasterThesisExperiment.Inputs
     // Methods
 
     void SetZooming(bool value);
-    void Zoom(Vector3 distance, Vector3 previousDistance, Vector3 movement);
+    void Zoom(Vector3 distance, Vector3 previousDistance, Vector3 translation, Vector3 previousTranslation);
   }
 }

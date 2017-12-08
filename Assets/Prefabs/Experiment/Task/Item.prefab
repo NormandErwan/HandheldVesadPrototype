@@ -194,11 +194,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemClassText: {fileID: 114230485758492408}
-  collider: {fileID: 135893047134043074}
   border: {fileID: 114304499754903040}
   borderMaterial: {fileID: 2100000, guid: f0e16e6f56061bc4c901ef987aeaa5e5, type: 2}
+  borderMargins: 5
   borderMaterial_Selected: {fileID: 2100000, guid: 408adcd45a901634a9934ec75b418ac9,
     type: 2}
+  borderMargins_Selected: 20
   background: {fileID: 114527948453479742}
   correctlyClassifiedMaterial: {fileID: 2100000, guid: 0a9e0615156122744a2ab6908e34133e,
     type: 2}

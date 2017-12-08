@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NormandErwan.MasterThesisExperiment.Inputs
 {
-  public interface IDraggable : IInteractable
+  public interface IDraggable : ITransformable
   {
     // Properties
 
@@ -19,6 +19,6 @@ namespace NormandErwan.MasterThesisExperiment.Inputs
     // Methods
 
     void SetDragging(bool value);
-    void Drag(Vector3 movement);
+    void Drag(Vector3 translation);
   }
 }

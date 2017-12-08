@@ -22,7 +22,11 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     // Interfaces properties
 
+    public bool IsInteractable { get; protected set; }
+
     public bool IsFocused { get; protected set; }
+
+    public bool IsSelectable { get; protected set; }
     public bool IsSelected { get; protected set; }
 
     // Properties
@@ -32,7 +36,11 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     // Events
 
+    public event Action<IInteractable> Interactable = delegate { };
+
     public event Action<IFocusable> Focused = delegate { };
+
+    public event Action<ISelectable> Selectable = delegate { };
     public event Action<ISelectable> Selected = delegate { };
     public event Action<Cell> SelectedCell = delegate { };
 
@@ -47,7 +55,10 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     {
       base.Awake();
       collider = GetComponent<BoxCollider>();
+
+      SetInteractable(true);
       SetFocused(false);
+      SetSelectable(true);
       SetSelected(false);
     }
 
@@ -61,8 +72,8 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       CellSize = new Vector2Int(cellSize, cellSize);
 
       // Configure the collider
-      collider.center = Vector3.zero;
-      collider.size =  new Vector3(rectSizeDelta.x, rectSizeDelta.y, 2f / 3f * cellSize);
+      collider.center = new Vector3(0f, 0f, cellSize);
+      collider.size = new Vector3(rectSizeDelta.x, rectSizeDelta.y, 3f * cellSize);
 
       // Configure the grid
       CellsNumberInstantiatedAtConfigure = (GridSize.x * GridSize.y) - 1; // -1 because we want to let space for the user to replace each item in its good cell
@@ -70,6 +81,15 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     }
 
     // Interfaces methods
+
+    public void SetInteractable(bool value)
+    {
+      IsInteractable = value;
+      if (IsInteractable)
+      {
+        Interactable(this);
+      }
+    }
 
     public void SetFocused(bool value)
     {
@@ -88,6 +108,15 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
         }
       }
       UpdateBackground();
+    }
+
+    public void SetSelectable(bool value)
+    {
+      IsSelectable = value;
+      if (IsSelectable)
+      {
+        Selectable(this);
+      }
     }
 
     public void SetSelected(bool value)

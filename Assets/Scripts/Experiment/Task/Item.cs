@@ -22,7 +22,13 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     private Material borderMaterial;
 
     [SerializeField]
+    private int borderMargins;
+
+    [SerializeField]
     private Material borderMaterial_Selected;
+
+    [SerializeField]
+    private int borderMargins_Selected;
 
     [Header("Background")]
     [SerializeField]
@@ -42,7 +48,11 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     // Interfaces properties
 
+    public bool IsInteractable { get; protected set; }
+
     public bool IsFocused { get; protected set; }
+
+    public bool IsSelectable { get; protected set; }
     public bool IsSelected { get; protected set; }
 
     // Properties
@@ -76,12 +86,18 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     // Events
 
+    public event Action<IInteractable> Interactable = delegate { };
+
     public event Action<IFocusable> Focused = delegate { };
+
+    public event Action<ISelectable> Selectable = delegate { };
     public event Action<ISelectable> Selected = delegate { };
     public event Action<Item> SelectedItem = delegate { };
 
     // Variables
 
+    protected RectTransform rectTransform;
+    protected RectTransform backgroundRectTransform;
     protected new SphereCollider collider;
     private ItemClass itemClass;
 
@@ -89,12 +105,26 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     protected virtual void Awake()
     {
+      rectTransform = GetComponent<RectTransform>();
+      backgroundRectTransform = background.GetComponent<RectTransform>();
       collider = GetComponent<SphereCollider>();
+
+      SetInteractable(true);
       SetFocused(false);
+      SetSelectable(true);
       SetSelected(false);
     }
 
     // Interfaces methods
+
+    public void SetInteractable(bool value)
+    {
+      IsInteractable = value;
+      if (IsInteractable)
+      {
+        Interactable(this);
+      }
+    }
 
     public void SetFocused(bool value)
     {
@@ -106,6 +136,15 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       UpdateBackgroundMaterial();
     }
 
+    public void SetSelectable(bool value)
+    {
+      IsSelectable = value;
+      if (IsSelectable)
+      {
+        Selectable(this);
+      }
+    }
+
     public void SetSelected(bool value)
     {
       IsSelected = value & !IsSelected;
@@ -115,15 +154,16 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
         SelectedItem(this);
       }
       border.material = (IsSelected) ? borderMaterial_Selected : borderMaterial;
+      backgroundRectTransform.offsetMin = ((IsSelected) ? borderMargins_Selected : borderMargins) * Vector2.one;
+      backgroundRectTransform.offsetMax = ((IsSelected) ? -borderMargins_Selected : -borderMargins) * Vector2.one;
     }
 
     // Methods
 
     public void Configure()
     {
-      var rectSizeDelta = GetComponent<RectTransform>().sizeDelta;
-      collider.center = 0.5f * new Vector3(rectSizeDelta.x, -rectSizeDelta.y, 0);
-      collider.radius = 0.5f * rectSizeDelta.x;
+      collider.center = 0.5f * new Vector3(rectTransform.sizeDelta.x, -rectTransform.sizeDelta.y, 0);
+      collider.radius = 0.5f * rectTransform.sizeDelta.x;
     }
 
     public void SetCorrectlyClassified(bool value)

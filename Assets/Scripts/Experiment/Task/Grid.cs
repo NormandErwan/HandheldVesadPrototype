@@ -33,11 +33,16 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     // Interfaces properties
 
-    public bool IsZooming { get; protected set; }
+    public bool IsInteractable { get; protected set; }
+
     public bool IsDragging { get; protected set; }
     public float DistanceToStartDragging { get; protected set; }
 
+    public bool IsZooming { get; protected set; }
+
     // Interfaces events
+
+    public event Action<IInteractable> Interactable = delegate { };
 
     public event Action<IDraggable> DraggingStarted = delegate { };
     public event Action<IDraggable> Dragging = delegate { };
@@ -64,6 +69,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     {
       base.Awake();
       collider = GetComponent<BoxCollider>();
+      SetInteractable(true);
     }
 
     /// <summary>
@@ -113,6 +119,15 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     // Interfaces methods
 
+    public void SetInteractable(bool value)
+    {
+      IsInteractable = value;
+      if (IsInteractable)
+      {
+        Interactable(this);
+      }
+    }
+
     public void SetDragging(bool value)
     {
       IsDragging = value;
@@ -124,11 +139,13 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       {
         DraggingStopped(this);
       }
+
+      ActivateInteractableCells(!IsDragging && !IsZooming);
     }
 
-    public void Drag(Vector3 movement)
+    public void Drag(Vector3 translation)
     {
-      transform.position += Vector3.ProjectOnPlane(movement, transform.up);
+      transform.position += Vector3.ProjectOnPlane(translation, transform.up);
     }
 
     public void SetZooming(bool value)
@@ -142,16 +159,20 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       {
         ZoomingStopped(this);
       }
+
+      ActivateInteractableCells(!IsDragging && !IsZooming);
     }
 
-    public void Zoom(Vector3 distance, Vector3 previousDistance, Vector3 movement)
+    public void Zoom(Vector3 distance, Vector3 previousDistance, Vector3 translation, Vector3 previousTranslation)
     {
       var distanceProjected = Vector3.ProjectOnPlane(distance, transform.up);
       var previousDistanceProjected = Vector3.ProjectOnPlane(previousDistance, transform.up);
       var distanceDifference = zoomFactor * (distanceProjected.magnitude / previousDistanceProjected.magnitude);
       transform.localScale = new Vector3(transform.localScale.x * distanceDifference, transform.localScale.y, transform.localScale.z * distanceDifference);
 
-      transform.position += distanceDifference * Vector3.ProjectOnPlane(movement, transform.up);
+      var translationProjected = Vector3.ProjectOnPlane(translation, transform.up);
+      var previousTranslationProjected = Vector3.ProjectOnPlane(previousTranslation, transform.up);
+      transform.position += translationProjected - previousTranslationProjected;
     }
 
     // Methods
@@ -188,8 +209,8 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
       // Configure the collider
       var rectSizeDelta = canvas.GetComponent<RectTransform>().sizeDelta;
-      collider.center = Vector3.zero;
-      collider.size = canvasScaleFactor * new Vector3(rectSizeDelta.x, 2f / 3f * itemSize, rectSizeDelta.y);
+      collider.center = canvasScaleFactor * new Vector3(0f, -itemSize, 0f);
+      collider.size = canvasScaleFactor * new Vector3(rectSizeDelta.x, 3f * itemSize, rectSizeDelta.y);
 
       DistanceToStartDragging = 0.5f * canvasScaleFactor * itemSize; // Activate panning only if the finger has moved more than half the size of an item
 
@@ -260,6 +281,18 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     protected virtual void IIndependentVariable_CurrentConditionUpdated()
     {
       ConfigureGrid(); // TODO: only call when state is training or trial
+    }
+
+    protected virtual void ActivateInteractableCells(bool value)
+    {
+      foreach (var cell in GetCells())
+      {
+        cell.SetInteractable(value);
+        foreach (var item in cell.GetCells())
+        {
+          item.SetInteractable(value);
+        }
+      }
     }
   }
 }

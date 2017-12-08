@@ -123,8 +123,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.366, y: 0.018, z: 0.127}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.366, y: 0.108, z: 0.127}
+  m_Center: {x: 0, y: -0.036, z: 0}
 --- !u!114 &114058657791026950
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -258,8 +258,9 @@ MonoBehaviour:
     type: 2}
   cellGridSize: {x: 2, y: 3}
   canvas: {fileID: 223257008643290306}
-  cavnasScale: 0.0001
+  canvasScaleFactor: 0.0001
   stateController: {fileID: 0}
+  zoomFactor: 1
 --- !u!114 &114739051112555216
 MonoBehaviour:
   m_ObjectHideFlags: 1
