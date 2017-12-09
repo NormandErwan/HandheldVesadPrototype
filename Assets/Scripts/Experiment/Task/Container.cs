@@ -1,18 +1,18 @@
 ﻿using NormandErwan.MasterThesisExperiment.Inputs;
+using NormandErwan.MasterThesisExperiment.UI.Grid;
 using System;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 {
   [RequireComponent(typeof(BoxCollider))]
-  public class Cell : GridLayoutController<Item>, IFocusable, ITappable
+  public class Container : Grid<Container, Item>, IFocusable, ITappable
   {
     // Editor fields
 
     [Header("Background")]
     [SerializeField]
-    private Image background;
+    private Renderer background;
 
     [SerializeField]
     private Material backgroundMaterial;
@@ -42,7 +42,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     public event Action<ISelectable> Selectable = delegate { };
     public event Action<ISelectable> Selected = delegate { };
-    public event Action<Cell> SelectedCell = delegate { };
+    public event Action<Container> Selected2 = delegate { };
 
     // Variables
 
@@ -54,6 +54,8 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     protected override void Awake()
     {
       base.Awake();
+      ElementsInstantiatedAtConfigure = (GridSize.x * GridSize.y) - 1; // -1 because we want to let space for the user to replace each item in its good cell
+
       collider = GetComponent<BoxCollider>();
 
       SetInteractable(true);
@@ -64,23 +66,35 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     // GridLayoutController methods
 
-    public override void ConfigureGrid()
+    public override void Configure()
     {
+      // Configure the grid
+      ElementScale = Scale - ElementMargin;
+      ElementScale = new Vector2(ElementScale.x / GridSize.x, ElementScale.y / GridSize.y) - ElementMargin;
+      base.Configure();
+
       // Compute the item size
-      var rectSizeDelta = GetComponent<RectTransform>().sizeDelta;
-      int cellSize = Mathf.Min((int)rectSizeDelta.x / GridSize.x, (int)rectSizeDelta.y / GridSize.y) - 2 * CellMargins;
-      CellSize = new Vector2Int(cellSize, cellSize);
+      float itemSize = Mathf.Min(ElementScale.x, ElementScale.y);
+      ElementScale = new Vector2(itemSize, itemSize);
+      foreach (var item in Elements)
+      {
+        item.Scale = ElementScale;
+      }
 
       // Configure the collider
-      collider.center = new Vector3(0f, 0f, cellSize);
-      collider.size = new Vector3(rectSizeDelta.x, rectSizeDelta.y, 3f * cellSize);
+      collider.center = new Vector3(0f, 0f, itemSize);
+      collider.size = new Vector3(Scale.x, Scale.y, 3f * itemSize);
 
-      // Configure the grid
-      CellsNumberInstantiatedAtConfigure = (GridSize.x * GridSize.y) - 1; // -1 because we want to let space for the user to replace each item in its good cell
-      base.ConfigureGrid();
+      // Configure the background
+      background.transform.localScale = new Vector3(Scale.x, Scale.y, 1);
     }
 
     // Interfaces methods
+
+    public override Container Instantiate()
+    {
+      return Instantiate(this);
+    }
 
     public void SetInteractable(bool value)
     {
@@ -100,7 +114,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       }
 
       focusedItems = 0;
-      foreach (var item in GetCells())
+      foreach (var item in Elements)
       {
         if (item.IsFocused)
         {
@@ -125,7 +139,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       if (IsSelected)
       {
         Selected(this);
-        SelectedCell(this);
+        Selected2(this);
         IsSelected = false;
       }
     }
@@ -135,27 +149,30 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     public virtual void ConfigureItems(int[] itemValues)
     {
       int index = 0;
-      foreach (var item in GetCells())
+      foreach (var item in Elements)
       {
         item.ItemClass = (ItemClass)itemValues[index];
         item.FontSize = ItemFontSize;
+        item.SetCorrectlyClassified(item.ItemClass == ItemClass);
         item.Configure();
-        index++;
 
-        AddItem(item);
+        item.Focused += Item_Focused;
+
+        index++;
       }
     }
 
-    public virtual void AddItem(Item item)
+    public override void AddElement(Item item)
     {
-      item.transform.SetParent(GridLayout.transform);
       item.SetCorrectlyClassified(item.ItemClass == ItemClass);
       item.Focused += Item_Focused;
+      base.AddElement(item);
     }
 
-    public virtual void RemoveItem(Item item)
+    public override void RemoveElement(Item item)
     {
       item.Focused -= Item_Focused;
+      base.RemoveElement(item);
     }
 
     protected virtual void UpdateBackground()

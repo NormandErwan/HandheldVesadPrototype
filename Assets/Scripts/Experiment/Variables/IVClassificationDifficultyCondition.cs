@@ -21,7 +21,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Variables
 
     public Range<float> Range { get; protected set; }
 
-    public float IncorrectlyClassifiedCellsFraction { get { return incorrectlyClassifiedCellsFraction; } protected set { incorrectlyClassifiedCellsFraction = value; } }
+    public float IncorrectlyClassifiedContainersFraction { get { return incorrectlyClassifiedCellsFraction; } protected set { incorrectlyClassifiedCellsFraction = value; } }
 
     // Methods
 

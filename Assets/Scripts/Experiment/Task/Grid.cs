@@ -1,31 +1,27 @@
 ﻿using NormandErwan.MasterThesisExperiment.Experiment.States;
 using NormandErwan.MasterThesisExperiment.Experiment.Variables;
 using NormandErwan.MasterThesisExperiment.Inputs;
+using NormandErwan.MasterThesisExperiment.UI.Grid;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 {
   [RequireComponent(typeof(BoxCollider))]
-  public class Grid : GridLayoutController<Cell>, IDraggable, IZoomable
+  public class Grid : Grid<Grid, Container>, IDraggable, IZoomable
   {
     // Editor fields
 
+    [Header("Task grid")]
     [SerializeField]
-    private Vector2Int cellGridSize;
+    private float scaleFactor = 0.0001f;
 
-    [Header("Canvas")]
-    [SerializeField]
-    private Canvas canvas;
-
-    [SerializeField]
-    private float canvasScaleFactor = 0.0001f;
-
-    [Header("References")]
     [SerializeField]
     private StateController stateController;
+
+    [SerializeField]
+    private GameObject background;
 
     // Interfaces properties
 
@@ -81,9 +77,9 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
         independentVariable.CurrentConditionUpdated += IIndependentVariable_CurrentConditionUpdated;
       }
 
-      canvas.GetComponent<RectTransform>().localScale = canvasScaleFactor * Vector3.one; // Scales the canvas as it's in world reference
+      transform.localScale = scaleFactor * Vector3.one; // Scales the canvas as it's in world reference
 
-      ConfigureGrid(); // TODO: remove, only call when state is training or trial
+      Configure(); // TODO: remove, only call when state is training or trial
     }
 
     protected virtual void OnDestroy()
@@ -93,27 +89,22 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
         independentVariable.CurrentConditionUpdated -= IIndependentVariable_CurrentConditionUpdated;
       }
 
-      foreach (var cell in GetCells())
+      foreach (var container in Elements)
       {
-        cell.SelectedCell -= Cell_Selected;
-        foreach (var item in cell.GetCells())
+        container.Selected2 -= Container_Selected;
+        foreach (var item in container.Elements)
         {
           item.SelectedItem -= Item_Selected;
         }
       }
     }
 
-    // GridLayoutController methods
-
-    /// <summary>
-    /// Calls <see cref="CleanConfigureGrid"/>.
-    /// </summary>
-    public override void ConfigureGrid()
-    {
-      StartCoroutine(CleanConfigureGrid());
-    }
-
     // Interfaces methods
+
+    public override Grid Instantiate()
+    {
+      return Instantiate(this);
+    }
 
     public void SetInteractable(bool value)
     {
@@ -136,12 +127,12 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
         DraggingStopped(this);
       }
 
-      ActivateInteractableCells(!IsDragging && !IsZooming);
+      SetContainersInteractable(!IsDragging && !IsZooming);
     }
 
     public void Drag(Vector3 translation)
     {
-      transform.position += Vector3.ProjectOnPlane(translation, transform.up);
+      transform.position += Vector3.ProjectOnPlane(translation, -transform.forward);
     }
 
     public void SetZooming(bool value)
@@ -156,108 +147,89 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
         ZoomingStopped(this);
       }
 
-      ActivateInteractableCells(!IsDragging && !IsZooming);
+      SetContainersInteractable(!IsDragging && !IsZooming);
     }
 
     public void Zoom(Vector3 distance, Vector3 previousDistance, Vector3 translation, Vector3 previousTranslation)
     {
-      var distanceProjected = Vector3.ProjectOnPlane(distance, transform.up);
-      var previousDistanceProjected = Vector3.ProjectOnPlane(previousDistance, transform.up);
+      var distanceProjected = Vector3.ProjectOnPlane(distance, -transform.forward);
+      var previousDistanceProjected = Vector3.ProjectOnPlane(previousDistance, -transform.forward);
       var scaleFactor = distanceProjected.magnitude / previousDistanceProjected.magnitude;
-      transform.localScale = new Vector3(transform.localScale.x * scaleFactor, transform.localScale.y, transform.localScale.z * scaleFactor);
+      transform.localScale = new Vector3(transform.localScale.x * scaleFactor, transform.localScale.y * scaleFactor, transform.localScale.z);
 
-      var translationProjected = Vector3.ProjectOnPlane(translation, transform.up);
-      var previousTranslationProjected = Vector3.ProjectOnPlane(previousTranslation, transform.up);
+      var translationProjected = scaleFactor * Vector3.ProjectOnPlane(translation, -transform.forward);
+      var previousTranslationProjected = Vector3.ProjectOnPlane(previousTranslation, -transform.forward);
       transform.position += translationProjected - previousTranslationProjected;
     }
 
     // Methods
 
-    /// <summary>
-    /// Removes the cells in the <see cref="GridLayoutController.GridLayout"/>, calls <see cref="ConfigureGrid"/> and setup the cells with a
-    /// <see cref="GridGenerator"/>.
-    /// </summary>
-    /// <returns></returns>
-    protected virtual IEnumerator CleanConfigureGrid()
+    public override void Configure()
     {
-      // Removes the previous cells
-      foreach (var cell in GetCells())
-      {
-        Destroy(cell.gameObject);
-      }
-      yield return null;
-
       // Configure the grid
-      base.ConfigureGrid();
-      yield return null;
-
-      // Configure the grid of each cell
-      int itemsPerCell = 0, itemSize = 0;
-      foreach (var cell in GetCells())
-      {
-        cell.GridSize = cellGridSize;
-        cell.ConfigureGrid();
-
-        itemsPerCell = cell.CellsNumberInstantiatedAtConfigure;
-        itemSize = cell.CellSize.x;
-      }
-      yield return null;
-
-      // Configure the collider
-      var rectSizeDelta = canvas.GetComponent<RectTransform>().sizeDelta;
-      collider.center = canvasScaleFactor * new Vector3(0f, -itemSize, 0f);
-      collider.size = canvasScaleFactor * new Vector3(rectSizeDelta.x, 3f * itemSize, rectSizeDelta.y);
-
-      DistanceToStartDragging = 0.5f * canvasScaleFactor * itemSize; // Activate panning only if the finger has moved more than half the size of an item
-
+      CleanGrid();
+      base.Configure();
+      BuildGrid();
+      
       // Generate a grid generator with average distance in current condition classification distance range
       GridGenerator gridGenerator;
       do
       {
-        gridGenerator = new GridGenerator(GridSize.y, GridSize.x, itemsPerCell,
-        iVClassificationDifficulty.CurrentCondition.IncorrectlyClassifiedCellsFraction,
+        gridGenerator = new GridGenerator(GridSize.y, GridSize.x, Elements[0].ElementsInstantiatedAtConfigure,
+        iVClassificationDifficulty.CurrentCondition.IncorrectlyClassifiedContainersFraction,
         (GridGenerator.DistanceTypes)iVClassificationDifficulty.CurrentConditionIndex);
       }
       while (!iVClassificationDifficulty.CurrentCondition.Range.ContainsValue(gridGenerator.AverageDistance));
 
-      // Configure the items of each cell and subscribes to cell and items
-      int cellRow = 0, cellColumn = 0;
-      foreach (var cell in GetCells())
+      // Configure containers and items
+      int containerRow = 0, containerColumn = 0;
+      foreach (var container in Elements)
       {
-        cell.ItemClass = (ItemClass)gridGenerator.Cells[cellRow, cellColumn].GetMainItemId();
-        cell.ItemFontSize = ivTextSize.CurrentCondition.fontSize;
-        cell.ConfigureItems(gridGenerator.Cells[cellRow, cellColumn].items);
+        container.Configure();
+        container.BuildGrid();
 
-        cell.SelectedCell += Cell_Selected;
-        foreach (var item in cell.GetCells())
+        container.ItemClass = (ItemClass)gridGenerator.Containers[containerRow, containerColumn].GetMainItemId();
+        container.ItemFontSize = ivTextSize.CurrentCondition.fontSize;
+        container.ConfigureItems(gridGenerator.Containers[containerRow, containerColumn].items);
+
+        container.Selected2 += Container_Selected;
+        foreach (var item in container.Elements)
         {
           item.SelectedItem += Item_Selected;
         }
 
-        cellColumn = (cellColumn + 1) % GridSize.x;
-        if (cellColumn == 0)
+        containerColumn = (containerColumn + 1) % GridSize.x;
+        if (containerColumn == 0)
         {
-          cellRow = (cellRow + 1) % GridSize.y;
+          containerRow = (containerRow + 1) % GridSize.y;
         }
       }
+
+      // Finish the grid configuration
+      float itemSize = Elements[0].ElementScale.x;
+      collider.center = new Vector3(0f, 0f, itemSize);
+      collider.size = new Vector3(Scale.x, Scale.y, 3f * itemSize);
+
+      background.transform.localScale = new Vector3(Scale.x, Scale.y, 1);
+
+      DistanceToStartDragging = 0.5f * scaleFactor * itemSize; // Activate panning only if the finger has moved more than half the size of an item
     }
 
-    protected virtual void Cell_Selected(Cell cell)
+    protected virtual void Container_Selected(Container container)
     {
       if (selectedItem != null)
       {
-        foreach (var previouCell in GetCells())
+        foreach (var previouContainer in Elements)
         {
-          if (previouCell.Contains(selectedItem))
+          if (previouContainer.Elements.Contains(selectedItem))
           {
-            previouCell.RemoveItem(selectedItem);
+            previouContainer.RemoveElement(selectedItem);
           }
         }
 
-        int itemsMaxNumber = cell.GridSize.x * cell.GridSize.y;
-        if (cell.GetCells().Length < itemsMaxNumber)
+        if (!container.IsFull)
         {
-          cell.AddItem(selectedItem);
+          container.AddElement(selectedItem);
         }
 
         selectedItem.SetSelected(false);
@@ -276,15 +248,15 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     protected virtual void IIndependentVariable_CurrentConditionUpdated()
     {
-      ConfigureGrid(); // TODO: only call when state is training or trial
+      base.Configure(); // TODO: only call when state is training or trial
     }
 
-    protected virtual void ActivateInteractableCells(bool value)
+    protected virtual void SetContainersInteractable(bool value)
     {
-      foreach (var cell in GetCells())
+      foreach (var container in Elements)
       {
-        cell.SetInteractable(value);
-        foreach (var item in cell.GetCells())
+        container.SetInteractable(value);
+        foreach (var item in container.Elements)
         {
           item.SetInteractable(value);
         }

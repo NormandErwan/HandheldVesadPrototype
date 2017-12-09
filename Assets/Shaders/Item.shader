@@ -15,12 +15,6 @@
 
         Pass
         {
-            Stencil {
-                Ref 0
-                Comp always
-                Pass replace
-            }
-
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag

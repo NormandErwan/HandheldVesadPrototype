@@ -1,22 +1,22 @@
 ﻿using NormandErwan.MasterThesisExperiment.Inputs;
+using NormandErwan.MasterThesisExperiment.UI.Grid;
 using System;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 {
   [RequireComponent(typeof(SphereCollider))]
-  public class Item : MonoBehaviour, IFocusable, ILongPressable
+  public class Item : MonoBehaviour, IGridElement<Item>, IFocusable, ILongPressable
   {
     // Editor fields
 
     [Header("Text")]
     [SerializeField]
-    private Text itemClassText;
+    private TextMesh itemClassText;
 
     [Header("Border")]
     [SerializeField]
-    private Image border;
+    private Renderer border;
 
     [SerializeField]
     private Material borderMaterial;
@@ -32,7 +32,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     [Header("Background")]
     [SerializeField]
-    private Image background;
+    private Renderer background;
 
     [SerializeField]
     private Material correctlyClassifiedMaterial;
@@ -47,6 +47,10 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
     private Material incorrectlyClassifiedMaterial_Focused;
 
     // Interfaces properties
+
+    public GameObject GameObject { get { return gameObject; } }
+    public Vector2 Scale { get; set; }
+    public Vector2 Margin { get; set; }
 
     public bool IsInteractable { get; protected set; }
 
@@ -96,8 +100,6 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     // Variables
 
-    protected RectTransform rectTransform;
-    protected RectTransform backgroundRectTransform;
     protected new SphereCollider collider;
     private ItemClass itemClass;
 
@@ -105,17 +107,18 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     protected virtual void Awake()
     {
-      rectTransform = GetComponent<RectTransform>();
-      backgroundRectTransform = background.GetComponent<RectTransform>();
       collider = GetComponent<SphereCollider>();
 
-      SetInteractable(true);
-      SetFocused(false);
-      SetSelectable(true);
-      SetSelected(false);
+      SetInteractable(false);
+      SetSelectable(false);
     }
 
     // Interfaces methods
+
+    public virtual Item Instantiate()
+    {
+      return Instantiate(this);
+    }
 
     public void SetInteractable(bool value)
     {
@@ -153,17 +156,35 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
         Selected(this);
         SelectedItem(this);
       }
-      border.material = (IsSelected) ? borderMaterial_Selected : borderMaterial;
-      backgroundRectTransform.offsetMin = ((IsSelected) ? borderMargins_Selected : borderMargins) * Vector2.one;
-      backgroundRectTransform.offsetMax = ((IsSelected) ? -borderMargins_Selected : -borderMargins) * Vector2.one;
+
+      if (IsSelected)
+      {
+        border.material = borderMaterial_Selected;
+        background.transform.localScale = new Vector3(Scale.x - 2 * borderMargins_Selected, Scale.y - 2 * borderMargins_Selected, 1f);
+      }
+      else
+      {
+        border.material = borderMaterial;
+        background.transform.localScale = new Vector3(Scale.x - 2 * borderMargins, Scale.y - 2 * borderMargins, 1f);
+      }
     }
 
     // Methods
 
-    public void Configure()
+    public virtual void Configure()
     {
-      collider.center = 0.5f * new Vector3(rectTransform.sizeDelta.x, -rectTransform.sizeDelta.y, 0);
-      collider.radius = 0.5f * rectTransform.sizeDelta.x;
+      // Configure the border
+      border.transform.localScale = new Vector3(Scale.x, Scale.y, 1f);
+
+      // Configure the collider
+      collider.center = Vector3.zero;
+      collider.radius = 0.5f * Scale.x;
+
+      // Configure interactions
+      SetInteractable(true);
+      SetFocused(false);
+      SetSelectable(true);
+      SetSelected(false);
     }
 
     public void SetCorrectlyClassified(bool value)

@@ -17,10 +17,10 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       Long
     };
 
-    public struct Cell
+    public struct Container
     {
-      // items[i] stores the item values of the cell.
-      // i is between 0 and (ItemsPerCell-1).
+      // items[i] stores the item values of the container.
+      // i is between 0 and (ItemsPerContainer-1).
       // item value is between 0 and ((RowsNumber * ColumnsNumber) - 1) for a valid item, or itemId==EMPTY_ITEM_ID for "empty".
       public int[] items;
 
@@ -30,9 +30,9 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
       }
     };
 
-    protected struct CandidateCell
+    protected struct CandidateContainer
     {
-      public int cellId;
+      public int containerId;
       public int row;
       public int column;
       public float distance;
@@ -42,143 +42,143 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
     public const int EMPTY_ITEM_ID = -1;
 
-    // These are necessary to compute the average distance between cells. These should be measured between the centers of cells.
-    // For example, the horizontal spacing is equal to the width of a cell plus the margin between cells.
-    // If the caller doesn't care about the effect of aspect ratio of cells
+    // These are necessary to compute the average distance between containers. These should be measured between the centers of containers.
+    // For example, the horizontal spacing is equal to the width of a container plus the margin between containers.
+    // If the caller doesn't care about the effect of aspect ratio of containers
     // on geometric distance, just pass in 1.0f, 1.0f
-    protected readonly float verticalSpacingBetweenCells = 1f;
-    protected readonly float horizontalSpacingBetweenCells = 1f;
+    protected readonly float verticalSpacingBetweenContainers = 1f;
+    protected readonly float horizontalSpacingBetweenContainers = 1f;
 
     // Properties
 
     public int RowsNumber { get; protected set; }
     public int ColumnsNumber { get; protected set; }
-    public int ItemsPerCell { get; protected set; }
+    public int ItemsPerContainer { get; protected set; }
 
-    // Cells[r,c] stores the cell in the (r)th row and (c)th column.
+    // Containers[r,c] stores the container in the (r)th row and (c)th column.
     // r is between 0 and (NumberRows-1).
     // c is between 0 and (NumberColumns-1).
-    public Cell[,] Cells { get; protected set; }
+    public Container[,] Containers { get; protected set; }
 
-    public float InitiallyIncorrectCellsFraction { get; protected set; } // between 0.0f and 1.0f
-    public int IncorrectCellsNumber { get; protected set; }
+    public float InitiallyIncorrectContainersFraction { get; protected set; } // between 0.0f and 1.0f
+    public int IncorrectContainersNumber { get; protected set; }
     
-    public float AverageDistance { get; protected set; } // This is the average distance to move all mis-classified items to their correct cell.
+    public float AverageDistance { get; protected set; } // This is the average distance to move all mis-classified items to their correct container.
     public DistanceTypes DistanceType { get; protected set; }
 
-    protected int cellsNumber; // example value: 5*3 == 15 (we assume one unique itemId per cell)
+    protected int containersNumber; // example value: 5*3 == 15 (we assume one unique itemId per container)
     protected Random random = new Random();
 
     // Constructor
 
-    public GridGenerator(int rowsNumber, int columnsNumber, int itemsPerCell, float incorrectCellsFraction, DistanceTypes distanceType)
+    public GridGenerator(int rowsNumber, int columnsNumber, int itemsPerContainer, float incorrectContainersFraction, DistanceTypes distanceType)
     {
       RowsNumber = rowsNumber;
       ColumnsNumber = columnsNumber;
-      ItemsPerCell = itemsPerCell;
+      ItemsPerContainer = itemsPerContainer;
 
-      Cells = new Cell[RowsNumber, ColumnsNumber];
+      Containers = new Container[RowsNumber, ColumnsNumber];
 
-      InitiallyIncorrectCellsFraction = incorrectCellsFraction;
-      IncorrectCellsNumber = 0;
+      InitiallyIncorrectContainersFraction = incorrectContainersFraction;
+      IncorrectContainersNumber = 0;
 
       AverageDistance = 0;
       DistanceType = distanceType;
 
-      cellsNumber = RowsNumber * ColumnsNumber;
+      containersNumber = RowsNumber * ColumnsNumber;
 
-      // Compute the itemId of each cell.
+      // Compute the itemId of each container.
       // Start with alphabetical ordering ...
-      List<int> cellsItemValues = new List<int>();
-      for (int itemId = 0; itemId < cellsNumber; ++itemId)
+      List<int> containersItemValues = new List<int>();
+      for (int itemId = 0; itemId < containersNumber; ++itemId)
       {
-        cellsItemValues.Add(itemId);
+        containersItemValues.Add(itemId);
       }
       // ... and then randomly permute
-      ShuffleList.Shuffle(cellsItemValues);
+      ShuffleList.Shuffle(containersItemValues);
 
-      // Now fill the cells with items of the appropriate itemId.
-      // In each cell, the first few items will be of the correct itemId,
+      // Now fill the containers with items of the appropriate itemId.
+      // In each container, the first few items will be of the correct itemId,
       // and the last item will be empty.
-      // Later on, the last item of some cells will be permuted.
+      // Later on, the last item of some containers will be permuted.
       for (int r = 0; r < RowsNumber; ++r)
       {
         for (int c = 0; c < ColumnsNumber; ++c)
         {
-          Cells[r, c] = new Cell();
-          Cells[r, c].items = new int[ItemsPerCell];
+          Containers[r, c] = new Container();
+          Containers[r, c].items = new int[ItemsPerContainer];
 
-          for (int i = 0; i < ItemsPerCell; ++i)
+          for (int i = 0; i < ItemsPerContainer; ++i)
           {
-            Cells[r, c].items[i] = cellsItemValues[r * ColumnsNumber + c];
+            Containers[r, c].items[i] = containersItemValues[r * ColumnsNumber + c];
           }
         }
       }
 
-      // BEGIN: We now want to permute the last items of *some* of the cells.
-      // InitiallyIncorrectCellsFraction tells us in how many cells to do this.
+      // BEGIN: We now want to permute the last items of *some* of the containers.
+      // InitiallyIncorrectContainersFraction tells us in how many containers to do this.
 
-      // We first build a list of cells, shuffle it, and then choose a fraction
-      // of the cells in that list on which to do more work.
-      // To make it easier to identify each cell in the list,
-      // rather than storing the (row, column) of each cell in the list,
-      // we store a single (cellID), where cellID == (row*NumberColumns + column)
-      // uniquely identifies each cell.
-      List<int> cellIds = new List<int>();
-      for (int i = 0; i < cellsNumber; ++i)
+      // We first build a list of containers, shuffle it, and then choose a fraction
+      // of the containers in that list on which to do more work.
+      // To make it easier to identify each container in the list,
+      // rather than storing the (row, column) of each container in the list,
+      // we store a single (containerID), where containerID == (row*NumberColumns + column)
+      // uniquely identifies each container.
+      List<int> containerIds = new List<int>();
+      for (int i = 0; i < containersNumber; ++i)
       {
-        cellIds.Add(i);
+        containerIds.Add(i);
       }
       // randomly permute
-      ShuffleList.Shuffle(cellIds);
+      ShuffleList.Shuffle(containerIds);
 
-      // Now imagine the list of cellIDs having length N,
+      // Now imagine the list of containerIDs having length N,
       // and imagine splitting this list into two sublists
       // with indices [0..(k-1)] and [k..N]
       // where N = NumberRows * NumberColumns,
-      // and k = InitiallyIncorrectCellsFraction * N.
+      // and k = InitiallyIncorrectContainersFraction * N.
       // The first sublist is the one where we want to permute the last items
-      // of the cells.
-      // The second sublist is the one where the cells should remain correct.
-      int k = (int)(cellIds.Count * InitiallyIncorrectCellsFraction);
-      // Since no further work is required on the cells of the second sublist,
+      // of the containers.
+      // The second sublist is the one where the containers should remain correct.
+      int k = (int)(containerIds.Count * InitiallyIncorrectContainersFraction);
+      // Since no further work is required on the containers of the second sublist,
       // forget about it, and just store the first sublist.
-      cellIds.RemoveRange(k, cellIds.Count - k);
+      containerIds.RemoveRange(k, containerIds.Count - k);
 
-      // Iterate over the cells in the list (now containing only the first sublist),
+      // Iterate over the containers in the list (now containing only the first sublist),
       // and set their last items to be empty.
-      for (int j = 0; j < cellIds.Count; ++j)
+      for (int j = 0; j < containerIds.Count; ++j)
       {
-        int r = cellIds[j] / ColumnsNumber;
-        int c = cellIds[j] % ColumnsNumber;
-        Cells[r, c].items[ItemsPerCell - 1] = EMPTY_ITEM_ID;
+        int r = containerIds[j] / ColumnsNumber;
+        int c = containerIds[j] % ColumnsNumber;
+        Containers[r, c].items[ItemsPerContainer - 1] = EMPTY_ITEM_ID;
       }
 
-      // Now, for each (source) cell remaining in the list cellIDs,
-      // we build a list of candidate target cells to which the
+      // Now, for each (source) container remaining in the list containerIDs,
+      // we build a list of candidate target containers to which the
       // original last item of the source could be moved.
       // We randomly select among the candidate targets and put the item there.
-      for (int i_source = 0; i_source < cellIds.Count; ++i_source)
+      for (int i_source = 0; i_source < containerIds.Count; ++i_source)
       {
-        int r_source = cellIds[i_source] / ColumnsNumber;
-        int c_source = cellIds[i_source] % ColumnsNumber;
+        int r_source = containerIds[i_source] / ColumnsNumber;
+        int c_source = containerIds[i_source] % ColumnsNumber;
 
-        List<CandidateCell> candidates = new List<CandidateCell>();
-        for (int i_target = 0; i_target < cellIds.Count; ++i_target)
+        List<CandidateContainer> candidates = new List<CandidateContainer>();
+        for (int i_target = 0; i_target < containerIds.Count; ++i_target)
         {
           if (i_target == i_source)
             continue;
 
-          CandidateCell cc = new CandidateCell();
-          cc.cellId = cellIds[i_target];
-          cc.row = cc.cellId / ColumnsNumber;
-          cc.column = cc.cellId % ColumnsNumber;
+          CandidateContainer cc = new CandidateContainer();
+          cc.containerId = containerIds[i_target];
+          cc.row = cc.containerId / ColumnsNumber;
+          cc.column = cc.containerId % ColumnsNumber;
 
-          if (Cells[cc.row, cc.column].items[ItemsPerCell - 1] != EMPTY_ITEM_ID)
+          if (Containers[cc.row, cc.column].items[ItemsPerContainer - 1] != EMPTY_ITEM_ID)
             continue;
 
-          float dx = (cc.column - c_source) * horizontalSpacingBetweenCells;
-          float dy = (cc.row - r_source) * verticalSpacingBetweenCells;
+          float dx = (cc.column - c_source) * horizontalSpacingBetweenContainers;
+          float dy = (cc.row - r_source) * verticalSpacingBetweenContainers;
           cc.distance = (float)Math.Sqrt(dx * dx + dy * dy);
 
           candidates.Add(cc);
@@ -186,8 +186,8 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
 
         if (candidates.Count == 0)
         {
-          // there are no other cells to move the item
-          Cells[r_source, c_source].items[ItemsPerCell - 1] = cellsItemValues[cellIds[i_source]];
+          // there are no other containers to move the item
+          Containers[r_source, c_source].items[ItemsPerContainer - 1] = containersItemValues[containerIds[i_source]];
         }
         else
         {
@@ -206,23 +206,23 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
             i = random.Next(2 * candidates.Count / 3, candidates.Count);
 
           // Now move the original item to the chosen candidate.
-          CandidateCell chosen = candidates[i];
-          Cells[chosen.row, chosen.column].items[ItemsPerCell - 1] = cellsItemValues[cellIds[i_source]];
+          CandidateContainer chosen = candidates[i];
+          Containers[chosen.row, chosen.column].items[ItemsPerContainer - 1] = containersItemValues[containerIds[i_source]];
           AverageDistance += candidates[i].distance;
-          IncorrectCellsNumber++;
+          IncorrectContainersNumber++;
         }
       }
 
-      AverageDistance /= IncorrectCellsNumber;
+      AverageDistance /= IncorrectContainersNumber;
     }
 
     // Methods
 
-    public bool AreAllCellItemsCorrect(int row, int column)
+    public bool AreAllContainerItemsCorrect(int row, int column)
     {
-      for (int i = 1; i < ItemsPerCell; ++i)
+      for (int i = 1; i < ItemsPerContainer; ++i)
       {
-        if (Cells[row, column].items[i] == EMPTY_ITEM_ID || Cells[row, column].items[i] != Cells[row, column].GetMainItemId())
+        if (Containers[row, column].items[i] == EMPTY_ITEM_ID || Containers[row, column].items[i] != Containers[row, column].GetMainItemId())
           return false;
       }
       return true;
@@ -237,17 +237,17 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Task
         for (int c = 0; c < ColumnsNumber; ++c)
         {
           if (c > 0) s += "  ";
-          for (int i = 0; i < ItemsPerCell; ++i)
+          for (int i = 0; i < ItemsPerContainer; ++i)
           {
             if (i > 0) s += ",";
-            s += string.Format("{0,2}", Cells[r, c].items[i]);
+            s += string.Format("{0,2}", Containers[r, c].items[i]);
           }
         }
         s += "\n";
       }
       s += "Average distance: " + AverageDistance;
-      s += "; Initially incorrect cells fraction: " + InitiallyIncorrectCellsFraction;
-      s += "; Incorrect cells number: " + IncorrectCellsNumber;
+      s += "; Initially incorrect containers fraction: " + InitiallyIncorrectContainersFraction;
+      s += "; Incorrect containers number: " + IncorrectContainersNumber;
       s += "\n";
 
       return s;

@@ -2,9 +2,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NormandErwan.MasterThesisExperiment.GUI
+namespace NormandErwan.MasterThesisExperiment.UI.HUD
 {
-  public class ServerGUI : MonoBehaviour
+  public class ServerHUD : MonoBehaviour
   {
     // Editor Fields
 

@@ -3,9 +3,9 @@ using NormandErwan.MasterThesisExperiment.Experiment.Variables;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NormandErwan.MasterThesisExperiment.GUI
+namespace NormandErwan.MasterThesisExperiment.UI.HUD
 {
-  public class DeviceGUI : ServerGUI
+  public class DeviceHUD : ServerHUD
   {
     // Editor Fields
 

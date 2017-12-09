@@ -29,7 +29,7 @@ namespace NormandErwan.MasterThesisExperiment.DeviceControllers
       yield return null;
 
       // TODO: if in phone only condition
-      if (grid.CellSize.x > 0 && grid.CellSize.y > 0)
+      if (grid.ElementScale.x > 0 && grid.ElementScale.y > 0)
       {
         // TODO: fix
         /*mainCamera.aspect = mobileDeviceSize.x / (float)mobileDeviceSize.y;
