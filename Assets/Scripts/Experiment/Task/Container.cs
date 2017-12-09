@@ -1,9 +1,9 @@
-﻿using NormandErwan.MasterThesisExperiment.Inputs;
-using NormandErwan.MasterThesisExperiment.UI.Grid;
+﻿using NormandErwan.MasterThesis.Experiment.Inputs;
+using NormandErwan.MasterThesis.Experiment.UI.Grid;
 using System;
 using UnityEngine;
 
-namespace NormandErwan.MasterThesisExperiment.Experiment.Task
+namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 {
   [RequireComponent(typeof(BoxCollider))]
   public class Container : Grid<Container, Item>, IFocusable, ITappable

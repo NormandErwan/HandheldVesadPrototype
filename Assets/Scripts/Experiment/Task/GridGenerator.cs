@@ -1,9 +1,9 @@
-﻿using NormandErwan.MasterThesisExperiment.Utilities;
+﻿using NormandErwan.MasterThesis.Experiment.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NormandErwan.MasterThesisExperiment.Experiment.Task
+namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 {
   /// <summary>
   /// Written by Michael J. Mcguffin.

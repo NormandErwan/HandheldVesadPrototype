@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NormandErwan.MasterThesisExperiment.Experiment.Variables
+namespace NormandErwan.MasterThesis.Experiment.Experiment.Variables
 {
   /// <summary>
   /// Serializable version of IndependentVariable, to be used in Unity inspector.

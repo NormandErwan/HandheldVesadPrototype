@@ -1,12 +1,12 @@
-﻿using NormandErwan.MasterThesisExperiment.Experiment.States;
-using NormandErwan.MasterThesisExperiment.Experiment.Variables;
-using NormandErwan.MasterThesisExperiment.Inputs;
-using NormandErwan.MasterThesisExperiment.UI.Grid;
+﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
+using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
+using NormandErwan.MasterThesis.Experiment.Inputs;
+using NormandErwan.MasterThesis.Experiment.UI.Grid;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NormandErwan.MasterThesisExperiment.Experiment.Task
+namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 {
   [RequireComponent(typeof(BoxCollider))]
   public class Grid : Grid<Grid, Container>, IDraggable, IZoomable

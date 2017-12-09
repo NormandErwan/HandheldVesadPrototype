@@ -1,9 +1,9 @@
-﻿using NormandErwan.MasterThesisExperiment.Experiment.States;
-using NormandErwan.MasterThesisExperiment.Experiment.Variables;
+﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
+using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NormandErwan.MasterThesisExperiment.UI.HUD
+namespace NormandErwan.MasterThesis.Experiment.UI.HUD
 {
   public class DeviceHUD : ServerHUD
   {

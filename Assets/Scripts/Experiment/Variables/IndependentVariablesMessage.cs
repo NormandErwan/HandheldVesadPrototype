@@ -1,6 +1,6 @@
 ﻿using DevicesSyncUnity.Messages;
 
-namespace NormandErwan.MasterThesisExperiment.Experiment.Variables
+namespace NormandErwan.MasterThesis.Experiment.Experiment.Variables
 {
   public class IndependentVariablesMessage : DevicesSyncMessage
   {
@@ -14,7 +14,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.Variables
     /// <summary>
     /// See <see cref="DevicesSyncMessage.MessageType"/>.
     /// </summary>
-    public override short MessageType { get { return MasterThesisExperiment.MessageType.IndependentVariableManagers; } }
+    public override short MessageType { get { return MasterThesis.Experiment.MessageType.IndependentVariableManagers; } }
 
     // Variables
 

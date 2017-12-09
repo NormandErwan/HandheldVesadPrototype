@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NormandErwan.MasterThesisExperiment.Utilities
+namespace NormandErwan.MasterThesis.Experiment.Utilities
 {
   /// <summary>
   /// Represent a range.

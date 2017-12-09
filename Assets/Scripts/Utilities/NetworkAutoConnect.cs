@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 
-namespace NormandErwan.MasterThesisExperiment.Utilities
+namespace NormandErwan.MasterThesis.Experiment.Utilities
 {
   public class NetworkAutoConnect : MonoBehaviour
   {

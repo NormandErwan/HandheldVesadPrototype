@@ -1,6 +1,6 @@
 ﻿using DevicesSyncUnity.Messages;
 
-namespace NormandErwan.MasterThesisExperiment.Experiment.States
+namespace NormandErwan.MasterThesis.Experiment.Experiment.States
 {
   /// <summary>
   /// Message that contains the new current state of the experiment.
@@ -17,7 +17,7 @@ namespace NormandErwan.MasterThesisExperiment.Experiment.States
     /// <summary>
     /// See <see cref="DevicesSyncMessage.MessageType"/>.
     /// </summary>
-    public override short MessageType { get { return MasterThesisExperiment.MessageType.StateManager; } }
+    public override short MessageType { get { return MasterThesis.Experiment.MessageType.StateManager; } }
 
     // Variables
 

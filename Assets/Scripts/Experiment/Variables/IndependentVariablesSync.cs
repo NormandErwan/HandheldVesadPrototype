@@ -2,7 +2,7 @@
 using DevicesSyncUnity.Messages;
 using UnityEngine.Networking;
 
-namespace NormandErwan.MasterThesisExperiment.Experiment.Variables
+namespace NormandErwan.MasterThesis.Experiment.Experiment.Variables
 {
   public class IndependentVariablesSync : DevicesSync
   {

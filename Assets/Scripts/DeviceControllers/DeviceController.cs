@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace NormandErwan.MasterThesisExperiment.DeviceControllers
+namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 {
   public abstract class DeviceController : MonoBehaviour
   {

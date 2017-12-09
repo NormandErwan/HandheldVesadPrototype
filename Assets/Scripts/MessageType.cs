@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine.Networking;
 
-namespace NormandErwan.MasterThesisExperiment
+namespace NormandErwan.MasterThesis.Experiment
 {
     /// <summary>
     /// Container class for networking messages types used in this experiment.

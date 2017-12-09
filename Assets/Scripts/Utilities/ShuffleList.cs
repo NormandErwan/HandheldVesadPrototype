@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NormandErwan.MasterThesisExperiment.Utilities
+namespace NormandErwan.MasterThesis.Experiment.Utilities
 {
   /// <summary>
   /// Written by Michael J. McGuffin.

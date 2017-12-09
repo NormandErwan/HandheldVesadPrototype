@@ -1,4 +1,4 @@
-﻿namespace NormandErwan.MasterThesisExperiment.Experiment.Task
+﻿namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 {
   public enum ItemClass
   {

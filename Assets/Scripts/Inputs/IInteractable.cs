@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NormandErwan.MasterThesisExperiment.Inputs
+namespace NormandErwan.MasterThesis.Experiment.Inputs
 {
   public interface IInteractable
   {

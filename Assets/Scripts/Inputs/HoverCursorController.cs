@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NormandErwan.MasterThesisExperiment.Inputs
+namespace NormandErwan.MasterThesis.Experiment.Inputs
 {
   [RequireComponent(typeof(HoverCursorData))]
   [RequireComponent(typeof(Collider))]

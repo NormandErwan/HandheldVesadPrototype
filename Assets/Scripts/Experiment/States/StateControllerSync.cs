@@ -2,7 +2,7 @@
 using DevicesSyncUnity.Messages;
 using UnityEngine.Networking;
 
-namespace NormandErwan.MasterThesisExperiment.Experiment.States
+namespace NormandErwan.MasterThesis.Experiment.Experiment.States
 {
   /// <summary>
   /// Synchronize the experiment between devices with <see cref="StateControllerMessage"/>.

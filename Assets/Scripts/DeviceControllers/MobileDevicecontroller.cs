@@ -1,8 +1,8 @@
-﻿using NormandErwan.MasterThesisExperiment.Experiment.States;
+﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
 using System.Collections;
 using UnityEngine;
 
-namespace NormandErwan.MasterThesisExperiment.DeviceControllers
+namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 {
   public class MobileDeviceController : DeviceController
   {

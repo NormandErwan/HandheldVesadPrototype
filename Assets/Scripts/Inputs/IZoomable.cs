@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace NormandErwan.MasterThesisExperiment.Inputs
+namespace NormandErwan.MasterThesis.Experiment.Inputs
 {
   public interface IZoomable : ITransformable
   {

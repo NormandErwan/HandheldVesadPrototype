@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace NormandErwan.MasterThesisExperiment.Inputs
+namespace NormandErwan.MasterThesis.Experiment.Inputs
 {
   public interface ICursor
   {

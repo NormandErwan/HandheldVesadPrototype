@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace NormandErwan.MasterThesisExperiment.UI.Grid
+namespace NormandErwan.MasterThesis.Experiment.UI.Grid
 {
   public interface IGrid<T, U> : IGridElement<T>
     where T : IGridElement<T>

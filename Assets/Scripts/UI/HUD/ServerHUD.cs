@@ -1,8 +1,8 @@
-﻿using NormandErwan.MasterThesisExperiment.Experiment.States;
+﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NormandErwan.MasterThesisExperiment.UI.HUD
+namespace NormandErwan.MasterThesis.Experiment.UI.HUD
 {
   public class ServerHUD : MonoBehaviour
   {

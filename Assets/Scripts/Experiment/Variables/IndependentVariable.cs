@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace NormandErwan.MasterThesisExperiment.Experiment.Variables
+namespace NormandErwan.MasterThesis.Experiment.Experiment.Variables
 {
   public abstract class IndependentVariable<T> : IIndependentVariable where T : IndependentVariableCondition
   {

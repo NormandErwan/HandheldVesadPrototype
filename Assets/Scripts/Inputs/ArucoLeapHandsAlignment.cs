@@ -1,7 +1,7 @@
 ﻿using Leap.Unity;
 using UnityEngine;
 
-namespace NormandErwan.MasterThesisExperiment.Inputs
+namespace NormandErwan.MasterThesis.Experiment.Inputs
 {
   /// <summary>
   /// Aligns the <see cref="leapHandController"/> with the aruco coordinates: point your right index <see cref="leapHandRight_IndexEnd"/> to the

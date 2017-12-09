@@ -1,7 +1,7 @@
-﻿using NormandErwan.MasterThesisExperiment.Utilities;
+﻿using NormandErwan.MasterThesis.Experiment.Utilities;
 using UnityEngine;
 
-namespace NormandErwan.MasterThesisExperiment.Experiment.Variables
+namespace NormandErwan.MasterThesis.Experiment.Experiment.Variables
 {
   public class IVClassificationDifficultyCondition : IndependentVariableCondition
   {
