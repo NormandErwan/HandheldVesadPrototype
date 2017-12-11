@@ -99,19 +99,13 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public void SetInteractable(bool value)
     {
       IsInteractable = value;
-      if (IsInteractable)
-      {
-        Interactable(this);
-      }
+      Interactable(this);
     }
 
     public void SetFocused(bool value)
     {
       IsFocused = value;
-      if (IsFocused)
-      {
-        Focused(this);
-      }
+      Focused(this);
 
       focusedItems = 0;
       foreach (var item in Elements)
@@ -127,21 +121,15 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public void SetSelectable(bool value)
     {
       IsSelectable = value;
-      if (IsSelectable)
-      {
-        Selectable(this);
-      }
+      Selectable(this);
     }
 
     public void SetSelected(bool value)
     {
       IsSelected = value;
-      if (IsSelected)
-      {
-        Selected(this);
-        Selected2(this);
-        IsSelected = false;
-      }
+      Selected(this);
+      Selected2(this);
+      IsSelected = false;
     }
 
     // Methods

@@ -60,7 +60,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     // c is between 0 and (NumberColumns-1).
     public Container[,] Containers { get; protected set; }
 
-    public float InitiallyIncorrectContainersFraction { get; protected set; } // between 0.0f and 1.0f
+    public int InitialIncorrectContainersNumber { get; protected set; }
     public int IncorrectContainersNumber { get; protected set; }
     
     public float AverageDistance { get; protected set; } // This is the average distance to move all mis-classified items to their correct container.
@@ -71,15 +71,15 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     // Constructor
 
-    public GridGenerator(int rowsNumber, int columnsNumber, int itemsPerContainer, float incorrectContainersFraction, DistanceTypes distanceType)
+    public GridGenerator(int rowsNumber, int columnsNumber, int itemsPerContainer, int initialIncorrectContainersNumber,
+      DistanceTypes distanceType)
     {
       RowsNumber = rowsNumber;
       ColumnsNumber = columnsNumber;
       ItemsPerContainer = itemsPerContainer;
 
       Containers = new Container[RowsNumber, ColumnsNumber];
-
-      InitiallyIncorrectContainersFraction = incorrectContainersFraction;
+      InitialIncorrectContainersNumber = initialIncorrectContainersNumber;
       IncorrectContainersNumber = 0;
 
       AverageDistance = 0;
@@ -136,14 +136,13 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       // and imagine splitting this list into two sublists
       // with indices [0..(k-1)] and [k..N]
       // where N = NumberRows * NumberColumns,
-      // and k = InitiallyIncorrectContainersFraction * N.
+      // and k = initialIncorrectContainersNumber.
       // The first sublist is the one where we want to permute the last items
       // of the containers.
       // The second sublist is the one where the containers should remain correct.
-      int k = (int)(containerIds.Count * InitiallyIncorrectContainersFraction);
       // Since no further work is required on the containers of the second sublist,
       // forget about it, and just store the first sublist.
-      containerIds.RemoveRange(k, containerIds.Count - k);
+      containerIds.RemoveRange(initialIncorrectContainersNumber, containerIds.Count - initialIncorrectContainersNumber);
 
       // Iterate over the containers in the list (now containing only the first sublist),
       // and set their last items to be empty.
@@ -246,7 +245,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         s += "\n";
       }
       s += "Average distance: " + AverageDistance;
-      s += "; Initially incorrect containers fraction: " + InitiallyIncorrectContainersFraction;
+      s += "; Initial incorrect containers number: " + InitialIncorrectContainersNumber;
       s += "; Incorrect containers number: " + IncorrectContainersNumber;
       s += "\n";
 

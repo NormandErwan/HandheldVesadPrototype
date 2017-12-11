@@ -11,6 +11,10 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
   [RequireComponent(typeof(BoxCollider))]
   public class Grid : Grid<Grid, Container>, IDraggable, IZoomable
   {
+    // Constants
+
+    protected int gridGenerationMaxNumber = 1000;
+
     // Editor fields
 
     [Header("Task grid")]
@@ -26,6 +30,10 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public bool IsDragging { get; protected set; }
     public bool IsZooming { get; protected set; }
 
+    // Properties
+
+    public int RemainingItemsToClassify = 0;
+
     // Interfaces events
 
     public event Action<IInteractable> Interactable = delegate { };
@@ -40,8 +48,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     // Events
 
-    public event Action<Item> ItemSelected = delegate { };
-    public event Action<Item> ItemDeselected = delegate { };
+    public event Action<Container, Item> ItemSelected = delegate { };
+    public event Action<Container, Item> ItemDeselected = delegate { };
     public event Action<Container, Container, Item> ClassificationSuccess = delegate { };
     public event Action<Container, Container, Item> ClassificationError = delegate { };
     public event Action Finished = delegate { };
@@ -76,7 +84,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         container.Selected2 -= Container_Selected;
         foreach (var item in container.Elements)
         {
-          item.SelectedItem -= Item_Selected;
+          item.Selected2 -= Item_Selected;
         }
       }
     }
@@ -91,10 +99,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public void SetInteractable(bool value)
     {
       IsInteractable = value;
-      if (IsInteractable)
-      {
-        Interactable(this);
-      }
+      Interactable(this);
     }
 
     public void SetDragging(bool value)
@@ -160,16 +165,29 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       CleanGrid();
       base.Configure();
       BuildGrid();
-      
+
       // Generate a grid generator with average distance in current condition classification distance range
+      var classificationCondition = iVClassificationDifficulty.CurrentCondition;
+
+      int gridNumber = 0;
       GridGenerator gridGenerator;
       do
       {
         gridGenerator = new GridGenerator(GridSize.y, GridSize.x, Elements[0].ElementsInstantiatedAtConfigure,
-        iVClassificationDifficulty.CurrentCondition.IncorrectlyClassifiedContainersFraction,
+        classificationCondition.NumberOfItemsToClass,
         (GridGenerator.DistanceTypes)iVClassificationDifficulty.CurrentConditionIndex);
+        gridNumber++;
       }
-      while (!iVClassificationDifficulty.CurrentCondition.Range.ContainsValue(gridGenerator.AverageDistance));
+      while (!classificationCondition.AverageClassificationDistanceRange.ContainsValue(gridGenerator.AverageDistance)
+        && classificationCondition.NumberOfItemsToClass != gridGenerator.IncorrectContainersNumber
+        && gridNumber < gridGenerationMaxNumber);
+
+      if (gridNumber >= gridGenerationMaxNumber)
+      {
+        throw new Exception("Failed to generate a grid.");
+      }
+      RemainingItemsToClassify = gridGenerator.IncorrectContainersNumber;
+      print(RemainingItemsToClassify);
 
       // Configure containers and items
       int containerRow = 0, containerColumn = 0;
@@ -185,7 +203,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         container.Selected2 += Container_Selected;
         foreach (var item in container.Elements)
         {
-          item.SelectedItem += Item_Selected;
+          item.Selected2 += Item_Selected;
         }
 
         containerColumn = (containerColumn + 1) % GridSize.x;
@@ -207,36 +225,77 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     {
       if (selectedItem != null)
       {
-        // Find current container of the item
-        Container currentContainer = null;
-        foreach (var containerSearch in Elements)
+        Container previousContainer = GetItemContainer(selectedItem);
+        if (previousContainer == container)
         {
-          if (containerSearch.Elements.Contains(selectedItem))
+          // Deselect the item if it's the same container
+          ItemDeselected(previousContainer, selectedItem);
+        }
+        else
+        {
+          // Update RemainingItemsToClassify and classification events
+          if (container.IsFull || container.ItemClass != selectedItem.ItemClass)
           {
-            currentContainer = containerSearch;
+            if (previousContainer.ItemClass == selectedItem.ItemClass)
+            {
+              RemainingItemsToClassify++;
+            }
+            ClassificationError(previousContainer, container, selectedItem);
+          }
+          else
+          {
+            RemainingItemsToClassify--;
+            ClassificationSuccess(previousContainer, container, selectedItem);
+          }
+
+          // Move the selected item only if it's a different and not full container
+          if (!container.IsFull)
+          {
+            previousContainer.RemoveElement(selectedItem);
+            container.AddElement(selectedItem);
+          }
+
+          // Deselect the item
+          selectedItem.SetSelected(false);
+          selectedItem = null;
+
+          // Call Finished if all items are classified
+          print(RemainingItemsToClassify);
+          if (RemainingItemsToClassify == 0)
+          {
+            Finished();
           }
         }
-
-        // Move the selected item only if it's a different and not full container
-        if (currentContainer != container && !container.IsFull)
-        {
-          currentContainer.RemoveElement(selectedItem);
-          container.AddElement(selectedItem);
-        }
-
-        // Deselect the item
-        selectedItem.SetSelected(false);
-        selectedItem = null;
       }
     }
 
     protected virtual void Item_Selected(Item item)
     {
+      Container itemContainer;
+
       if (selectedItem != null)
       {
-        selectedItem.SetSelected(false);
+        // Deselect the previous selected item
+        if (selectedItem != item)
+        {
+          selectedItem.SetSelected(false);
+        }
+
+        // Call ItemDeselected
+        itemContainer = GetItemContainer(selectedItem);
+        ItemDeselected(itemContainer, selectedItem);
+
+        selectedItem = null;
       }
-      selectedItem = item;
+
+      // Update selectedItem with the new item
+      if (item.IsSelected)
+      {
+        selectedItem = item;
+
+        itemContainer = GetItemContainer(selectedItem);
+        ItemSelected(itemContainer, selectedItem);
+      }
     }
 
     protected virtual void SetContainersInteractable(bool value)
@@ -249,6 +308,19 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
           item.SetInteractable(value);
         }
       }
+    }
+
+    protected virtual Container GetItemContainer(Item item)
+    {
+      Container parentContainer = null;
+      foreach (var container in Elements)
+      {
+        if (container.Elements.Contains(selectedItem))
+        {
+          parentContainer = container;
+        }
+      }
+      return parentContainer;
     }
   }
 }

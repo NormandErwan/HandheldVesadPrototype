@@ -414,9 +414,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2_Hard
   title: Difficile
-  minimum: 2.5
-  maximum: 2.7
-  incorrectlyClassifiedCellsFraction: 0.5
+  minimumAverageClassificationDistance: 2.5
+  maximumAverageClassificationDistance: 2.7
+  numberOfItemsToClass: 11
 --- !u!114 &114102835371396286
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -569,9 +569,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1_Easy
   title: Facile
-  minimum: 1.25
-  maximum: 1.45
-  incorrectlyClassifiedCellsFraction: 0.5
+  minimumAverageClassificationDistance: 1.25
+  maximumAverageClassificationDistance: 1.45
+  numberOfItemsToClass: 11
 --- !u!114 &114759187420252978
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -96,7 +96,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public event Action<ISelectable> Selectable = delegate { };
     public event Action<ISelectable> Selected = delegate { };
-    public event Action<Item> SelectedItem = delegate { };
+    public event Action<Item> Selected2 = delegate { };
 
     // Variables
 
@@ -123,39 +123,27 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public void SetInteractable(bool value)
     {
       IsInteractable = value;
-      if (IsInteractable)
-      {
-        Interactable(this);
-      }
+      Interactable(this);
     }
 
     public void SetFocused(bool value)
     {
       IsFocused = value;
-      if (IsFocused)
-      {
-        Focused(this);
-      }
+      Focused(this);
       UpdateBackgroundMaterial();
     }
 
     public void SetSelectable(bool value)
     {
       IsSelectable = value;
-      if (IsSelectable)
-      {
-        Selectable(this);
-      }
+      Selectable(this);
     }
 
     public void SetSelected(bool value)
     {
       IsSelected = value & !IsSelected;
-      if (IsSelected)
-      {
-        Selected(this);
-        SelectedItem(this);
-      }
+      Selected(this);
+      Selected2(this);
 
       if (IsSelected)
       {
