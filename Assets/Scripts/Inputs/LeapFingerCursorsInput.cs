@@ -1,21 +1,17 @@
 ﻿using Leap;
 using Leap.Unity;
 using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Inputs
 {
-  public class LeapFingerCursorsInput : MonoBehaviour
+  public class LeapFingerCursorsInput : CursorsInput
   {
     // Constants
 
     protected const float oneMillimeterToMeters = 0.001f;
 
     // Editor fields
-
-    [SerializeField]
-    private Cursor[] cursors;
 
     [SerializeField]
     private LeapServiceProvider leapServiceProvider;
@@ -25,30 +21,13 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     // Properties
 
-    public Dictionary<CursorType, Cursor> Cursors { get; protected set; }
     public LeapServiceProvider LeapServiceProvider { get { return leapServiceProvider; } set { leapServiceProvider = value; } }
     public bool UseStabilizedPositions { get { return useStabilizedPositions; } set { useStabilizedPositions = value; } }
 
-    // Methods
+    // CursorsInput methods
 
-    protected virtual void Awake()
+    protected override void UpdateCursors()
     {
-      Cursors = new Dictionary<CursorType, Cursor>();
-      foreach (var cursor in cursors)
-      {
-        Cursors.Add(cursor.Type, cursor);
-      }
-    }
-
-    protected virtual void Update()
-    {
-      // Deactivates the cursors
-      foreach (var cursor in Cursors)
-      {
-        cursor.Value.gameObject.SetActive(false);
-      }
-
-      // Activates the detected cursors
       foreach (var hand in LeapServiceProvider.CurrentFrame.Hands)
       {
         foreach (var finger in hand.Fingers)
@@ -58,10 +37,10 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
           Cursor cursor;
           if (Cursors.TryGetValue(cursorType, out cursor))
           {
-            cursor.gameObject.SetActive(true);
             cursor.transform.position = (UseStabilizedPositions ? finger.StabilizedTipPosition : finger.TipPosition).ToVector3();
             cursor.transform.forward = finger.Direction.ToVector3();
             cursor.transform.localScale = finger.Width * oneMillimeterToMeters * Vector3.one;
+            cursor.gameObject.SetActive(true);
           }
         }
       }

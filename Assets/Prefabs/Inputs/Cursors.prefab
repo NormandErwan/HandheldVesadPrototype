@@ -115,6 +115,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4836254632867852}
   - component: {fileID: 114329110569601582}
+  - component: {fileID: 114717382359170248}
   m_Layer: 0
   m_Name: Cursors
   m_TagString: Untagged
@@ -1124,7 +1125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46ca95cf7f269e4488d919f571e44182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 6
 --- !u!114 &114029505999846332
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1136,7 +1137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46ca95cf7f269e4488d919f571e44182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 8
 --- !u!114 &114245298380061518
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1160,7 +1161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46ca95cf7f269e4488d919f571e44182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 2
 --- !u!114 &114304547472484076
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1172,7 +1173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46ca95cf7f269e4488d919f571e44182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 1
 --- !u!114 &114329110569601582
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1202,7 +1203,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46ca95cf7f269e4488d919f571e44182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 5
 --- !u!114 &114560577002036184
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1214,7 +1215,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46ca95cf7f269e4488d919f571e44182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 4
+--- !u!114 &114717382359170248
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1289847447491222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a3a8bc350dfb3746b53440b824916f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cursors:
+  - {fileID: 114304547472484076}
+  - {fileID: 114245298380061518}
+  camera: {fileID: 0}
+  planeToProjectCursors: {fileID: 0}
 --- !u!114 &114726499238018480
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1226,7 +1243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46ca95cf7f269e4488d919f571e44182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 3
 --- !u!114 &114773955637911080
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1238,7 +1255,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46ca95cf7f269e4488d919f571e44182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 7
 --- !u!114 &114789646245915216
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1262,7 +1279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46ca95cf7f269e4488d919f571e44182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 10
 --- !u!135 &135027591974533164
 SphereCollider:
   m_ObjectHideFlags: 1

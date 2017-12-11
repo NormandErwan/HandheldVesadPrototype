@@ -21,7 +21,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     // ICursor properties
 
     public CursorType Type { get { return type; } set { type = value; } }
-    public Transform Transform { get { return transform; } }
+    public GameObject GameObject { get { return gameObject; } }
     
     // Properties
 
