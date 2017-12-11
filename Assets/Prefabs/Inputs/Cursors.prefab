@@ -1126,6 +1126,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 6
+  deviceController: {fileID: 0}
 --- !u!114 &114029505999846332
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1138,6 +1139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 8
+  deviceController: {fileID: 0}
 --- !u!114 &114245298380061518
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1150,6 +1152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  deviceController: {fileID: 0}
 --- !u!114 &114286179544140628
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1162,6 +1165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 2
+  deviceController: {fileID: 0}
 --- !u!114 &114304547472484076
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1174,6 +1178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
+  deviceController: {fileID: 0}
 --- !u!114 &114329110569601582
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1204,6 +1209,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 5
+  deviceController: {fileID: 0}
 --- !u!114 &114560577002036184
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1216,6 +1222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 4
+  deviceController: {fileID: 0}
 --- !u!114 &114717382359170248
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1228,8 +1235,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursors:
-  - {fileID: 114304547472484076}
-  - {fileID: 114245298380061518}
+  - {fileID: 114026836117134686}
+  - {fileID: 114529553825851816}
   camera: {fileID: 0}
   planeToProjectCursors: {fileID: 0}
 --- !u!114 &114726499238018480
@@ -1244,6 +1251,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 3
+  deviceController: {fileID: 0}
 --- !u!114 &114773955637911080
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1256,6 +1264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 7
+  deviceController: {fileID: 0}
 --- !u!114 &114789646245915216
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1267,7 +1276,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46ca95cf7f269e4488d919f571e44182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 10
+  type: 0
+  deviceController: {fileID: 0}
 --- !u!114 &114933141613715370
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1279,7 +1289,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46ca95cf7f269e4488d919f571e44182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 10
+  type: 9
+  deviceController: {fileID: 0}
 --- !u!135 &135027591974533164
 SphereCollider:
   m_ObjectHideFlags: 1

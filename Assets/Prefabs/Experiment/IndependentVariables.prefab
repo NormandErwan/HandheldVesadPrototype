@@ -571,7 +571,7 @@ MonoBehaviour:
   title: Facile
   minimumAverageClassificationDistance: 1.25
   maximumAverageClassificationDistance: 1.45
-  numberOfItemsToClass: 11
+  numberOfItemsToClass: 2
 --- !u!114 &114759187420252978
 MonoBehaviour:
   m_ObjectHideFlags: 1

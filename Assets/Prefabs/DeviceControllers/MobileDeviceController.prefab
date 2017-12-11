@@ -62,7 +62,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 227d0fcd131d9ab4a823c20a8677cb02, type: 2}
   - {fileID: 2100000, guid: 57c7d98b1acef0f49967632816a6cedb, type: 2}
   - {fileID: 2100000, guid: c7221b4879017a440a24f4c727142375, type: 2}
-  transparency: 0.75
+  transparency: 1
 --- !u!114 &114394180611686014
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -74,4 +74,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14c3bcd1c158c734787c75e77e47f599, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateController: {fileID: 0}
+  grid: {fileID: 0}
   maxSelectableDistance: 0.003

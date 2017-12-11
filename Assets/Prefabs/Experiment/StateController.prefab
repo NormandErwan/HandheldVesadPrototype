@@ -226,7 +226,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: ExperimentBeginState
   title: "D\xE9but de l'exp\xE9rience"
-  instructions: TODO instruction state
+  instructions: "Le but est de rendre tous les disques verts. Les disques rouges sont
+    les disques mal class\xE9s. Vous devez les d\xE9placer pour les mettre dans la
+    bonne case de la grille."
   activateTask: 0
 --- !u!114 &114429863715970740
 MonoBehaviour:
@@ -241,7 +243,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: TaskTrainingState
   title: "Entrainement sur une nouvelle t\xE2che"
-  instructions: 
+  instructions: "Ceci est un entra\xEEnement. Prenez autant de temps que vous voulez
+    pour vous familiariser avec la t\xE2che et e syst\xE8me."
   activateTask: 1
 --- !u!114 &114495959195748250
 MonoBehaviour:
@@ -269,7 +272,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: TaskTrialCompleteState
   title: "Essai termin\xE9"
-  instructions: 
+  instructions: "L'essai est termin\xE9. Vous pouvez enlever le casque et prendre
+    une pause avant le prochain essai."
   activateTask: 0
 --- !u!114 &114661546425955246
 MonoBehaviour:
@@ -284,7 +288,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: TaskTrialState
   title: "Essai sur la t\xE2che courante"
-  instructions: 
+  instructions: "Ceci est un essai r\xE9el. Mettez tous les disques verts. Allez le
+    plus vite possible en faisant le moins d'erreurs."
   activateTask: 1
 --- !u!114 &114798882843681932
 MonoBehaviour:
@@ -331,5 +336,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: ExperimentEndState
   title: "Fin de l'exp\xE9rience"
-  instructions: 
+  instructions: Merci de votre participation !
   activateTask: 0
