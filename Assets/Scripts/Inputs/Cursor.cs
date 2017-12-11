@@ -158,16 +158,17 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
         {
           if (longPressTimers.ContainsKey(longPressable))
           {
-            if (longPressTimers[longPressable] < longPressMinTime)
+            if (!longPressable.IsInteractable || !longPressable.IsSelectable)
+            {
+              longPressTimers.Remove(longPressable);
+            }
+            else if (longPressTimers[longPressable] < longPressMinTime)
             {
               longPressTimers[longPressable] += Time.deltaTime;
             }
             else
             {
-              if (longPressable.IsInteractable && longPressable.IsSelectable)
-              {
-                longPressable.SetSelected(true);
-              }
+              longPressable.SetSelected(true);
               longPressTimers.Remove(longPressable);
             }
           }
@@ -177,7 +178,11 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
         {
           if (tapTimers.ContainsKey(tappable))
           {
-            if (tapTimers[tappable] < tapTimeout)
+            if (!tappable.IsInteractable || !tappable.IsSelectable)
+            {
+              tapTimers.Remove(tappable);
+            }
+            else if (tapTimers[tappable] < tapTimeout)
             {
               tapTimers[tappable] += Time.deltaTime;
             }
