@@ -6,7 +6,7 @@ using UnityEngine;
 namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 {
   [RequireComponent(typeof(SphereCollider))]
-  public class Item : MonoBehaviour, IGridElement<Item>, IFocusable, ILongPressable
+  public class Item : MonoBehaviour, IGridElement<Item>, IFocusable, ITappable
   {
     // Editor fields
 
