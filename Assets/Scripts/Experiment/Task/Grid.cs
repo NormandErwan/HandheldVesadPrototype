@@ -1,5 +1,6 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
 using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
+using NormandErwan.MasterThesis.Experiment.Inputs;
 using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using NormandErwan.MasterThesis.Experiment.UI.Grid;
 using System;
@@ -47,7 +48,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     // Variables
 
     protected new BoxCollider collider;
-    protected List<HoverCursorController> triggeredFingers = new List<HoverCursorController>();
+    protected List<Inputs.Cursor> triggeredFingers = new List<Inputs.Cursor>();
     protected Vector3 fingerPanningLastPosition;
 
     protected Item selectedItem;

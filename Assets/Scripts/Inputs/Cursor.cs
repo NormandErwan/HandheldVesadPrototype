@@ -5,23 +5,25 @@ using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Inputs
 {
-  [RequireComponent(typeof(HoverCursorData))]
   [RequireComponent(typeof(Collider))]
-  public class HoverCursorController : MonoBehaviour, ICursor
+  public class Cursor : MonoBehaviour, ICursor
   {
     // Constants
 
     public static readonly float longPressTimeout = 0.5f; // in seconds
     public static readonly float tapTimeout = 0.3f; // in seconds
 
+    // Editor fields
+
+    [SerializeField]
+    private CursorType type;
+
     // ICursor properties
 
-    public CursorType Type { get; protected set; }
+    public CursorType Type { get { return type; } set { type = value; } }
     public Transform Transform { get { return transform; } }
     
     // Properties
-
-    public HoverCursorData HoverCursorData { get; protected set; }
 
     public bool IsFinger { get { return Type != CursorType.Look; } }
     public bool IsIndex { get { return Type == CursorType.LeftIndex || Type == CursorType.RightIndex; } }
@@ -30,32 +32,13 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     // Variables
 
-    protected static Dictionary<ITransformable, Dictionary<HoverCursorController, Vector3>> latestCursorPositions 
-      = new Dictionary<ITransformable, Dictionary<HoverCursorController, Vector3>>();
+    protected static Dictionary<ITransformable, Dictionary<Cursor, Vector3>> latestCursorPositions 
+      = new Dictionary<ITransformable, Dictionary<Cursor, Vector3>>();
 
     protected Dictionary<ILongPressable, float> longPressTimers = new Dictionary<ILongPressable, float>();
     protected Dictionary<ITappable, float> tapTimers = new Dictionary<ITappable, float>();
 
     // Methods
-
-    protected void Awake()
-    {
-      HoverCursorData = GetComponent<HoverCursorData>();
-      switch (HoverCursorData.Type)
-      {
-        case Hover.Core.Cursors.CursorType.LeftThumb:   Type = CursorType.LeftThumb;    break;
-        case Hover.Core.Cursors.CursorType.LeftIndex:   Type = CursorType.LeftIndex;    break;
-        case Hover.Core.Cursors.CursorType.LeftMiddle:  Type = CursorType.LeftMiddle;   break;
-        case Hover.Core.Cursors.CursorType.LeftRing:    Type = CursorType.LeftRing;     break;
-        case Hover.Core.Cursors.CursorType.LeftPinky:   Type = CursorType.LeftPinky;    break;
-        case Hover.Core.Cursors.CursorType.RightThumb:  Type = CursorType.RightThumb;   break;
-        case Hover.Core.Cursors.CursorType.RightIndex:  Type = CursorType.RightIndex;   break;
-        case Hover.Core.Cursors.CursorType.RightMiddle: Type = CursorType.RightMiddle;  break;
-        case Hover.Core.Cursors.CursorType.RightRing:   Type = CursorType.RightRing;    break;
-        case Hover.Core.Cursors.CursorType.RightPinky:  Type = CursorType.RightPinky;   break;
-        case Hover.Core.Cursors.CursorType.Look:        Type = CursorType.Look;         break;
-      }
-    }
 
     protected virtual void OnTriggerEnter(Collider other)
     {
@@ -78,7 +61,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
         {
           if (!latestCursorPositions.ContainsKey(transformable))
           {
-            latestCursorPositions.Add(transformable, new Dictionary<HoverCursorController, Vector3>());
+            latestCursorPositions.Add(transformable, new Dictionary<Cursor, Vector3>());
           }
           latestCursorPositions[transformable].Add(this, transform.position);
         });
@@ -147,7 +130,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
         {
           if (zoomable.IsInteractable && zoomable.IsZooming)
           {
-            var cursors = new List<HoverCursorController>(latestCursorPositions[zoomable].Keys);
+            var cursors = new List<Cursor>(latestCursorPositions[zoomable].Keys);
             if (cursors[0] == this) // Update only once per frame
             {
               var translation = cursors[0].transform.position;
