@@ -124,7 +124,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
               latestCursorPositions[draggable][this] = transform.position;
               draggable.Drag(translation);
             }
-            else if (translation.magnitude > deviceController.MaxSelectableDistance)
+            else if (translation.magnitude > DeviceController.MaxSelectableDistance)
             {
               latestCursorPositions[draggable][this] = transform.position;
               draggable.SetDragging(true);

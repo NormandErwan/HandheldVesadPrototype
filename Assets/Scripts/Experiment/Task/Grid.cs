@@ -187,7 +187,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         throw new Exception("Failed to generate a grid.");
       }
       RemainingItemsToClassify = gridGenerator.IncorrectContainersNumber;
-      print(RemainingItemsToClassify);
 
       // Configure containers and items
       int containerRow = 0, containerColumn = 0;

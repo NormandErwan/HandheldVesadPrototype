@@ -30,34 +30,56 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     // Methods
 
+    /// <summary>
+    /// Configures and activates <see cref="Grid"/>.
+    /// </summary>
     public virtual void ActivateTask()
     {
-      grid.Configure(StateController);
-      grid.gameObject.SetActive(true);
+      Grid.Configure(StateController);
+      Grid.gameObject.SetActive(true);
     }
 
+    /// <summary>
+    /// Deactivates <see cref="Grid"/>.
+    /// </summary>
+    protected virtual void Start()
+    {
+      Grid.gameObject.SetActive(false);
+    }
+
+    // subscribes
     protected virtual void OnEnable()
     {
       StateController.CurrentStateUpdated += StateController_CurrentStateUpdated;
-      grid.Finished += Grid_Finished;
+      Grid.Finished += Grid_Finished;
     }
 
+    // unsubscribes
     protected virtual void OnDisable()
     {
       StateController.CurrentStateUpdated -= StateController_CurrentStateUpdated;
-      grid.Finished -= Grid_Finished;
+      Grid.Finished -= Grid_Finished;
     }
 
+    /// <summary>
+    /// Deactivates <see cref="Grid"/> each new state.
+    /// </summary>
     protected virtual void StateController_CurrentStateUpdated(State currentState)
     {
-      grid.gameObject.SetActive(false);
+      Grid.gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// Go to the next state when the <see cref="Grid"/> is finished.
+    /// </summary>
     protected virtual void Grid_Finished()
     {
       stateController.NextState();
     }
 
+    /// <summary>
+    /// Calls <see cref="RequestActivateTask"/>.
+    /// </summary>
     protected virtual void OnRequestActivateTask()
     {
       RequestActivateTask();

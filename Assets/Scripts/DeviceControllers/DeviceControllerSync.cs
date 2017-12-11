@@ -39,6 +39,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     protected override DevicesSyncMessage OnServerMessageReceived(NetworkMessage netMessage)
     {
       currentMessage = netMessage.ReadMessage<DeviceControllerMessage>();
+      print(deviceController.name);
       if (currentMessage.activateTask)
       {
         deviceController.ActivateTask();

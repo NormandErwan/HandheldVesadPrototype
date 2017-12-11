@@ -17,19 +17,24 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
 
     // Methods
 
-    public void ShowValidateButton(bool value)
+    public virtual void ShowValidateButton(bool value)
     {
       validateButton.gameObject.SetActive(value);
     }
 
-    protected void OnEnable()
+    protected virtual void OnEnable()
     {
       validateButton.onClick.AddListener(validateButton_onClick);
     }
 
-    protected void OnDisable()
+    protected virtual void OnDisable()
     {
       validateButton.onClick.AddListener(validateButton_onClick);
+    }
+
+    protected virtual void Start()
+    {
+      ShowValidateButton(false);
     }
 
     protected virtual void validateButton_onClick()

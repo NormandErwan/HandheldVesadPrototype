@@ -1,4 +1,5 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,37 +9,74 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
   {
     // Editor Fields
 
-    public StateController stateController;
-    public Text progressText;
-    public Button validateStateButton;
+    [SerializeField]
+    private Text progressText;
+
+    [SerializeField]
+    private Button nextStateButton;
+
+    [SerializeField]
+    private RectTransform experimentConfigurationRect;
+
+    [SerializeField]
+    private InputField participantIdInput;
+
+    [SerializeField]
+    private InputField orderingInput;
+
+    [SerializeField]
+    private Button beginExperimentButton;
+
+    // Properties
+
+    public int ParticipantId { get { return int.Parse(participantIdInput.text); } }
+    public int Ordering { get { return int.Parse(participantIdInput.text); } }
+
+    // Events
+
+    public event Action RequestNextState = delegate { };
+    public event Action RequestBeginExperiment = delegate { };
 
     // Methods
 
-    protected virtual void Start()
-    {
-      if (stateController.CurrentState != null)
-      {
-        StateManager_CurrentStateUpdated(stateController.CurrentState);
-      }
-      stateController.CurrentStateUpdated += StateManager_CurrentStateUpdated;
-
-      validateStateButton.onClick.AddListener(validateStateButton_onClik);
-    }
-
-    protected virtual void OnDestroy()
-    {
-      stateController.CurrentStateUpdated -= StateManager_CurrentStateUpdated;
-      validateStateButton.onClick.RemoveListener(validateStateButton_onClik);
-    }
-
-    protected virtual void StateManager_CurrentStateUpdated(State currentState)
+    public virtual void UpdateInstructionsProgress(StateController stateController)
     {
       progressText.text = stateController.ToString();
+
+      if (stateController.CurrentState.ActivateTask)
+      {
+        foreach (var independentVariable in stateController.independentVariables)
+        {
+          // TODO
+        }
+      }
     }
 
-    protected virtual void validateStateButton_onClik()
+    public virtual void DeactivateExperimentConfiguration()
     {
-      stateController.NextState();
+      experimentConfigurationRect.gameObject.SetActive(false);
+    }
+
+    protected virtual void OnEnable()
+    {
+      nextStateButton.onClick.AddListener(nextStateButton_onClik);
+      beginExperimentButton.onClick.AddListener(beginExperimentButton_onClik);
+    }
+
+    protected virtual void OnDisable()
+    {
+      nextStateButton.onClick.RemoveListener(nextStateButton_onClik);
+      beginExperimentButton.onClick.RemoveListener(beginExperimentButton_onClik);
+    }
+
+    protected virtual void nextStateButton_onClik()
+    {
+      RequestNextState();
+    }
+
+    protected virtual void beginExperimentButton_onClik()
+    {
+      RequestBeginExperiment();
     }
   }
 }

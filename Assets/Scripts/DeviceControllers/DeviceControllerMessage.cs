@@ -24,5 +24,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     public int senderConnectionId;
 
     public bool activateTask;
+
+    public bool beginExperiment;
   }
 }

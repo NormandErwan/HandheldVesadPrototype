@@ -5,17 +5,31 @@ using UnityEngine.UI;
 
 namespace NormandErwan.MasterThesis.Experiment.UI.HUD
 {
-  public class HMDDeviceHUD : ServerHUD
+  public class HMDDeviceHUD : MonoBehaviour
   {
     // Editor Fields
 
-    public GameObject stateTextsParent;
-    public Text stateTitleText;
-    public Text stateInstructionsText;
+    [SerializeField]
+    private Text progressText;
+
+    [SerializeField]
+    private GameObject stateTextsParent;
+
+    [SerializeField]
+    private Text stateTitleText;
+
+    [SerializeField]
+    private Text stateInstructionsText;
 
     // Methods
 
-    protected override void StateManager_CurrentStateUpdated(State currentState)
+    public virtual void ShowContent(bool value)
+    {
+      progressText.gameObject.SetActive(value);
+      stateTextsParent.SetActive(value);
+    }
+
+    public virtual void UpdateInstructionsProgress(StateController stateController)
     {
       progressText.text = "État courant : " + stateController.CurrentState.title + " - "
           + "Progression : " + (stateController.StatesProgress * 100f / stateController.StatesTotal).ToString("F1") + "%";
@@ -24,7 +38,7 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
       stateTitleText.text = stateController.CurrentState.title;
       stateInstructionsText.text = stateController.CurrentState.Instructions;
 
-      if (currentState.id == stateController.taskBeginState.id || currentState.id == stateController.taskTrialState.id)
+      if (stateController.CurrentState.ActivateTask)
       {
         foreach (var independentVariable in stateController.independentVariables)
         {
@@ -53,16 +67,9 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
       }
     }
 
-    protected override void validateStateButton_onClik()
+    protected virtual void Start()
     {
-      if (stateController.CurrentState.id == stateController.taskTrialState.id)
-      {
-        stateTextsParent.SetActive(false);
-      }
-      else
-      {
-        stateController.NextState();
-      }
+      ShowContent(false);
     }
   }
 }

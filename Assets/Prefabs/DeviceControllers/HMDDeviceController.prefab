@@ -21,6 +21,8 @@ GameObject:
   - component: {fileID: 4311954838107104}
   - component: {fileID: 114030483370761412}
   - component: {fileID: 114281789336942790}
+  - component: {fileID: 114148178166964244}
+  - component: {fileID: 114583428748405722}
   m_Layer: 0
   m_Name: HMDDeviceController
   m_TagString: Untagged
@@ -52,7 +54,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0bff15c6221ba542ad06c5b36c3b386, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateController: {fileID: 0}
+  grid: {fileID: 0}
   maxSelectableDistance: 0.006
+  hmdDeviceHUD: {fileID: 0}
+--- !u!114 &114148178166964244
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1356752641048696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 200
+    i1: 50
+    i2: 121
+    i3: 57
+    i4: 156
+    i5: 234
+    i6: 212
+    i7: 36
+    i8: 154
+    i9: 202
+    i10: 39
+    i11: 43
+    i12: 229
+    i13: 10
+    i14: 122
+    i15: 192
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114281789336942790
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -75,3 +112,16 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 57c7d98b1acef0f49967632816a6cedb, type: 2}
   - {fileID: 2100000, guid: c7221b4879017a440a24f4c727142375, type: 2}
   transparency: 0.75
+--- !u!114 &114583428748405722
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1356752641048696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d065cc2fc94ba74bbe20e69072b19f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  deviceController: {fileID: 114030483370761412}

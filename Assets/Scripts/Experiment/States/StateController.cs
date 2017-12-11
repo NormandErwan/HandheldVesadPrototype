@@ -47,6 +47,11 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.States
 
     // Methods
 
+    public void BeginExperiment()
+    {
+      SetCurrentState(experimentBeginState.id);
+    }
+
     public void NextState()
     {
       if (CurrentState.id == experimentBeginState.id)
@@ -95,11 +100,11 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.States
 
     public override string ToString()
     {
-      return "StatesManager: [CurrentState: '" + CurrentState.id
+      return name + ": CurrentState: '" + CurrentState.id
         + "', ConditionsProgress: " + ConditionsProgress + "/" + ConditionsTotal
         + ", TrialsProgress: " + TrialsProgress + "/" + TrialsTotal
         + " (current trial: " + CurrentTrial + "/" + TrialsPerCondition + ")"
-        + ", Overall progress: " + (StatesProgress * 100f / StatesTotal).ToString("F1") + "%]";
+        + ", Overall progress: " + (StatesProgress * 100f / StatesTotal).ToString("F1") + "%";
     }
 
     internal virtual void SetCurrentState(string currentStateId)
@@ -157,7 +162,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.States
       StatesTotal = 2 // experimentBeginState and experimentEndState
         + 2 * ConditionsTotal // taskBeginState and taskEndState
         + TrialsTotal;
-      SetCurrentState(experimentBeginState.id);
+
+      //BeginExperiment();
     }
 
     /// <summary>
