@@ -62,13 +62,10 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Variables
 
     protected virtual void DevicesInfoSync_DeviceConnected(int deviceId)
     {
-      if (deviceId != NetworkManager.client.connection.connectionId)
+      foreach (var independentVariable in independentVariables)
       {
-        foreach (var independentVariable in independentVariables)
-        {
-          currentMessage.Update(independentVariable.id, independentVariable.CurrentConditionId);
-          SendToClient(deviceId, currentMessage);
-        }
+        currentMessage.Update(independentVariable.id, independentVariable.CurrentConditionId);
+        SendToClient(deviceId, currentMessage);
       }
     }
 
