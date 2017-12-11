@@ -260,7 +260,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
           selectedItem = null;
 
           // Call Finished if all items are classified
-          print(RemainingItemsToClassify);
           if (RemainingItemsToClassify == 0)
           {
             Finished();

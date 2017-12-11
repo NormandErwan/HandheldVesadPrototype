@@ -1,5 +1,5 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
-using NormandErwan.MasterThesis.Experiment.Experiment.Task;
+using System;
 using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
@@ -20,37 +20,47 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     // Properties
 
+    public StateController StateController { get { return stateController; } set { stateController = value; } }
+    public Experiment.Task.Grid Grid { get { return grid; } set { grid = value; } }
     public float MaxSelectableDistance { get { return maxSelectableDistance; } set { maxSelectableDistance = value; } }
+
+    // Events
+
+    public event Action RequestActivateTask = delegate { };
 
     // Methods
 
+    public virtual void ActivateTask()
+    {
+      grid.Configure(StateController);
+      grid.gameObject.SetActive(true);
+    }
+
     protected virtual void OnEnable()
     {
-      stateController.CurrentStateUpdated += StateController_CurrentStateUpdated;
+      StateController.CurrentStateUpdated += StateController_CurrentStateUpdated;
       grid.Finished += Grid_Finished;
     }
 
     protected virtual void OnDisable()
     {
+      StateController.CurrentStateUpdated -= StateController_CurrentStateUpdated;
       grid.Finished -= Grid_Finished;
     }
 
-    private void StateController_CurrentStateUpdated(State currentState)
+    protected virtual void StateController_CurrentStateUpdated(State currentState)
     {
-      if (currentState.ActivateTask)
-      {
-        grid.Configure(stateController);
-        grid.gameObject.SetActive(true);
-      }
-      else
-      {
-        grid.gameObject.SetActive(false);
-      }
+      grid.gameObject.SetActive(false);
     }
 
-    private void Grid_Finished()
+    protected virtual void Grid_Finished()
     {
       stateController.NextState();
+    }
+
+    protected virtual void OnRequestActivateTask()
+    {
+      RequestActivateTask();
     }
   }
 }

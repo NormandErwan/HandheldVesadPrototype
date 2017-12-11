@@ -21,6 +21,8 @@ GameObject:
   - component: {fileID: 4267468444616448}
   - component: {fileID: 114394180611686014}
   - component: {fileID: 114382237294149638}
+  - component: {fileID: 114518926644399396}
+  - component: {fileID: 114487934079002734}
   m_Layer: 0
   m_Name: MobileDeviceController
   m_TagString: Untagged
@@ -77,3 +79,49 @@ MonoBehaviour:
   stateController: {fileID: 0}
   grid: {fileID: 0}
   maxSelectableDistance: 0.003
+  mobileDeviceHUD: {fileID: 0}
+--- !u!114 &114487934079002734
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1938131900248046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d065cc2fc94ba74bbe20e69072b19f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  deviceController: {fileID: 114394180611686014}
+--- !u!114 &114518926644399396
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1938131900248046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 112
+    i1: 88
+    i2: 171
+    i3: 92
+    i4: 126
+    i5: 53
+    i6: 251
+    i7: 20
+    i8: 251
+    i9: 252
+    i10: 110
+    i11: 253
+    i12: 235
+    i13: 147
+    i14: 38
+    i15: 139
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0

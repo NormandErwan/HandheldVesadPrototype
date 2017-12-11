@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace NormandErwan.MasterThesis.Experiment.UI.HUD
 {
-  public class DeviceHUD : ServerHUD
+  public class HMDDeviceHUD : ServerHUD
   {
     // Editor Fields
 
