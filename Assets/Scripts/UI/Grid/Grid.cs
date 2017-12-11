@@ -73,6 +73,7 @@ namespace NormandErwan.MasterThesis.Experiment.UI.Grid
     {
       Scale = Vector2.Scale(GridSize, ElementScale) + new Vector2((GridSize.x + 1) * ElementMargin.x, (GridSize.y + 1) * ElementMargin.y);
 
+      Elements.Clear();
       for (int i = 0; i < ElementsInstantiatedAtConfigure; i++)
       {
         var element = elementPrefab.Instantiate();

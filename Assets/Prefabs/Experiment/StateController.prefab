@@ -227,6 +227,7 @@ MonoBehaviour:
   id: ExperimentBeginState
   title: "D\xE9but de l'exp\xE9rience"
   instructions: TODO instruction state
+  activateTask: 0
 --- !u!114 &114429863715970740
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -241,6 +242,7 @@ MonoBehaviour:
   id: TaskTrainingState
   title: "Entrainement sur une nouvelle t\xE2che"
   instructions: 
+  activateTask: 1
 --- !u!114 &114495959195748250
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -268,6 +270,7 @@ MonoBehaviour:
   id: TaskTrialCompleteState
   title: "Essai termin\xE9"
   instructions: 
+  activateTask: 0
 --- !u!114 &114661546425955246
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -282,6 +285,7 @@ MonoBehaviour:
   id: TaskTrialState
   title: "Essai sur la t\xE2che courante"
   instructions: 
+  activateTask: 1
 --- !u!114 &114798882843681932
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -328,3 +332,4 @@ MonoBehaviour:
   id: ExperimentEndState
   title: "Fin de l'exp\xE9rience"
   instructions: 
+  activateTask: 0

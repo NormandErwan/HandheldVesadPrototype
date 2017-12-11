@@ -22,7 +22,7 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
 
       stateTextsParent.SetActive(true);
       stateTitleText.text = stateController.CurrentState.title;
-      stateInstructionsText.text = stateController.CurrentState.instructions;
+      stateInstructionsText.text = stateController.CurrentState.Instructions;
 
       if (currentState.id == stateController.taskBeginState.id || currentState.id == stateController.taskTrialState.id)
       {

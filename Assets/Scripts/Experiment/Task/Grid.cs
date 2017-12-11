@@ -18,9 +18,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     private float scaleFactor = 0.0001f;
 
     [SerializeField]
-    private StateController stateController;
-
-    [SerializeField]
     private GameObject background;
 
     // Interfaces properties
@@ -41,6 +38,14 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public event Action<IZoomable> Zooming = delegate { };
     public event Action<IZoomable> ZoomingStopped = delegate { };
 
+    // Events
+
+    public event Action<Item> ItemSelected = delegate { };
+    public event Action<Item> ItemDeselected = delegate { };
+    public event Action<Container, Container, Item> ClassificationSuccess = delegate { };
+    public event Action<Container, Container, Item> ClassificationError = delegate { };
+    public event Action Finished = delegate { };
+
     // Variables
 
     protected new BoxCollider collider;
@@ -58,34 +63,14 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     {
       base.Awake();
       collider = GetComponent<BoxCollider>();
-      SetInteractable(true);
-    }
-
-    /// <summary>
-    /// Gets and subscribes to the independent variables, and calls <see cref="ConfigureGrid"/>.
-    /// </summary>
-    protected virtual void Start()
-    {
-      ivTextSize = stateController.GetIndependentVariable<IVTextSize>();
-      iVClassificationDifficulty = stateController.GetIndependentVariable<IVClassificationDifficulty>();
-
-      foreach (var independentVariable in stateController.independentVariables)
-      {
-        independentVariable.CurrentConditionUpdated += IIndependentVariable_CurrentConditionUpdated;
-      }
 
       transform.localScale = scaleFactor * Vector3.one; // Scales the canvas as it's in world reference
 
-      Configure(); // TODO: remove, only call when state is training or trial
+      SetInteractable(true);
     }
 
     protected virtual void OnDestroy()
     {
-      foreach (var independentVariable in stateController.independentVariables)
-      {
-        independentVariable.CurrentConditionUpdated -= IIndependentVariable_CurrentConditionUpdated;
-      }
-
       foreach (var container in Elements)
       {
         container.Selected2 -= Container_Selected;
@@ -160,6 +145,14 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     }
 
     // Methods
+
+    public virtual void Configure(StateController stateController)
+    {
+      ivTextSize = stateController.GetIndependentVariable<IVTextSize>();
+      iVClassificationDifficulty = stateController.GetIndependentVariable<IVClassificationDifficulty>();
+
+      Configure();
+    }
 
     public override void Configure()
     {
@@ -244,11 +237,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         selectedItem.SetSelected(false);
       }
       selectedItem = item;
-    }
-
-    protected virtual void IIndependentVariable_CurrentConditionUpdated()
-    {
-      base.Configure(); // TODO: only call when state is training or trial
     }
 
     protected virtual void SetContainersInteractable(bool value)
