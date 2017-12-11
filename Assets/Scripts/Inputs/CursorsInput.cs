@@ -34,12 +34,16 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     /// </summary>
     protected virtual void Update()
     {
+      DeactivateCursors();
+      UpdateCursors();
+    }
+
+    protected virtual void DeactivateCursors()
+    {
       foreach (var cursor in Cursors)
       {
         cursor.Value.GameObject.SetActive(false);
       }
-
-      UpdateCursors();
     }
 
     protected abstract void UpdateCursors();

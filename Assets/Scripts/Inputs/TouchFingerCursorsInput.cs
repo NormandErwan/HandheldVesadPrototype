@@ -29,9 +29,23 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     {
       base.Awake();
       keys = new List<CursorType>(Cursors.Keys);
+
+      foreach (var cursor in Cursors)
+      {
+        cursor.Value.GetComponent<MeshRenderer>().enabled = false;
+      }
     }
 
     // CursorsInput methods
+
+    protected override void DeactivateCursors()
+    {
+      foreach (var cursor in Cursors)
+      {
+        cursor.Value.gameObject.SetActive(true);
+        cursor.Value.transform.position = new Vector3(cursor.Value.transform.position.x, cursor.Value.transform.position.y, Camera.transform.position.z);
+      }
+    }
 
     protected override void UpdateCursors()
     {
@@ -56,9 +70,8 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       cursorPosition = Vector3.ProjectOnPlane(cursorPosition, -PlaneToProjectCursors.forward);
 
       var cursor = Cursors[keys[0]];
-      cursor.transform.position = PlaneToProjectCursors.position + cursorPosition - new Vector3(0, 0, cursor.transform.lossyScale.z / 2);
+      cursor.transform.position = new Vector3(cursorPosition.x, cursorPosition.y, PlaneToProjectCursors.position.z);
       cursor.transform.forward = planeToProjectCursors.forward;
-      cursor.gameObject.SetActive(true);
     }
   }
 }
