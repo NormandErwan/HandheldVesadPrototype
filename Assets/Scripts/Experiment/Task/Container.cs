@@ -1,4 +1,4 @@
-﻿using NormandErwan.MasterThesis.Experiment.Inputs;
+﻿using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using NormandErwan.MasterThesis.Experiment.UI.Grid;
 using System;
 using UnityEngine;

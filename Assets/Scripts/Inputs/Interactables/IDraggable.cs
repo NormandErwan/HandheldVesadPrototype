@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace NormandErwan.MasterThesis.Experiment.Inputs
+namespace NormandErwan.MasterThesis.Experiment.Inputs.Interactables
 {
   public interface IDraggable : ITransformable
   {

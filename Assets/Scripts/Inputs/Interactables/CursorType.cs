@@ -1,4 +1,4 @@
-﻿namespace NormandErwan.MasterThesis.Experiment.Inputs
+﻿namespace NormandErwan.MasterThesis.Experiment.Inputs.Interactables
 {
   public enum CursorType
   {

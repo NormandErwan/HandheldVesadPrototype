@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 114524138550517152}
   - component: {fileID: 114549147926699086}
   m_Layer: 5
-  m_Name: ServerGUI
+  m_Name: ServerHUD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
