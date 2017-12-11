@@ -8,7 +8,6 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Interactables
     // Properties
 
     bool IsDragging { get; }
-    float DistanceToStartDragging { get; }
 
     // Events
 

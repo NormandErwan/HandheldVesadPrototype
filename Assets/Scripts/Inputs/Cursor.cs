@@ -1,4 +1,5 @@
-﻿using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
+﻿using NormandErwan.MasterThesis.Experiment.DeviceControllers;
+using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,13 +11,16 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
   {
     // Constants
 
-    public static readonly float longPressTimeout = 0.5f; // in seconds
-    public static readonly float tapTimeout = 0.3f; // in seconds
+    public static readonly float longPressMinTime = 0.5f; // in seconds
+    public static readonly float tapTimeout = 0.5f; // in seconds
 
     // Editor fields
 
     [SerializeField]
     private CursorType type;
+
+    [SerializeField]
+    private DeviceController deviceController;
 
     // ICursor properties
 
@@ -24,6 +28,8 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     public GameObject GameObject { get { return gameObject; } }
     
     // Properties
+
+    public DeviceController DeviceController { get { return deviceController; } set { deviceController = value; } }
 
     public bool IsFinger { get { return Type != CursorType.Look; } }
     public bool IsIndex { get { return Type == CursorType.LeftIndex || Type == CursorType.RightIndex; } }
@@ -118,7 +124,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
               latestCursorPositions[draggable][this] = transform.position;
               draggable.Drag(translation);
             }
-            else if (translation.magnitude > draggable.DistanceToStartDragging)
+            else if (translation.magnitude > deviceController.MaxSelectableDistance)
             {
               latestCursorPositions[draggable][this] = transform.position;
               draggable.SetDragging(true);
@@ -152,7 +158,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
         {
           if (longPressTimers.ContainsKey(longPressable))
           {
-            if (longPressTimers[longPressable] < longPressTimeout)
+            if (longPressTimers[longPressable] < longPressMinTime)
             {
               longPressTimers[longPressable] += Time.deltaTime;
             }
@@ -208,9 +214,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
           {
             zoomable.SetZooming(false);
           }
-        });
-
-        GetInteractable<ILongPressable>(other, (longPressable) =>
+        }); GetInteractable<ILongPressable>(other, (longPressable) =>
         {
           if (longPressTimers.ContainsKey(longPressable))
           {

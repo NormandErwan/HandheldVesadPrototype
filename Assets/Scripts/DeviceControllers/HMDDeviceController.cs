@@ -2,7 +2,7 @@
 
 namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 {
-  public class MobileDeviceController : DeviceController
+  public class HMDDeviceController : DeviceController
   {
   }
 }

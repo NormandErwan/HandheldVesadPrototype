@@ -1,6 +1,5 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
 using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
-using NormandErwan.MasterThesis.Experiment.Inputs;
 using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using NormandErwan.MasterThesis.Experiment.UI.Grid;
 using System;
@@ -27,10 +26,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     // Interfaces properties
 
     public bool IsInteractable { get; protected set; }
-
     public bool IsDragging { get; protected set; }
-    public float DistanceToStartDragging { get; protected set; }
-
     public bool IsZooming { get; protected set; }
 
     // Interfaces events
@@ -212,27 +208,30 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       collider.size = new Vector3(Scale.x, Scale.y, 3f * itemSize);
 
       background.transform.localScale = new Vector3(Scale.x, Scale.y, 1);
-
-      DistanceToStartDragging = 0.5f * scaleFactor * itemSize; // Activate panning only if the finger has moved more than half the size of an item
     }
 
     protected virtual void Container_Selected(Container container)
     {
       if (selectedItem != null)
       {
-        foreach (var previouContainer in Elements)
+        // Find current container of the item
+        Container currentContainer = null;
+        foreach (var containerSearch in Elements)
         {
-          if (previouContainer.Elements.Contains(selectedItem))
+          if (containerSearch.Elements.Contains(selectedItem))
           {
-            previouContainer.RemoveElement(selectedItem);
+            currentContainer = containerSearch;
           }
         }
 
-        if (!container.IsFull)
+        // Move the selected item only if it's a different and not full container
+        if (currentContainer != container && !container.IsFull)
         {
+          currentContainer.RemoveElement(selectedItem);
           container.AddElement(selectedItem);
         }
 
+        // Deselect the item
         selectedItem.SetSelected(false);
         selectedItem = null;
       }
