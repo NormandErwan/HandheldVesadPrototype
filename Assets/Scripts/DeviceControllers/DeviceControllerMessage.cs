@@ -25,6 +25,8 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     public bool activateTask;
 
-    public bool beginExperiment;
+    public bool configureExperiment;
+
+    public bool participantIsRightHanded;
   }
 }

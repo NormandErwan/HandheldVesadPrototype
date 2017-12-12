@@ -37,12 +37,15 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       serverHUD.DeactivateExperimentConfiguration();
 
-      if (serverHUD.Ordering == 1)
+      ParticipantIsRightHanded = serverHUD.ParticipantIsRightHanded;
+      OnConfigureExperiment();
+
+      if (serverHUD.ConditionsOrdering == 1)
       {
         var mainIndVar = StateController.independentVariables[0];
         mainIndVar.NextCondition();
       }
-      else if (serverHUD.Ordering == 2)
+      else if (serverHUD.ConditionsOrdering == 2)
       {
         var mainIndVar = StateController.independentVariables[0];
         mainIndVar.NextCondition();

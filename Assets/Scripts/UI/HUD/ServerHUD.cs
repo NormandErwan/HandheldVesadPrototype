@@ -22,7 +22,10 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
     private InputField participantIdInput;
 
     [SerializeField]
-    private InputField orderingInput;
+    private InputField conditionsOrderingInput;
+
+    [SerializeField]
+    private Toggle participantIsRightHandedToggle;
 
     [SerializeField]
     private Button beginExperimentButton;
@@ -30,7 +33,8 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
     // Properties
 
     public int ParticipantId { get { return int.Parse(participantIdInput.text); } }
-    public int Ordering { get { return int.Parse(participantIdInput.text); } }
+    public int ConditionsOrdering { get { return int.Parse(conditionsOrderingInput.text); } }
+    public bool ParticipantIsRightHanded { get { return participantIsRightHandedToggle.isOn; } }
 
     // Events
 

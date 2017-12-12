@@ -11,12 +11,43 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     [SerializeField]
     private HMDDeviceHUD hmdDeviceHUD;
 
+    [SerializeField]
+    private GameObject LeftLeapMotionHand;
+
+    [SerializeField]
+    private GameObject LeftHandCursors;
+
+    [SerializeField]
+    private GameObject RightLeapMotionHand;
+
+    [SerializeField]
+    private GameObject RightHandCursors;
+
     // Methods
 
     public override void ActivateTask()
     {
       base.ActivateTask();
       hmdDeviceHUD.ShowContent(false);
+    }
+
+    public override void SetParticipantIsRightHanded(bool value)
+    {
+      base.SetParticipantIsRightHanded(value);
+
+      LeftLeapMotionHand.SetActive(!ParticipantIsRightHanded);
+      LeftHandCursors.SetActive(!ParticipantIsRightHanded);
+      RightLeapMotionHand.SetActive(ParticipantIsRightHanded);
+      RightHandCursors.SetActive(ParticipantIsRightHanded);
+    }
+
+    protected override void Start()
+    {
+      base.Start();
+      LeftLeapMotionHand.SetActive(false);
+      LeftHandCursors.SetActive(false);
+      RightLeapMotionHand.SetActive(false);
+      RightHandCursors.SetActive(false);
     }
 
     protected override void StateController_CurrentStateUpdated(State currentState)

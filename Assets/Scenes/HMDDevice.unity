@@ -154,7 +154,7 @@ Prefab:
     - target: {fileID: 114230085306632826, guid: fbbef59b3dd39404ca1cd8b91b4498c2,
         type: 2}
       propertyPath: type
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fbbef59b3dd39404ca1cd8b91b4498c2, type: 2}
@@ -307,6 +307,11 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 153634927}
   m_Script: {fileID: 11500000, guid: df4710b2e9b6c114a848996acfb1cf07, type: 3}
+--- !u!1 &192306151 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1607542539644112, guid: 9b75a8a0bd521bb4a9d36aaf3742d21b,
+    type: 2}
+  m_PrefabInternal: {fileID: 1786725734}
 --- !u!1001 &284785076
 Prefab:
   m_ObjectHideFlags: 0
@@ -705,7 +710,6 @@ Transform:
   m_Children:
   - {fileID: 1795030764}
   - {fileID: 525235695}
-  - {fileID: 1568995464}
   - {fileID: 636858989}
   m_Father: {fileID: 0}
   m_RootOrder: 7
@@ -739,7 +743,7 @@ Transform:
   m_Children:
   - {fileID: 153634928}
   m_Father: {fileID: 636396465}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!114 &636858990
 MonoBehaviour:
@@ -865,6 +869,11 @@ Prefab:
       propertyPath: m_CullingMask.m_Bits
       value: 4244631775
       objectReference: {fileID: 0}
+    - target: {fileID: 114126752375325634, guid: 0708be0041bc5194590eefd165bbc5f3,
+        type: 2}
+      propertyPath: _syncMode
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0708be0041bc5194590eefd165bbc5f3, type: 2}
   m_IsPrefabParent: 0
@@ -931,6 +940,21 @@ Transform:
   m_PrefabParentObject: {fileID: 4836254632867852, guid: 1af7da660e405ea4d88d276210dfa5c0,
     type: 2}
   m_PrefabInternal: {fileID: 891901921}
+--- !u!1 &891901923 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1986579595314124, guid: 1af7da660e405ea4d88d276210dfa5c0,
+    type: 2}
+  m_PrefabInternal: {fileID: 891901921}
+--- !u!1 &891901924 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1180324665479064, guid: 1af7da660e405ea4d88d276210dfa5c0,
+    type: 2}
+  m_PrefabInternal: {fileID: 891901921}
+--- !u!1 &1143749597 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1398262010878346, guid: 9b75a8a0bd521bb4a9d36aaf3742d21b,
+    type: 2}
+  m_PrefabInternal: {fileID: 1786725734}
 --- !u!1001 &1419585700
 Prefab:
   m_ObjectHideFlags: 0
@@ -1019,7 +1043,7 @@ Prefab:
         type: 2}
       propertyPath: arucoObjects.Array.data[1]
       value: 
-      objectReference: {fileID: 1568995465}
+      objectReference: {fileID: 0}
     - target: {fileID: 114704470919034220, guid: 59dab6b4111ee0849bb667a5a1d298e5,
         type: 2}
       propertyPath: autoStart
@@ -1220,67 +1244,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1568995463
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 1568995464}
-  - component: {fileID: 1568995465}
-  - component: {fileID: 1568995466}
-  m_Layer: 0
-  m_Name: MobileDevice_ArucoGridBoard
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &1568995464
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1568995463}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 636396465}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
---- !u!114 &1568995465
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1568995463}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a66515f6201048442966d413775d221e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dictionaryName: 0
-  markerSideLength: 0.033
-  markerBorderBits: 1
-  marginsLength: 0
-  markersNumberX: 4
-  markersNumberY: 3
-  markerSeparation: 0.007
---- !u!114 &1568995466
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1568995463}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b8644fbc5335334e944b09d5c8da57a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  arucoObject: {fileID: 1568995465}
-  displayInPlayMode: 1
 --- !u!1001 &1721093715
 Prefab:
   m_ObjectHideFlags: 0
@@ -1335,6 +1298,26 @@ Prefab:
       propertyPath: hmdDeviceHUD
       value: 
       objectReference: {fileID: 610893905}
+    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
+        type: 2}
+      propertyPath: LeftLeapMotionHand
+      value: 
+      objectReference: {fileID: 192306151}
+    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
+        type: 2}
+      propertyPath: RightLeapMotionHand
+      value: 
+      objectReference: {fileID: 1143749597}
+    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
+        type: 2}
+      propertyPath: LeftHandCursors
+      value: 
+      objectReference: {fileID: 891901924}
+    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
+        type: 2}
+      propertyPath: RightHandCursors
+      value: 
+      objectReference: {fileID: 891901923}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c83279399cead4249aca272be50a7ac0, type: 2}
   m_IsPrefabParent: 0
@@ -1635,6 +1618,11 @@ Prefab:
     - target: {fileID: 1009805945840234, guid: 41f37c3e615df2b4aad3d004fdbcb53e, type: 2}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224668128503582764, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
+        type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 80
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 41f37c3e615df2b4aad3d004fdbcb53e, type: 2}

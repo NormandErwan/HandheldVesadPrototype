@@ -24,9 +24,12 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     public Experiment.Task.Grid Grid { get { return grid; } set { grid = value; } }
     public float MaxSelectableDistance { get { return maxSelectableDistance; } set { maxSelectableDistance = value; } }
 
+    public bool ParticipantIsRightHanded { get; protected set; }
+
     // Events
 
     public event Action RequestActivateTask = delegate { };
+    public event Action ConfigureExperiment = delegate { };
 
     // Methods
 
@@ -37,6 +40,11 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       Grid.Configure(StateController);
       Grid.gameObject.SetActive(true);
+    }
+
+    public virtual void SetParticipantIsRightHanded(bool value)
+    {
+      ParticipantIsRightHanded = value;
     }
 
     /// <summary>
@@ -83,6 +91,14 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     protected virtual void OnRequestActivateTask()
     {
       RequestActivateTask();
+    }
+
+    /// <summary>
+    /// Calls <see cref="ConfigureExperiment"/>.
+    /// </summary>
+    protected virtual void OnConfigureExperiment()
+    {
+      ConfigureExperiment();
     }
   }
 }

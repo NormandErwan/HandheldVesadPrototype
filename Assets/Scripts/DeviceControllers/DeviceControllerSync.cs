@@ -28,22 +28,20 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       base.Awake();
 
       MessageTypes.Add(currentMessage.MessageType);
+      DeviceController.ConfigureExperiment += DeviceController_ConfigureExperiment;
       DeviceController.RequestActivateTask += DeviceController_RequestActivateTask;
     }
 
     protected virtual void OnDestroy()
     {
+      DeviceController.ConfigureExperiment -= DeviceController_ConfigureExperiment;
       DeviceController.RequestActivateTask -= DeviceController_RequestActivateTask;
     }
 
     protected override DevicesSyncMessage OnServerMessageReceived(NetworkMessage netMessage)
     {
       currentMessage = netMessage.ReadMessage<DeviceControllerMessage>();
-      print(deviceController.name);
-      if (currentMessage.activateTask)
-      {
-        deviceController.ActivateTask();
-      }
+      ProcessReceivedMessage();
       return currentMessage;
     }
 
@@ -52,18 +50,35 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       currentMessage = netMessage.ReadMessage<DeviceControllerMessage>();
       if (!isServer)
       {
-        if (currentMessage.activateTask)
-        {
-          deviceController.ActivateTask();
-        }
+        ProcessReceivedMessage();
       }
       return currentMessage;
+    }
+
+    protected virtual void DeviceController_ConfigureExperiment()
+    {
+      currentMessage.configureExperiment = true;
+      currentMessage.participantIsRightHanded = deviceController.ParticipantIsRightHanded;
+      SendToServer(currentMessage);
     }
 
     protected virtual void DeviceController_RequestActivateTask()
     {
       currentMessage.activateTask = true;
       SendToServer(currentMessage);
+    }
+
+    protected virtual void ProcessReceivedMessage()
+    {
+      if (currentMessage.configureExperiment)
+      {
+        deviceController.SetParticipantIsRightHanded(currentMessage.participantIsRightHanded);
+      }
+
+      if (currentMessage.activateTask)
+      {
+        deviceController.ActivateTask();
+      }
     }
   }
 }
