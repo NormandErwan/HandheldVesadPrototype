@@ -49,6 +49,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       RightLeapMotionHand.SetActive(false);
       RightHandCursors.SetActive(false);
 
+      // TODO: remove, for debug testing only
       SetParticipantIsRightHanded(true);
       StateController.BeginExperiment();
       ActivateTask();

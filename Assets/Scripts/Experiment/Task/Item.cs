@@ -101,6 +101,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     // Variables
 
     protected new SphereCollider collider;
+    protected Renderer itemClassTextRenderer;
+
     private ItemClass itemClass;
 
     // MonoBehaviour methods
@@ -108,7 +110,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     protected virtual void Awake()
     {
       collider = GetComponent<SphereCollider>();
-
       SetInteractable(false);
       SetSelectable(false);
     }

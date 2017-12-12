@@ -57,6 +57,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     // Variables
 
     protected new BoxCollider collider;
+
     protected List<Inputs.Cursor> triggeredFingers = new List<Inputs.Cursor>();
     protected Vector3 fingerPanningLastPosition;
 

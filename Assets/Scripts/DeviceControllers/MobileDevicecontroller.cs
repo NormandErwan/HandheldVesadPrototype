@@ -25,6 +25,15 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       mobileDeviceHUD.ValidateButtonPressed -= MobileDeviceHUD_ValidateButtonPressed;
     }
 
+    protected override void Start()
+    {
+      base.Start();
+
+      // TODO: remove, for debug testing only
+      /*StateController.BeginExperiment();
+      ActivateTask();*/
+    }
+
     protected override void StateController_CurrentStateUpdated(State currentState)
     {
       base.StateController_CurrentStateUpdated(currentState);

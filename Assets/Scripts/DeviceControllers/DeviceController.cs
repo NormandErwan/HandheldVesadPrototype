@@ -15,7 +15,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     private Experiment.Task.Grid grid;
 
     [SerializeField]
-    [Range(0f, 0.02f)]
+    [Range(0f, 0.05f)]
     private float maxSelectableDistance = 0.001f;
 
     // Properties

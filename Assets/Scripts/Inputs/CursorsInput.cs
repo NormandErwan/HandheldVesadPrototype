@@ -15,6 +15,10 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     public Dictionary<CursorType, Cursor> Cursors { get; protected set; }
 
+    // Variables
+
+    protected Dictionary<CursorType, MeshRenderer> cursorMeshRenderers = new Dictionary<CursorType, MeshRenderer>();
+
     // Methods
 
     /// <summary>
@@ -26,6 +30,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       foreach (var cursor in cursors)
       {
         Cursors.Add(cursor.Type, cursor);
+        cursorMeshRenderers.Add(cursor.Type, cursor.GetComponent<MeshRenderer>());
       }
     }
 
@@ -42,8 +47,13 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     {
       foreach (var cursor in Cursors)
       {
-        cursor.Value.GameObject.SetActive(false);
+        cursorMeshRenderers[cursor.Key].enabled = false;
       }
+    }
+
+    protected virtual void ActivateCursor(CursorType cursorType)
+    {
+      cursorMeshRenderers[cursorType].enabled = true;
     }
 
     protected abstract void UpdateCursors();

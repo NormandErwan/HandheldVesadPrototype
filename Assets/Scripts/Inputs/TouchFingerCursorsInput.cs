@@ -31,21 +31,13 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       keys = new List<CursorType>(Cursors.Keys);
     }
 
-    protected virtual void Start()
-    {
-      foreach (var cursor in Cursors)
-      {
-        cursor.Value.GetComponent<MeshRenderer>().enabled = false;
-      }
-    }
-
     // CursorsInput methods
 
     protected override void DeactivateCursors()
     {
+      base.DeactivateCursors();
       foreach (var cursor in Cursors)
       {
-        cursor.Value.gameObject.SetActive(true);
         cursor.Value.transform.position = new Vector3(cursor.Value.transform.position.x, cursor.Value.transform.position.y, Camera.transform.position.z);
       }
     }

@@ -69,7 +69,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
           {
             latestCursorPositions.Add(transformable, new Dictionary<Cursor, Vector3>());
           }
-          latestCursorPositions[transformable].Add(this, transform.position);
+          latestCursorPositions[transformable][this] = transform.position;
         });
 
         GetInteractable<IDraggable>(other, (draggable) =>
@@ -112,6 +112,14 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     protected virtual void OnTriggerStay(Collider other)
     {
+      GetInteractable<IInteractable>(other, (interactable) =>
+      {
+        if (!interactable.IsInteractable)
+        {
+          return;
+        }
+      });
+
       if (IsFinger)
       {
         GetInteractable<IDraggable>(other, (draggable) =>
@@ -219,7 +227,9 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
           {
             zoomable.SetZooming(false);
           }
-        }); GetInteractable<ILongPressable>(other, (longPressable) =>
+        });
+
+        GetInteractable<ILongPressable>(other, (longPressable) =>
         {
           if (longPressTimers.ContainsKey(longPressable))
           {
