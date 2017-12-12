@@ -48,6 +48,10 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       LeftHandCursors.SetActive(false);
       RightLeapMotionHand.SetActive(false);
       RightHandCursors.SetActive(false);
+
+      SetParticipantIsRightHanded(true);
+      StateController.BeginExperiment();
+      ActivateTask();
     }
 
     protected override void StateController_CurrentStateUpdated(State currentState)

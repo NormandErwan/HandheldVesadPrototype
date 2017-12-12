@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 114281789336942790}
   - component: {fileID: 114148178166964244}
   - component: {fileID: 114583428748405722}
+  - component: {fileID: 114638224906555138}
   m_Layer: 0
   m_Name: HMDDeviceController
   m_TagString: Untagged
@@ -58,6 +59,10 @@ MonoBehaviour:
   grid: {fileID: 0}
   maxSelectableDistance: 0.006
   hmdDeviceHUD: {fileID: 0}
+  LeftLeapMotionHand: {fileID: 0}
+  LeftHandCursors: {fileID: 0}
+  RightLeapMotionHand: {fileID: 0}
+  RightHandCursors: {fileID: 0}
 --- !u!114 &114148178166964244
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -105,13 +110,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: c9457f952e56b0749a7d861d78907922, type: 2}
   - {fileID: 2100000, guid: ee9e3ce13d60e834094b6714ca4a0801, type: 2}
   - {fileID: 2100000, guid: e81b1f995c3f6f14986248ccea9afbd4, type: 2}
-  - {fileID: 2100000, guid: f0e16e6f56061bc4c901ef987aeaa5e5, type: 2}
-  - {fileID: 2100000, guid: 408adcd45a901634a9934ec75b418ac9, type: 2}
-  - {fileID: 2100000, guid: 0a9e0615156122744a2ab6908e34133e, type: 2}
-  - {fileID: 2100000, guid: 227d0fcd131d9ab4a823c20a8677cb02, type: 2}
-  - {fileID: 2100000, guid: 57c7d98b1acef0f49967632816a6cedb, type: 2}
-  - {fileID: 2100000, guid: c7221b4879017a440a24f4c727142375, type: 2}
-  transparency: 0.75
+  transparency: 0.2
 --- !u!114 &114583428748405722
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -125,3 +124,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   deviceController: {fileID: 114030483370761412}
+--- !u!114 &114638224906555138
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1356752641048696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22c67e364875dc542a25cb46f80bc0b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  materials:
+  - {fileID: 2100000, guid: f0e16e6f56061bc4c901ef987aeaa5e5, type: 2}
+  - {fileID: 2100000, guid: 408adcd45a901634a9934ec75b418ac9, type: 2}
+  - {fileID: 2100000, guid: 0a9e0615156122744a2ab6908e34133e, type: 2}
+  - {fileID: 2100000, guid: 227d0fcd131d9ab4a823c20a8677cb02, type: 2}
+  - {fileID: 2100000, guid: 57c7d98b1acef0f49967632816a6cedb, type: 2}
+  - {fileID: 2100000, guid: c7221b4879017a440a24f4c727142375, type: 2}
+  - {fileID: 2100000, guid: 235726b5d2693a04899aad0f9b08aea3, type: 2}
+  transparency: 0.9

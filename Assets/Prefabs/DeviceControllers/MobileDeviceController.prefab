@@ -74,7 +74,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4267468444616448}
   - component: {fileID: 114394180611686014}
-  - component: {fileID: 114382237294149638}
   - component: {fileID: 114518926644399396}
   - component: {fileID: 114487934079002734}
   m_Layer: 0
@@ -143,28 +142,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   validateButton: {fileID: 114680958352828126}
---- !u!114 &114382237294149638
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1938131900248046}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22c67e364875dc542a25cb46f80bc0b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  materials:
-  - {fileID: 2100000, guid: c9457f952e56b0749a7d861d78907922, type: 2}
-  - {fileID: 2100000, guid: ee9e3ce13d60e834094b6714ca4a0801, type: 2}
-  - {fileID: 2100000, guid: e81b1f995c3f6f14986248ccea9afbd4, type: 2}
-  - {fileID: 2100000, guid: f0e16e6f56061bc4c901ef987aeaa5e5, type: 2}
-  - {fileID: 2100000, guid: 408adcd45a901634a9934ec75b418ac9, type: 2}
-  - {fileID: 2100000, guid: 0a9e0615156122744a2ab6908e34133e, type: 2}
-  - {fileID: 2100000, guid: 227d0fcd131d9ab4a823c20a8677cb02, type: 2}
-  - {fileID: 2100000, guid: 57c7d98b1acef0f49967632816a6cedb, type: 2}
-  - {fileID: 2100000, guid: c7221b4879017a440a24f4c727142375, type: 2}
-  transparency: 1
 --- !u!114 &114394180611686014
 MonoBehaviour:
   m_ObjectHideFlags: 1
