@@ -4,6 +4,10 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 {
   public class MaterialsTransparencyController : MonoBehaviour
   {
+    // Constants
+
+    protected const float opaqueAlpha = 1f;
+
     // Editor fields
 
     [SerializeField]
@@ -15,11 +19,19 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     // Methods
 
-    protected void OnValidate()
+    protected virtual void OnEnable()
     {
       foreach (var material in materials)
       {
         material.color = new Color(material.color.r, material.color.g, material.color.b, transparency);
+      }
+    }
+
+    protected virtual void OnDisable()
+    {
+      foreach (var material in materials)
+      {
+        material.color = new Color(material.color.r, material.color.g, material.color.b, opaqueAlpha);
       }
     }
   }
