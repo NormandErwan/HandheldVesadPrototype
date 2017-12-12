@@ -1,4 +1,5 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
+using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -47,12 +48,17 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
     {
       progressText.text = stateController.ToString();
 
+      progressText.text += "\n\nConditions :";
       if (stateController.CurrentState.ActivateTask)
       {
-        foreach (var independentVariable in stateController.independentVariables)
-        {
-          // TODO
-        }
+        var ivClassificationDifficulty = stateController.GetIndependentVariable<IVClassificationDifficulty>();
+        progressText.text += "\n" + ivClassificationDifficulty.title + " : " + ivClassificationDifficulty.CurrentCondition.title;
+
+        var ivTextSize = stateController.GetIndependentVariable<IVTextSize>();
+        progressText.text += "\n" + ivTextSize.title + " : " + ivTextSize.CurrentCondition.title;
+
+        var ivTechnique = stateController.GetIndependentVariable<IVTechnique>();
+        progressText.text += "\n" + ivTechnique.title + " : " + ivTechnique.CurrentCondition.title;
       }
     }
 
