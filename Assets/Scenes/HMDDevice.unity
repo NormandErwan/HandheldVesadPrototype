@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.4366757, g: 0.48427194, b: 0.5645252, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -245,11 +245,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4494200272367184, guid: 8da6483971380fd418dac0b21a143fad, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.0013
       objectReference: {fileID: 0}
     - target: {fileID: 4494200272367184, guid: 8da6483971380fd418dac0b21a143fad, type: 2}
       propertyPath: m_LocalPosition.z
-      value: -0.2165
+      value: -0.19
       objectReference: {fileID: 0}
     - target: {fileID: 4494200272367184, guid: 8da6483971380fd418dac0b21a143fad, type: 2}
       propertyPath: m_LocalRotation.x
@@ -397,7 +397,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arucoObject: {fileID: 296627892}
-  displayInPlayMode: 1
+  displayInPlayMode: 0
 --- !u!114 &296627892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -528,13 +528,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 387941212}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1001 &419413557
 Prefab:
   m_ObjectHideFlags: 0
@@ -822,7 +822,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arucoObject: {fileID: 636858991}
-  displayInPlayMode: 1
+  displayInPlayMode: 0
 --- !u!114 &636858991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -891,7 +891,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arucoObject: {fileID: 692543116}
-  displayInPlayMode: 1
+  displayInPlayMode: 0
 --- !u!114 &692543116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1930,7 +1930,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2103332783}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.01, y: 0, z: -0.2165}
+  m_LocalPosition: {x: 0.01, y: 0.0013, z: -0.19}
   m_LocalScale: {x: 0.079, y: 0.15200002, z: 0.009000007}
   m_Children: []
   m_Father: {fileID: 1207794058}
