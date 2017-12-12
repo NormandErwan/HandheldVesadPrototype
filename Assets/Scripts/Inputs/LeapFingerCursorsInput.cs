@@ -7,10 +7,6 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 {
   public class LeapFingerCursorsInput : CursorsInput
   {
-    // Constants
-
-    protected const float oneMillimeterToMeters = 0.001f;
-
     // Editor fields
 
     [SerializeField]
@@ -39,7 +35,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
           {
             cursor.transform.position = (UseStabilizedPositions ? finger.StabilizedTipPosition : finger.TipPosition).ToVector3();
             cursor.transform.forward = finger.Direction.ToVector3();
-            cursor.transform.localScale = finger.Width * oneMillimeterToMeters * Vector3.one;
+            cursor.transform.localScale = finger.Width * Vector3.one;
             cursor.gameObject.SetActive(true);
           }
         }

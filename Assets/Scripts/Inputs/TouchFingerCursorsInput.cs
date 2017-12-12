@@ -29,7 +29,10 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     {
       base.Awake();
       keys = new List<CursorType>(Cursors.Keys);
+    }
 
+    protected virtual void Start()
+    {
       foreach (var cursor in Cursors)
       {
         cursor.Value.GetComponent<MeshRenderer>().enabled = false;
