@@ -117,7 +117,7 @@ GameObject:
   - component: {fileID: 4881476555587638}
   - component: {fileID: 114265026425476688}
   m_Layer: 0
-  m_Name: DirectInput_AROutput
+  m_Name: HandInput_AROutput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -431,6 +431,8 @@ MonoBehaviour:
   id: A_MobileDeviceOnly
   title: "T\xE9l\xE9phone seul"
   instructions: TODO Instructions Input Output
+  useLeapInput: 0
+  useTouchInput: 1
 --- !u!114 &114158752525081080
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -458,9 +460,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: C_HandsInput_AROutput
+  id: C_HandInput_AROutput
   title: "R\xE9alit\xE9 augment\xE9e, interactions avec la main"
   instructions: 
+  useLeapInput: 1
+  useTouchInput: 0
 --- !u!114 &114303898851726862
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -523,6 +527,8 @@ MonoBehaviour:
   id: B_MobileDeviceInput_AROutput
   title: "R\xE9alit\xE9 augment\xE9e, interactions sur le t\xE9l\xE9phone"
   instructions: 
+  useLeapInput: 0
+  useTouchInput: 1
 --- !u!114 &114501037082189576
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -540,8 +546,6 @@ MonoBehaviour:
   - {fileID: 114102835371396286}
   - {fileID: 114495023776505986}
   - {fileID: 114265026425476688}
-  - {fileID: 114784559623597272}
-  - {fileID: 114623683837749356}
 --- !u!114 &114623683837749356
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -556,6 +560,8 @@ MonoBehaviour:
   id: E_Peephole
   title: "R\xE9alit\xE9 augment\xE9e \xE0 travers le t\xE9l\xE9phone"
   instructions: 
+  useLeapInput: 0
+  useTouchInput: 0
 --- !u!114 &114712957325740358
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -585,7 +591,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2_Large
   title: Grand
-  fontSize: 40
+  fontSize: 64
 --- !u!114 &114784559623597272
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -600,6 +606,8 @@ MonoBehaviour:
   id: D_GazeInput_AROutput
   title: "R\xE9alit\xE9 augment\xE9e, interactions HoloLens"
   instructions: 
+  useLeapInput: 0
+  useTouchInput: 0
 --- !u!114 &114940950492825338
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -613,7 +621,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1_Small
   title: Petit
-  fontSize: 28
+  fontSize: 64
 --- !u!114 &114999698179949338
 MonoBehaviour:
   m_ObjectHideFlags: 1

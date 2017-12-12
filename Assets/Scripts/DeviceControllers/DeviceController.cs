@@ -24,7 +24,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     public Experiment.Task.Grid Grid { get { return grid; } set { grid = value; } }
     public float MaxSelectableDistance { get { return maxSelectableDistance; } set { maxSelectableDistance = value; } }
 
-    public bool ParticipantIsRightHanded { get; protected set; }
+    public bool ParticipantIsRightHanded { get; internal set; }
 
     // Events
 
@@ -40,11 +40,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       Grid.Configure(StateController);
       Grid.gameObject.SetActive(true);
-    }
-
-    public virtual void SetParticipantIsRightHanded(bool value)
-    {
-      ParticipantIsRightHanded = value;
     }
 
     /// <summary>

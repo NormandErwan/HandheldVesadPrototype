@@ -1,4 +1,7 @@
-﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
+﻿using DevicesSyncUnity;
+using NormandErwan.MasterThesis.Experiment.Experiment.States;
+using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
+using NormandErwan.MasterThesis.Experiment.Inputs;
 using NormandErwan.MasterThesis.Experiment.UI.HUD;
 using UnityEngine;
 
@@ -23,6 +26,12 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     [SerializeField]
     private GameObject RightHandCursors;
 
+    [SerializeField]
+    private LeapFingerCursorsInput leapFingerCursorsInput;
+
+    [SerializeField]
+    private TransformSync cursorsSync;
+
     // Methods
 
     public override void ActivateTask()
@@ -31,36 +40,48 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       hmdDeviceHUD.ShowContent(false);
     }
 
-    public override void SetParticipantIsRightHanded(bool value)
-    {
-      base.SetParticipantIsRightHanded(value);
-
-      LeftLeapMotionHand.SetActive(!ParticipantIsRightHanded);
-      LeftHandCursors.SetActive(!ParticipantIsRightHanded);
-      RightLeapMotionHand.SetActive(ParticipantIsRightHanded);
-      RightHandCursors.SetActive(ParticipantIsRightHanded);
-    }
-
     protected override void Start()
     {
       base.Start();
-      LeftLeapMotionHand.SetActive(false);
-      LeftHandCursors.SetActive(false);
-      RightLeapMotionHand.SetActive(false);
-      RightHandCursors.SetActive(false);
+
+      leapFingerCursorsInput.gameObject.SetActive(false);
+      ActivateHand(true, false);
+      ActivateHand(false, false);
 
       // TODO: remove, for debug testing only
-      SetParticipantIsRightHanded(true);
+      /*SetParticipantIsRightHanded(true);
       StateController.BeginExperiment();
-      ActivateTask();
+      ActivateTask();*/
     }
 
     protected override void StateController_CurrentStateUpdated(State currentState)
     {
       base.StateController_CurrentStateUpdated(currentState);
 
+      var indVarTechnique = StateController.GetIndependentVariable<IVTechnique>();
+      bool useLeapInput = indVarTechnique.CurrentCondition.useLeapInput;
+
+      leapFingerCursorsInput.gameObject.SetActive(useLeapInput);
+      cursorsSync.SyncMode = (useLeapInput) ? SyncMode.SenderOnly : SyncMode.ReceiverOnly;
+
+      ActivateHand(ParticipantIsRightHanded, currentState.ActivateTask && useLeapInput);
+
       hmdDeviceHUD.ShowContent(true);
       hmdDeviceHUD.UpdateInstructionsProgress(StateController);
+    }
+
+    protected virtual void ActivateHand(bool rightHand, bool value)
+    {
+      if (rightHand)
+      {
+        RightLeapMotionHand.SetActive(value);
+        RightHandCursors.SetActive(value);
+      }
+      else
+      {
+        LeftLeapMotionHand.SetActive(value);
+        LeftHandCursors.SetActive(value);
+      }
     }
   }
 }

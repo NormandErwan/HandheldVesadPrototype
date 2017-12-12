@@ -63,6 +63,8 @@ MonoBehaviour:
   LeftHandCursors: {fileID: 0}
   RightLeapMotionHand: {fileID: 0}
   RightHandCursors: {fileID: 0}
+  leapFingerCursorsInput: {fileID: 0}
+  cursorsSync: {fileID: 0}
 --- !u!114 &114148178166964244
 MonoBehaviour:
   m_ObjectHideFlags: 1

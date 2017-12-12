@@ -72,7 +72,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       if (currentMessage.configureExperiment)
       {
-        deviceController.SetParticipantIsRightHanded(currentMessage.participantIsRightHanded);
+        deviceController.ParticipantIsRightHanded = currentMessage.participantIsRightHanded;
       }
 
       if (currentMessage.activateTask)

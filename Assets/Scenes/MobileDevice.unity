@@ -519,6 +519,12 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 61698222a95f4734783382f651cd5cba, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &1113834579 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114455525047258568, guid: 1af7da660e405ea4d88d276210dfa5c0,
+    type: 2}
+  m_PrefabInternal: {fileID: 1372156097}
+  m_Script: {fileID: 11500000, guid: 8e8da5a12ccb2c142909682ad56957e9, type: 3}
 --- !u!114 &1189171530 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114158752525081080, guid: a3b64898f2954384a989df0bbfd40e80,
@@ -570,6 +576,56 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 114726499238018480, guid: 1af7da660e405ea4d88d276210dfa5c0,
+        type: 2}
+      propertyPath: deviceController
+      value: 
+      objectReference: {fileID: 1578455496}
+    - target: {fileID: 114286179544140628, guid: 1af7da660e405ea4d88d276210dfa5c0,
+        type: 2}
+      propertyPath: deviceController
+      value: 
+      objectReference: {fileID: 1578455496}
+    - target: {fileID: 114560577002036184, guid: 1af7da660e405ea4d88d276210dfa5c0,
+        type: 2}
+      propertyPath: deviceController
+      value: 
+      objectReference: {fileID: 1578455496}
+    - target: {fileID: 114245298380061518, guid: 1af7da660e405ea4d88d276210dfa5c0,
+        type: 2}
+      propertyPath: deviceController
+      value: 
+      objectReference: {fileID: 1578455496}
+    - target: {fileID: 114304547472484076, guid: 1af7da660e405ea4d88d276210dfa5c0,
+        type: 2}
+      propertyPath: deviceController
+      value: 
+      objectReference: {fileID: 1578455496}
+    - target: {fileID: 114773955637911080, guid: 1af7da660e405ea4d88d276210dfa5c0,
+        type: 2}
+      propertyPath: deviceController
+      value: 
+      objectReference: {fileID: 1578455496}
+    - target: {fileID: 114933141613715370, guid: 1af7da660e405ea4d88d276210dfa5c0,
+        type: 2}
+      propertyPath: deviceController
+      value: 
+      objectReference: {fileID: 1578455496}
+    - target: {fileID: 114029505999846332, guid: 1af7da660e405ea4d88d276210dfa5c0,
+        type: 2}
+      propertyPath: deviceController
+      value: 
+      objectReference: {fileID: 1578455496}
+    - target: {fileID: 114026836117134686, guid: 1af7da660e405ea4d88d276210dfa5c0,
+        type: 2}
+      propertyPath: deviceController
+      value: 
+      objectReference: {fileID: 1578455496}
+    - target: {fileID: 114529553825851816, guid: 1af7da660e405ea4d88d276210dfa5c0,
+        type: 2}
+      propertyPath: deviceController
+      value: 
+      objectReference: {fileID: 1578455496}
     - target: {fileID: 114717382359170248, guid: 1af7da660e405ea4d88d276210dfa5c0,
         type: 2}
       propertyPath: camera
@@ -585,64 +641,15 @@ Prefab:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114726499238018480, guid: 1af7da660e405ea4d88d276210dfa5c0,
-        type: 2}
-      propertyPath: deviceController
-      value: 
-      objectReference: {fileID: 1578455496}
-    - target: {fileID: 114560577002036184, guid: 1af7da660e405ea4d88d276210dfa5c0,
-        type: 2}
-      propertyPath: deviceController
-      value: 
-      objectReference: {fileID: 1578455496}
-    - target: {fileID: 114286179544140628, guid: 1af7da660e405ea4d88d276210dfa5c0,
-        type: 2}
-      propertyPath: deviceController
-      value: 
-      objectReference: {fileID: 1578455496}
-    - target: {fileID: 114026836117134686, guid: 1af7da660e405ea4d88d276210dfa5c0,
-        type: 2}
-      propertyPath: deviceController
-      value: 
-      objectReference: {fileID: 1578455496}
-    - target: {fileID: 114029505999846332, guid: 1af7da660e405ea4d88d276210dfa5c0,
-        type: 2}
-      propertyPath: deviceController
-      value: 
-      objectReference: {fileID: 1578455496}
-    - target: {fileID: 114304547472484076, guid: 1af7da660e405ea4d88d276210dfa5c0,
-        type: 2}
-      propertyPath: deviceController
-      value: 
-      objectReference: {fileID: 1578455496}
-    - target: {fileID: 114529553825851816, guid: 1af7da660e405ea4d88d276210dfa5c0,
-        type: 2}
-      propertyPath: deviceController
-      value: 
-      objectReference: {fileID: 1578455496}
-    - target: {fileID: 114773955637911080, guid: 1af7da660e405ea4d88d276210dfa5c0,
-        type: 2}
-      propertyPath: deviceController
-      value: 
-      objectReference: {fileID: 1578455496}
-    - target: {fileID: 114933141613715370, guid: 1af7da660e405ea4d88d276210dfa5c0,
-        type: 2}
-      propertyPath: deviceController
-      value: 
-      objectReference: {fileID: 1578455496}
-    - target: {fileID: 114245298380061518, guid: 1af7da660e405ea4d88d276210dfa5c0,
-        type: 2}
-      propertyPath: deviceController
-      value: 
-      objectReference: {fileID: 1578455496}
-    - target: {fileID: 114717382359170248, guid: 1af7da660e405ea4d88d276210dfa5c0,
-        type: 2}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1af7da660e405ea4d88d276210dfa5c0, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &1372156098 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114717382359170248, guid: 1af7da660e405ea4d88d276210dfa5c0,
+    type: 2}
+  m_PrefabInternal: {fileID: 1372156097}
+  m_Script: {fileID: 11500000, guid: 2a3a8bc350dfb3746b53440b824916f8, type: 3}
 --- !u!1001 &1408397270
 Prefab:
   m_ObjectHideFlags: 0
@@ -949,7 +956,7 @@ Prefab:
     - target: {fileID: 224224068287543308, guid: 7058ab5c7e35fb14fbfc6efdeb93268b,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 348.5
+      value: 323
       objectReference: {fileID: 0}
     - target: {fileID: 114394180611686014, guid: 7058ab5c7e35fb14fbfc6efdeb93268b,
         type: 2}
@@ -965,6 +972,16 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114394180611686014, guid: 7058ab5c7e35fb14fbfc6efdeb93268b,
+        type: 2}
+      propertyPath: touchFingerCursorsInput
+      value: 
+      objectReference: {fileID: 1372156098}
+    - target: {fileID: 114394180611686014, guid: 7058ab5c7e35fb14fbfc6efdeb93268b,
+        type: 2}
+      propertyPath: cursorsSync
+      value: 
+      objectReference: {fileID: 1113834579}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7058ab5c7e35fb14fbfc6efdeb93268b, type: 2}
   m_IsPrefabParent: 0

@@ -8,5 +8,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Variables
 
     [TextArea]
     public string instructions;
+
+    public bool useLeapInput;
+
+    public bool useTouchInput;
   }
 }
