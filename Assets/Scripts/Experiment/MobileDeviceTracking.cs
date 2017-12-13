@@ -15,13 +15,13 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment
 
     [SerializeField]
     [Range(0.0f, 1.0f)]
-    private float smoothRotationWeigth = 0.01f;
+    private float smoothTrackingWeigth = 0.01f;
 
     // Variables
 
     protected Vector3[] positionOffsets;
     protected bool activatedPreviousFrame = false;
-    protected Vector3 previousForward, previousRight, previousUp;
+    protected Vector3 previousPosition, previousForward, previousRight, previousUp;
 
     // Methods
 
@@ -61,14 +61,19 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment
         // Smooth the rotation
         if (activatedPreviousFrame)
         {
-          Vector3 newForward = (smoothRotationWeigth * transform.forward + (1 - smoothRotationWeigth) * previousForward).normalized;
-          Vector3 newRight = (smoothRotationWeigth * transform.right + (1 - smoothRotationWeigth) * previousRight).normalized;
+          Vector3 newPosition = (smoothTrackingWeigth * transform.position + (1 - smoothTrackingWeigth) * previousPosition);
+          transform.position = newPosition;
+
+          Vector3 newForward = (smoothTrackingWeigth * transform.forward + (1 - smoothTrackingWeigth) * previousForward).normalized;
+          Vector3 newRight = (smoothTrackingWeigth * transform.right + (1 - smoothTrackingWeigth) * previousRight).normalized;
           Vector3 newUp = Vector3.Cross(newForward, newRight).normalized;
           transform.rotation = Quaternion.LookRotation(newForward, newUp);
         }
+        previousPosition = transform.position;
         previousForward = transform.forward;
         previousRight = transform.right;
         previousUp = transform.up;
+
         activatedPreviousFrame = true;
       }
       else
