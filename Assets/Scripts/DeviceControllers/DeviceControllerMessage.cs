@@ -26,11 +26,11 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     public bool activateTask;
 
     public bool configureExperiment;
-
     public int participantId;
-
     public int conditionsOrdering;
-
     public bool participantIsRightHanded;
+
+    public bool toggleZoomMode;
+    public bool zoomModeActivated;
   }
 }

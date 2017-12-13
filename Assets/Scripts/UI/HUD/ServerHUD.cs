@@ -39,8 +39,8 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
 
     // Events
 
-    public event Action RequestNextState = delegate { };
-    public event Action RequestBeginExperiment = delegate { };
+    public event Action NextStateButtonPressed = delegate { };
+    public event Action BeginExperimentButtonPressed = delegate { };
 
     // Methods
 
@@ -67,13 +67,13 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
       experimentConfigurationRect.gameObject.SetActive(false);
     }
 
-    protected virtual void OnEnable()
+    protected virtual void Start()
     {
       nextStateButton.onClick.AddListener(nextStateButton_onClik);
       beginExperimentButton.onClick.AddListener(beginExperimentButton_onClik);
     }
 
-    protected virtual void OnDisable()
+    protected virtual void OnDestroy()
     {
       nextStateButton.onClick.RemoveListener(nextStateButton_onClik);
       beginExperimentButton.onClick.RemoveListener(beginExperimentButton_onClik);
@@ -81,12 +81,12 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
 
     protected virtual void nextStateButton_onClik()
     {
-      RequestNextState();
+      NextStateButtonPressed();
     }
 
     protected virtual void beginExperimentButton_onClik()
     {
-      RequestBeginExperiment();
+      BeginExperimentButtonPressed();
     }
   }
 }

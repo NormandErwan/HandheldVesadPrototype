@@ -47,6 +47,14 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       UpdateCursors();
     }
 
+    public virtual void Configure(float maxSelectableDistance)
+    {
+      foreach (var cursor in Cursors)
+      {
+        cursor.Value.MaxSelectableDistance = maxSelectableDistance;
+      }
+    }
+
     protected virtual void DeactivateCursors()
     {
       foreach (var cursor in Cursors)

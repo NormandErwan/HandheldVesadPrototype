@@ -416,7 +416,7 @@ MonoBehaviour:
   title: Difficile
   minimumAverageClassificationDistance: 2.5
   maximumAverageClassificationDistance: 2.7
-  numberOfItemsToClass: 3
+  numberOfItemsToClass: 2
 --- !u!114 &114102835371396286
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -590,7 +590,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2_Large
   title: Grand
-  fontSize: 54
+  fontSize: 56
 --- !u!114 &114784559623597272
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -620,7 +620,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1_Small
   title: Petit
-  fontSize: 36
+  fontSize: 32
 --- !u!114 &114999698179949338
 MonoBehaviour:
   m_ObjectHideFlags: 1

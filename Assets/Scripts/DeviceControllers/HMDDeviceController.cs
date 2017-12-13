@@ -29,13 +29,11 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     [SerializeField]
     private LeapFingerCursorsInput leapFingerCursorsInput;
 
-    // Methods
+    [SerializeField]
+    [Range(0f, 0.05f)]
+    private float maxSelectableDistance = 0.001f;
 
-    public override void ActivateTask()
-    {
-      base.ActivateTask();
-      hmdDeviceHUD.ShowContent(false);
-    }
+    // Methods
 
     protected override void Start()
     {
@@ -43,14 +41,27 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
       ParticipantLogger.DeviceControllerName = "hmd";
 
+      leapFingerCursorsInput.Configure(maxSelectableDistance);
       leapFingerCursorsInput.gameObject.SetActive(false);
       ActivateHand(true, false);
       ActivateHand(false, false);
 
       // TODO: remove, for debug testing only
-      ActivateHand(true, true);
+      /*ActivateHand(true, true);
       StateController.BeginExperiment();
-      ActivateTask();
+      ActivateTask();*/
+    }
+
+    public override void ActivateTask()
+    {
+      base.ActivateTask();
+      hmdDeviceHUD.ShowContent(false);
+    }
+
+    public override void ZoomModeActivated(bool value)
+    {
+      base.ZoomModeActivated(value);
+      // TODO
     }
 
     protected override void StateController_CurrentStateUpdated(State currentState)
@@ -60,6 +71,8 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       bool useLeapInput = ivTechnique.CurrentCondition.useLeapInput;
       leapFingerCursorsInput.gameObject.SetActive(currentState.ActivateTask && useLeapInput);
       ActivateHand(ParticipantIsRightHanded, currentState.ActivateTask && useLeapInput);
+
+      // TODO: deactivate zoom mode
 
       hmdDeviceHUD.ShowContent(true);
       hmdDeviceHUD.UpdateInstructionsProgress(StateController);

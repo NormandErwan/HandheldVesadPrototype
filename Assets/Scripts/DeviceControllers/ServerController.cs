@@ -1,5 +1,4 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
-using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
 using NormandErwan.MasterThesis.Experiment.Loggers;
 using NormandErwan.MasterThesis.Experiment.UI.HUD;
 using UnityEngine;
@@ -15,24 +14,20 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     // MonoBehaviour methods
 
-    protected override void OnEnable()
-    {
-      base.OnEnable();
-      serverHUD.RequestBeginExperiment += ServerHUD_RequestBeginExperiment;
-      serverHUD.RequestNextState += ServerHUD_RequestNextState;
-    }
-
-    protected override void OnDisable()
-    {
-      base.OnDisable();
-      serverHUD.RequestBeginExperiment -= ServerHUD_RequestBeginExperiment;
-      serverHUD.RequestNextState -= ServerHUD_RequestNextState;
-    }
-
     protected override void Start()
     {
       base.Start();
       ParticipantLogger.DeviceControllerName = "server";
+
+      serverHUD.BeginExperimentButtonPressed += ServerHUD_BeginExperimentButtonPressed;
+      serverHUD.NextStateButtonPressed += ServerHUD_NextStateButtonPressed;
+    }
+
+    protected override void OnDestroy()
+    {
+      base.OnDestroy();
+      serverHUD.BeginExperimentButtonPressed -= ServerHUD_BeginExperimentButtonPressed;
+      serverHUD.NextStateButtonPressed -= ServerHUD_NextStateButtonPressed;
     }
 
     // DeviceController methods
@@ -43,7 +38,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       serverHUD.UpdateInstructionsProgress(StateController);
     }
 
-    protected virtual void ServerHUD_RequestBeginExperiment()
+    protected virtual void ServerHUD_BeginExperimentButtonPressed()
     {
       serverHUD.DeactivateExperimentConfiguration();
 
@@ -70,7 +65,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       StateController.BeginExperiment();
     }
 
-    protected virtual void ServerHUD_RequestNextState()
+    protected virtual void ServerHUD_NextStateButtonPressed()
     {
       StateController.NextState();
     }

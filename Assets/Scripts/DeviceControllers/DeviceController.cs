@@ -17,17 +17,12 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     private Experiment.Task.Grid grid;
 
     [SerializeField]
-    [Range(0f, 0.05f)]
-    private float maxSelectableDistance = 0.001f;
-
-    [SerializeField]
     private ParticipantLogger participantLogger;
 
     // Properties
 
     public StateController StateController { get { return stateController; } set { stateController = value; } }
     public Experiment.Task.Grid Grid { get { return grid; } set { grid = value; } }
-    public float MaxSelectableDistance { get { return maxSelectableDistance; } set { maxSelectableDistance = value; } }
 
     public int ParticipantId { get; protected set; }
     public int ConditionsOrdering { get; protected set; }
@@ -39,6 +34,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     public event Action ActivateTaskSync = delegate { };
     public event Action ConfigureExperimentSync = delegate { };
+    public event Action<bool> ToogleZoomModeSync = delegate { };
 
     // Variables
 
@@ -53,23 +49,22 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     /// </summary>
     protected virtual void Start()
     {
+      // init vars
       ivTechnique = StateController.GetIndependentVariable<IVTechnique>();
       ivClassificationDifficulty = StateController.GetIndependentVariable<IVClassificationDifficulty>();
       ivTextSize = StateController.GetIndependentVariable<IVTextSize>();
 
+      // subscribe
+      StateController.CurrentStateUpdated += StateController_CurrentStateUpdated;
+      Grid.Finished += Grid_Finished;
+
+      // deactivate the grid
       Grid.gameObject.SetActive(false);
     }
 
-    // subscribes
-    protected virtual void OnEnable()
+    protected virtual void OnDestroy()
     {
-      StateController.CurrentStateUpdated += StateController_CurrentStateUpdated;
-      Grid.Finished += Grid_Finished;
-    }
-
-    // unsubscribes
-    protected virtual void OnDisable()
-    {
+      // unsubscribes
       StateController.CurrentStateUpdated -= StateController_CurrentStateUpdated;
       Grid.Finished -= Grid_Finished;
     }
@@ -101,6 +96,10 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       Grid.gameObject.SetActive(true);
     }
 
+    public virtual void ZoomModeActivated(bool value)
+    {
+    }
+
     /// <summary>
     /// Deactivates <see cref="Grid"/> each new state.
     /// </summary>
@@ -124,7 +123,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     /// </summary>
     protected virtual void OnActivateTaskSync()
     {
-      print("activate task");
       ActivateTaskSync();
     }
 
@@ -134,6 +132,15 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     protected virtual void OnConfigureExperimentSync()
     {
       ConfigureExperimentSync();
+    }
+
+
+    /// <summary>
+    /// Calls <see cref="ToogleZoomModeSync"/>.
+    /// </summary>
+    protected virtual void OnToogleZoomModeSync(bool zoomModeActivated)
+    {
+      ToogleZoomModeSync(zoomModeActivated);
     }
   }
 }

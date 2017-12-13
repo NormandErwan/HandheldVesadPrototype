@@ -30,12 +30,14 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       MessageTypes.Add(currentMessage.MessageType);
       DeviceController.ConfigureExperimentSync += DeviceController_ConfigureExperimentSync;
       DeviceController.ActivateTaskSync += DeviceController_ActivateTaskSync;
+      DeviceController.ToogleZoomModeSync += DeviceController_ToogleZoomModeSync;
     }
 
     protected virtual void OnDestroy()
     {
       DeviceController.ConfigureExperimentSync -= DeviceController_ConfigureExperimentSync;
       DeviceController.ActivateTaskSync -= DeviceController_ActivateTaskSync;
+      DeviceController.ToogleZoomModeSync -= DeviceController_ToogleZoomModeSync;
     }
 
     protected override DevicesSyncMessage OnServerMessageReceived(NetworkMessage netMessage)
@@ -57,16 +59,31 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     protected virtual void DeviceController_ConfigureExperimentSync()
     {
-      currentMessage.configureExperiment = true;
       currentMessage.participantId = deviceController.ParticipantId;
       currentMessage.conditionsOrdering = deviceController.ConditionsOrdering;
       currentMessage.participantIsRightHanded = deviceController.ParticipantIsRightHanded;
+
+      currentMessage.configureExperiment = true;
+      currentMessage.activateTask = false;
+      currentMessage.toggleZoomMode = false;
       SendToServer(currentMessage);
     }
 
     protected virtual void DeviceController_ActivateTaskSync()
     {
+      currentMessage.configureExperiment = false;
       currentMessage.activateTask = true;
+      currentMessage.toggleZoomMode = false;
+      SendToServer(currentMessage);
+    }
+
+    protected virtual void DeviceController_ToogleZoomModeSync(bool zoomModeActivated)
+    {
+      currentMessage.zoomModeActivated = zoomModeActivated;
+
+      currentMessage.configureExperiment = false;
+      currentMessage.activateTask = false;
+      currentMessage.toggleZoomMode = true;
       SendToServer(currentMessage);
     }
 
@@ -80,8 +97,12 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
       if (currentMessage.activateTask)
       {
-        print("activate task sync");
         deviceController.ActivateTask();
+      }
+
+      if (currentMessage.zoomModeActivated)
+      {
+        deviceController.ZoomModeActivated(currentMessage.zoomModeActivated);
       }
     }
   }

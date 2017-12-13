@@ -1,5 +1,4 @@
-﻿using NormandErwan.MasterThesis.Experiment.DeviceControllers;
-using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
+﻿using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,9 +18,6 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     [SerializeField]
     private CursorType type;
 
-    [SerializeField]
-    private DeviceController deviceController;
-
     // ICursor properties
 
     public CursorType Type { get { return type; } set { type = value; } }
@@ -29,7 +25,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     
     // Properties
 
-    public DeviceController DeviceController { get { return deviceController; } set { deviceController = value; } }
+    public float MaxSelectableDistance { get; set; }
 
     public bool IsFinger { get { return Type != CursorType.Look; } }
     public bool IsIndex { get { return Type == CursorType.LeftIndex || Type == CursorType.RightIndex; } }
@@ -154,7 +150,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
                 latestCursorPositions[draggable][this] = transform.position;
                 draggable.Drag(translation);
               }
-              else if (translation.magnitude > DeviceController.MaxSelectableDistance)
+              else if (translation.magnitude > MaxSelectableDistance)
               {
                 latestCursorPositions[draggable][this] = transform.position;
                 draggable.SetDragging(true);
