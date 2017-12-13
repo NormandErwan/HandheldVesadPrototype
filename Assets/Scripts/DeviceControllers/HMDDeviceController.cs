@@ -29,9 +29,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     [SerializeField]
     private LeapFingerCursorsInput leapFingerCursorsInput;
 
-    [SerializeField]
-    private TransformSync cursorsSync;
-
     // Methods
 
     public override void ActivateTask()
@@ -49,9 +46,9 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       ActivateHand(false, false);
 
       // TODO: remove, for debug testing only
-      /*SetParticipantIsRightHanded(true);
+      ActivateHand(true, true);
       StateController.BeginExperiment();
-      ActivateTask();*/
+      ActivateTask();
     }
 
     protected override void StateController_CurrentStateUpdated(State currentState)
@@ -62,8 +59,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       bool useLeapInput = indVarTechnique.CurrentCondition.useLeapInput;
 
       leapFingerCursorsInput.gameObject.SetActive(useLeapInput);
-      cursorsSync.SyncMode = (useLeapInput) ? SyncMode.SenderOnly : SyncMode.ReceiverOnly;
-
       ActivateHand(ParticipantIsRightHanded, currentState.ActivateTask && useLeapInput);
 
       hmdDeviceHUD.ShowContent(true);

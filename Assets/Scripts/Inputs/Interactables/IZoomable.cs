@@ -18,6 +18,6 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Interactables
     // Methods
 
     void SetZooming(bool value);
-    void Zoom(Vector3 distance, Vector3 previousDistance, Vector3 translation, Vector3 previousTranslation);
+    void Zoom(Vector3 distance, Vector3 originalDistance, Vector3 translation, Vector3 previousTranslation);
   }
 }

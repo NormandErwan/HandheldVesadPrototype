@@ -1,5 +1,4 @@
-﻿using DevicesSyncUnity;
-using NormandErwan.MasterThesis.Experiment.Experiment.States;
+﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
 using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
 using NormandErwan.MasterThesis.Experiment.Inputs;
 using NormandErwan.MasterThesis.Experiment.UI.HUD;
@@ -16,9 +15,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     [SerializeField]
     private TouchFingerCursorsInput touchFingerCursorsInput;
-
-    [SerializeField]
-    private TransformSync cursorsSync;
 
     // Methods
 
@@ -41,8 +37,8 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       touchFingerCursorsInput.gameObject.SetActive(false);
 
       // TODO: remove, for debug testing only
-      /*StateController.BeginExperiment();
-      ActivateTask();*/
+      StateController.BeginExperiment();
+      ActivateTask();
     }
 
     protected override void StateController_CurrentStateUpdated(State currentState)
@@ -53,7 +49,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       bool useTouchInput = indVarTechnique.CurrentCondition.useTouchInput;
 
       touchFingerCursorsInput.gameObject.SetActive(useTouchInput);
-      cursorsSync.SyncMode = (useTouchInput) ? SyncMode.SenderOnly : SyncMode.ReceiverOnly;
 
       mobileDeviceHUD.ShowValidateButton(true);
     }
@@ -63,7 +58,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       mobileDeviceHUD.ShowValidateButton(false);
       if (StateController.CurrentState.ActivateTask)
       {
-        OnRequestActivateTask();
+        OnRequestActivateTask(); // activate the task grid
       }
       else
       {

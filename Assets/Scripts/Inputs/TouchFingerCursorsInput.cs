@@ -22,6 +22,8 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     // Variables
 
     protected List<CursorType> keys;
+    protected Vector3 mouse1Position = Vector3.zero;
+    protected bool updateCursor1;
 
     // MonoBehaviour methods
 
@@ -44,29 +46,43 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     protected override void UpdateCursors()
     {
+#if UNITY_EDITOR
       if (Input.GetKey(KeyCode.Mouse0))
       {
-        UpdateCursor(Input.mousePosition);
+        UpdateCursor(0, Input.mousePosition);
       }
 
-      for (int i = 0; i < Input.touchCount; i++)
+      if (Input.GetKeyUp(KeyCode.Mouse1))
+      {
+        updateCursor1 = !updateCursor1;
+        mouse1Position = Input.mousePosition;
+      }
+      if (updateCursor1)
+      {
+        UpdateCursor(1, mouse1Position);
+      }
+#endif
+
+      for (int i = 0; i < Input.touchCount && i < Cursors.Count; i++)
       {
         var touch = Input.GetTouch(i);
         if (touch.phase != TouchPhase.Ended && touch.phase != TouchPhase.Canceled)
         {
-          UpdateCursor(touch.position);
+          UpdateCursor(i, touch.position);
         }
       }
     }
 
-    protected virtual void UpdateCursor(Vector3 cursorScreenPosition)
+    protected virtual void UpdateCursor(int cursorId, Vector3 cursorScreenPosition)
     {
-      var cursorPosition = Camera.ScreenToWorldPoint(Input.mousePosition);
+      var cursorPosition = Camera.ScreenToWorldPoint(cursorScreenPosition);
       cursorPosition = Vector3.ProjectOnPlane(cursorPosition, -PlaneToProjectCursors.forward);
 
-      var cursor = Cursors[keys[0]];
+      var cursor = Cursors[keys[cursorId]];
       cursor.transform.position = new Vector3(cursorPosition.x, cursorPosition.y, PlaneToProjectCursors.position.z);
       cursor.transform.forward = planeToProjectCursors.forward;
+
+      ActivateCursor(cursor.Type);
     }
   }
 }

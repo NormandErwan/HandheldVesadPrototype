@@ -124,7 +124,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       {
         GetInteractable<IDraggable>(other, (draggable) =>
         {
-          if (draggable.IsInteractable)
+          if (draggable.IsInteractable && latestCursorPositions[draggable].Count == 1)
           {
             var translation = transform.position - latestCursorPositions[draggable][this];
             if (draggable.IsDragging)
@@ -147,17 +147,12 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
             var cursors = new List<Cursor>(latestCursorPositions[zoomable].Keys);
             if (cursors[0] == this) // Update only once per frame
             {
-              var translation = cursors[0].transform.position;
-              var previousTranslation = latestCursorPositions[zoomable][cursors[0]];
+              var translation = cursors[1].transform.position;
+              var originalTranslation = latestCursorPositions[zoomable][cursors[1]];
               var distance = cursors[0].transform.position - cursors[1].transform.position;
-              var previousDistance = latestCursorPositions[zoomable][cursors[0]] - latestCursorPositions[zoomable][cursors[1]];
+              var originalDistance = latestCursorPositions[zoomable][cursors[0]] - latestCursorPositions[zoomable][cursors[1]];
 
-              foreach (var cursor in cursors)
-              {
-                latestCursorPositions[zoomable][cursor] = cursor.transform.position;
-              }
-
-              zoomable.Zoom(distance, previousDistance, translation, previousTranslation);
+              zoomable.Zoom(distance, originalDistance, translation, originalTranslation);
             }
           }
         });

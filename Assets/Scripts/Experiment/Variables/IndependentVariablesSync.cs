@@ -24,9 +24,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Variables
     {
       base.Awake();
 
-      DeviceConnected += DevicesInfoSync_DeviceConnected;
       foreach (var independentVariable in independentVariables)
       {
+        DeviceConnected += DevicesInfoSync_DeviceConnected;
         independentVariable.RequestCurrentConditionSync += IndependentVariableManager_RequestCurrentConditionSync;
       }
 
@@ -35,9 +35,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Variables
 
     protected virtual void OnDestroy()
     {
-      DeviceConnected -= DevicesInfoSync_DeviceConnected;
       foreach (var indeVarManager in independentVariables)
       {
+        DeviceConnected -= DevicesInfoSync_DeviceConnected;
         indeVarManager.RequestCurrentConditionSync -= IndependentVariableManager_RequestCurrentConditionSync;
       }
     }

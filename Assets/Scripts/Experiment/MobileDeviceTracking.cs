@@ -13,54 +13,69 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment
     [SerializeField]
     private ArucoMarker[] markers;
 
+    [SerializeField]
+    [Range(0.0f, 1.0f)]
+    private float smoothRotationWeigth = 0.01f;
+
     // Variables
 
-    protected Vector3 positionOffset;
+    protected Vector3[] positionOffsets;
+    protected bool activatedPreviousFrame = false;
+    protected Vector3 previousForward, previousRight, previousUp;
 
     // Methods
 
     protected virtual void Awake()
     {
-      positionOffset = transform.position - markers[0].transform.position;
-      print(positionOffset.ToString("F3"));
+      positionOffsets = new Vector3[markers.Length];
+      for (int i = 0; i < markers.Length; i++)
+      {
+        positionOffsets[i] = transform.position - markers[i].transform.position;
+      }
     }
 
     protected virtual void LateUpdate()
     {
-      bool activated = markers[0].gameObject.activeSelf;
-      if (activated)
-      {
-        Vector3 position = markers[0].transform.position;
-        Quaternion rotation = markers[0].transform.rotation;
+      Vector3 position = Vector3.zero;
+      Quaternion rotation = Quaternion.identity;
 
-        // Compute average position for the activated markers
-        /*int activeMarkers = 0;
-        foreach (var marker in markers)
+      bool activated = false;
+      for (int i = 0; i < markers.Length; i++)
+      {
+        if (markers[i].gameObject.activeSelf)
         {
-          if (marker.gameObject.activeSelf)
+          if (!activated)
           {
-            if (!activated)
-            {
-              rotation = marker.transform.rotation.eulerAngles;
-              activated = true;
-            }
-            position += marker.transform.position;
-            activeMarkers++;
+            activated = true;
+            position = markers[i].transform.position + positionOffsets[i];
+            rotation = markers[i].transform.rotation;
           }
         }
+      }
 
-        if (activeMarkers > 0)
-        {
-          position *= 1 / activeMarkers;
-        }*/
-
-        transform.position = position + positionOffset;
+      if (activated)
+      {
+        transform.position = position;
         transform.rotation = rotation;
+
+        // Smooth the rotation
+        if (activatedPreviousFrame)
+        {
+          Vector3 newForward = (smoothRotationWeigth * transform.forward + (1 - smoothRotationWeigth) * previousForward).normalized;
+          Vector3 newRight = (smoothRotationWeigth * transform.right + (1 - smoothRotationWeigth) * previousRight).normalized;
+          Vector3 newUp = Vector3.Cross(newForward, newRight).normalized;
+          transform.rotation = Quaternion.LookRotation(newForward, newUp);
+        }
+        previousForward = transform.forward;
+        previousRight = transform.right;
+        previousUp = transform.up;
+        activatedPreviousFrame = true;
       }
       else
       {
         transform.position = camera.transform.position - camera.transform.forward;
         transform.rotation = camera.transform.rotation;
+        activatedPreviousFrame = false;
       }
     }
   }

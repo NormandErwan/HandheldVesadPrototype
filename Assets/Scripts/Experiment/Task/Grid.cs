@@ -60,6 +60,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     protected List<Inputs.Cursor> triggeredFingers = new List<Inputs.Cursor>();
     protected Vector3 fingerPanningLastPosition;
+    protected Vector3 zoomStartedScale, zoomStartedPosition;
 
     protected Item selectedItem;
 
@@ -128,6 +129,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       IsZooming = value;
       if (IsZooming)
       {
+        zoomStartedScale = transform.localScale;
+        zoomStartedPosition = transform.position - transform.lossyScale / 2;
         ZoomingStarted(this);
       }
       else
@@ -138,16 +141,16 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       SetContainersInteractable(!IsDragging && !IsZooming);
     }
 
-    public void Zoom(Vector3 distance, Vector3 previousDistance, Vector3 translation, Vector3 previousTranslation)
+    public void Zoom(Vector3 distance, Vector3 originalDistance, Vector3 translation, Vector3 originalTranslation)
     {
       var distanceProjected = Vector3.ProjectOnPlane(distance, -transform.forward);
-      var previousDistanceProjected = Vector3.ProjectOnPlane(previousDistance, -transform.forward);
+      var previousDistanceProjected = Vector3.ProjectOnPlane(originalDistance, -transform.forward);
       var scaleFactor = distanceProjected.magnitude / previousDistanceProjected.magnitude;
-      transform.localScale = new Vector3(transform.localScale.x * scaleFactor, transform.localScale.y * scaleFactor, transform.localScale.z);
+      transform.localScale = new Vector3(zoomStartedScale.x * scaleFactor, zoomStartedScale.y * scaleFactor, zoomStartedScale.z);
 
-      var translationProjected = scaleFactor * Vector3.ProjectOnPlane(translation, -transform.forward);
-      var previousTranslationProjected = Vector3.ProjectOnPlane(previousTranslation, -transform.forward);
-      transform.position += translationProjected - previousTranslationProjected;
+      var translationProjected = Vector3.ProjectOnPlane(translation, -transform.forward);
+      var previousTranslationProjected = Vector3.ProjectOnPlane(originalTranslation, -transform.forward);
+      transform.position = zoomStartedPosition + translationProjected - previousTranslationProjected; // TODO: fix
     }
 
     // Methods
