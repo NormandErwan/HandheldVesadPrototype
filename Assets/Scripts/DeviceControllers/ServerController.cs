@@ -1,4 +1,6 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
+using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
+using NormandErwan.MasterThesis.Experiment.Loggers;
 using NormandErwan.MasterThesis.Experiment.UI.HUD;
 using UnityEngine;
 
@@ -11,7 +13,16 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     [SerializeField]
     private ServerHUD serverHUD;
 
-    // Methods
+    [SerializeField]
+    private ParticipantLogger participantLogger;
+
+    // Variables
+
+    protected IVTechnique ivTechnique;
+    protected IVClassificationDifficulty ivClassificationDifficulty;
+    protected IVTextSize ivTextSize;
+
+    // MonoBehaviour methods
 
     protected override void OnEnable()
     {
@@ -27,6 +38,33 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       serverHUD.RequestNextState -= ServerHUD_RequestNextState;
     }
 
+    protected override void Start()
+    {
+      base.Start();
+      ivTechnique = StateController.GetIndependentVariable<IVTechnique>();
+      ivClassificationDifficulty = StateController.GetIndependentVariable<IVClassificationDifficulty>();
+      ivTextSize = StateController.GetIndependentVariable<IVTextSize>();
+    }
+
+    // DeviceController methods
+
+    public override void ActivateTask()
+    {
+      participantLogger.Technique = ivTechnique.CurrentCondition.id;
+      participantLogger.TextSize = ivTextSize.CurrentCondition.id;
+      participantLogger.ClassificationDistance = ivClassificationDifficulty.CurrentCondition.id;
+      participantLogger.TrialNumber = StateController.CurrentTrial;
+      participantLogger.PrepareNextRow();
+
+      base.ActivateTask();
+    }
+
+    protected override void Grid_Finished()
+    {
+      participantLogger.WriteRow();
+      base.Grid_Finished();
+    }
+
     protected override void StateController_CurrentStateUpdated(State currentState)
     {
       base.StateController_CurrentStateUpdated(currentState);
@@ -37,9 +75,11 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       serverHUD.DeactivateExperimentConfiguration();
 
+      // Configure (sync) the experiment
       ParticipantIsRightHanded = serverHUD.ParticipantIsRightHanded;
       OnConfigureExperiment();
 
+      // Set the ordering in conditions (sync)
       if (serverHUD.ConditionsOrdering == 1)
       {
         var mainIndVar = StateController.independentVariables[0];
@@ -52,6 +92,11 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
         mainIndVar.NextCondition();
       }
 
+      // Start loggers
+      participantLogger.ParticipantId = serverHUD.ParticipantId;
+      participantLogger.StartLogger();
+
+      // Begin (sync) the experiment
       StateController.BeginExperiment();
     }
 

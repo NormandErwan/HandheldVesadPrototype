@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -814,40 +814,40 @@ Prefab:
       propertyPath: m_RootOrder
       value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 224668128503582764, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
+    - target: {fileID: 224244501972561576, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: -95
+      value: 111.16458
       objectReference: {fileID: 0}
-    - target: {fileID: 224092965516132820, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
-        type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 114763772651783544, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
-        type: 2}
-      propertyPath: stateController
-      value: 
-      objectReference: {fileID: 653876119}
-    - target: {fileID: 114763772651783544, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
-        type: 2}
-      propertyPath: grid
-      value: 
-      objectReference: {fileID: 1228041265}
-    - target: {fileID: 224786535967430606, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
+    - target: {fileID: 224911233874760896, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 248.5577
       objectReference: {fileID: 0}
-    - target: {fileID: 224786535967430606, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
+    - target: {fileID: 224911233874760896, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 438.2651
       objectReference: {fileID: 0}
-    - target: {fileID: 224384586033746108, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
+    - target: {fileID: 224402987455359180, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: -130
+      value: 468.2651
+      objectReference: {fileID: 0}
+    - target: {fileID: 224873999866407996, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
+        type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 446.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 224873999866407996, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
+        type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 182
+      objectReference: {fileID: 0}
+    - target: {fileID: 224239140344684744, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
+        type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -20
       objectReference: {fileID: 0}
     - target: {fileID: 224863445391565276, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
         type: 2}
@@ -859,60 +859,49 @@ Prefab:
       propertyPath: m_LocalPosition.y
       value: -60
       objectReference: {fileID: 0}
-    - target: {fileID: 224239140344684744, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
+    - target: {fileID: 224384586033746108, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: -20
+      value: -130
       objectReference: {fileID: 0}
-    - target: {fileID: 224873999866407996, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
+    - target: {fileID: 224786535967430606, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 360
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 224873999866407996, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
+    - target: {fileID: 224786535967430606, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 625
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 224402987455359180, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
+    - target: {fileID: 114763772651783544, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
+        type: 2}
+      propertyPath: stateController
+      value: 
+      objectReference: {fileID: 653876119}
+    - target: {fileID: 114763772651783544, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
+        type: 2}
+      propertyPath: grid
+      value: 
+      objectReference: {fileID: 1228041265}
+    - target: {fileID: 224092965516132820, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 562.0031
+      value: 20
       objectReference: {fileID: 0}
-    - target: {fileID: 224911233874760896, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
-        type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 206.63905
-      objectReference: {fileID: 0}
-    - target: {fileID: 224911233874760896, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
+    - target: {fileID: 224668128503582764, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 532.0031
-      objectReference: {fileID: 0}
-    - target: {fileID: 224244501972561576, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
-        type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 346.4355
+      value: -95
       objectReference: {fileID: 0}
     - target: {fileID: 224402987455359180, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
         type: 2}
       propertyPath: m_LocalPosition.x
       value: -64.999985
       objectReference: {fileID: 0}
-    - target: {fileID: 114763772651783544, guid: 41f37c3e615df2b4aad3d004fdbcb53e,
-        type: 2}
-      propertyPath: cursorsSync
-      value: 
-      objectReference: {fileID: 1693725723}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 41f37c3e615df2b4aad3d004fdbcb53e, type: 2}
   m_IsPrefabParent: 0
---- !u!114 &1693725723 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114455525047258568, guid: 1af7da660e405ea4d88d276210dfa5c0,
-    type: 2}
-  m_PrefabInternal: {fileID: 451851527}
-  m_Script: {fileID: 11500000, guid: 8e8da5a12ccb2c142909682ad56957e9, type: 3}
 --- !u!1 &2111690776
 GameObject:
   m_ObjectHideFlags: 0
