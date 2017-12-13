@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: ContainerBackground
-  m_Shader: {fileID: 4800000, guid: 0d802a4650111104f9d0cd889e188ae4, type: 3}
+  m_Shader: {fileID: 4800000, guid: 9ea9fe02b5f1a3d4289301c4d32f96e6, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
