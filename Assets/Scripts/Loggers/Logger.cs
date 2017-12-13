@@ -1,5 +1,7 @@
 ﻿using Mono.Csv;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Loggers
@@ -8,16 +10,24 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
   {
     // Properties
 
-    public virtual string Filename { get; protected set; }
-    public virtual List<string> Columns { get; protected set; }
+    public string Filename { get; protected set; }
+    public string FilePath { get; protected set; }
 
-    protected virtual List<string> NextRow { get; private set; }
+    public List<string> Columns { get; protected set; }
+
+    protected List<string> NextRow { get; private set; }
 
     // Variables
 
     protected CsvFileWriter csvWriter;
+    protected string dataPath;
 
     // MonoBehaviour methods
+
+    protected virtual void Awake()
+    {
+      dataPath = (Application.isEditor) ? Application.dataPath : Application.persistentDataPath;
+    }
 
     protected virtual void OnDestroy()
     {
@@ -31,7 +41,9 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     public virtual void StartLogger()
     {
-      csvWriter = new CsvFileWriter(Filename);
+      FilePath = Path.Combine(dataPath, Filename);
+
+      csvWriter = new CsvFileWriter(FilePath);
       csvWriter.WriteRow(Columns);
 
       NextRow = new List<string>(Columns.Count);
@@ -43,6 +55,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     public virtual void PrepareNextRow()
     {
+      NextRow.Clear();
     }
 
     public virtual void WriteRow()
@@ -55,9 +68,29 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       csvWriter.Dispose();
     }
 
-    protected virtual string ToString(bool boolean)
+    protected virtual void AddToNextRow(string text)
     {
-      return (boolean) ? "true" : "false";
+      NextRow.Add(text);
+    }
+
+    protected virtual void AddToNextRow(int number)
+    {
+      NextRow.Add(number.ToString());
+    }
+
+    protected virtual void AddToNextRow(float number)
+    {
+      NextRow.Add(number.ToString());
+    }
+
+    protected virtual void AddToNextRow(DateTime dateTime)
+    {
+      AddToNextRow(dateTime.ToString("yyyy-MM-dd HH-mm-ss"));
+    }
+
+    protected virtual void AddToNextRow(bool boolean)
+    {
+      AddToNextRow((boolean) ? "true" : "false");
     }
   }
 }

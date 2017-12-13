@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Loggers
 {
@@ -8,23 +9,25 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
   {
     // Properties
 
+    public string DeviceControllerName { get; set; }
     public int TrialId { get; protected set; }
     public int ParticipantId { get; set; }
     public DateTime startDateTime { get; protected set; }
     public string Technique { get; set; }
     public string TextSize { get; set; }
     public string ClassificationDistance { get; set; }
-    public TimeSpan TotalTime { get; protected set; }
+    public float TotalTime { get; protected set; }
     public int TrialNumber { get; set; }
 
     // Variables
 
-    protected Stopwatch stopWatch = new Stopwatch();
+    protected float stopWatch;
 
     // MonoBehaviour
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
+      base.Awake();
       TrialId = 0;
     }
 
@@ -32,7 +35,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     public override void StartLogger()
     {
-      Filename = "participant-" + ParticipantId + ".csv";
+      Filename = "participant-" + ParticipantId + "-" + DeviceControllerName + ".csv";
       Columns = new List<string>() { "TrialId", "ParticipantId", "StartDateTime", "Technique", "TextSize",
         "ClassificationDistance", "TotalTime", "TrialNumber" };
       base.StartLogger();
@@ -40,30 +43,26 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     public override void PrepareNextRow()
     {
-      NextRow.Clear();
       startDateTime = DateTime.Now;
-      stopWatch.Start();
+      stopWatch = Time.unscaledDeltaTime;
     }
 
     public override void WriteRow()
     {
-      stopWatch.Stop();
-      TotalTime = stopWatch.Elapsed;
+      TotalTime = Time.unscaledDeltaTime - stopWatch;
 
-      NextRow.AddRange(new string[]
-      {
-        TrialId.ToString(),
-        ParticipantId.ToString(),
-        startDateTime.ToString("yyyy-MM-dd HH-mm-ss"),
-        Technique,
-        TextSize,
-        ClassificationDistance,
-        TotalTime.TotalSeconds.ToString(),
-        TrialNumber.ToString(),
-      });
+      AddToNextRow(TrialId);
+      AddToNextRow(ParticipantId);
+      AddToNextRow(startDateTime);
+      AddToNextRow(Technique);
+      AddToNextRow(TextSize);
+      AddToNextRow(ClassificationDistance);
+      AddToNextRow(TotalTime);
+      AddToNextRow(TrialNumber);
+
+      TrialId++;
 
       base.WriteRow();
-      TrialId++;
     }
   }
 }
