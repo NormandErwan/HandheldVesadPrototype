@@ -15,12 +15,13 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     public List<string> Columns { get; protected set; }
 
-    protected List<string> NextRow { get; private set; }
+    protected string[] NextRow { get; private set; }
 
     // Variables
 
     protected CsvFileWriter csvWriter;
     protected string dataPath;
+    protected int columnIndex = 0;
 
     // MonoBehaviour methods
 
@@ -41,26 +42,21 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     public virtual void StartLogger()
     {
-      FilePath = Path.Combine(dataPath, Filename);
+      NextRow = new string[Columns.Count];
 
+      FilePath = Path.Combine(dataPath, Filename);
       csvWriter = new CsvFileWriter(FilePath);
       csvWriter.WriteRow(Columns);
-
-      NextRow = new List<string>(Columns.Count);
-      for (int i = 0; i < Columns.Count; i++)
-      {
-        NextRow.Add("");
-      }
     }
 
     public virtual void PrepareNextRow()
     {
-      NextRow.Clear();
+      columnIndex = 0;
     }
 
     public virtual void WriteRow()
     {
-      csvWriter.WriteRow(NextRow);
+      csvWriter.WriteRow(new List<string>(NextRow));
     }
 
     public virtual void StopLogger()
@@ -68,19 +64,25 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       csvWriter.Dispose();
     }
 
+    protected virtual void AddToNextRow(int column, string text)
+    {
+      NextRow[column] = text;
+    }
+
     protected virtual void AddToNextRow(string text)
     {
-      NextRow.Add(text);
+      AddToNextRow(columnIndex, text);
+      columnIndex++;
     }
 
     protected virtual void AddToNextRow(int number)
     {
-      NextRow.Add(number.ToString());
+      AddToNextRow(number.ToString());
     }
 
     protected virtual void AddToNextRow(float number)
     {
-      NextRow.Add(number.ToString());
+      AddToNextRow(number.ToString());
     }
 
     protected virtual void AddToNextRow(DateTime dateTime)
