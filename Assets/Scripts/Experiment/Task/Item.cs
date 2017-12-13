@@ -88,6 +88,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public bool CorrectlyClassified { get; protected set; }
 
+    public SphereCollider Collider { get; protected set; }
+
     // Events
 
     public event Action<IInteractable> Interactable = delegate { };
@@ -100,7 +102,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     // Variables
 
-    protected new SphereCollider collider;
     protected Renderer itemClassTextRenderer;
 
     private ItemClass itemClass;
@@ -109,7 +110,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     protected virtual void Awake()
     {
-      collider = GetComponent<SphereCollider>();
+      Collider = GetComponent<SphereCollider>();
       SetInteractable(false);
       SetSelectable(false);
     }
@@ -166,8 +167,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       border.transform.localScale = new Vector3(Scale.x, Scale.y, 1f);
 
       // Configure the collider
-      collider.center = Vector3.zero;
-      collider.radius = 0.5f * Scale.x;
+      Collider.center = Vector3.zero;
+      Collider.radius = 0.5f * Scale.x;
 
       // Configure interactions
       SetInteractable(true);

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Inputs
 {
-  [RequireComponent(typeof(Collider))]
+  [RequireComponent(typeof(SphereCollider))]
   public class Cursor : MonoBehaviour, ICursor
   {
     // Constants
@@ -30,6 +30,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     // Properties
 
     public DeviceController DeviceController { get { return deviceController; } set { deviceController = value; } }
+    public SphereCollider Collider { get; protected set; }
 
     public bool IsFinger { get { return Type != CursorType.Look; } }
     public bool IsIndex { get { return Type == CursorType.LeftIndex || Type == CursorType.RightIndex; } }
@@ -45,6 +46,11 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     protected Dictionary<ITappable, float> tapTimers = new Dictionary<ITappable, float>();
 
     // Methods
+
+    protected virtual void Awake()
+    {
+      Collider = GetComponent<SphereCollider>();
+    }
 
     protected virtual void OnTriggerEnter(Collider other)
     {

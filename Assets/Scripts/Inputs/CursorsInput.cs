@@ -6,6 +6,10 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 {
   public abstract class CursorsInput : MonoBehaviour
   {
+    // Constants
+
+    protected static readonly float cursorColliderRadiusFactor = 0.65f;
+
     // Editor fields
 
     [SerializeField]

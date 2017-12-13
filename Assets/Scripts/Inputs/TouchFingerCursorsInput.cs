@@ -6,6 +6,10 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 {
   public class TouchFingerCursorsInput : CursorsInput
   {
+    // Constants
+
+    protected readonly static float fingerWidth = 0.005f;
+
     // Editor fields
 
     [SerializeField]
@@ -81,6 +85,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       var cursor = Cursors[keys[cursorId]];
       cursor.transform.position = new Vector3(cursorPosition.x, cursorPosition.y, PlaneToProjectCursors.position.z);
       cursor.transform.forward = planeToProjectCursors.forward;
+      cursor.transform.localScale = fingerWidth * Vector3.one;
 
       ActivateCursor(cursor.Type);
     }

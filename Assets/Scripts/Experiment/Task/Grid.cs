@@ -61,6 +61,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     protected List<Inputs.Cursor> triggeredFingers = new List<Inputs.Cursor>();
     protected Vector3 fingerPanningLastPosition;
     protected Vector3 zoomStartedScale, zoomStartedPosition;
+    protected float zoomStartedItemRadius;
 
     protected Item selectedItem;
 
@@ -131,6 +132,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       {
         zoomStartedScale = transform.localScale;
         zoomStartedPosition = transform.position - transform.lossyScale / 2;
+        zoomStartedItemRadius = Elements[0].Elements[0].Collider.radius;
+
         ZoomingStarted(this);
       }
       else
@@ -151,6 +154,15 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       var translationProjected = Vector3.ProjectOnPlane(translation, -transform.forward);
       var previousTranslationProjected = Vector3.ProjectOnPlane(originalTranslation, -transform.forward);
       transform.position = zoomStartedPosition + translationProjected - previousTranslationProjected; // TODO: fix
+
+      // Fix collider bug
+      foreach (var container in Elements)
+      {
+        foreach (var item in container.Elements)
+        {
+          item.Collider.radius = zoomStartedItemRadius * scaleFactor;
+        }
+      }
     }
 
     // Methods
