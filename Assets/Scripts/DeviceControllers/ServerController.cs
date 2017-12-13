@@ -1,4 +1,6 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
+using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
+using NormandErwan.MasterThesis.Experiment.Loggers;
 using NormandErwan.MasterThesis.Experiment.UI.HUD;
 using UnityEngine;
 
@@ -11,7 +13,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     [SerializeField]
     private ServerHUD serverHUD;
 
-    // Methods
+    // MonoBehaviour methods
 
     protected override void OnEnable()
     {
@@ -27,6 +29,14 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       serverHUD.RequestNextState -= ServerHUD_RequestNextState;
     }
 
+    protected override void Start()
+    {
+      base.Start();
+      ParticipantLogger.DeviceControllerName = "server";
+    }
+
+    // DeviceController methods
+
     protected override void StateController_CurrentStateUpdated(State currentState)
     {
       base.StateController_CurrentStateUpdated(currentState);
@@ -37,9 +47,13 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       serverHUD.DeactivateExperimentConfiguration();
 
+      // Configure (sync) the experiment
+      ParticipantId = serverHUD.ParticipantId;
+      ConditionsOrdering = serverHUD.ConditionsOrdering;
       ParticipantIsRightHanded = serverHUD.ParticipantIsRightHanded;
-      OnConfigureExperiment();
+      OnConfigureExperimentSync();
 
+      // Set the ordering in conditions (sync)
       if (serverHUD.ConditionsOrdering == 1)
       {
         var mainIndVar = StateController.independentVariables[0];
@@ -52,6 +66,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
         mainIndVar.NextCondition();
       }
 
+      // Begin (sync) the experiment
       StateController.BeginExperiment();
     }
 

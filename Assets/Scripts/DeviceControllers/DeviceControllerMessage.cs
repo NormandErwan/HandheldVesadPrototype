@@ -27,6 +27,10 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     public bool configureExperiment;
 
+    public int participantId;
+
+    public int conditionsOrdering;
+
     public bool participantIsRightHanded;
   }
 }

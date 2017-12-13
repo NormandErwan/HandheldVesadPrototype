@@ -28,14 +28,14 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       base.Awake();
 
       MessageTypes.Add(currentMessage.MessageType);
-      DeviceController.ConfigureExperiment += DeviceController_ConfigureExperiment;
-      DeviceController.RequestActivateTask += DeviceController_RequestActivateTask;
+      DeviceController.ConfigureExperimentSync += DeviceController_ConfigureExperimentSync;
+      DeviceController.ActivateTaskSync += DeviceController_ActivateTaskSync;
     }
 
     protected virtual void OnDestroy()
     {
-      DeviceController.ConfigureExperiment -= DeviceController_ConfigureExperiment;
-      DeviceController.RequestActivateTask -= DeviceController_RequestActivateTask;
+      DeviceController.ConfigureExperimentSync -= DeviceController_ConfigureExperimentSync;
+      DeviceController.ActivateTaskSync -= DeviceController_ActivateTaskSync;
     }
 
     protected override DevicesSyncMessage OnServerMessageReceived(NetworkMessage netMessage)
@@ -55,14 +55,16 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       return currentMessage;
     }
 
-    protected virtual void DeviceController_ConfigureExperiment()
+    protected virtual void DeviceController_ConfigureExperimentSync()
     {
       currentMessage.configureExperiment = true;
+      currentMessage.participantId = deviceController.ParticipantId;
+      currentMessage.conditionsOrdering = deviceController.ConditionsOrdering;
       currentMessage.participantIsRightHanded = deviceController.ParticipantIsRightHanded;
       SendToServer(currentMessage);
     }
 
-    protected virtual void DeviceController_RequestActivateTask()
+    protected virtual void DeviceController_ActivateTaskSync()
     {
       currentMessage.activateTask = true;
       SendToServer(currentMessage);
@@ -72,11 +74,13 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       if (currentMessage.configureExperiment)
       {
-        deviceController.ParticipantIsRightHanded = currentMessage.participantIsRightHanded;
+        deviceController.ConfigureExperiment(currentMessage.participantId, currentMessage.conditionsOrdering,
+          currentMessage.participantIsRightHanded);
       }
 
       if (currentMessage.activateTask)
       {
+        print("activate task sync");
         deviceController.ActivateTask();
       }
     }

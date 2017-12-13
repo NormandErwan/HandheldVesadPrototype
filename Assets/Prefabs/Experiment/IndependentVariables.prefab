@@ -416,7 +416,7 @@ MonoBehaviour:
   title: Difficile
   minimumAverageClassificationDistance: 2.5
   maximumAverageClassificationDistance: 2.7
-  numberOfItemsToClass: 11
+  numberOfItemsToClass: 3
 --- !u!114 &114102835371396286
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -544,7 +544,6 @@ MonoBehaviour:
   title: "Syst\xE8me utilis\xE9"
   conditions:
   - {fileID: 114102835371396286}
-  - {fileID: 114495023776505986}
   - {fileID: 114265026425476688}
 --- !u!114 &114623683837749356
 MonoBehaviour:
@@ -577,7 +576,7 @@ MonoBehaviour:
   title: Facile
   minimumAverageClassificationDistance: 1.25
   maximumAverageClassificationDistance: 1.45
-  numberOfItemsToClass: 11
+  numberOfItemsToClass: 2
 --- !u!114 &114759187420252978
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -591,7 +590,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2_Large
   title: Grand
-  fontSize: 64
+  fontSize: 54
 --- !u!114 &114784559623597272
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -621,7 +620,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1_Small
   title: Petit
-  fontSize: 64
+  fontSize: 36
 --- !u!114 &114999698179949338
 MonoBehaviour:
   m_ObjectHideFlags: 1

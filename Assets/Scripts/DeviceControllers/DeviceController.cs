@@ -1,4 +1,6 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
+using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
+using NormandErwan.MasterThesis.Experiment.Loggers;
 using System;
 using UnityEngine;
 
@@ -18,35 +20,43 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     [Range(0f, 0.05f)]
     private float maxSelectableDistance = 0.001f;
 
+    [SerializeField]
+    private ParticipantLogger participantLogger;
+
     // Properties
 
     public StateController StateController { get { return stateController; } set { stateController = value; } }
     public Experiment.Task.Grid Grid { get { return grid; } set { grid = value; } }
     public float MaxSelectableDistance { get { return maxSelectableDistance; } set { maxSelectableDistance = value; } }
 
-    public bool ParticipantIsRightHanded { get; internal set; }
+    public int ParticipantId { get; protected set; }
+    public int ConditionsOrdering { get; protected set; }
+    public bool ParticipantIsRightHanded { get; protected set; }
+
+    public ParticipantLogger ParticipantLogger { get { return participantLogger; } set { participantLogger = value; } }
 
     // Events
 
-    public event Action RequestActivateTask = delegate { };
-    public event Action ConfigureExperiment = delegate { };
+    public event Action ActivateTaskSync = delegate { };
+    public event Action ConfigureExperimentSync = delegate { };
 
-    // Methods
+    // Variables
 
-    /// <summary>
-    /// Configures and activates <see cref="Grid"/>.
-    /// </summary>
-    public virtual void ActivateTask()
-    {
-      Grid.Configure(StateController);
-      Grid.gameObject.SetActive(true);
-    }
+    protected IVTechnique ivTechnique;
+    protected IVClassificationDifficulty ivClassificationDifficulty;
+    protected IVTextSize ivTextSize;
+
+    // MonoBehaviour methods
 
     /// <summary>
     /// Deactivates <see cref="Grid"/>.
     /// </summary>
     protected virtual void Start()
     {
+      ivTechnique = StateController.GetIndependentVariable<IVTechnique>();
+      ivClassificationDifficulty = StateController.GetIndependentVariable<IVClassificationDifficulty>();
+      ivTextSize = StateController.GetIndependentVariable<IVTextSize>();
+
       Grid.gameObject.SetActive(false);
     }
 
@@ -64,6 +74,33 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       Grid.Finished -= Grid_Finished;
     }
 
+    // Methods
+
+    public virtual void ConfigureExperiment(int participantId, int conditionsOrdering, bool participantIsRightHanded)
+    {
+      ParticipantId = participantId;
+      ConditionsOrdering = conditionsOrdering;
+      ParticipantIsRightHanded = participantIsRightHanded;
+
+      ParticipantLogger.ParticipantId = ParticipantId;
+      ParticipantLogger.StartLogger();
+    }
+
+    /// <summary>
+    /// Configures and activates <see cref="Grid"/>.
+    /// </summary>
+    public virtual void ActivateTask()
+    {
+      ParticipantLogger.Technique = ivTechnique.CurrentCondition.id;
+      ParticipantLogger.TextSize = ivTextSize.CurrentCondition.id;
+      ParticipantLogger.ClassificationDistance = ivClassificationDifficulty.CurrentCondition.id;
+      ParticipantLogger.TrialNumber = StateController.CurrentTrial;
+      ParticipantLogger.PrepareNextRow();
+
+      Grid.Configure(StateController);
+      Grid.gameObject.SetActive(true);
+    }
+
     /// <summary>
     /// Deactivates <see cref="Grid"/> each new state.
     /// </summary>
@@ -77,23 +114,26 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     /// </summary>
     protected virtual void Grid_Finished()
     {
+      ParticipantLogger.WriteRow();
+
       stateController.NextState();
     }
 
     /// <summary>
-    /// Calls <see cref="RequestActivateTask"/>.
+    /// Calls <see cref="ActivateTaskSync"/>.
     /// </summary>
-    protected virtual void OnRequestActivateTask()
+    protected virtual void OnActivateTaskSync()
     {
-      RequestActivateTask();
+      print("activate task");
+      ActivateTaskSync();
     }
 
     /// <summary>
-    /// Calls <see cref="ConfigureExperiment"/>.
+    /// Calls <see cref="ConfigureExperimentSync"/>.
     /// </summary>
-    protected virtual void OnConfigureExperiment()
+    protected virtual void OnConfigureExperimentSync()
     {
-      ConfigureExperiment();
+      ConfigureExperimentSync();
     }
   }
 }

@@ -16,6 +16,9 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     [SerializeField]
     private TouchFingerCursorsInput touchFingerCursorsInput;
 
+    [SerializeField]
+    private new Camera camera;
+
     // Methods
 
     protected override void OnEnable()
@@ -34,6 +37,11 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       base.Start();
 
+      ParticipantLogger.DeviceControllerName = "mobile";
+
+      camera.orthographic = true;
+      camera.orthographicSize = 0.5f * Grid.transform.localScale.y * (Grid.ElementScale.y + Grid.ElementMargin.y);
+
       touchFingerCursorsInput.gameObject.SetActive(false);
 
       // TODO: remove, for debug testing only
@@ -45,10 +53,8 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       base.StateController_CurrentStateUpdated(currentState);
 
-      var indVarTechnique = StateController.GetIndependentVariable<IVTechnique>();
-      bool useTouchInput = indVarTechnique.CurrentCondition.useTouchInput;
-
-      touchFingerCursorsInput.gameObject.SetActive(useTouchInput);
+      bool useTouchInput = ivTechnique.CurrentCondition.useTouchInput;
+      touchFingerCursorsInput.gameObject.SetActive(currentState.ActivateTask && useTouchInput);
 
       mobileDeviceHUD.ShowValidateButton(true);
     }
@@ -58,7 +64,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       mobileDeviceHUD.ShowValidateButton(false);
       if (StateController.CurrentState.ActivateTask)
       {
-        OnRequestActivateTask(); // activate the task grid
+        OnActivateTaskSync(); // activate the task grid
       }
       else
       {

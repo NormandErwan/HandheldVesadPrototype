@@ -41,6 +41,8 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       base.Start();
 
+      ParticipantLogger.DeviceControllerName = "hmd";
+
       leapFingerCursorsInput.gameObject.SetActive(false);
       ActivateHand(true, false);
       ActivateHand(false, false);
@@ -55,10 +57,8 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       base.StateController_CurrentStateUpdated(currentState);
 
-      var indVarTechnique = StateController.GetIndependentVariable<IVTechnique>();
-      bool useLeapInput = indVarTechnique.CurrentCondition.useLeapInput;
-
-      leapFingerCursorsInput.gameObject.SetActive(useLeapInput);
+      bool useLeapInput = ivTechnique.CurrentCondition.useLeapInput;
+      leapFingerCursorsInput.gameObject.SetActive(currentState.ActivateTask && useLeapInput);
       ActivateHand(ParticipantIsRightHanded, currentState.ActivateTask && useLeapInput);
 
       hmdDeviceHUD.ShowContent(true);

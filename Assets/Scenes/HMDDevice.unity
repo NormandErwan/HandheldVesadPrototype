@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4366757, g: 0.48427194, b: 0.5645252, a: 1}
+  m_IndirectSpecularColor: {r: 0.43667546, g: 0.48427135, b: 0.5645225, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -1100,12 +1100,12 @@ Prefab:
     - target: {fileID: 224663951439573798, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 595
+      value: 437.5
       objectReference: {fileID: 0}
     - target: {fileID: 224663951439573798, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 323
+      value: 216
       objectReference: {fileID: 0}
     - target: {fileID: 224663951439573798, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
@@ -1195,7 +1195,7 @@ Prefab:
     - target: {fileID: 224538788333267750, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 205.23093
+      value: 193.40436
       objectReference: {fileID: 0}
     - target: {fileID: 224280364903364314, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
@@ -1205,12 +1205,12 @@ Prefab:
     - target: {fileID: 224556241811007488, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: -460.16235
+      value: -483.00662
       objectReference: {fileID: 0}
     - target: {fileID: 224556241811007488, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 250.23099
+      value: 238.40442
       objectReference: {fileID: 0}
     - target: {fileID: 224969021351808344, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
@@ -1220,7 +1220,7 @@ Prefab:
     - target: {fileID: 224936207022536966, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: -44.63208
+      value: -44.298683
       objectReference: {fileID: 0}
     - target: {fileID: 224538788333267750, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
@@ -1412,11 +1412,6 @@ Prefab:
       propertyPath: leapFingerCursorsInput
       value: 
       objectReference: {fileID: 891901926}
-    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
-        type: 2}
-      propertyPath: cursorsSync
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c83279399cead4249aca272be50a7ac0, type: 2}
   m_IsPrefabParent: 0

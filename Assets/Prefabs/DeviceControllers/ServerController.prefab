@@ -319,6 +319,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1603441957086368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4354918733851706}
+  - component: {fileID: 114022431547797296}
+  m_Layer: 0
+  m_Name: Loggers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1640221040704224
 GameObject:
   m_ObjectHideFlags: 1
@@ -453,6 +469,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &4354918733851706
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1603441957086368}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4402858502294664}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4402858502294664
 Transform:
   m_ObjectHideFlags: 1
@@ -463,6 +492,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 4354918733851706}
   - {fileID: 224873999866407996}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -500,6 +530,17 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 'Participant id :'
+--- !u!114 &114022431547797296
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1603441957086368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32f1fca08794f9f48a8200271d7d6ce3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114094356854643574
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1138,6 +1179,7 @@ MonoBehaviour:
   grid: {fileID: 0}
   maxSelectableDistance: 0.001
   serverHUD: {fileID: 114144970937663040}
+  participantLogger: {fileID: 114022431547797296}
 --- !u!114 &114779574891830982
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1957,7 +1999,7 @@ RectTransform:
   - {fileID: 224911233874760896}
   - {fileID: 224244501972561576}
   m_Father: {fileID: 4402858502294664}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

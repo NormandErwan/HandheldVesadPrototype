@@ -50,7 +50,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     protected override void UpdateCursors()
     {
-#if UNITY_EDITOR
+#if UNITY_EDITOR || !UNITY_ANDROID
       if (Input.GetKey(KeyCode.Mouse0))
       {
         UpdateCursor(0, Input.mousePosition);
