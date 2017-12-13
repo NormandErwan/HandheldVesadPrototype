@@ -7,10 +7,6 @@ namespace NormandErwan.MasterThesis.Experiment.UI.Grid
     where T : IGridElement<T>
     where U : IGridElement<U>
   {
-    // Constants
-
-    public readonly int ElementsZOffset = 5;
-
     // Editor fields
 
     [Header("Grid")]
@@ -88,7 +84,7 @@ namespace NormandErwan.MasterThesis.Experiment.UI.Grid
     {
       // Configure grid placement
       var gridPosition = 0.5f * Scale - ElementMargin - 0.5f * ElementScale;
-      ElementsParent.localPosition = new Vector3(-gridPosition.x, gridPosition.y, -ElementsZOffset);
+      ElementsParent.localPosition = new Vector3(-gridPosition.x, gridPosition.y, 0f);
       ElementsParent.localScale = Vector3.one;
 
       // Configure elements placement

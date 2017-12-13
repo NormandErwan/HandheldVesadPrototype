@@ -30,7 +30,6 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     // Properties
 
     public DeviceController DeviceController { get { return deviceController; } set { deviceController = value; } }
-    public SphereCollider Collider { get; protected set; }
 
     public bool IsFinger { get { return Type != CursorType.Look; } }
     public bool IsIndex { get { return Type == CursorType.LeftIndex || Type == CursorType.RightIndex; } }
@@ -46,11 +45,6 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     protected Dictionary<ITappable, float> tapTimers = new Dictionary<ITappable, float>();
 
     // Methods
-
-    protected virtual void Awake()
-    {
-      Collider = GetComponent<SphereCollider>();
-    }
 
     protected virtual void OnTriggerEnter(Collider other)
     {
@@ -78,14 +72,6 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
           latestCursorPositions[transformable][this] = transform.position;
         });
 
-        GetInteractable<IDraggable>(other, (draggable) =>
-        {
-          if (latestCursorPositions[draggable].Count > 1 && draggable.IsDragging)
-          {
-            draggable.SetDragging(false); // Only one finger can drag, cancel if more than one finger
-          }
-        });
-
         GetInteractable<IZoomable>(other, (zoomable) =>
         {
           if (latestCursorPositions[zoomable].Count == 2 && !zoomable.IsZooming)
@@ -98,21 +84,32 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
           }
         });
 
-        GetInteractable<ILongPressable>(other, (longPressable) =>
+        if (IsIndex)
         {
-          if (longPressable.IsSelectable)
+          GetInteractable<IDraggable>(other, (draggable) =>
           {
-            longPressTimers.Add(longPressable, 0);
+            if (latestCursorPositions[draggable].Count > 1 && draggable.IsDragging)
+            {
+              draggable.SetDragging(false); // Only one finger can drag, cancel if more than one finger
           }
-        });
+          });
 
-        GetInteractable<ITappable>(other, (tappable) =>
-        {
-          if (tappable.IsSelectable)
+          GetInteractable<ILongPressable>(other, (longPressable) =>
           {
-            tapTimers.Add(tappable, 0);
-          }
-        });
+            if (longPressable.IsSelectable)
+            {
+              longPressTimers.Add(longPressable, 0);
+            }
+          });
+
+          GetInteractable<ITappable>(other, (tappable) =>
+          {
+            if (tappable.IsSelectable)
+            {
+              tapTimers.Add(tappable, 0);
+            }
+          });
+        }
       }
     }
 
@@ -128,24 +125,6 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
       if (IsFinger)
       {
-        GetInteractable<IDraggable>(other, (draggable) =>
-        {
-          if (draggable.IsInteractable && latestCursorPositions[draggable].Count == 1)
-          {
-            var translation = transform.position - latestCursorPositions[draggable][this];
-            if (draggable.IsDragging)
-            {
-              latestCursorPositions[draggable][this] = transform.position;
-              draggable.Drag(translation);
-            }
-            else if (translation.magnitude > DeviceController.MaxSelectableDistance)
-            {
-              latestCursorPositions[draggable][this] = transform.position;
-              draggable.SetDragging(true);
-            }
-          }
-        });
-
         GetInteractable<IZoomable>(other, (zoomable) =>
         {
           if (zoomable.IsInteractable && zoomable.IsZooming)
@@ -163,40 +142,61 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
           }
         });
 
-        GetInteractable<ILongPressable>(other, (longPressable) =>
+        if (IsIndex)
         {
-          if (longPressTimers.ContainsKey(longPressable))
+          GetInteractable<IDraggable>(other, (draggable) =>
           {
-            if (!longPressable.IsInteractable || !longPressable.IsSelectable)
+            if (draggable.IsInteractable && latestCursorPositions[draggable].Count == 1)
             {
-              longPressTimers.Remove(longPressable);
+              var translation = transform.position - latestCursorPositions[draggable][this];
+              if (draggable.IsDragging)
+              {
+                latestCursorPositions[draggable][this] = transform.position;
+                draggable.Drag(translation);
+              }
+              else if (translation.magnitude > DeviceController.MaxSelectableDistance)
+              {
+                latestCursorPositions[draggable][this] = transform.position;
+                draggable.SetDragging(true);
+              }
             }
-            else if (longPressTimers[longPressable] < longPressMinTime)
-            {
-              longPressTimers[longPressable] += Time.deltaTime;
-            }
-            else
-            {
-              longPressable.SetSelected(true);
-              longPressTimers.Remove(longPressable);
-            }
-          }
-        });
+          });
 
-        GetInteractable<ITappable>(other, (tappable) =>
-        {
-          if (tapTimers.ContainsKey(tappable))
+          GetInteractable<ILongPressable>(other, (longPressable) =>
           {
-            if (!tappable.IsInteractable || !tappable.IsSelectable)
+            if (longPressTimers.ContainsKey(longPressable))
             {
-              tapTimers.Remove(tappable);
+              if (!longPressable.IsInteractable || !longPressable.IsSelectable)
+              {
+                longPressTimers.Remove(longPressable);
+              }
+              else if (longPressTimers[longPressable] < longPressMinTime)
+              {
+                longPressTimers[longPressable] += Time.deltaTime;
+              }
+              else
+              {
+                longPressable.SetSelected(true);
+                longPressTimers.Remove(longPressable);
+              }
             }
-            else if (tapTimers[tappable] < tapTimeout)
+          });
+
+          GetInteractable<ITappable>(other, (tappable) =>
+          {
+            if (tapTimers.ContainsKey(tappable))
             {
-              tapTimers[tappable] += Time.deltaTime;
+              if (!tappable.IsInteractable || !tappable.IsSelectable)
+              {
+                tapTimers.Remove(tappable);
+              }
+              else if (tapTimers[tappable] < tapTimeout)
+              {
+                tapTimers[tappable] += Time.deltaTime;
+              }
             }
-          }
-        });
+          });
+        }
       }
     }
 
@@ -214,14 +214,6 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
           latestCursorPositions[transformable].Remove(this);
         });
 
-        GetInteractable<IDraggable>(other, (draggable) =>
-        {
-          if (latestCursorPositions[draggable].Count == 0 && draggable.IsDragging)
-          {
-            draggable.SetDragging(false);
-          }
-        });
-
         GetInteractable<IZoomable>(other, (zoomable) =>
         {
           if (latestCursorPositions[zoomable].Count < 2 && zoomable.IsZooming)
@@ -230,25 +222,36 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
           }
         });
 
-        GetInteractable<ILongPressable>(other, (longPressable) =>
+        if (IsIndex)
         {
-          if (longPressTimers.ContainsKey(longPressable))
+          GetInteractable<IDraggable>(other, (draggable) =>
           {
-            longPressTimers.Remove(longPressable);
-          }
-        });
-
-        GetInteractable<ITappable>(other, (tappable) =>
-        {
-          if (tapTimers.ContainsKey(tappable))
-          {
-            if (tappable.IsInteractable && tappable.IsSelectable && tapTimers[tappable] < tapTimeout)
+            if (latestCursorPositions[draggable].Count == 0 && draggable.IsDragging)
             {
-              tappable.SetSelected(true);
+              draggable.SetDragging(false);
             }
-            tapTimers.Remove(tappable);
-          }
-        });
+          });
+
+          GetInteractable<ILongPressable>(other, (longPressable) =>
+          {
+            if (longPressTimers.ContainsKey(longPressable))
+            {
+              longPressTimers.Remove(longPressable);
+            }
+          });
+
+          GetInteractable<ITappable>(other, (tappable) =>
+          {
+            if (tapTimers.ContainsKey(tappable))
+            {
+              if (tappable.IsInteractable && tappable.IsSelectable && tapTimers[tappable] < tapTimeout)
+              {
+                tappable.SetSelected(true);
+              }
+              tapTimers.Remove(tappable);
+            }
+          });
+        }
       }
     }
 

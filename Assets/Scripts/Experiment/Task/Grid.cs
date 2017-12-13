@@ -3,6 +3,7 @@ using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
 using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using NormandErwan.MasterThesis.Experiment.UI.Grid;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -117,7 +118,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         DraggingStopped(this);
       }
 
-      SetContainersInteractable(!IsDragging && !IsZooming);
+      StartCoroutine(SetContainersInteractable(!IsDragging && !IsZooming));
     }
 
     public void Drag(Vector3 translation)
@@ -141,7 +142,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         ZoomingStopped(this);
       }
 
-      SetContainersInteractable(!IsDragging && !IsZooming);
+      StartCoroutine(SetContainersInteractable(!IsDragging && !IsZooming));
     }
 
     public void Zoom(Vector3 distance, Vector3 originalDistance, Vector3 translation, Vector3 originalTranslation)
@@ -231,7 +232,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       // Finish the grid configuration
       float itemSize = Elements[0].ElementScale.x;
       collider.center = new Vector3(0f, 0f, itemSize);
-      collider.size = new Vector3(Scale.x, Scale.y, 3f * itemSize);
+      collider.size = new Vector3(Scale.x, Scale.y, 3f * itemSize + itemSize/2f);
 
       background.transform.localScale = new Vector3(Scale.x, Scale.y, 1);
     }
@@ -312,8 +313,13 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       }
     }
 
-    protected virtual void SetContainersInteractable(bool value)
+    protected virtual IEnumerator SetContainersInteractable(bool value)
     {
+      if (value)
+      {
+        yield return null;
+      }
+
       foreach (var container in Elements)
       {
         container.SetInteractable(value);
