@@ -2,6 +2,7 @@
 using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
 using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using NormandErwan.MasterThesis.Experiment.UI.Grid;
+using NormandErwan.MasterThesis.Experiment.Utilities;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -62,6 +63,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     protected Vector3 fingerPanningLastPosition;
     protected Vector3 zoomStartedScale, zoomStartedPosition;
     protected float zoomStartedItemRadius;
+    protected Range<float> localScaleRange;
 
     protected Item selectedItem;
 
@@ -74,10 +76,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     {
       base.Awake();
       collider = GetComponent<BoxCollider>();
-
-      transform.localScale = scaleFactor * Vector3.one; // Scales the canvas as it's in world reference
-
-      SetInteractable(true);
     }
 
     protected virtual void OnDestroy()
@@ -123,6 +121,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public void Drag(Vector3 translation)
     {
       transform.position += Vector3.ProjectOnPlane(translation, -transform.forward);
+      ClampPositionScale();
     }
 
     public void SetZooming(bool value)
@@ -146,21 +145,24 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public void Zoom(Vector3 distance, Vector3 originalDistance, Vector3 translation, Vector3 originalTranslation)
     {
+      // Scale with the zoom factor
       var distanceProjected = Vector3.ProjectOnPlane(distance, -transform.forward);
       var previousDistanceProjected = Vector3.ProjectOnPlane(originalDistance, -transform.forward);
-      var scaleFactor = distanceProjected.magnitude / previousDistanceProjected.magnitude;
-      transform.localScale = new Vector3(zoomStartedScale.x * scaleFactor, zoomStartedScale.y * scaleFactor, zoomStartedScale.z);
+      var zoomFactor = distanceProjected.magnitude / previousDistanceProjected.magnitude;
+      transform.localScale = new Vector3(zoomStartedScale.x * zoomFactor, zoomStartedScale.y * zoomFactor, zoomStartedScale.z);
 
       var translationProjected = Vector3.ProjectOnPlane(translation, -transform.forward);
       var previousTranslationProjected = Vector3.ProjectOnPlane(originalTranslation, -transform.forward);
       transform.position = zoomStartedPosition + translationProjected - previousTranslationProjected; // TODO: fix
+
+      ClampPositionScale();
 
       // Fix collider bug
       foreach (var container in Elements)
       {
         foreach (var item in container.Elements)
         {
-          item.Collider.radius = zoomStartedItemRadius * scaleFactor;
+          item.Collider.radius = zoomStartedItemRadius * zoomFactor;
         }
       }
     }
@@ -177,6 +179,10 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public override void Configure()
     {
+      // Reset transform
+      transform.localPosition = Vector3.zero;
+      transform.localScale = scaleFactor * Vector3.one; // Scales the canvas as it's in world reference
+
       // Configure the grid
       CleanGrid();
       base.Configure();
@@ -186,7 +192,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       var classificationCondition = iVClassificationDifficulty.CurrentCondition;
 
       int gridNumber = 0;
-      GridGenerator gridGenerator;
+      GridGenerator gridGenerator; // TODO: sync this generation
       do
       {
         gridGenerator = new GridGenerator(GridSize.y, GridSize.x, Elements[0].ElementsInstantiatedAtConfigure,
@@ -229,11 +235,14 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       }
 
       // Finish the grid configuration
-      float itemSize = Elements[0].ElementScale.x;
+      float itemSize = Elements[0].ElementScale.x; // items have same size in x and in y
       collider.center = new Vector3(0f, 0f, itemSize);
       collider.size = new Vector3(Scale.x, Scale.y, 3f * itemSize);
 
       background.transform.localScale = new Vector3(Scale.x, Scale.y, 1);
+      localScaleRange = new Range<float>(ElementScale.y / Scale.y * scaleFactor, ElementScale.x / itemSize * scaleFactor);
+
+      SetInteractable(true);
     }
 
     protected virtual void Container_Selected(Container container)
@@ -335,6 +344,19 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         }
       }
       return parentContainer;
+    }
+
+    protected virtual void ClampPositionScale()
+    {
+      // Clamp scale
+      float localScale = Mathf.Clamp(transform.localScale.x, localScaleRange.Minimum, localScaleRange.Maximum);
+      transform.localScale = new Vector3(localScale, localScale, transform.localScale.z);
+
+      // Clamp position
+      Vector2 translationMax = (Vector2.Scale(transform.localScale, Scale) - scaleFactor * ElementScale) / 2;
+      float localPositionX = Mathf.Clamp(transform.localPosition.x, -translationMax.x, translationMax.x);
+      float localPositionY = Mathf.Clamp(transform.localPosition.y, -translationMax.y, translationMax.y);
+      transform.localPosition = new Vector3(localPositionX, localPositionY, transform.localPosition.z);
     }
   }
 }

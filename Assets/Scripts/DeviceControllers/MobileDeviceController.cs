@@ -16,6 +16,9 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     [SerializeField]
     private TouchFingerCursorsInput touchFingerCursorsInput;
 
+    [SerializeField]
+    private new Camera camera;
+
     // Methods
 
     protected override void OnEnable()
@@ -33,6 +36,9 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     protected override void Start()
     {
       base.Start();
+
+      camera.orthographic = true;
+      camera.orthographicSize = 0.5f * Grid.transform.localScale.y * (Grid.ElementScale.y + Grid.ElementMargin.y);
 
       touchFingerCursorsInput.gameObject.SetActive(false);
 

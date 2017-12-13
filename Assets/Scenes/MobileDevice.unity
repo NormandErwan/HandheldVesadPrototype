@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -192,6 +192,11 @@ Prefab:
         type: 2}
       propertyPath: m_NetworkAddress
       value: 192.168.137.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114607292408350858, guid: 271a4db9a82ef2a42ad2918c1e923109,
+        type: 2}
+      propertyPath: m_LogLevel
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 271a4db9a82ef2a42ad2918c1e923109, type: 2}
@@ -524,12 +529,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 61698222a95f4734783382f651cd5cba, type: 2}
   m_IsPrefabParent: 0
---- !u!114 &1113834579 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114455525047258568, guid: 1af7da660e405ea4d88d276210dfa5c0,
-    type: 2}
-  m_PrefabInternal: {fileID: 1372156097}
-  m_Script: {fileID: 11500000, guid: 8e8da5a12ccb2c142909682ad56957e9, type: 3}
 --- !u!114 &1189171530 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114158752525081080, guid: a3b64898f2954384a989df0bbfd40e80,
@@ -867,7 +866,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4494200272367184, guid: 8da6483971380fd418dac0b21a143fad, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 1
+      value: 0.50000006
       objectReference: {fileID: 0}
     - target: {fileID: 4494200272367184, guid: 8da6483971380fd418dac0b21a143fad, type: 2}
       propertyPath: m_LocalRotation.x
@@ -894,6 +893,14 @@ Prefab:
       propertyPath: stateController
       value: 
       objectReference: {fileID: 746225671}
+    - target: {fileID: 4494200272367184, guid: 8da6483971380fd418dac0b21a143fad, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 0.00010000029
+      objectReference: {fileID: 0}
+    - target: {fileID: 4494200272367184, guid: 8da6483971380fd418dac0b21a143fad, type: 2}
+      propertyPath: m_LocalScale.z
+      value: 0.00010000029
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8da6483971380fd418dac0b21a143fad, type: 2}
   m_IsPrefabParent: 0
@@ -961,12 +968,12 @@ Prefab:
     - target: {fileID: 224224068287543308, guid: 7058ab5c7e35fb14fbfc6efdeb93268b,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 595
+      value: 151.5
       objectReference: {fileID: 0}
     - target: {fileID: 224224068287543308, guid: 7058ab5c7e35fb14fbfc6efdeb93268b,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 323
+      value: 242
       objectReference: {fileID: 0}
     - target: {fileID: 114394180611686014, guid: 7058ab5c7e35fb14fbfc6efdeb93268b,
         type: 2}
@@ -991,12 +998,17 @@ Prefab:
         type: 2}
       propertyPath: cursorsSync
       value: 
-      objectReference: {fileID: 1113834579}
+      objectReference: {fileID: 0}
     - target: {fileID: 114394180611686014, guid: 7058ab5c7e35fb14fbfc6efdeb93268b,
         type: 2}
       propertyPath: maxSelectableDistance
       value: 0.0005
       objectReference: {fileID: 0}
+    - target: {fileID: 114394180611686014, guid: 7058ab5c7e35fb14fbfc6efdeb93268b,
+        type: 2}
+      propertyPath: camera
+      value: 
+      objectReference: {fileID: 1468961874}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7058ab5c7e35fb14fbfc6efdeb93268b, type: 2}
   m_IsPrefabParent: 0
