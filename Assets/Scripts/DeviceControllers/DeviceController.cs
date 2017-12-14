@@ -34,7 +34,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     public event Action ActivateTaskSync = delegate { };
     public event Action ConfigureExperimentSync = delegate { };
-    public event Action<bool> ToogleZoomModeSync = delegate { };
+    public event Action<bool> ToogleZoomSync = delegate { };
 
     // Variables
 
@@ -96,7 +96,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       Grid.gameObject.SetActive(true);
     }
 
-    public virtual void ZoomModeActivated(bool value)
+    public virtual void ToggleZoom(bool activated)
     {
     }
 
@@ -136,11 +136,11 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
 
     /// <summary>
-    /// Calls <see cref="ToogleZoomModeSync"/>.
+    /// Calls <see cref="ToogleZoomSync"/>.
     /// </summary>
     protected virtual void OnToogleZoomModeSync(bool zoomModeActivated)
     {
-      ToogleZoomModeSync(zoomModeActivated);
+      ToogleZoomSync(zoomModeActivated);
     }
   }
 }

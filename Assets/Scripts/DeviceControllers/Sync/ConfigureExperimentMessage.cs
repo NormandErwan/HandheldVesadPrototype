@@ -1,8 +1,8 @@
 ﻿using DevicesSyncUnity.Messages;
 
-namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
+namespace NormandErwan.MasterThesis.Experiment.DeviceControllers.Sync
 {
-  public class DeviceControllerMessage : DevicesSyncMessage
+  public class ConfigureExperimentMessage : DevicesSyncMessage
   {
     // Properties
 
@@ -14,7 +14,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     /// <summary>
     /// See <see cref="DevicesSyncMessage.MessageType"/>.
     /// </summary>
-    public override short MessageType { get { return MasterThesis.Experiment.MessageType.DeviceController; } }
+    public override short MessageType { get { return MasterThesis.Experiment.MessageType.DeviceControllerConfigureExperiment; } }
 
     // Variables
 
@@ -23,14 +23,8 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     /// </summary>
     public int senderConnectionId;
 
-    public bool activateTask;
-
-    public bool configureExperiment;
     public int participantId;
     public int conditionsOrdering;
     public bool participantIsRightHanded;
-
-    public bool toggleZoomMode;
-    public bool zoomModeActivated;
   }
 }

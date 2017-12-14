@@ -58,9 +58,9 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       hmdDeviceHUD.ShowContent(false);
     }
 
-    public override void ZoomModeActivated(bool value)
+    public override void ToggleZoom(bool activated)
     {
-      base.ZoomModeActivated(value);
+      base.ToggleZoom(activated);
       // TODO
     }
 
