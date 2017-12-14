@@ -2,6 +2,7 @@
 using NormandErwan.MasterThesis.Experiment.Experiment.States;
 using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
 using NormandErwan.MasterThesis.Experiment.Inputs;
+using NormandErwan.MasterThesis.Experiment.Loggers;
 using NormandErwan.MasterThesis.Experiment.UI.HUD;
 using UnityEngine;
 
@@ -12,19 +13,22 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     // Editor fields
 
     [SerializeField]
+    private ParticipantLogger participantLogger;
+
+    [SerializeField]
     private HMDDeviceHUD hmdDeviceHUD;
 
     [SerializeField]
-    private GameObject LeftLeapMotionHand;
+    private GameObject leftLeapMotionHand;
 
     [SerializeField]
-    private GameObject LeftHandCursors;
+    private GameObject leftHandCursors;
 
     [SerializeField]
-    private GameObject RightLeapMotionHand;
+    private GameObject rightLeapMotionHand;
 
     [SerializeField]
-    private GameObject RightHandCursors;
+    private GameObject rightHandCursors;
 
     [SerializeField]
     private LeapFingerCursorsInput leapFingerCursorsInput;
@@ -33,18 +37,25 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     [Range(0f, 0.05f)]
     private float maxSelectableDistance = 0.001f;
 
+    // Properties
+
+    public ParticipantLogger ParticipantLogger { get { return participantLogger; } set { participantLogger = value; } }
+    public HMDDeviceHUD HMDDeviceHUD { get { return hmdDeviceHUD; } set { hmdDeviceHUD = value; } }
+    public LeapFingerCursorsInput LeapFingerCursorsInput { get { return leapFingerCursorsInput; } set { leapFingerCursorsInput = value; } }
+
     // Methods
 
     protected override void Start()
     {
       base.Start();
 
-      ParticipantLogger.DeviceControllerName = "hmd";
-
-      leapFingerCursorsInput.Configure(maxSelectableDistance);
-      leapFingerCursorsInput.gameObject.SetActive(false);
+      LeapFingerCursorsInput.Configure(maxSelectableDistance);
+      LeapFingerCursorsInput.gameObject.SetActive(false);
       ActivateHand(true, false);
       ActivateHand(false, false);
+
+      Grid.Completed += Grid_Completed;
+      Grid.Configured += Grid_Configured;
 
       // TODO: remove, for debug testing only
       /*ActivateHand(true, true);
@@ -52,10 +63,28 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       ActivateTask();*/
     }
 
+    protected override void OnDestroy()
+    {
+      base.OnDestroy();
+
+      Grid.Completed -= Grid_Completed;
+      Grid.Configured -= Grid_Configured;
+    }
+
+    // DeviceController methods
+
+    public override void ConfigureExperiment(int participantId, int conditionsOrdering, bool participantIsRightHanded)
+    {
+      base.ConfigureExperiment(participantId, conditionsOrdering, participantIsRightHanded);
+
+      ParticipantLogger.ParticipantId = ParticipantId;
+      ParticipantLogger.StartLogger();
+    }
+
     public override void ActivateTask()
     {
       base.ActivateTask();
-      hmdDeviceHUD.ShowContent(false);
+      HMDDeviceHUD.ShowContent(false);
     }
 
     public override void ToggleZoom(bool activated)
@@ -69,27 +98,43 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       base.StateController_CurrentStateUpdated(currentState);
 
       bool useLeapInput = ivTechnique.CurrentCondition.useLeapInput;
-      leapFingerCursorsInput.gameObject.SetActive(currentState.ActivateTask && useLeapInput);
+      LeapFingerCursorsInput.gameObject.SetActive(currentState.ActivateTask && useLeapInput);
       ActivateHand(ParticipantIsRightHanded, currentState.ActivateTask && useLeapInput);
 
       // TODO: deactivate zoom mode
 
-      hmdDeviceHUD.ShowContent(true);
-      hmdDeviceHUD.UpdateInstructionsProgress(StateController);
+      HMDDeviceHUD.ShowContent(true);
+      HMDDeviceHUD.UpdateInstructionsProgress(StateController);
     }
+
+    // Methods
 
     protected virtual void ActivateHand(bool rightHand, bool value)
     {
       if (rightHand)
       {
-        RightLeapMotionHand.SetActive(value);
-        RightHandCursors.SetActive(value);
+        rightLeapMotionHand.SetActive(value);
+        rightHandCursors.SetActive(value);
       }
       else
       {
-        LeftLeapMotionHand.SetActive(value);
-        LeftHandCursors.SetActive(value);
+        leftLeapMotionHand.SetActive(value);
+        leftHandCursors.SetActive(value);
       }
+    }
+
+    private void Grid_Configured()
+    {
+      ParticipantLogger.Technique = ivTechnique.CurrentCondition.id;
+      ParticipantLogger.TextSize = ivTextSize.CurrentCondition.id;
+      ParticipantLogger.ClassificationDistance = ivClassificationDifficulty.CurrentCondition.id;
+      ParticipantLogger.TrialNumber = StateController.CurrentTrial;
+      ParticipantLogger.PrepareNextRow();
+    }
+
+    protected virtual void Grid_Completed()
+    {
+      ParticipantLogger.WriteRow();
     }
   }
 }

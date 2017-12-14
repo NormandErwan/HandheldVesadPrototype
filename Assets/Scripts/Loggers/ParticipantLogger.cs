@@ -8,7 +8,6 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
   {
     // Properties
 
-    public string DeviceControllerName { get; set; }
     public int TrialId { get; protected set; }
     public int ParticipantId { get; set; }
     public DateTime startDateTime { get; protected set; }
@@ -34,7 +33,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     public override void StartLogger()
     {
-      Filename = "participant-" + ParticipantId + "-" + DeviceControllerName + ".csv";
+      Filename = "participant-" + ParticipantId + ".csv";
       Columns = new List<string>() { "TrialId", "ParticipantId", "StartDateTime", "Technique", "TextSize",
         "ClassificationDistance", "TotalTime", "TrialNumber" };
       base.StartLogger();

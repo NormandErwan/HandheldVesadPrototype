@@ -22,23 +22,26 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     [SerializeField]
     private new Camera camera;
 
+    // Properties
+
+    public MobileDeviceHUD MobileDeviceHUD { get { return mobileDeviceHUD; } set { mobileDeviceHUD = value; } }
+    public TouchFingerCursorsInput TouchFingerCursorsInput { get { return touchFingerCursorsInput; } set { touchFingerCursorsInput = value; } }
+
     // Methods
 
     protected override void Start()
     {
       base.Start();
 
-      ParticipantLogger.DeviceControllerName = "mobile";
-
       camera.orthographic = true;
       camera.orthographicSize = 0.5f * Grid.transform.localScale.y * (Grid.ElementScale.y + Grid.ElementMargin.y);
 
-      touchFingerCursorsInput.Configure(maxSelectableDistance);
-      touchFingerCursorsInput.gameObject.SetActive(false);
+      TouchFingerCursorsInput.Configure(maxSelectableDistance);
+      TouchFingerCursorsInput.gameObject.SetActive(false);
 
-      mobileDeviceHUD.ActivateTaskButtonPressed += MobileDeviceHUD_ActivateTaskButtonPressed;
-      mobileDeviceHUD.NextStateButtonPressed += MobileDeviceHUD_NextStateButtonPressed;
-      mobileDeviceHUD.ZoomModeToggleButtonPressed += MobileDeviceHUD_ZoomModeToggleButtonPressed;
+      MobileDeviceHUD.ActivateTaskButtonPressed += MobileDeviceHUD_ActivateTaskButtonPressed;
+      MobileDeviceHUD.NextStateButtonPressed += MobileDeviceHUD_NextStateButtonPressed;
+      MobileDeviceHUD.ZoomModeToggleButtonPressed += MobileDeviceHUD_ZoomModeToggleButtonPressed;
 
       // TODO: remove, for debug testing only
       /*StateController.BeginExperiment();
@@ -48,9 +51,10 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     protected override void OnDestroy()
     {
       base.OnDestroy();
-      mobileDeviceHUD.ActivateTaskButtonPressed -= MobileDeviceHUD_ActivateTaskButtonPressed;
-      mobileDeviceHUD.NextStateButtonPressed -= MobileDeviceHUD_NextStateButtonPressed;
-      mobileDeviceHUD.ZoomModeToggleButtonPressed -= MobileDeviceHUD_ZoomModeToggleButtonPressed;
+
+      MobileDeviceHUD.ActivateTaskButtonPressed -= MobileDeviceHUD_ActivateTaskButtonPressed;
+      MobileDeviceHUD.NextStateButtonPressed -= MobileDeviceHUD_NextStateButtonPressed;
+      MobileDeviceHUD.ZoomModeToggleButtonPressed -= MobileDeviceHUD_ZoomModeToggleButtonPressed;
     }
 
     public override void ActivateTask()
@@ -59,11 +63,11 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
       if (ivTechnique.CurrentCondition.useLeapInput)
       {
-        mobileDeviceHUD.ShowToggleButton(mobileDeviceHUD.ZoomModeToggleButton);
+        MobileDeviceHUD.ShowToggleButton(MobileDeviceHUD.ZoomModeToggleButton);
       }
       else if (ivTechnique.CurrentCondition.useTouchInput)
       {
-        touchFingerCursorsInput.gameObject.SetActive(true);
+        TouchFingerCursorsInput.gameObject.SetActive(true);
       }
     }
 
@@ -71,27 +75,27 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       base.StateController_CurrentStateUpdated(currentState);
 
-      touchFingerCursorsInput.gameObject.SetActive(false);
+      TouchFingerCursorsInput.gameObject.SetActive(false);
 
       if (currentState.ActivateTask)
       {
-        mobileDeviceHUD.ShowToggleButton(mobileDeviceHUD.ActivateTaskButton);
+        MobileDeviceHUD.ShowToggleButton(MobileDeviceHUD.ActivateTaskButton);
       }
       else
       {
-        mobileDeviceHUD.ShowToggleButton(mobileDeviceHUD.NextStateButton);
+        MobileDeviceHUD.ShowToggleButton(MobileDeviceHUD.NextStateButton);
       }
     }
 
     protected virtual void MobileDeviceHUD_ActivateTaskButtonPressed()
     {
-      mobileDeviceHUD.ShowToggleButton(null);
+      MobileDeviceHUD.ShowToggleButton(null);
       OnActivateTaskSync();
     }
 
     protected virtual void MobileDeviceHUD_NextStateButtonPressed()
     {
-      mobileDeviceHUD.ShowToggleButton(null);
+      MobileDeviceHUD.ShowToggleButton(null);
       StateController.NextState();
     }
 

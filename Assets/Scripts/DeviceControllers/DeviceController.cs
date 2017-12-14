@@ -16,9 +16,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     [SerializeField]
     private Experiment.Task.Grid grid;
 
-    [SerializeField]
-    private ParticipantLogger participantLogger;
-
     // Properties
 
     public StateController StateController { get { return stateController; } set { stateController = value; } }
@@ -27,8 +24,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     public int ParticipantId { get; protected set; }
     public int ConditionsOrdering { get; protected set; }
     public bool ParticipantIsRightHanded { get; protected set; }
-
-    public ParticipantLogger ParticipantLogger { get { return participantLogger; } set { participantLogger = value; } }
 
     // Events
 
@@ -49,24 +44,19 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     /// </summary>
     protected virtual void Start()
     {
-      // init vars
       ivTechnique = StateController.GetIndependentVariable<IVTechnique>();
       ivClassificationDifficulty = StateController.GetIndependentVariable<IVClassificationDifficulty>();
       ivTextSize = StateController.GetIndependentVariable<IVTextSize>();
 
-      // subscribe
-      StateController.CurrentStateUpdated += StateController_CurrentStateUpdated;
-      Grid.Finished += Grid_Finished;
-
-      // deactivate the grid
+      Grid.StateController = StateController;
       Grid.gameObject.SetActive(false);
+
+      StateController.CurrentStateUpdated += StateController_CurrentStateUpdated;
     }
 
     protected virtual void OnDestroy()
     {
-      // unsubscribes
       StateController.CurrentStateUpdated -= StateController_CurrentStateUpdated;
-      Grid.Finished -= Grid_Finished;
     }
 
     // Methods
@@ -76,46 +66,19 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       ParticipantId = participantId;
       ConditionsOrdering = conditionsOrdering;
       ParticipantIsRightHanded = participantIsRightHanded;
-
-      ParticipantLogger.ParticipantId = ParticipantId;
-      ParticipantLogger.StartLogger();
     }
 
-    /// <summary>
-    /// Configures and activates <see cref="Grid"/>.
-    /// </summary>
     public virtual void ActivateTask()
     {
-      ParticipantLogger.Technique = ivTechnique.CurrentCondition.id;
-      ParticipantLogger.TextSize = ivTextSize.CurrentCondition.id;
-      ParticipantLogger.ClassificationDistance = ivClassificationDifficulty.CurrentCondition.id;
-      ParticipantLogger.TrialNumber = StateController.CurrentTrial;
-      ParticipantLogger.PrepareNextRow();
-
-      Grid.Configure(StateController);
-      Grid.gameObject.SetActive(true);
     }
 
     public virtual void ToggleZoom(bool activated)
     {
     }
 
-    /// <summary>
-    /// Deactivates <see cref="Grid"/> each new state.
-    /// </summary>
     protected virtual void StateController_CurrentStateUpdated(State currentState)
     {
       Grid.gameObject.SetActive(false);
-    }
-
-    /// <summary>
-    /// Go to the next state when the <see cref="Grid"/> is finished.
-    /// </summary>
-    protected virtual void Grid_Finished()
-    {
-      ParticipantLogger.WriteRow();
-
-      stateController.NextState();
     }
 
     /// <summary>
@@ -133,7 +96,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       ConfigureExperimentSync();
     }
-
 
     /// <summary>
     /// Calls <see cref="ToogleZoomSync"/>.
