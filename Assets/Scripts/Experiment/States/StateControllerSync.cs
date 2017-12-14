@@ -1,5 +1,6 @@
 ﻿using DevicesSyncUnity;
 using DevicesSyncUnity.Messages;
+using UnityEngine;
 using UnityEngine.Networking;
 
 namespace NormandErwan.MasterThesis.Experiment.Experiment.States
@@ -11,15 +12,17 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.States
   {
     // Editor Fields
 
-    public StateController stateController;
+    [SerializeField]
+    private StateController stateController;
 
     // Properties
 
+    public StateController StateController { get { return stateController; } set { stateController = value; } }
     protected override int DefaultChannelId { get { return Channels.DefaultReliable; } }
 
     // Variables
 
-    protected StateControllerMessage currentStateMessage = new StateControllerMessage();
+    protected StateControllerMessage stateControllerMessage = new StateControllerMessage();
 
     // Methods
 
@@ -27,49 +30,37 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.States
     {
       base.Awake();
 
-      DeviceDisconnected += DevicesInfoSync_DeviceDisconnected;
-      stateController.RequestCurrentStateSync += StateManager_RequestCurrentStateSync;
+      StateController.CurrentStateSync += StateManager_CurrentStateSync;
 
-      MessageTypes.Add(currentStateMessage.MessageType);
+      MessageTypes.Add(stateControllerMessage.MessageType);
     }
 
     protected virtual void OnDestroy()
     {
-      DeviceDisconnected -= DevicesInfoSync_DeviceDisconnected;
-      stateController.RequestCurrentStateSync -= StateManager_RequestCurrentStateSync;
+      StateController.CurrentStateSync -= StateManager_CurrentStateSync;
     }
 
     protected override DevicesSyncMessage OnServerMessageReceived(NetworkMessage netMessage)
     {
-      currentStateMessage = netMessage.ReadMessage<StateControllerMessage>();
-      currentStateMessage.Restore(stateController);
-      return currentStateMessage;
+      var stateControllerMessage = netMessage.ReadMessage<StateControllerMessage>();
+      StateController.SetCurrentState(stateControllerMessage.currentStateId);
+      return stateControllerMessage;
     }
 
     protected override DevicesSyncMessage OnClientMessageReceived(NetworkMessage netMessage)
     {
-      var stateMessage = netMessage.ReadMessage<StateControllerMessage>();
+      var stateControllerMessage = netMessage.ReadMessage<StateControllerMessage>();
       if (!isServer)
       {
-        currentStateMessage = stateMessage;
-        currentStateMessage.Restore(stateController);
+        StateController.SetCurrentState(stateControllerMessage.currentStateId);
       }
-      return stateMessage;
+      return stateControllerMessage;
     }
 
-    protected virtual void DevicesInfoSync_DeviceDisconnected(int deviceId)
+    protected virtual void StateManager_CurrentStateSync(State currentState)
     {
-      if (deviceId != NetworkManager.client.connection.connectionId)
-      {
-        currentStateMessage.Update(stateController.CurrentState);
-        SendToClient(deviceId, currentStateMessage);
-      }
-    }
-
-    protected virtual void StateManager_RequestCurrentStateSync(State currentState)
-    {
-      currentStateMessage.Update(currentState);
-      SendToServer(currentStateMessage);
+      stateControllerMessage.currentStateId = StateController.CurrentState.id;
+      SendToServer(stateControllerMessage);
     }
   }
 }

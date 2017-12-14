@@ -27,17 +27,5 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.States
     public int senderConnectionId;
 
     public string currentStateId;
-
-    // Methods
-
-    public void Update(State currentState)
-    {
-      currentStateId = currentState.id;
-    }
-
-    public void Restore(StateController stateController)
-    {
-      stateController.SetCurrentState(currentStateId);
-    }
   }
 }

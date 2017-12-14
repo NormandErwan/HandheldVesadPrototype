@@ -1,4 +1,5 @@
 ﻿using DevicesSyncUnity.Messages;
+using System.Collections.Generic;
 
 namespace NormandErwan.MasterThesis.Experiment.Experiment.Variables
 {
@@ -35,7 +36,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Variables
       this.currentConditionId = currentConditionId;
     }
 
-    public void Restore(IIndependentVariable[] independentVariables)
+    public void Restore(List<IIndependentVariable> independentVariables)
     {
       foreach (var independentVariable in independentVariables)
       {

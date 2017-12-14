@@ -1,5 +1,7 @@
 ﻿using DevicesSyncUnity;
 using DevicesSyncUnity.Messages;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Networking;
 
 namespace NormandErwan.MasterThesis.Experiment.Experiment.Variables
@@ -8,15 +10,17 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Variables
   {
     // Editor Fields
 
-    public IIndependentVariable[] independentVariables;
+    [SerializeField]
+    private IIndependentVariable[] independentVariables;
 
     // Properties
 
+    public List<IIndependentVariable> IndependentVariables { get; protected set; }
     protected override int DefaultChannelId { get { return Channels.DefaultReliable; } }
 
     // Variables
 
-    protected IndependentVariablesMessage currentMessage = new IndependentVariablesMessage();
+    protected IndependentVariablesMessage independentVariablesMessage = new IndependentVariablesMessage();
 
     // Methods
 
@@ -24,55 +28,56 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Variables
     {
       base.Awake();
 
+      MessageTypes.Add(independentVariablesMessage.MessageType);
+
+      IndependentVariables = new List<IIndependentVariable>(independentVariables.Length);
       foreach (var independentVariable in independentVariables)
       {
-        DeviceConnected += DevicesInfoSync_DeviceConnected;
-        independentVariable.RequestCurrentConditionSync += IndependentVariableManager_RequestCurrentConditionSync;
+        IndependentVariables.Add(independentVariable);
+        independentVariable.CurrentConditionSync += IndependentVariable_CurrentConditionSync;
       }
-
-      MessageTypes.Add(currentMessage.MessageType);
+      DeviceConnected += DevicesInfoSync_DeviceConnected;
     }
 
     protected virtual void OnDestroy()
     {
-      foreach (var indeVarManager in independentVariables)
+      foreach (var independentVariable in IndependentVariables)
       {
-        DeviceConnected -= DevicesInfoSync_DeviceConnected;
-        indeVarManager.RequestCurrentConditionSync -= IndependentVariableManager_RequestCurrentConditionSync;
+        independentVariable.CurrentConditionSync -= IndependentVariable_CurrentConditionSync;
       }
+      DeviceConnected -= DevicesInfoSync_DeviceConnected;
     }
 
     protected override DevicesSyncMessage OnServerMessageReceived(NetworkMessage netMessage)
     {
-      currentMessage = netMessage.ReadMessage<IndependentVariablesMessage>();
-      currentMessage.Restore(independentVariables);
-      return currentMessage;
+      var independentVariablesMessage = netMessage.ReadMessage<IndependentVariablesMessage>();
+      independentVariablesMessage.Restore(IndependentVariables);
+      return independentVariablesMessage;
     }
 
     protected override DevicesSyncMessage OnClientMessageReceived(NetworkMessage netMessage)
     {
-      var stateMessage = netMessage.ReadMessage<IndependentVariablesMessage>();
+      var independentVariablesMessage = netMessage.ReadMessage<IndependentVariablesMessage>();
       if (!isServer)
       {
-        currentMessage = stateMessage;
-        currentMessage.Restore(independentVariables);
+        independentVariablesMessage.Restore(IndependentVariables);
       }
-      return stateMessage;
+      return independentVariablesMessage;
     }
 
     protected virtual void DevicesInfoSync_DeviceConnected(int deviceId)
     {
-      foreach (var independentVariable in independentVariables)
+      foreach (var independentVariable in IndependentVariables)
       {
-        currentMessage.Update(independentVariable.id, independentVariable.CurrentConditionId);
-        SendToClient(deviceId, currentMessage);
+        independentVariablesMessage.Update(independentVariable.id, independentVariable.CurrentConditionId);
+        SendToClient(deviceId, independentVariablesMessage);
       }
     }
 
-    protected virtual void IndependentVariableManager_RequestCurrentConditionSync(string independentVariableManagerId, string currentConditionId)
+    protected virtual void IndependentVariable_CurrentConditionSync(string independentVariableId, string currentConditionId)
     {
-      currentMessage.Update(independentVariableManagerId, currentConditionId);
-      SendToServer(currentMessage);
+      independentVariablesMessage.Update(independentVariableId, currentConditionId);
+      SendToServer(independentVariablesMessage);
     }
   }
 }

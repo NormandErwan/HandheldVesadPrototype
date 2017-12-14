@@ -42,46 +42,46 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.States
 
     // Events
 
-    public event Action<State> RequestCurrentStateSync = delegate { };
+    public event Action<State> CurrentStateSync = delegate { };
     public event Action<State> CurrentStateUpdated = delegate { };
 
     // Methods
 
     public void BeginExperiment()
     {
-      RequestCurrentStateSync(experimentBeginState);
+      CurrentStateSync(experimentBeginState);
     }
 
     public void NextState()
     {
       if (CurrentState.id == experimentBeginState.id)
       {
-        RequestCurrentStateSync(taskBeginState);
+        CurrentStateSync(taskBeginState);
       }
       else if (CurrentState.id == taskBeginState.id)
       {
-        RequestCurrentStateSync(taskTrialState);
+        CurrentStateSync(taskTrialState);
       }
       else if (CurrentState.id == taskTrialState.id)
       {
-        RequestCurrentStateSync((CurrentTrial < TrialsPerCondition) ? taskTrialState : taskEndState);
+        CurrentStateSync((CurrentTrial < TrialsPerCondition) ? taskTrialState : taskEndState);
       }
       else if (CurrentState.id == taskEndState.id)
       {
         if (ConditionsProgress < ConditionsTotal)
         {
           UpdateIndependentVariablesCurrentCondition();
-          RequestCurrentStateSync(taskBeginState);
+          CurrentStateSync(taskBeginState);
         }
         else
         {
-          RequestCurrentStateSync(experimentEndState);
+          CurrentStateSync(experimentEndState);
         }
       }
       else if (CurrentState.id == experimentEndState.id)
       {
         UpdateIndependentVariablesCurrentCondition();
-        RequestCurrentStateSync(experimentBeginState);
+        CurrentStateSync(experimentBeginState);
       }
     }
 
