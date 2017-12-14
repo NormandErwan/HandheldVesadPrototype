@@ -37,7 +37,7 @@ GameObject:
   - component: {fileID: 4341015876515966}
   - component: {fileID: 114759187420252978}
   m_Layer: 0
-  m_Name: Large
+  m_Name: 1_Large
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53,7 +53,7 @@ GameObject:
   - component: {fileID: 4768359814576080}
   - component: {fileID: 114102835371396286}
   m_Layer: 0
-  m_Name: MobileDeviceOnly
+  m_Name: A_MobileDeviceOnly
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69,7 +69,7 @@ GameObject:
   - component: {fileID: 4753534011137922}
   - component: {fileID: 114712957325740358}
   m_Layer: 0
-  m_Name: Easy
+  m_Name: 1_Easy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -85,7 +85,7 @@ GameObject:
   - component: {fileID: 4633448848570030}
   - component: {fileID: 114784559623597272}
   m_Layer: 0
-  m_Name: GazeInput_AROutput
+  m_Name: D_GazeInput_AROutput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 4127288365583052}
   - component: {fileID: 114623683837749356}
   m_Layer: 0
-  m_Name: Peephole
+  m_Name: E_Peephole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -117,7 +117,7 @@ GameObject:
   - component: {fileID: 4881476555587638}
   - component: {fileID: 114265026425476688}
   m_Layer: 0
-  m_Name: HandInput_AROutput
+  m_Name: C_HandInput_AROutput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -150,7 +150,7 @@ GameObject:
   - component: {fileID: 4940331990316028}
   - component: {fileID: 114495023776505986}
   m_Layer: 0
-  m_Name: MobileDeviceInput_AROutput
+  m_Name: B_MobileDeviceInput_AROutput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -166,7 +166,7 @@ GameObject:
   - component: {fileID: 4519653912215882}
   - component: {fileID: 114940950492825338}
   m_Layer: 0
-  m_Name: Small
+  m_Name: 2_Small
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -198,7 +198,7 @@ GameObject:
   - component: {fileID: 4477437883708588}
   - component: {fileID: 114002735001638114}
   m_Layer: 0
-  m_Name: Hard
+  m_Name: 2_Hard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -243,8 +243,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4519653912215882}
   - {fileID: 4341015876515966}
+  - {fileID: 4519653912215882}
   m_Father: {fileID: 4222087900461476}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -293,7 +293,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4162387300961746}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4437069565568174
 Transform:
@@ -334,7 +334,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4162387300961746}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4633448848570030
 Transform:
@@ -447,8 +447,8 @@ MonoBehaviour:
   id: TextSize
   title: Taille du texte
   conditions:
-  - {fileID: 114940950492825338}
   - {fileID: 114759187420252978}
+  - {fileID: 114940950492825338}
 --- !u!114 &114265026425476688
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -560,7 +560,7 @@ MonoBehaviour:
   title: "R\xE9alit\xE9 augment\xE9e \xE0 travers le t\xE9l\xE9phone"
   instructions: 
   useLeapInput: 0
-  useTouchInput: 0
+  useTouchInput: 1
 --- !u!114 &114712957325740358
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -588,7 +588,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc14585ef5e6c0f4e992ca1bb6cf090e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 2_Large
+  id: 1_Large
   title: Grand
   fontSize: 56
 --- !u!114 &114784559623597272
@@ -618,7 +618,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc14585ef5e6c0f4e992ca1bb6cf090e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 1_Small
+  id: 2_Small
   title: Petit
   fontSize: 32
 --- !u!114 &114999698179949338
