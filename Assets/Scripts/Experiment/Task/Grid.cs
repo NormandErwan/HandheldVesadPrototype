@@ -34,7 +34,11 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     // Properties
 
-    public int RemainingItemsToClassify = 0;
+    public StateController StateController { get; set; }
+
+    public bool IsConfigured { get; protected set; }
+    public bool IsCompleted { get; protected set; }
+    public int RemainingItemsToClassify { get; protected set; }
 
     // Interfaces events
 
@@ -50,11 +54,15 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     // Events
 
+    public event Action ConfigureSync = delegate { };
+    public event Action Configured = delegate { };
+    public event Action Completed = delegate { };
+
     public event Action<Container, Item> ItemSelected = delegate { };
     public event Action<Container, Item> ItemDeselected = delegate { };
     public event Action<Container, Container, Item> ClassificationSuccess = delegate { };
     public event Action<Container, Container, Item> ClassificationError = delegate { };
-    public event Action Finished = delegate { };
+
 
     // Variables
 
@@ -77,6 +85,12 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     {
       base.Awake();
       collider = GetComponent<BoxCollider>();
+
+      SetInteractable(false);
+      SetContainersItemsInteractable(false);
+
+      IsConfigured = false;
+      IsCompleted = false;
     }
 
     protected virtual void OnDestroy()
@@ -116,7 +130,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         DraggingStopped(this);
       }
 
-      StartCoroutine(SetContainersInteractable(!IsDragging && !IsZooming));
+      StartCoroutine(SetContainersItemsInteractable(!IsDragging && !IsZooming));
     }
 
     public void Drag(Vector3 translation)
@@ -141,7 +155,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         ZoomingStopped(this);
       }
 
-      StartCoroutine(SetContainersInteractable(!IsDragging && !IsZooming));
+      StartCoroutine(SetContainersItemsInteractable(!IsDragging && !IsZooming));
     }
 
     public void Zoom(Vector3 distance, Vector3 originalDistance, Vector3 translation, Vector3 originalTranslation)
@@ -170,17 +184,26 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     // Methods
 
-    public virtual void Configure(StateController stateController)
-    {
-      ivTextSize = stateController.GetIndependentVariable<IVTextSize>();
-      iVClassificationDifficulty = stateController.GetIndependentVariable<IVClassificationDifficulty>();
-
-      Configure();
-    }
-
     public override void Configure()
     {
-      // Reset transform
+      ConfigureSync();
+    }
+
+    internal virtual void SetConfiguration()
+    {
+      // Init the variables and properties
+      if (ivTextSize == null)
+      {
+        ivTextSize = StateController.GetIndependentVariable<IVTextSize>();
+        iVClassificationDifficulty = StateController.GetIndependentVariable<IVClassificationDifficulty>();
+      }
+
+      SetInteractable(false);
+      SetContainersItemsInteractable(false);
+
+      IsConfigured = false;
+      IsCompleted = false;
+
       transform.localPosition = Vector3.zero;
       transform.localScale = scaleFactor * Vector3.one; // Scales the canvas as it's in world reference
 
@@ -244,13 +267,16 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       localScaleRange = new Range<float>(ElementScale.y / Scale.y * scaleFactor, ElementScale.x / itemSize * scaleFactor);
 
       SetInteractable(true);
+      SetContainersItemsInteractable(true);
+      IsConfigured = true;
+      Configured();
     }
 
     protected virtual void Container_Selected(Container container)
     {
       if (selectedItem != null)
       {
-        Container previousContainer = GetItemContainer(selectedItem);
+        Container previousContainer = GetContainer(selectedItem);
         if (previousContainer == container)
         {
           // Deselect the item if it's the same container
@@ -287,7 +313,11 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
           // Call Finished if all items are classified
           if (RemainingItemsToClassify == 0)
           {
-            Finished();
+            SetContainersItemsInteractable(false);
+            SetInteractable(false);
+
+            IsCompleted = true;
+            Completed();
           }
         }
       }
@@ -295,19 +325,18 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     protected virtual void Item_Selected(Item item)
     {
-      Container itemContainer;
+      Container container;
 
+      // Deselect the previous selected item
       if (selectedItem != null)
       {
-        // Deselect the previous selected item
         if (selectedItem != item)
         {
           selectedItem.SetSelected(false);
         }
 
-        // Call ItemDeselected
-        itemContainer = GetItemContainer(selectedItem);
-        ItemDeselected(itemContainer, selectedItem);
+        container = GetContainer(selectedItem);
+        ItemDeselected(container, selectedItem);
 
         selectedItem = null;
       }
@@ -317,16 +346,16 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       {
         selectedItem = item;
 
-        itemContainer = GetItemContainer(selectedItem);
-        ItemSelected(itemContainer, selectedItem);
+        container = GetContainer(selectedItem);
+        ItemSelected(container, selectedItem);
       }
     }
 
-    protected virtual IEnumerator SetContainersInteractable(bool value)
+    protected virtual IEnumerator SetContainersItemsInteractable(bool value)
     {
       if (value)
       {
-        yield return null;
+        yield return null; // wait a frame before reactivacting the containers and items
       }
 
       foreach (var container in Elements)
@@ -339,7 +368,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       }
     }
 
-    protected virtual Container GetItemContainer(Item item)
+    protected virtual Container GetContainer(Item item)
     {
       Container parentContainer = null;
       foreach (var container in Elements)

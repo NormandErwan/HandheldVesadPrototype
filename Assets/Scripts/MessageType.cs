@@ -6,7 +6,6 @@ namespace NormandErwan.MasterThesis.Experiment
   /// <summary>
   /// Container class for networking messages types used in this experiment.
   /// </summary>
-  // TODO: rename/refacto
   public class MessageType : DevicesSyncUnity.Messages.MessageType
   {
     // Constants
@@ -26,15 +25,20 @@ namespace NormandErwan.MasterThesis.Experiment
     /// </summary>
     public static short IndependentVariableManagers { get { return (short)(Smallest + 2); } }
 
-    /// <summary>
-    /// Networking message for communicating <see cref="DeviceControllers.DeviceControllerMessage"/>
-    /// </summary>
-    public static short DeviceController { get { return (short)(Smallest + 3); } }
+    public static short DeviceControllerActivateTask { get { return (short)(Smallest + 3); } }
+
+    public static short DeviceControllerConfigureExperiment { get { return (short)(Smallest + 4); } }
+
+    public static short DeviceControllerToggleZoom { get { return (short)(Smallest + 5); } }
+
+    public static short GridConfigure { get { return (short)(Smallest + 6); } }
+
+    public static short GridTransform { get { return (short)(Smallest + 7); } }
 
     /// <summary>
     /// See <see cref="DevicesSyncUnity.Messages.MessageType.Highest"/>.
     /// </summary>
-    public static new short Highest { get { return DeviceController; } }
+    public static new short Highest { get { return GridTransform; } }
 
     // Variables
 
@@ -43,7 +47,11 @@ namespace NormandErwan.MasterThesis.Experiment
     {
       { StateManager, "State" },
       { IndependentVariableManagers, "IndependentVariableManagers" },
-      { DeviceController, "DeviceController" }
+      { DeviceControllerActivateTask, "DeviceControllerActivateTask" },
+      { DeviceControllerConfigureExperiment, "DeviceControllerConfigureExperiment" },
+      { DeviceControllerToggleZoom, "DeviceControllerToggleZoom" },
+      { GridConfigure, "GridConfigure" },
+      { GridTransform, "GridTransform" }
     };
 
     // Methods
