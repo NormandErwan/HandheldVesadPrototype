@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
+namespace NormandErwan.MasterThesis.Experiment.UI
 {
   public class MaterialsTransparencyController : MonoBehaviour
   {
