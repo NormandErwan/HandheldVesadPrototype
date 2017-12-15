@@ -52,11 +52,17 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       Grid.gameObject.SetActive(false);
 
       StateController.CurrentStateUpdated += StateController_CurrentStateUpdated;
+
+      Grid.Completed += Grid_Completed;
+      Grid.Configured += Grid_Configured;
     }
 
     protected virtual void OnDestroy()
     {
       StateController.CurrentStateUpdated -= StateController_CurrentStateUpdated;
+
+      Grid.Completed -= Grid_Completed;
+      Grid.Configured -= Grid_Configured;
     }
 
     // Methods
@@ -79,6 +85,15 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     protected virtual void StateController_CurrentStateUpdated(State currentState)
     {
       Grid.gameObject.SetActive(false);
+    }
+
+    protected virtual void Grid_Configured()
+    {
+      Grid.gameObject.SetActive(true);
+    }
+
+    protected virtual void Grid_Completed()
+    {
     }
 
     /// <summary>

@@ -38,7 +38,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     public override void ActivateTask()
     {
       base.ActivateTask();
-
       Grid.Configure();
     }
 
@@ -50,8 +49,9 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     // Methods
 
-    protected virtual void Grid_Completed()
+    protected override void Grid_Completed()
     {
+      base.Grid_Completed();
       StateController.NextState();
     }
 

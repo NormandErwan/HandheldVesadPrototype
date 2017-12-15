@@ -154,7 +154,7 @@ Prefab:
     - target: {fileID: 114230085306632826, guid: fbbef59b3dd39404ca1cd8b91b4498c2,
         type: 2}
       propertyPath: type
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fbbef59b3dd39404ca1cd8b91b4498c2, type: 2}
@@ -291,11 +291,6 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 153634927}
   m_Script: {fileID: 11500000, guid: df4710b2e9b6c114a848996acfb1cf07, type: 3}
---- !u!1 &192306151 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1607542539644112, guid: 9b75a8a0bd521bb4a9d36aaf3742d21b,
-    type: 2}
-  m_PrefabInternal: {fileID: 1786725734}
 --- !u!1001 &284785076
 Prefab:
   m_ObjectHideFlags: 0
@@ -907,11 +902,6 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 891901921}
   m_Script: {fileID: 11500000, guid: 85b67eefb2c88ec4f9bd31670369aa67, type: 3}
---- !u!1 &1143749597 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1398262010878346, guid: 9b75a8a0bd521bb4a9d36aaf3742d21b,
-    type: 2}
-  m_PrefabInternal: {fileID: 1786725734}
 --- !u!4 &1207794058 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4197242790626690, guid: d0062cd8605df454698f3cb819549186,
@@ -1323,22 +1313,22 @@ Prefab:
       objectReference: {fileID: 610893905}
     - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
         type: 2}
-      propertyPath: LeftLeapMotionHand
+      propertyPath: leftLeapMotionHand
       value: 
-      objectReference: {fileID: 192306151}
+      objectReference: {fileID: 1786725736}
     - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
         type: 2}
-      propertyPath: LeftHandCursors
+      propertyPath: leftHandCursors
       value: 
       objectReference: {fileID: 891901924}
     - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
         type: 2}
-      propertyPath: RightLeapMotionHand
+      propertyPath: rightLeapMotionHand
       value: 
-      objectReference: {fileID: 1143749597}
+      objectReference: {fileID: 1786725735}
     - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
         type: 2}
-      propertyPath: RightHandCursors
+      propertyPath: rightHandCursors
       value: 
       objectReference: {fileID: 891901923}
     - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
@@ -1449,6 +1439,16 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9b75a8a0bd521bb4a9d36aaf3742d21b, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1786725735 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1425288415618804, guid: 9b75a8a0bd521bb4a9d36aaf3742d21b,
+    type: 2}
+  m_PrefabInternal: {fileID: 1786725734}
+--- !u!1 &1786725736 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1953453606658392, guid: 9b75a8a0bd521bb4a9d36aaf3742d21b,
+    type: 2}
+  m_PrefabInternal: {fileID: 1786725734}
 --- !u!1001 &1795030760
 Prefab:
   m_ObjectHideFlags: 0

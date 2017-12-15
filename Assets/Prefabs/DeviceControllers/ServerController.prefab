@@ -20,8 +20,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4402858502294664}
   - component: {fileID: 114763772651783544}
+  - component: {fileID: 114216020874993580}
   - component: {fileID: 114978119515432736}
-  - component: {fileID: 114144624732179802}
   m_Layer: 0
   m_Name: ServerController
   m_TagString: Untagged
@@ -707,19 +707,6 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
---- !u!114 &114144624732179802
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1009805945840234}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d065cc2fc94ba74bbe20e69072b19f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  deviceController: {fileID: 114763772651783544}
 --- !u!114 &114144970937663040
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -771,6 +758,19 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
+--- !u!114 &114216020874993580
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1009805945840234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d951df001a01bad40895439289c79aae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  deviceController: {fileID: 114763772651783544}
 --- !u!114 &114240070731895230
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1330,7 +1330,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateController: {fileID: 0}
   grid: {fileID: 0}
-  participantLogger: {fileID: 114022431547797296}
   serverHUD: {fileID: 114144970937663040}
 --- !u!114 &114779574891830982
 MonoBehaviour:

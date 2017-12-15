@@ -35,6 +35,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4494200272367184}
   - component: {fileID: 114719098960501060}
+  - component: {fileID: 114167442127256608}
+  - component: {fileID: 114682871163061374}
   - component: {fileID: 65277862645556952}
   - component: {fileID: 54126743979261308}
   m_Layer: 0
@@ -80,7 +82,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1271075881665134}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.0001, y: 0.00010000023, z: 0.00010000023}
   m_Children:
@@ -170,6 +172,56 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 720, y: 1270, z: 1080}
   m_Center: {x: 0, y: 0, z: 180}
+--- !u!114 &114167442127256608
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1271075881665134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 938877fcb1334724c8ff80629fd50799, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  sendingMode: 1
+  sendingFramesInterval: 1
+  sendingTimeInterval: 0.1
+  autoStartSending: 1
+  grid: {fileID: 114719098960501060}
+  movementThresholdToSync: 0.001
+--- !u!114 &114682871163061374
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1271075881665134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 141
+    i1: 166
+    i2: 72
+    i3: 57
+    i4: 113
+    i5: 56
+    i6: 15
+    i7: 212
+    i8: 24
+    i9: 218
+    i10: 192
+    i11: 178
+    i12: 26
+    i13: 20
+    i14: 63
+    i15: 173
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114719098960501060
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -189,4 +241,3 @@ MonoBehaviour:
     type: 2}
   scaleFactor: 0.0001
   background: {fileID: 1504925704302960}
-  RemainingItemsToClassify: 0

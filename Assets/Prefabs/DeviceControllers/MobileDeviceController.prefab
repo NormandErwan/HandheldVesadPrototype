@@ -160,8 +160,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4267468444616448}
   - component: {fileID: 114394180611686014}
+  - component: {fileID: 114433082473484472}
   - component: {fileID: 114518926644399396}
-  - component: {fileID: 114487934079002734}
   m_Layer: 0
   m_Name: MobileDeviceController
   m_TagString: Untagged
@@ -309,7 +309,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateController: {fileID: 0}
   grid: {fileID: 0}
-  participantLogger: {fileID: 114000971063042666}
   mobileDeviceHUD: {fileID: 114367898630795866}
   touchFingerCursorsInput: {fileID: 0}
   maxSelectableDistance: 0.005
@@ -341,6 +340,19 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114433082473484472
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1938131900248046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d951df001a01bad40895439289c79aae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  deviceController: {fileID: 114394180611686014}
 --- !u!114 &114454375251054444
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -362,19 +374,6 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
---- !u!114 &114487934079002734
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1938131900248046}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d065cc2fc94ba74bbe20e69072b19f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  deviceController: {fileID: 114394180611686014}
 --- !u!114 &114518926644399396
 MonoBehaviour:
   m_ObjectHideFlags: 1

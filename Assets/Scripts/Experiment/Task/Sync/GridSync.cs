@@ -81,8 +81,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
         devicesSyncMessage = ProcessReceivedMessage<GridConfigureMessage>(netMessage, gridConfigureMessage.MessageType,
           (gridConfigureMessage) =>
           {
-            // TODO
+            grid.SetConfiguration();
           });
+
         devicesSyncMessage = ProcessReceivedMessage<GridTransformMessage>(netMessage, gridTransformMessage.MessageType,
           (gridTransformMessage) =>
           {

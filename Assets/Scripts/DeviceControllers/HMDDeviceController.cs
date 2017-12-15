@@ -54,21 +54,11 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       ActivateHand(true, false);
       ActivateHand(false, false);
 
-      Grid.Completed += Grid_Completed;
-      Grid.Configured += Grid_Configured;
-
       // TODO: remove, for debug testing only
       /*ActivateHand(true, true);
       StateController.BeginExperiment();
-      ActivateTask();*/
-    }
-
-    protected override void OnDestroy()
-    {
-      base.OnDestroy();
-
-      Grid.Completed -= Grid_Completed;
-      Grid.Configured -= Grid_Configured;
+      ActivateTask();
+      Grid.SetConfiguration();*/
     }
 
     // DeviceController methods
@@ -123,8 +113,9 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       }
     }
 
-    private void Grid_Configured()
+    protected override void Grid_Configured()
     {
+      base.Grid_Configured();
       ParticipantLogger.Technique = ivTechnique.CurrentCondition.id;
       ParticipantLogger.TextSize = ivTextSize.CurrentCondition.id;
       ParticipantLogger.ClassificationDistance = ivClassificationDifficulty.CurrentCondition.id;
@@ -132,8 +123,9 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       ParticipantLogger.PrepareNextRow();
     }
 
-    protected virtual void Grid_Completed()
+    protected override void Grid_Completed()
     {
+      base.Grid_Completed();
       ParticipantLogger.WriteRow();
     }
   }
