@@ -128,12 +128,15 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
             var cursors = new List<Cursor>(latestCursorPositions[zoomable].Keys);
             if (cursors[0] == this) // Update only once per frame
             {
-              var translation = cursors[1].transform.position;
-              var originalTranslation = latestCursorPositions[zoomable][cursors[1]];
               var distance = cursors[0].transform.position - cursors[1].transform.position;
-              var originalDistance = latestCursorPositions[zoomable][cursors[0]] - latestCursorPositions[zoomable][cursors[1]];
+              var previousDistance = latestCursorPositions[zoomable][cursors[0]] - latestCursorPositions[zoomable][cursors[1]];
+              var translation = cursors[1].transform.position;
+              var previousTranslation = latestCursorPositions[zoomable][cursors[1]];
 
-              zoomable.Zoom(distance, originalDistance, translation, originalTranslation);
+              zoomable.Zoom(distance, previousDistance, translation, previousTranslation);
+
+              latestCursorPositions[zoomable][cursors[0]] = cursors[0].transform.position;
+              latestCursorPositions[zoomable][cursors[1]] = cursors[1].transform.position;
             }
           }
         });
