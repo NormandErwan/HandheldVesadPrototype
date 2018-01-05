@@ -2,6 +2,7 @@
 using NormandErwan.MasterThesis.Experiment.Inputs;
 using NormandErwan.MasterThesis.Experiment.UI.HUD;
 using UnityEngine;
+using System.Collections;
 
 namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 {
@@ -44,8 +45,23 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       MobileDeviceHUD.ZoomModeToggleButtonPressed += MobileDeviceHUD_ZoomModeToggleButtonPressed;
 
       // TODO: remove, for debug testing only
-      /*StateController.BeginExperiment();
-      ActivateTask();*/
+      //StartCoroutine(StartTaskDebug());
+    }
+
+    private IEnumerator StartTaskDebug()
+    {
+      yield return null;
+      StateController.BeginExperiment();
+
+      yield return null;
+      StateController.NextState();
+
+      yield return null;
+      ActivateTask();
+      MobileDeviceHUD.HideAllButtons();
+
+      yield return null;
+      Grid.Configure();
     }
 
     protected override void OnDestroy()
@@ -89,13 +105,13 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     protected virtual void MobileDeviceHUD_ActivateTaskButtonPressed()
     {
-      MobileDeviceHUD.ShowToggleButton(null);
+      MobileDeviceHUD.HideAllButtons();
       OnActivateTaskSync();
     }
 
     protected virtual void MobileDeviceHUD_NextStateButtonPressed()
     {
-      MobileDeviceHUD.ShowToggleButton(null);
+      MobileDeviceHUD.HideAllButtons();
       StateController.NextState();
     }
 

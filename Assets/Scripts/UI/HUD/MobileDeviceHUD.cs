@@ -35,16 +35,17 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
 
     // Methods
 
-    public virtual void ShowToggleButton(Button button)
+    public virtual void HideAllButtons()
     {
       ActivateTaskButton.gameObject.SetActive(false);
       NextStateButton.gameObject.SetActive(false);
       ZoomModeToggleButton.gameObject.SetActive(false);
+    }
 
-      if (button != null)
-      {
-        button.gameObject.SetActive(true);
-      }
+    public virtual void ShowToggleButton(Button button)
+    {
+      HideAllButtons();
+      button.gameObject.SetActive(true);
     }
 
     protected virtual void Start()
@@ -53,7 +54,7 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
       NextStateButton.onClick.AddListener(nextStateButtonButton_onClick);
       ZoomModeToggleButton.onClick.AddListener(zoomModeToggleButtonButton_onClick);
 
-      ShowToggleButton(null);
+      HideAllButtons();
     }
 
     protected virtual void OnDestroy()
