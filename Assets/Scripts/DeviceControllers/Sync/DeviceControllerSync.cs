@@ -79,7 +79,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers.Sync
       DevicesSyncMessage devicesSyncMessage = null;
       if (netMessage.msgType == MessageType.DeviceControllerConfigureExperiment)
       {
-        if (!onClient && (onClient && !isServer))
+        if (!onClient || (onClient && !isServer))
         {
           var configureExperimentMessage = netMessage.ReadMessage<ConfigureExperimentMessage>();
           devicesSyncMessage = configureExperimentMessage;
@@ -90,7 +90,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers.Sync
       }
       else if (netMessage.msgType == MessageType.DeviceControllerActivateTask)
       {
-        if (!onClient && (onClient && !isServer))
+        if (!onClient || (onClient && !isServer))
         {
           devicesSyncMessage = netMessage.ReadMessage<ActivateTaskMessage>();
 
@@ -99,7 +99,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers.Sync
       }
       else if (netMessage.msgType == MessageType.DeviceControllerToggleZoom)
       {
-        if (!onClient && (onClient && !isServer))
+        if (!onClient || (onClient && !isServer))
         {
           var toggleZoomMessage = netMessage.ReadMessage<ToggleZoomMessage>();
           devicesSyncMessage = toggleZoomMessage;
