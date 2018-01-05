@@ -2,7 +2,7 @@
 
 namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 {
-  public class GridConfigureMessage : DevicesSyncMessage
+  public class GridSyncConfigureMessage : DevicesSyncMessage
   {
     // Properties
 

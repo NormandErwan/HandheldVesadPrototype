@@ -22,8 +22,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 
     // Variables
 
-    protected GridConfigureMessage gridConfigureMessage = new GridConfigureMessage();
-    protected GridTransformMessage gridTransformMessage = new GridTransformMessage();
+    protected GridSyncConfigureMessage gridConfigureMessage = new GridSyncConfigureMessage();
+    protected GridSyncTransformMessage gridTransformMessage = new GridSyncTransformMessage();
 
     // MonoBehaviour methods
 
@@ -76,15 +76,15 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
     protected virtual DevicesSyncMessage ProcessReceivedMessage(NetworkMessage netMessage, bool onClient)
     {
       DevicesSyncMessage devicesSyncMessage = null;
-      if (!onClient && (onClient && !isServer))
+      if (!onClient || (onClient && !isServer))
       {
-        devicesSyncMessage = ProcessReceivedMessage<GridConfigureMessage>(netMessage, gridConfigureMessage.MessageType,
+        devicesSyncMessage = ProcessReceivedMessage<GridSyncConfigureMessage>(netMessage, gridConfigureMessage.MessageType,
           (gridConfigureMessage) =>
           {
             grid.SetConfiguration();
           });
 
-        devicesSyncMessage = ProcessReceivedMessage<GridTransformMessage>(netMessage, gridTransformMessage.MessageType,
+        devicesSyncMessage = ProcessReceivedMessage<GridSyncTransformMessage>(netMessage, gridTransformMessage.MessageType,
           (gridTransformMessage) =>
           {
             gridTransformMessage.Restore(Grid);
