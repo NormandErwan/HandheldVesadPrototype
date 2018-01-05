@@ -14,8 +14,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     public string FilePath { get; protected set; }
 
     public List<string> Columns { get; protected set; }
-
-    protected string[] NextRow { get; private set; }
+    public List<string> NextRow { get; protected set; }
 
     // Variables
 
@@ -42,7 +41,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     public virtual void StartLogger()
     {
-      NextRow = new string[Columns.Count];
+      NextRow = new List<string>(new string[Columns.Count]);
 
       FilePath = Path.Combine(dataPath, Filename);
       csvWriter = new CsvFileWriter(FilePath);
@@ -56,7 +55,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     public virtual void WriteRow()
     {
-      csvWriter.WriteRow(new List<string>(NextRow));
+      csvWriter.WriteRow(NextRow);
     }
 
     public virtual void StopLogger()
@@ -64,14 +63,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       csvWriter.Dispose();
     }
 
-    protected virtual void AddToNextRow(int column, string text)
-    {
-      NextRow[column] = text;
-    }
-
     protected virtual void AddToNextRow(string text)
     {
-      AddToNextRow(columnIndex, text);
+      print(columnIndex + " " + text);
+      NextRow[columnIndex] = text;
       columnIndex++;
     }
 
