@@ -375,7 +375,7 @@ namespace Mono.Csv
         if (i > 0)
           Writer.Write(Delimiter);
         // Write this column
-        if (columns[i].IndexOfAny(SpecialChars) == -1)
+        if (columns[i] == null || columns[i].IndexOfAny(SpecialChars) == -1)
           Writer.Write(columns[i]);
         else
           Writer.Write(QuotedFormat, columns[i].Replace(OneQuote, TwoQuotes));
