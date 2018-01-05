@@ -41,6 +41,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     public override void PrepareNextRow()
     {
+      base.PrepareNextRow();
       startDateTime = DateTime.Now;
       stopWatch = Time.unscaledDeltaTime;
     }

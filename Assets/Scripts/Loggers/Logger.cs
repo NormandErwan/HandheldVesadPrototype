@@ -65,7 +65,6 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected virtual void AddToNextRow(string text)
     {
-      print(columnIndex + " " + text);
       NextRow[columnIndex] = text;
       columnIndex++;
     }
