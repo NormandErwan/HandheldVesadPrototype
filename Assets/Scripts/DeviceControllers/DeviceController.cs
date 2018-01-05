@@ -49,7 +49,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       ivTextSize = StateController.GetIndependentVariable<IVTextSize>();
 
       Grid.StateController = StateController;
-      Grid.gameObject.SetActive(false);
+      Grid.Show(false);
 
       StateController.CurrentStateUpdated += StateController_CurrentStateUpdated;
 
@@ -84,12 +84,12 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     protected virtual void StateController_CurrentStateUpdated(State currentState)
     {
-      Grid.gameObject.SetActive(false);
+      Grid.Show(false);
     }
 
     protected virtual void Grid_Configured()
     {
-      Grid.gameObject.SetActive(true);
+      Grid.Show(true);
     }
 
     protected virtual void Grid_Completed()
