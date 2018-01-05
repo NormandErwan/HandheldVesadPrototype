@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 {
-  public class GridTransformMessage : DevicesSyncMessage
+  public class GridSyncTransformMessage : DevicesSyncMessage
   {
     // Properties
 
@@ -25,8 +25,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 
     public void Update(Grid grid, float movementThreshold)
     {
-      HasChanged = (localPosition == null)
-                || !VectorEquals(localPosition, grid.transform.localPosition, movementThreshold)
+      HasChanged = !VectorEquals(localPosition, grid.transform.localPosition, movementThreshold)
                 || !VectorEquals(localRotation.eulerAngles, grid.transform.localRotation.eulerAngles, movementThreshold)
                 || !VectorEquals(localScale, grid.transform.localScale, movementThreshold);
       localPosition = grid.transform.localPosition;
