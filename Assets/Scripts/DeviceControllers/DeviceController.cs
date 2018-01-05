@@ -1,6 +1,5 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
 using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
-using NormandErwan.MasterThesis.Experiment.Loggers;
 using System;
 using UnityEngine;
 

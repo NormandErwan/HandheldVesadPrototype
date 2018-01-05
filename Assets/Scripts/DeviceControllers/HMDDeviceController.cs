@@ -5,6 +5,7 @@ using NormandErwan.MasterThesis.Experiment.Inputs;
 using NormandErwan.MasterThesis.Experiment.Loggers;
 using NormandErwan.MasterThesis.Experiment.UI.HUD;
 using UnityEngine;
+using System.Collections;
 
 namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 {
@@ -55,10 +56,32 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       ActivateHand(false, false);
 
       // TODO: remove, for debug testing only
-      /*ActivateHand(true, true);
+      //StartCoroutine(StartTaskDebug());
+    }
+
+    private void Update()
+    {
+      if (Input.GetKeyUp(KeyCode.C))
+      {
+        Grid_Completed();
+        StateController.NextState();
+        ActivateTask();
+        Grid.Configure();
+      }
+    }
+
+    private IEnumerator StartTaskDebug()
+    {
+      yield return null;
+      OnConfigureExperimentSync();
       StateController.BeginExperiment();
+
+      yield return null;
+      StateController.NextState();
+
+      yield return null;
       ActivateTask();
-      Grid.SetConfiguration();*/
+      Grid.Configure();
     }
 
     // DeviceController methods
@@ -116,11 +139,12 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     protected override void Grid_Configured()
     {
       base.Grid_Configured();
+
+      ParticipantLogger.PrepareNextRow();
       ParticipantLogger.Technique = ivTechnique.CurrentCondition.id;
       ParticipantLogger.TextSize = ivTextSize.CurrentCondition.id;
       ParticipantLogger.ClassificationDistance = ivClassificationDifficulty.CurrentCondition.id;
       ParticipantLogger.TrialNumber = StateController.CurrentTrial;
-      ParticipantLogger.PrepareNextRow();
     }
 
     protected override void Grid_Completed()

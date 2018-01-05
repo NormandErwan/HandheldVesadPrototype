@@ -51,6 +51,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     private IEnumerator StartTaskDebug()
     {
       yield return null;
+      OnConfigureExperimentSync();
       StateController.BeginExperiment();
 
       yield return null;
@@ -59,8 +60,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       yield return null;
       ActivateTask();
       MobileDeviceHUD.HideAllButtons();
-
-      yield return null;
       Grid.Configure();
     }
 
