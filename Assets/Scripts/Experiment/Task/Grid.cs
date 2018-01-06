@@ -32,6 +32,14 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public bool IsDragging { get; protected set; }
     public bool IsZooming { get; protected set; }
 
+    public Transform Transform { get { return transform; } }
+
+    public GenericVector3<bool> FreezePosition { get; protected set; }
+    public GenericVector3<Range<float>> PositionRange { get; protected set; }
+
+    public GenericVector3<bool> FreezeScale { get; protected set; }
+    public GenericVector3<Range<float>> ScaleRange { get; protected set; }
+
     // Properties
 
     public StateController StateController { get; set; }
@@ -69,10 +77,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     protected new BoxCollider collider;
 
-    protected List<Inputs.Cursor> triggeredFingers = new List<Inputs.Cursor>();
-    protected Vector3 fingerPanningLastPosition;
-    protected Range<float> localScaleRange;
-
     protected Item selectedItem;
 
     protected IVTextSize ivTextSize;
@@ -84,6 +88,10 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     {
       base.Awake();
       collider = GetComponent<BoxCollider>();
+
+      FreezePosition = FreezeScale = new GenericVector3<bool>(false, false, true);
+      PositionRange = new GenericVector3<Range<float>>(new Range<float>(), new Range<float>(), null);
+      ScaleRange = new GenericVector3<Range<float>>(new Range<float>(), new Range<float>(), null);
 
       SetInteractable(false);
       StartCoroutine(SetContainersItemsInteractable(false));
@@ -117,6 +125,11 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       Interactable(this);
     }
 
+    public Vector3 ProjectPosition(Vector3 position)
+    {
+      return Vector3.ProjectOnPlane(position, -transform.forward);
+    }
+
     public void SetDragging(bool value)
     {
       IsDragging = value;
@@ -134,9 +147,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public void Drag(Vector3 translation)
     {
-      transform.position += Vector3.ProjectOnPlane(translation, -transform.forward);
-      ClampPosition();
-
       Dragging(this);
     }
 
@@ -155,37 +165,23 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       StartCoroutine(SetContainersItemsInteractable(!IsDragging && !IsZooming));
     }
 
-    public void Zoom(Vector3 distance, Vector3 previousDistance, Vector3 translation, Vector3 previousTranslation)
+    public void Zoom(float scaleFactor, Vector3 translation)
     {
-      // Computes the zoom factor
-      var distanceProjected = Vector3.ProjectOnPlane(distance, -transform.forward);
-      var previousDistanceProjected = Vector3.ProjectOnPlane(previousDistance, -transform.forward);
-      float zoomFactor = distanceProjected.magnitude / previousDistanceProjected.magnitude;
+      UpdateTransformRanges();
 
-      // Scales only if new scale is in range
-      float scale = zoomFactor * transform.localScale.x;
-      if (localScaleRange.ContainsValue(scale))
+      // Fix resize bug of the colliders of the items
+      if (translation.sqrMagnitude > 0)
       {
-        var previousTranslationProjected = Vector3.ProjectOnPlane(previousTranslation, -transform.forward) + transform.position - LossyScale / 2;
-
-        transform.localScale = new Vector3(zoomFactor * transform.localScale.x, transform.localScale.y, transform.localScale.z);
-
-        var translationProjected = Vector3.ProjectOnPlane(translation, -transform.forward) + transform.position - LossyScale / 2;
-        transform.position += translationProjected - previousTranslationProjected;
-
-        ClampPosition();
-
-        // Fix resize bug of the colliders of the items
         foreach (var container in Elements)
         {
           foreach (var item in container.Elements)
           {
-            item.Collider.radius *= zoomFactor;
+            item.Collider.radius *= scaleFactor;
           }
         }
-
-        Zooming(this);
       }
+
+      Zooming(this);
     }
 
     // Methods
@@ -279,7 +275,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       collider.size = new Vector3(Scale.x, Scale.y, 3f * itemSize + itemSize/2f);
 
       background.transform.localScale = new Vector3(Scale.x, Scale.y, 1);
-      localScaleRange = new Range<float>(ElementScale.y / Scale.y * scaleFactor, ElementScale.x / itemSize * scaleFactor);
+
+      UpdateTransformRanges();
 
       SetInteractable(true);
       StartCoroutine(SetContainersItemsInteractable(true));
@@ -396,12 +393,18 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       return parentContainer;
     }
 
-    protected virtual void ClampPosition()
+    protected virtual void UpdateTransformRanges()
     {
-      Vector2 translationMax = (Vector2.Scale(transform.localScale, Scale) - scaleFactor * ElementScale) / 2;
-      float localPositionX = Mathf.Clamp(transform.localPosition.x, -translationMax.x, translationMax.x);
-      float localPositionY = Mathf.Clamp(transform.localPosition.y, -translationMax.y, translationMax.y);
-      transform.localPosition = new Vector3(localPositionX, localPositionY, transform.localPosition.z);
+      var itemSize = Elements[0].ElementScale.x;
+
+      ScaleRange[0].Minimum = ScaleRange[1].Minimum = scaleFactor * Mathf.Max(ElementScale.x / Scale.x, ElementScale.y / Scale.y);
+      ScaleRange[0].Maximum = ScaleRange[1].Maximum = scaleFactor * Mathf.Min(ElementScale.x, ElementScale.y) / itemSize;
+
+      Vector2 positionMax = (Vector2.Scale(transform.localScale, Scale) - scaleFactor * ElementScale) / 2;
+      PositionRange[0].Minimum = -positionMax.x;
+      PositionRange[0].Maximum = positionMax.x;
+      PositionRange[1].Minimum = -positionMax.y;
+      PositionRange[1].Maximum = positionMax.y;
     }
   }
 }

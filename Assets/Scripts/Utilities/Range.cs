@@ -11,6 +11,20 @@ namespace NormandErwan.MasterThesis.Experiment.Utilities
   /// </remarks>
   public class Range<T> where T : IComparable<T>
   {
+    // Constructors
+
+    public Range() : base()
+    {
+      Minimum = default(T);
+      Maximum = default(T);
+    }
+
+    public Range(T minimum, T maximum) : base()
+    {
+      Minimum = minimum;
+      Maximum = maximum;
+    }
+
     // Properties
 
     /// <summary>
@@ -22,14 +36,6 @@ namespace NormandErwan.MasterThesis.Experiment.Utilities
     /// Maximum value of the range.
     /// </summary>
     public virtual T Maximum { get; set; }
-
-    // Constructors
-
-    public Range(T minimum, T maximum) : base()
-    {
-      Minimum = minimum;
-      Maximum = maximum;
-    }
 
     // Methods
 
@@ -60,6 +66,22 @@ namespace NormandErwan.MasterThesis.Experiment.Utilities
     public virtual bool ContainsRange(Range<T> range)
     {
       return ContainsValue(range.Minimum) && ContainsValue(range.Maximum);
+    }
+
+    public virtual T Clamp(T value)
+    {
+      if (Minimum.CompareTo(value) > 0)
+      {
+        return Minimum;
+      }
+      else if (Maximum.CompareTo(value) < 0)
+      {
+        return Maximum;
+      }
+      else
+      {
+        return value;
+      }
     }
 
     protected virtual bool IsValid()
