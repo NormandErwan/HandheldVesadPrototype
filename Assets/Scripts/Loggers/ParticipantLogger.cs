@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NormandErwan.MasterThesis.Experiment.DeviceControllers;
+using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,62 +8,95 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 {
   public class ParticipantLogger : Logger
   {
+    // Editor fields
+
+    [SerializeField]
+    private DeviceController deviceController;
+
     // Properties
 
-    public int TrialId { get; protected set; }
-    public int ParticipantId { get; set; }
-    public DateTime startDateTime { get; protected set; }
-    public string Technique { get; set; }
-    public string TextSize { get; set; }
-    public string ClassificationDistance { get; set; }
-    public float TotalTime { get; protected set; }
-    public int TrialNumber { get; set; }
+    public int Selections { get; set; }
+    public int Deselections { get; set; }
+    public int Errors { get; set; }
+
+    public int HeadPhoneDistance { get; set; }
 
     // Variables
 
+    protected DateTime startDateTime;
     protected float stopWatch;
 
-    // MonoBehaviour
+    protected bool panCount;
+    protected float panTime;
+    protected int panDistance;
+
+    protected bool zoomCount;
+    protected float zoomTime;
+    protected int zoomDistance;
+
+    // MonoBehaviour methods
 
     protected override void Awake()
     {
       base.Awake();
-      TrialId = 0;
+
+      deviceController.Configured += DeviceController_Configured;
+
+      deviceController.Grid.Configured += Grid_Configured;
+      deviceController.Grid.Completed += Grid_Completed;
     }
 
-    // Logger methods
+    protected override void OnDestroy()
+    {
+      base.OnDestroy();
+
+      deviceController.Configured -= DeviceController_Configured;
+
+      deviceController.Grid.Configured -= Grid_Configured;
+      deviceController.Grid.Completed -= Grid_Completed;
+    }
+
+    // Methods
 
     public override void StartLogger()
     {
-      Filename = "participant-" + ParticipantId + ".csv";
-      Columns = new List<string>() { "TrialId", "ParticipantId", "StartDateTime", "Technique", "TextSize",
-        "ClassificationDistance", "TotalTime", "TrialNumber" };
+      Filename = "participant-" + deviceController.ParticipantId + "_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".csv";
+      Columns = new List<string>() {
+        "ParticipantId", "Technique", "Distance", "TextSize", "TrialNumber",
+        "StartDateTime", "TotalTime",
+        "Selections", "Deselections", "Errors",
+        "PanCount", "PanTime", "PanDistance",
+        "ZoomCount", "ZoomTime", "ZoomDistance",
+        "HeadDeviceDistance"
+      };
       base.StartLogger();
     }
 
-    public override void PrepareNextRow()
+    protected virtual void DeviceController_Configured()
     {
-      base.PrepareNextRow();
-      startDateTime = DateTime.Now;
-      stopWatch = Time.unscaledDeltaTime;
+      StartLogger();
     }
 
-    public override void WriteRow()
+    protected virtual void Grid_Configured()
     {
-      TotalTime = Time.unscaledDeltaTime - stopWatch;
+      PrepareNextRow();
 
-      AddToNextRow(TrialId);
-      AddToNextRow(ParticipantId);
+      startDateTime = DateTime.Now;
+      stopWatch = Time.unscaledDeltaTime;
+
+      AddToNextRow(deviceController.ParticipantId);
+      AddToNextRow(deviceController.StateController.GetIndependentVariable<IVTechnique>().CurrentCondition.id);
+      AddToNextRow(deviceController.StateController.GetIndependentVariable<IVClassificationDifficulty>().CurrentCondition.id);
+      AddToNextRow(deviceController.StateController.GetIndependentVariable<IVTextSize>().CurrentCondition.id);
+      AddToNextRow(deviceController.StateController.CurrentTrial);
+    }
+
+    protected virtual void Grid_Completed()
+    {
       AddToNextRow(startDateTime);
-      AddToNextRow(Technique);
-      AddToNextRow(TextSize);
-      AddToNextRow(ClassificationDistance);
-      AddToNextRow(TotalTime);
-      AddToNextRow(TrialNumber);
+      AddToNextRow((startDateTime - DateTime.Now).TotalSeconds);
 
-      TrialId++;
-
-      base.WriteRow();
+      WriteRow();
     }
   }
 }

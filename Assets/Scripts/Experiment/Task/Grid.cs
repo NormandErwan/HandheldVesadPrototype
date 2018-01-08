@@ -5,7 +5,6 @@ using NormandErwan.MasterThesis.Experiment.UI.Grid;
 using NormandErwan.MasterThesis.Experiment.Utilities;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
@@ -26,6 +25,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     [SerializeField]
     private GameObject background;
 
+    [SerializeField]
+    private StateController stateController;
+
     // Interfaces properties
 
     public bool IsInteractable { get; protected set; }
@@ -41,8 +43,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public GenericVector3<Range<float>> ScaleRange { get; protected set; }
 
     // Properties
-
-    public StateController StateController { get; set; }
 
     public bool IsConfigured { get; protected set; }
     public bool IsCompleted { get; protected set; }
@@ -66,6 +66,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public event Action ConfigureSync = delegate { };
     public event Action Configured = delegate { };
+
+    public event Action CompleteSync = delegate { };
     public event Action Completed = delegate { };
 
     public event Action<Container, Item> ItemSelected = delegate { };
@@ -205,8 +207,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       // Init the variables and properties
       if (ivTextSize == null)
       {
-        ivTextSize = StateController.GetIndependentVariable<IVTextSize>();
-        iVClassificationDifficulty = StateController.GetIndependentVariable<IVClassificationDifficulty>();
+        ivTextSize = stateController.GetIndependentVariable<IVTextSize>();
+        iVClassificationDifficulty = stateController.GetIndependentVariable<IVClassificationDifficulty>();
       }
 
       SetInteractable(false);
@@ -278,10 +280,21 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
       UpdateTransformRanges();
 
+      // Update grid state
       SetInteractable(true);
       StartCoroutine(SetContainersItemsInteractable(true));
+
       IsConfigured = true;
       Configured();
+    }
+
+    internal virtual void SetCompleted()
+    {
+      StartCoroutine(SetContainersItemsInteractable(false));
+      SetInteractable(false);
+
+      IsCompleted = true;
+      Completed();
     }
 
     protected virtual void Container_Selected(Container container)
@@ -325,11 +338,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
           // Call Finished if all items are classified
           if (RemainingItemsToClassify == 0)
           {
-            StartCoroutine(SetContainersItemsInteractable(false));
-            SetInteractable(false);
-
-            IsCompleted = true;
-            Completed();
+            CompleteSync();
           }
         }
       }

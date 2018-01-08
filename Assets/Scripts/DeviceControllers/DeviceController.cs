@@ -1,6 +1,4 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
-using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
-using NormandErwan.MasterThesis.Experiment.Loggers;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -17,14 +15,10 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     [SerializeField]
     private Experiment.Task.Grid grid;
 
-    [SerializeField]
-    private ParticipantLogger participantLogger;
-
     // Properties
 
     public StateController StateController { get { return stateController; } set { stateController = value; } }
     public Experiment.Task.Grid Grid { get { return grid; } set { grid = value; } }
-    public ParticipantLogger ParticipantLogger { get { return participantLogger; } set { participantLogger = value; } }
 
     public int ParticipantId { get; protected set; }
     public int ConditionsOrdering { get; protected set; }
@@ -32,54 +26,42 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     // Events
 
+    public event Action ConfigureSync = delegate { };
+    public event Action Configured = delegate { };
     public event Action ActivateTaskSync = delegate { };
-    public event Action ConfigureExperimentSync = delegate { };
     public event Action<bool> ToogleZoomSync = delegate { };
-
-    // Variables
-
-    protected IVTechnique ivTechnique;
-    protected IVClassificationDifficulty ivClassificationDifficulty;
-    protected IVTextSize ivTextSize;
 
     // MonoBehaviour methods
 
-    /// <summary>
-    /// Deactivates <see cref="Grid"/>.
-    /// </summary>
-    protected virtual void Start()
+    protected virtual void Awake()
     {
-      ivTechnique = StateController.GetIndependentVariable<IVTechnique>();
-      ivClassificationDifficulty = StateController.GetIndependentVariable<IVClassificationDifficulty>();
-      ivTextSize = StateController.GetIndependentVariable<IVTextSize>();
-
-      Grid.StateController = StateController;
-      Grid.Show(false);
-
       StateController.CurrentStateUpdated += StateController_CurrentStateUpdated;
 
-      Grid.Completed += Grid_Completed;
       Grid.Configured += Grid_Configured;
+      Grid.Completed += Grid_Completed;
+    }
+
+    protected virtual void Start()
+    {
+      Grid.Show(false);
     }
 
     protected virtual void OnDestroy()
     {
       StateController.CurrentStateUpdated -= StateController_CurrentStateUpdated;
 
-      Grid.Completed -= Grid_Completed;
       Grid.Configured -= Grid_Configured;
+      Grid.Completed -= Grid_Completed;
     }
 
     // Methods
 
-    public virtual void ConfigureExperiment(int participantId, int conditionsOrdering, bool participantIsRightHanded)
+    public virtual void Configure(int participantId, int conditionsOrdering, bool participantIsRightHanded)
     {
       ParticipantId = participantId;
       ConditionsOrdering = conditionsOrdering;
       ParticipantIsRightHanded = participantIsRightHanded;
-
-      ParticipantLogger.ParticipantId = ParticipantId;
-      ParticipantLogger.StartLogger();
+      Configured();
     }
 
     public virtual void ActivateTask()
@@ -98,17 +80,10 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     protected virtual void Grid_Configured()
     {
       Grid.Show(true);
-
-      ParticipantLogger.PrepareNextRow();
-      ParticipantLogger.Technique = ivTechnique.CurrentCondition.id;
-      ParticipantLogger.TextSize = ivTextSize.CurrentCondition.id;
-      ParticipantLogger.ClassificationDistance = ivClassificationDifficulty.CurrentCondition.id;
-      ParticipantLogger.TrialNumber = StateController.CurrentTrial;
     }
 
     protected virtual void Grid_Completed()
     {
-      ParticipantLogger.WriteRow();
     }
 
     /// <summary>
@@ -120,11 +95,11 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     }
 
     /// <summary>
-    /// Calls <see cref="ConfigureExperimentSync"/>.
+    /// Calls <see cref="ConfigureSync"/>.
     /// </summary>
     protected virtual void OnConfigureExperimentSync()
     {
-      ConfigureExperimentSync();
+      ConfigureSync();
     }
 
     /// <summary>
@@ -151,7 +126,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       if (Input.GetKeyUp(KeyCode.C))
       {
-        Grid_Completed();
+        Grid.SetCompleted();
         StateController.NextState();
         ActivateTask();
         Grid.Configure();

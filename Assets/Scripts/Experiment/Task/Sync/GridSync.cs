@@ -35,11 +35,13 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       MessageTypes.Add(gridTransformMessage.MessageType);
 
       Grid.ConfigureSync += Grid_ConfigureSync;
+      Grid.CompleteSync += Grid_CompleteSync;
     }
 
     protected virtual void OnDestroy()
     {
       Grid.ConfigureSync -= Grid_ConfigureSync;
+      Grid.CompleteSync -= Grid_CompleteSync;
     }
 
     // DevicesSync methods
@@ -49,7 +51,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       if (shouldSendThisFrame && Grid.IsConfigured)
       {
         gridTransformMessage.Update(Grid, MovementThresholdToSync);
-        if (gridTransformMessage.HasChanged)
+        if (gridTransformMessage.transformChanged)
         {
           SendToServer(gridTransformMessage);
         }
@@ -71,6 +73,12 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
     protected virtual void Grid_ConfigureSync()
     {
       SendToServer(gridConfigureMessage);
+    }
+
+    protected virtual void Grid_CompleteSync()
+    {
+      gridTransformMessage.completed = true;
+      SendToServer(gridTransformMessage);
     }
 
     protected virtual DevicesSyncMessage ProcessReceivedMessage(NetworkMessage netMessage, bool onClient)

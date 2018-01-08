@@ -27,7 +27,7 @@ namespace NormandErwan.MasterThesis.Experiment
 
     public static short DeviceControllerActivateTask { get { return (short)(Smallest + 3); } }
 
-    public static short DeviceControllerConfigureExperiment { get { return (short)(Smallest + 4); } }
+    public static short DeviceControllerConfigure { get { return (short)(Smallest + 4); } }
 
     public static short DeviceControllerToggleZoom { get { return (short)(Smallest + 5); } }
 
@@ -48,7 +48,7 @@ namespace NormandErwan.MasterThesis.Experiment
       { StateManager, "State" },
       { IndependentVariableManagers, "IndependentVariableManagers" },
       { DeviceControllerActivateTask, "DeviceControllerActivateTask" },
-      { DeviceControllerConfigureExperiment, "DeviceControllerConfigureExperiment" },
+      { DeviceControllerConfigure, "DeviceControllerConfigureExperiment" },
       { DeviceControllerToggleZoom, "DeviceControllerToggleZoom" },
       { GridConfigure, "GridConfigure" },
       { GridTransform, "GridTransform" }

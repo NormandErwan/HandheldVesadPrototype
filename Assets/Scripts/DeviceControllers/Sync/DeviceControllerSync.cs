@@ -19,7 +19,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers.Sync
 
     // Variables
 
-    protected ConfigureExperimentMessage configureExperimentMessage = new ConfigureExperimentMessage();
+    protected ConfigureMessage configureMessage = new ConfigureMessage();
     protected ActivateTaskMessage activateTaskMessage = new ActivateTaskMessage();
     protected ToggleZoomMessage toggleZoomMessage = new ToggleZoomMessage();
 
@@ -29,18 +29,18 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers.Sync
     {
       base.Awake();
 
-      MessageTypes.Add(configureExperimentMessage.MessageType);
+      MessageTypes.Add(configureMessage.MessageType);
       MessageTypes.Add(activateTaskMessage.MessageType);
       MessageTypes.Add(toggleZoomMessage.MessageType);
 
-      DeviceController.ConfigureExperimentSync += DeviceController_ConfigureExperimentSync;
+      DeviceController.ConfigureSync += DeviceController_ConfigureSync;
       DeviceController.ActivateTaskSync += DeviceController_ActivateTaskSync;
       DeviceController.ToogleZoomSync += DeviceController_ToogleZoomSync;
     }
 
     protected virtual void OnDestroy()
     {
-      DeviceController.ConfigureExperimentSync -= DeviceController_ConfigureExperimentSync;
+      DeviceController.ConfigureSync -= DeviceController_ConfigureSync;
       DeviceController.ActivateTaskSync -= DeviceController_ActivateTaskSync;
       DeviceController.ToogleZoomSync -= DeviceController_ToogleZoomSync;
     }
@@ -55,12 +55,12 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers.Sync
       return ProcessReceivedMessage(netMessage, true);
     }
 
-    protected virtual void DeviceController_ConfigureExperimentSync()
+    protected virtual void DeviceController_ConfigureSync()
     {
-      configureExperimentMessage.participantId = DeviceController.ParticipantId;
-      configureExperimentMessage.conditionsOrdering = DeviceController.ConditionsOrdering;
-      configureExperimentMessage.participantIsRightHanded = DeviceController.ParticipantIsRightHanded;
-      SendToServer(configureExperimentMessage);
+      configureMessage.participantId = DeviceController.ParticipantId;
+      configureMessage.conditionsOrdering = DeviceController.ConditionsOrdering;
+      configureMessage.participantIsRightHanded = DeviceController.ParticipantIsRightHanded;
+      SendToServer(configureMessage);
     }
 
     protected virtual void DeviceController_ActivateTaskSync()
@@ -77,15 +77,15 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers.Sync
     protected virtual DevicesSyncMessage ProcessReceivedMessage(NetworkMessage netMessage, bool onClient)
     {
       DevicesSyncMessage devicesSyncMessage = null;
-      if (netMessage.msgType == MessageType.DeviceControllerConfigureExperiment)
+      if (netMessage.msgType == MessageType.DeviceControllerConfigure)
       {
         if (!onClient || (onClient && !isServer))
         {
-          var configureExperimentMessage = netMessage.ReadMessage<ConfigureExperimentMessage>();
-          devicesSyncMessage = configureExperimentMessage;
+          var configureMessage = netMessage.ReadMessage<ConfigureMessage>();
+          devicesSyncMessage = configureMessage;
 
-          DeviceController.ConfigureExperiment(configureExperimentMessage.participantId,
-            configureExperimentMessage.conditionsOrdering, configureExperimentMessage.participantIsRightHanded);
+          DeviceController.Configure(configureMessage.participantId, configureMessage.conditionsOrdering,
+            configureMessage.participantIsRightHanded);
         }
       }
       else if (netMessage.msgType == MessageType.DeviceControllerActivateTask)

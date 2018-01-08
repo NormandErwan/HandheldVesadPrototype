@@ -2,7 +2,7 @@
 
 namespace NormandErwan.MasterThesis.Experiment.DeviceControllers.Sync
 {
-  public class ConfigureExperimentMessage : DevicesSyncMessage
+  public class ConfigureMessage : DevicesSyncMessage
   {
     // Properties
 
@@ -14,7 +14,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers.Sync
     /// <summary>
     /// See <see cref="DevicesSyncMessage.MessageType"/>.
     /// </summary>
-    public override short MessageType { get { return MasterThesis.Experiment.MessageType.DeviceControllerConfigureExperiment; } }
+    public override short MessageType { get { return MasterThesis.Experiment.MessageType.DeviceControllerConfigure; } }
 
     // Variables
 

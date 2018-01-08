@@ -1,8 +1,8 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
+using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
 using NormandErwan.MasterThesis.Experiment.Inputs;
 using NormandErwan.MasterThesis.Experiment.UI.HUD;
 using UnityEngine;
-using System.Collections;
 
 namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 {
@@ -70,7 +70,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       base.StateController_CurrentStateUpdated(currentState);
 
-      bool useLeapInput = ivTechnique.CurrentCondition.useLeapInput;
+      bool useLeapInput = StateController.GetIndependentVariable<IVTechnique>().CurrentCondition.useLeapInput;
       LeapFingerCursorsInput.gameObject.SetActive(currentState.ActivateTask && useLeapInput);
       ActivateHand(ParticipantIsRightHanded, currentState.ActivateTask && useLeapInput);
 

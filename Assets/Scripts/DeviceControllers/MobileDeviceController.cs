@@ -3,6 +3,7 @@ using NormandErwan.MasterThesis.Experiment.Inputs;
 using NormandErwan.MasterThesis.Experiment.UI.HUD;
 using UnityEngine;
 using System.Collections;
+using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
 
 namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 {
@@ -67,6 +68,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       base.ActivateTask();
 
+      var ivTechnique = StateController.GetIndependentVariable<IVTechnique>();
       if (ivTechnique.CurrentCondition.useLeapInput)
       {
         MobileDeviceHUD.ShowToggleButton(MobileDeviceHUD.ZoomModeToggleButton);

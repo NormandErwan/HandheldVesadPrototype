@@ -79,6 +79,11 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       AddToNextRow(number.ToString());
     }
 
+    protected virtual void AddToNextRow(double number)
+    {
+      AddToNextRow(number.ToString());
+    }
+
     protected virtual void AddToNextRow(DateTime dateTime)
     {
       AddToNextRow(dateTime.ToString("yyyy-MM-dd HH-mm-ss"));
