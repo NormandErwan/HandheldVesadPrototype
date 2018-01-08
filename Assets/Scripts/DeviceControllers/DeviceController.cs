@@ -1,6 +1,8 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
 using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
+using NormandErwan.MasterThesis.Experiment.Loggers;
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
@@ -15,10 +17,14 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     [SerializeField]
     private Experiment.Task.Grid grid;
 
+    [SerializeField]
+    private ParticipantLogger participantLogger;
+
     // Properties
 
     public StateController StateController { get { return stateController; } set { stateController = value; } }
     public Experiment.Task.Grid Grid { get { return grid; } set { grid = value; } }
+    public ParticipantLogger ParticipantLogger { get { return participantLogger; } set { participantLogger = value; } }
 
     public int ParticipantId { get; protected set; }
     public int ConditionsOrdering { get; protected set; }
@@ -71,6 +77,9 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       ParticipantId = participantId;
       ConditionsOrdering = conditionsOrdering;
       ParticipantIsRightHanded = participantIsRightHanded;
+
+      ParticipantLogger.ParticipantId = ParticipantId;
+      ParticipantLogger.StartLogger();
     }
 
     public virtual void ActivateTask()
@@ -89,10 +98,17 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     protected virtual void Grid_Configured()
     {
       Grid.Show(true);
+
+      ParticipantLogger.PrepareNextRow();
+      ParticipantLogger.Technique = ivTechnique.CurrentCondition.id;
+      ParticipantLogger.TextSize = ivTextSize.CurrentCondition.id;
+      ParticipantLogger.ClassificationDistance = ivClassificationDifficulty.CurrentCondition.id;
+      ParticipantLogger.TrialNumber = StateController.CurrentTrial;
     }
 
     protected virtual void Grid_Completed()
     {
+      ParticipantLogger.WriteRow();
     }
 
     /// <summary>
@@ -117,6 +133,29 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     protected virtual void OnToogleZoomModeSync(bool zoomModeActivated)
     {
       ToogleZoomSync(zoomModeActivated);
+    }
+
+    protected virtual IEnumerator StartTaskDebug()
+    {
+      yield return null;
+      OnConfigureExperimentSync();
+      StateController.BeginExperiment();
+
+      yield return null;
+      StateController.NextState();
+      ActivateTask();
+      Grid.Configure();
+    }
+
+    private void Update()
+    {
+      if (Input.GetKeyUp(KeyCode.C))
+      {
+        Grid_Completed();
+        StateController.NextState();
+        ActivateTask();
+        Grid.Configure();
+      }
     }
   }
 }

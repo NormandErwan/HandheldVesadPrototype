@@ -48,19 +48,10 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       StartCoroutine(StartTaskDebug());
     }
 
-    private IEnumerator StartTaskDebug()
+    protected override IEnumerator StartTaskDebug()
     {
-      yield return null;
-      OnConfigureExperimentSync();
-      StateController.BeginExperiment();
-
-      yield return null;
-      StateController.NextState();
-
-      yield return null;
-      ActivateTask();
+      yield return base.StartTaskDebug();
       MobileDeviceHUD.HideAllButtons();
-      Grid.Configure();
     }
 
     protected override void OnDestroy()

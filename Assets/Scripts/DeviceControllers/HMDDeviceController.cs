@@ -1,8 +1,5 @@
-﻿using DevicesSyncUnity;
-using NormandErwan.MasterThesis.Experiment.Experiment.States;
-using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
+﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
 using NormandErwan.MasterThesis.Experiment.Inputs;
-using NormandErwan.MasterThesis.Experiment.Loggers;
 using NormandErwan.MasterThesis.Experiment.UI.HUD;
 using UnityEngine;
 using System.Collections;
@@ -12,9 +9,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
   public class HMDDeviceController : DeviceController
   {
     // Editor fields
-
-    [SerializeField]
-    private ParticipantLogger participantLogger;
 
     [SerializeField]
     private HMDDeviceHUD hmdDeviceHUD;
@@ -40,7 +34,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     // Properties
 
-    public ParticipantLogger ParticipantLogger { get { return participantLogger; } set { participantLogger = value; } }
     public HMDDeviceHUD HMDDeviceHUD { get { return hmdDeviceHUD; } set { hmdDeviceHUD = value; } }
     public LeapFingerCursorsInput LeapFingerCursorsInput { get { return leapFingerCursorsInput; } set { leapFingerCursorsInput = value; } }
 
@@ -59,40 +52,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       //StartCoroutine(StartTaskDebug());
     }
 
-    private void Update()
-    {
-      if (Input.GetKeyUp(KeyCode.C))
-      {
-        Grid_Completed();
-        StateController.NextState();
-        ActivateTask();
-        Grid.Configure();
-      }
-    }
-
-    private IEnumerator StartTaskDebug()
-    {
-      yield return null;
-      OnConfigureExperimentSync();
-      StateController.BeginExperiment();
-
-      yield return null;
-      StateController.NextState();
-
-      yield return null;
-      ActivateTask();
-      Grid.Configure();
-    }
-
     // DeviceController methods
-
-    public override void ConfigureExperiment(int participantId, int conditionsOrdering, bool participantIsRightHanded)
-    {
-      base.ConfigureExperiment(participantId, conditionsOrdering, participantIsRightHanded);
-
-      ParticipantLogger.ParticipantId = ParticipantId;
-      ParticipantLogger.StartLogger();
-    }
 
     public override void ActivateTask()
     {
@@ -134,23 +94,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
         leftLeapMotionHand.SetActive(value);
         leftHandCursors.SetActive(value);
       }
-    }
-
-    protected override void Grid_Configured()
-    {
-      base.Grid_Configured();
-
-      ParticipantLogger.PrepareNextRow();
-      ParticipantLogger.Technique = ivTechnique.CurrentCondition.id;
-      ParticipantLogger.TextSize = ivTextSize.CurrentCondition.id;
-      ParticipantLogger.ClassificationDistance = ivClassificationDifficulty.CurrentCondition.id;
-      ParticipantLogger.TrialNumber = StateController.CurrentTrial;
-    }
-
-    protected override void Grid_Completed()
-    {
-      base.Grid_Completed();
-      ParticipantLogger.WriteRow();
     }
   }
 }
