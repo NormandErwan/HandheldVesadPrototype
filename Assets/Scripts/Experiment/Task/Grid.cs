@@ -365,7 +365,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     protected virtual IEnumerator SetContainersItemsInteractable(bool value)
     {
-      if (value)
+      if (value == true)
       {
         yield return null; // wait a frame before reactivacting the containers and items
       }
@@ -376,6 +376,11 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         foreach (var item in container.Elements)
         {
           item.SetInteractable(value);
+
+          if (value == false)
+          {
+            item.SetFocused(value);
+          }
         }
       }
     }

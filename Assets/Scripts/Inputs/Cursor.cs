@@ -1,5 +1,6 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -44,13 +45,10 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     protected virtual void OnTriggerEnter(Collider other)
     {
-      GetInteractable<IInteractable>(other, (interactable) =>
+      if (!IsInteractable(other))
       {
-        if (!interactable.IsInteractable)
-        {
-          return;
-        }
-      });
+        return;
+      }
 
       GetInteractable<IFocusable>(other, (focusable) =>
       {
@@ -87,7 +85,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
             if (latestCursorPositions[draggable].Count > 1 && draggable.IsDragging)
             {
               draggable.SetDragging(false); // Only one finger can drag, cancel if more than one finger
-          }
+            }
           });
 
           GetInteractable<ILongPressable>(other, (longPressable) =>
@@ -111,13 +109,10 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     protected virtual void OnTriggerStay(Collider other)
     {
-      GetInteractable<IInteractable>(other, (interactable) =>
+      if (!IsInteractable(other))
       {
-        if (!interactable.IsInteractable)
-        {
-          return;
-        }
-      });
+        return;
+      }
 
       if (IsFinger)
       {
@@ -177,17 +172,13 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
           {
             if (longPressTimers.ContainsKey(longPressable))
             {
-              if (!longPressable.IsInteractable || !longPressable.IsSelectable)
-              {
-                longPressTimers.Remove(longPressable);
-              }
-              else if (longPressTimers[longPressable] < longPressMinTime)
+              if (longPressTimers[longPressable] < longPressMinTime)
               {
                 longPressTimers[longPressable] += Time.deltaTime;
               }
               else
               {
-                longPressable.SetSelected(true);
+                StartCoroutine(SetSelected(longPressable));
                 longPressTimers.Remove(longPressable);
               }
             }
@@ -195,16 +186,9 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
           GetInteractable<ITappable>(other, (tappable) =>
           {
-            if (tapTimers.ContainsKey(tappable))
+            if (tapTimers.ContainsKey(tappable) && tapTimers[tappable] < tapTimeout)
             {
-              if (!tappable.IsInteractable || !tappable.IsSelectable)
-              {
-                tapTimers.Remove(tappable);
-              }
-              else if (tapTimers[tappable] < tapTimeout)
-              {
-                tapTimers[tappable] += Time.deltaTime;
-              }
+              tapTimers[tappable] += Time.deltaTime;
             }
           });
         }
@@ -255,9 +239,9 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
           {
             if (tapTimers.ContainsKey(tappable))
             {
-              if (tappable.IsInteractable && tappable.IsSelectable && tapTimers[tappable] < tapTimeout)
+              if (tapTimers[tappable] < tapTimeout)
               {
-                tappable.SetSelected(true);
+                StartCoroutine(SetSelected(tappable));
               }
               tapTimers.Remove(tappable);
             }
@@ -266,7 +250,17 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       }
     }
 
-    protected virtual void GetInteractable<T>(Component component, Action<T> actionOnInteractable)
+    protected virtual bool IsInteractable(Component component)
+    {
+      bool value = true;
+      GetInteractable<IInteractable>(component, (interactable) =>
+      {
+        value = interactable.IsInteractable;
+      });
+      return value;
+    }
+
+    protected virtual void GetInteractable<T>(Component component, Action<T> actionOnInteractable) where T : IInteractable
     {
       var interactable = component.GetComponent<T>();
       if (interactable != null)
@@ -305,6 +299,16 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       zoomable.Transform.localScale = localScale;
 
       return hasClamped;
+    }
+
+    protected virtual IEnumerator SetSelected(ISelectable selectable)
+    {
+      yield return null; // wait the next frame
+
+      if (selectable.IsInteractable && selectable.IsSelectable)
+      {
+        selectable.SetSelected(true);
+      }
     }
   }
 }
