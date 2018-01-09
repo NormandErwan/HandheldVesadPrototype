@@ -70,16 +70,15 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public event Action CompleteSync = delegate { };
     public event Action Completed = delegate { };
 
-    public event Action<Container, Item> ItemSelected = delegate { };
-    public event Action<Container, Item> ItemDeselected = delegate { };
-    public event Action<Container, Container, Item> ClassificationSuccess = delegate { };
-    public event Action<Container, Container, Item> ClassificationError = delegate { };
+    public event Action<Container, Item, bool> ItemSelected = delegate { };
+    public event Action<Container, Container, Item, bool> ItemClassed = delegate { };
 
     // Variables
 
     protected new BoxCollider collider;
 
     protected Item selectedItem;
+    protected bool itemSelectedThisFrame;
 
     protected IVTextSize ivTextSize;
     protected IVClassificationDifficulty iVClassificationDifficulty;
@@ -100,6 +99,11 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
       IsConfigured = false;
       IsCompleted = false;
+    }
+
+    protected virtual void LateUpdate()
+    {
+      itemSelectedThisFrame = false;
     }
 
     protected virtual void OnDestroy()
@@ -307,13 +311,12 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     protected virtual void Container_Selected(Container container)
     {
-      if (selectedItem != null)
+      if (selectedItem != null && !itemSelectedThisFrame)
       {
         Container previousContainer = GetContainer(selectedItem);
-        if (previousContainer == container)
+        if (previousContainer == container) // Deselect the item if it's the same container
         {
-          // Deselect the item if it's the same container
-          ItemDeselected(previousContainer, selectedItem);
+          selectedItem.SetSelected(false);
         }
         else
         {
@@ -324,12 +327,12 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
             {
               RemainingItemsToClassify++;
             }
-            ClassificationError(previousContainer, container, selectedItem);
+            ItemClassed(previousContainer, container, selectedItem, false);
           }
           else
           {
             RemainingItemsToClassify--;
-            ClassificationSuccess(previousContainer, container, selectedItem);
+            ItemClassed(previousContainer, container, selectedItem, true);
           }
 
           // Move the selected item only if it's a different and not full container
@@ -340,8 +343,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
           }
 
           // Deselect the item
-          selectedItem.SetSelected(false);
+          var oldSelectedItem = selectedItem;
           selectedItem = null;
+          oldSelectedItem.SetSelected(false);
 
           // Call Finished if all items are classified
           if (RemainingItemsToClassify == 0)
@@ -354,29 +358,25 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     protected virtual void Item_Selected(Item item)
     {
-      Container container;
-
       // Deselect the previous selected item
       if (selectedItem != null)
       {
-        if (selectedItem != item)
-        {
-          selectedItem.SetSelected(false);
-        }
-
-        container = GetContainer(selectedItem);
-        ItemDeselected(container, selectedItem);
-
+        var oldSelectedItem = selectedItem;
         selectedItem = null;
+        ItemSelected(GetContainer(oldSelectedItem), oldSelectedItem, false);
+
+        if (item != oldSelectedItem)
+        {
+          oldSelectedItem.SetSelected(false);
+        }
       }
 
       // Update selectedItem with the new item
       if (item.IsSelected)
       {
         selectedItem = item;
-
-        container = GetContainer(selectedItem);
-        ItemSelected(container, selectedItem);
+        itemSelectedThisFrame = true;
+        ItemSelected(GetContainer(selectedItem), selectedItem, true);
       }
     }
 

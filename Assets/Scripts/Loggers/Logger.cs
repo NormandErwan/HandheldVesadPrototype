@@ -43,7 +43,9 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     {
       NextRow = new List<string>(new string[Columns.Count]);
 
+      Directory.CreateDirectory(dataPath);
       FilePath = Path.Combine(dataPath, Filename);
+
       csvWriter = new CsvFileWriter(FilePath);
       csvWriter.WriteRow(Columns);
     }

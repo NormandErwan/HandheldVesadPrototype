@@ -1,13 +1,43 @@
 ﻿using NormandErwan.MasterThesis.Experiment.DeviceControllers;
+using NormandErwan.MasterThesis.Experiment.Experiment.Task;
 using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Loggers
 {
   public class ParticipantLogger : Logger
   {
+    public enum VariableType
+    {
+      Selections,
+      Pan,
+      Zoom
+    }
+
+    public class Variable
+    {
+      public VariableType type;
+      public int count;
+      public Stopwatch time = new Stopwatch();
+      public float distance;
+
+      public Variable(VariableType type)
+      {
+        this.type = type;
+        Reset();
+      }
+
+      public void Reset()
+      {
+        count = 0;
+        time.Reset();
+        distance = 0;
+      }
+    }
+
     // Editor fields
 
     [SerializeField]
@@ -15,24 +45,21 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     // Properties
 
-    public int Selections { get; set; }
-    public int Deselections { get; set; }
-    public int Errors { get; set; }
-
     public int HeadPhoneDistance { get; set; }
 
     // Variables
 
     protected DateTime startDateTime;
-    protected float stopWatch;
 
-    protected bool panCount;
-    protected float panTime;
-    protected int panDistance;
+    public Variable selections = new Variable(VariableType.Selections);
+    protected int deselections = 0;
+    protected int errors = 0;
+    protected int success = 0;
 
-    protected bool zoomCount;
-    protected float zoomTime;
-    protected int zoomDistance;
+    public Variable pan = new Variable(VariableType.Pan);
+    public Variable zoom = new Variable(VariableType.Zoom);
+
+    protected Experiment.Task.Grid grid;
 
     // MonoBehaviour methods
 
@@ -40,10 +67,16 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     {
       base.Awake();
 
+      dataPath += "/Logs";
+
+      grid = deviceController.Grid;
+
       deviceController.Configured += DeviceController_Configured;
 
-      deviceController.Grid.Configured += Grid_Configured;
-      deviceController.Grid.Completed += Grid_Completed;
+      grid.Configured += Grid_Configured;
+      grid.Completed += Grid_Completed;
+      grid.ItemSelected += Grid_ItemSelected;
+      grid.ItemClassed += Grid_ItemClassed;
     }
 
     protected override void OnDestroy()
@@ -52,8 +85,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
       deviceController.Configured -= DeviceController_Configured;
 
-      deviceController.Grid.Configured -= Grid_Configured;
-      deviceController.Grid.Completed -= Grid_Completed;
+      grid.Configured -= Grid_Configured;
+      grid.Completed -= Grid_Completed;
+      grid.ItemSelected -= Grid_ItemSelected;
+      grid.ItemClassed -= Grid_ItemClassed;
     }
 
     // Methods
@@ -64,10 +99,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       Columns = new List<string>() {
         "ParticipantId", "Technique", "Distance", "TextSize", "TrialNumber",
         "StartDateTime", "TotalTime",
-        "Selections", "Deselections", "Errors",
+        "SelectionsCount", "SelectionsTime", "SelectionsDistance", "Deselections", "Errors", "Success",
         "PanCount", "PanTime", "PanDistance",
         "ZoomCount", "ZoomTime", "ZoomDistance",
-        "HeadDeviceDistance"
+        "HeadPhoneDistance"
       };
       base.StartLogger();
     }
@@ -82,7 +117,13 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       PrepareNextRow();
 
       startDateTime = DateTime.Now;
-      stopWatch = Time.unscaledDeltaTime;
+
+      selections.Reset();
+      deselections = 0;
+      errors = 0;
+
+      pan.Reset();
+      zoom.Reset();
 
       AddToNextRow(deviceController.ParticipantId);
       AddToNextRow(deviceController.StateController.GetIndependentVariable<IVTechnique>().CurrentCondition.id);
@@ -94,9 +135,53 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     protected virtual void Grid_Completed()
     {
       AddToNextRow(startDateTime);
-      AddToNextRow((startDateTime - DateTime.Now).TotalSeconds);
+      AddToNextRow((DateTime.Now - startDateTime).TotalSeconds);
+
+      AddToNextRow(selections);
+      AddToNextRow(deselections);
+      AddToNextRow(errors);
+      AddToNextRow(success);
+
+      AddToNextRow(pan);
+      AddToNextRow(zoom);
+
+      AddToNextRow(HeadPhoneDistance);
 
       WriteRow();
+    }
+
+    protected virtual void Grid_ItemSelected(Container container, Item item, bool selected)
+    {
+      if (selected)
+      {
+        selections.count++;
+        selections.time.Start();
+      }
+      else
+      {
+        deselections++;
+        selections.time.Stop();
+      }
+    }
+
+    protected virtual void Grid_ItemClassed(Container oldContainer, Container newContainer, Item item, bool success)
+    {
+      if (success)
+      {
+        this.success++;
+      }
+      else
+      {
+        errors++;
+      }
+      selections.time.Stop();
+    }
+
+    protected virtual void AddToNextRow(Variable variable)
+    {
+      AddToNextRow(variable.count);
+      AddToNextRow(variable.time.Elapsed.TotalSeconds);
+      AddToNextRow(variable.distance);
     }
   }
 }
