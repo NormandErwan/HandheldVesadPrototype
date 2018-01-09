@@ -124,6 +124,13 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
             var cursors = new List<Cursor>(latestPositions.Keys);
             if (cursors[0] == this) // Update only once per frame
             {
+              var cursorPositions = new Vector3[4] {
+                zoomable.ProjectPosition(cursors[0].transform.position),
+                zoomable.ProjectPosition(latestPositions[cursors[0]]),
+                zoomable.ProjectPosition(cursors[1].transform.position),
+                zoomable.ProjectPosition(latestPositions[cursors[1]])
+              };
+
               var distance = zoomable.ProjectPosition(cursors[0].transform.position - cursors[1].transform.position);
               var previousDistance = zoomable.ProjectPosition(latestPositions[cursors[0]] - latestPositions[cursors[1]]);
               float scaleFactor = distance.magnitude / previousDistance.magnitude;
@@ -134,11 +141,11 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
                 var newPosition = cursors[0].transform.position - scaleFactor * (latestPositions[cursors[0]] - zoomable.Transform.position);
                 var translation = newPosition - zoomable.Transform.position;
                 Translate(zoomable, translation);
-                zoomable.Zoom(scaleFactor, translation);
+                zoomable.Zoom(scaleFactor, translation, cursorPositions);
               }
               else
               {
-                zoomable.Zoom(scaleFactor, Vector3.zero);
+                zoomable.Zoom(scaleFactor, Vector3.zero, cursorPositions);
               }
 
               latestPositions[cursors[0]] = cursors[0].transform.position;

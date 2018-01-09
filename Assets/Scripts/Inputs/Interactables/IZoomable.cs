@@ -15,12 +15,12 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Interactables
     // Events
 
     event Action<IZoomable> ZoomingStarted;
-    event Action<IZoomable> Zooming;
+    event Action<IZoomable, float, Vector3, Vector3[]> Zooming;
     event Action<IZoomable> ZoomingStopped;
 
     // Methods
 
     void SetZooming(bool value);
-    void Zoom(float scaleFactor, Vector3 translation);
+    void Zoom(float scaleFactor, Vector3 translation, Vector3[] cursors);
   }
 }

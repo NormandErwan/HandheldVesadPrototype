@@ -82,6 +82,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       grid.DraggingStarted += Grid_DraggingStarted;
       grid.Dragging += Grid_Dragging;
       grid.DraggingStopped += Grid_DraggingStopped;
+
+      grid.ZoomingStarted += Grid_ZoomingStarted;
+      grid.Zooming += Grid_Zooming;
+      grid.ZoomingStopped += Grid_ZoomingStopped;
     }
 
     protected override void OnDestroy()
@@ -98,6 +102,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       grid.DraggingStarted -= Grid_DraggingStarted;
       grid.Dragging -= Grid_Dragging;
       grid.DraggingStopped -= Grid_DraggingStopped;
+
+      grid.ZoomingStarted -= Grid_ZoomingStarted;
+      grid.Zooming -= Grid_Zooming;
+      grid.ZoomingStopped -= Grid_ZoomingStopped;
     }
 
     // Methods
@@ -206,6 +214,31 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     protected virtual void Grid_DraggingStopped(IDraggable grid)
     {
       pan.time.Stop();
+    }
+
+    protected virtual void Grid_ZoomingStarted(IZoomable grid)
+    {
+      zoom.count++;
+      zoom.time.Start();
+    }
+
+    protected virtual void Grid_Zooming(IZoomable grid, float scaleFactor, Vector3 translation, Vector3[] cursors)
+    {
+      var distance = cursors[0] - cursors[1];
+      var previousDistance = cursors[2] - cursors[3];
+      var magnitude = (distance - previousDistance).magnitude;
+
+      zoom.distance += magnitude;
+
+      if (selections.time.IsRunning)
+      {
+        selections.distance += magnitude;
+      }
+    }
+
+    protected virtual void Grid_ZoomingStopped(IZoomable grid)
+    {
+      zoom.time.Stop();
     }
 
     protected virtual void AddToNextRow(Variable variable)

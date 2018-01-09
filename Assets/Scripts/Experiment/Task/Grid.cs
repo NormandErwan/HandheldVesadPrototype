@@ -59,7 +59,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public event Action<IDraggable> DraggingStopped = delegate { };
 
     public event Action<IZoomable> ZoomingStarted = delegate { };
-    public event Action<IZoomable> Zooming = delegate { };
+    public event Action<IZoomable, float, Vector3, Vector3[]> Zooming = delegate { };
     public event Action<IZoomable> ZoomingStopped = delegate { };
 
     // Events
@@ -171,7 +171,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       StartCoroutine(SetContainersItemsInteractable(!IsDragging && !IsZooming));
     }
 
-    public void Zoom(float scaleFactor, Vector3 translation)
+    public void Zoom(float scaleFactor, Vector3 translation, Vector3[] cursors)
     {
       UpdateTransformRanges();
 
@@ -187,7 +187,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         }
       }
 
-      Zooming(this);
+      Zooming(this, scaleFactor, translation, cursors);
     }
 
     // Methods
