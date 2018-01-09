@@ -64,7 +64,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     // Events
 
-    public event Action ConfigureSync = delegate { };
+    public event Action<GridGenerator> ConfigureSync = delegate { };
     public event Action Configured = delegate { };
 
     public event Action CompleteSync = delegate { };
@@ -190,7 +190,38 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public override void Configure()
     {
-      ConfigureSync();
+      if (iVClassificationDifficulty == null)
+      {
+        iVClassificationDifficulty = stateController.GetIndependentVariable<IVClassificationDifficulty>();
+      }
+      var classificationCondition = iVClassificationDifficulty.CurrentCondition;
+
+      // Pre-configure the grid
+      CleanGrid();
+      base.Configure();
+
+      // Generate a grid generator with average distance in current condition classification distance range
+      int gridNumber = 0;
+      GridGenerator gridGenerator;
+      do
+      {
+        int itemsPerContainer = Elements[0].ElementsInstantiatedAtConfigure;
+        gridGenerator = new GridGenerator(GridSize.y, GridSize.x, itemsPerContainer,
+          classificationCondition.NumberOfItemsToClass,
+          (GridGenerator.DistanceTypes)iVClassificationDifficulty.CurrentConditionIndex);
+        gridNumber++;
+      }
+      while (!classificationCondition.AverageClassificationDistanceRange.ContainsValue(gridGenerator.AverageDistance)
+        && classificationCondition.NumberOfItemsToClass != gridGenerator.IncorrectContainersNumber
+        && gridNumber < gridGenerationMaxNumber);
+
+      if (gridNumber >= gridGenerationMaxNumber)
+      {
+        throw new Exception("Failed to generate a grid.");
+      }
+      RemainingItemsToClassify = gridGenerator.IncorrectContainersNumber;
+
+      ConfigureSync(gridGenerator);
     }
 
     public virtual void Show(bool value)
@@ -202,13 +233,12 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       background.SetActive(value);
     }
 
-    internal virtual void SetConfiguration()
+    internal virtual void SetConfiguration(GridGenerator gridGenerator)
     {
       // Init the variables and properties
       if (ivTextSize == null)
       {
         ivTextSize = stateController.GetIndependentVariable<IVTextSize>();
-        iVClassificationDifficulty = stateController.GetIndependentVariable<IVClassificationDifficulty>();
       }
 
       SetInteractable(false);
@@ -224,28 +254,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       CleanGrid();
       base.Configure();
       BuildGrid();
-
-      // Generate a grid generator with average distance in current condition classification distance range
-      var classificationCondition = iVClassificationDifficulty.CurrentCondition;
-
-      int gridNumber = 0;
-      GridGenerator gridGenerator; // TODO: sync this generation
-      do
-      {
-        gridGenerator = new GridGenerator(GridSize.y, GridSize.x, Elements[0].ElementsInstantiatedAtConfigure,
-        classificationCondition.NumberOfItemsToClass,
-        (GridGenerator.DistanceTypes)iVClassificationDifficulty.CurrentConditionIndex);
-        gridNumber++;
-      }
-      while (!classificationCondition.AverageClassificationDistanceRange.ContainsValue(gridGenerator.AverageDistance)
-        && classificationCondition.NumberOfItemsToClass != gridGenerator.IncorrectContainersNumber
-        && gridNumber < gridGenerationMaxNumber);
-
-      if (gridNumber >= gridGenerationMaxNumber)
-      {
-        throw new Exception("Failed to generate a grid.");
-      }
-      RemainingItemsToClassify = gridGenerator.IncorrectContainersNumber;
 
       // Configure containers and items
       int containerRow = 0, containerColumn = 0;

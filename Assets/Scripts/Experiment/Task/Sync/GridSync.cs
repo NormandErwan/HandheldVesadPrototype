@@ -70,8 +70,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 
     // Methods
 
-    protected virtual void Grid_ConfigureSync()
+    protected virtual void Grid_ConfigureSync(GridGenerator gridGenerator)
     {
+      gridConfigureMessage.Update(grid, gridGenerator);
       SendToServer(gridConfigureMessage);
     }
 
@@ -89,7 +90,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
         devicesSyncMessage = ProcessReceivedMessage<GridSyncConfigureMessage>(netMessage, gridConfigureMessage.MessageType,
           (gridConfigureMessage) =>
           {
-            grid.SetConfiguration();
+            gridConfigureMessage.Restore(Grid);
           });
 
         devicesSyncMessage = ProcessReceivedMessage<GridSyncTransformMessage>(netMessage, gridTransformMessage.MessageType,

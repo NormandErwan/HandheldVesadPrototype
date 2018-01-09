@@ -78,7 +78,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       ColumnsNumber = columnsNumber;
       ItemsPerContainer = itemsPerContainer;
 
-      Containers = new Container[RowsNumber, ColumnsNumber];
       InitialIncorrectContainersNumber = initialIncorrectContainersNumber;
       IncorrectContainersNumber = 0;
 
@@ -101,16 +100,17 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       // In each container, the first few items will be of the correct itemId,
       // and the last item will be empty.
       // Later on, the last item of some containers will be permuted.
-      for (int r = 0; r < RowsNumber; ++r)
+      Containers = new Container[RowsNumber, ColumnsNumber];
+      for (int row = 0; row < RowsNumber; ++row)
       {
-        for (int c = 0; c < ColumnsNumber; ++c)
+        for (int col = 0; col < ColumnsNumber; ++col)
         {
-          Containers[r, c] = new Container();
-          Containers[r, c].items = new int[ItemsPerContainer];
+          Containers[row, col] = new Container();
+          Containers[row, col].items = new int[ItemsPerContainer];
 
           for (int i = 0; i < ItemsPerContainer; ++i)
           {
-            Containers[r, c].items[i] = containersItemValues[r * ColumnsNumber + c];
+            Containers[row, col].items[i] = containersItemValues[row * ColumnsNumber + col];
           }
         }
       }
@@ -213,6 +213,15 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       }
 
       AverageDistance /= IncorrectContainersNumber;
+    }
+
+    public GridGenerator(Container[,] containers)
+    {
+      RowsNumber = containers.GetLength(0);
+      ColumnsNumber = containers.GetLength(1);
+      ItemsPerContainer = containers[0,0].items.Length;
+
+      Containers = containers;
     }
 
     // Methods
