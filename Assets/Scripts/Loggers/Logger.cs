@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Globalization;
 using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Loggers
@@ -73,17 +74,17 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected virtual void AddToNextRow(int number)
     {
-      AddToNextRow(number.ToString());
+      AddToNextRow(number.ToString(CultureInfo.InvariantCulture));
     }
 
     protected virtual void AddToNextRow(float number)
     {
-      AddToNextRow(number.ToString());
+      AddToNextRow(number.ToString(CultureInfo.InvariantCulture));
     }
 
     protected virtual void AddToNextRow(double number)
     {
-      AddToNextRow(number.ToString());
+      AddToNextRow(number.ToString(CultureInfo.InvariantCulture));
     }
 
     protected virtual void AddToNextRow(DateTime dateTime)
