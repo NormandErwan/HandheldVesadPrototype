@@ -1,6 +1,7 @@
 ﻿using NormandErwan.MasterThesis.Experiment.DeviceControllers;
 using NormandErwan.MasterThesis.Experiment.Experiment.Task;
 using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
+using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -77,6 +78,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       grid.Completed += Grid_Completed;
       grid.ItemSelected += Grid_ItemSelected;
       grid.ItemClassed += Grid_ItemClassed;
+
+      grid.DraggingStarted += Grid_DraggingStarted;
+      grid.Dragging += Grid_Dragging;
+      grid.DraggingStopped += Grid_DraggingStopped;
     }
 
     protected override void OnDestroy()
@@ -89,6 +94,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       grid.Completed -= Grid_Completed;
       grid.ItemSelected -= Grid_ItemSelected;
       grid.ItemClassed -= Grid_ItemClassed;
+
+      grid.DraggingStarted -= Grid_DraggingStarted;
+      grid.Dragging -= Grid_Dragging;
+      grid.DraggingStopped -= Grid_DraggingStopped;
     }
 
     // Methods
@@ -175,6 +184,28 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         errors++;
       }
       selections.time.Stop();
+    }
+
+    protected virtual void Grid_DraggingStarted(IDraggable grid)
+    {
+      pan.count++;
+      pan.time.Start();
+    }
+
+    protected virtual void Grid_Dragging(IDraggable grid, Vector3 translation)
+    {
+      var magnitude = translation.magnitude;
+      pan.distance += magnitude;
+
+      if (selections.time.IsRunning)
+      {
+        selections.distance += magnitude;
+      }
+    }
+
+    protected virtual void Grid_DraggingStopped(IDraggable grid)
+    {
+      pan.time.Stop();
     }
 
     protected virtual void AddToNextRow(Variable variable)

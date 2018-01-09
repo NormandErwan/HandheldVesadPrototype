@@ -12,7 +12,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Interactables
     // Events
 
     event Action<IDraggable> DraggingStarted;
-    event Action<IDraggable> Dragging;
+    event Action<IDraggable, Vector3> Dragging;
     event Action<IDraggable> DraggingStopped;
 
     // Methods

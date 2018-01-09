@@ -55,7 +55,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public event Action<IInteractable> Interactable = delegate { };
 
     public event Action<IDraggable> DraggingStarted = delegate { };
-    public event Action<IDraggable> Dragging = delegate { };
+    public event Action<IDraggable, Vector3> Dragging = delegate { };
     public event Action<IDraggable> DraggingStopped = delegate { };
 
     public event Action<IZoomable> ZoomingStarted = delegate { };
@@ -153,7 +153,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public void Drag(Vector3 translation)
     {
-      Dragging(this);
+      Dragging(this, translation);
     }
 
     public void SetZooming(bool value)
