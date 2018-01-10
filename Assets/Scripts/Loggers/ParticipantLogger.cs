@@ -1,5 +1,4 @@
-﻿using NormandErwan.MasterThesis.Experiment.DeviceControllers;
-using NormandErwan.MasterThesis.Experiment.Experiment.Task;
+﻿using NormandErwan.MasterThesis.Experiment.Experiment.Task;
 using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
 using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using System;
@@ -9,25 +8,18 @@ using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Loggers
 {
-  public class ParticipantLogger : Logger
+  public class ExperimentLogger : ExperimentBaseLogger
   {
-    public enum VariableType
-    {
-      Selections,
-      Pan,
-      Zoom
-    }
-
     public class Variable
     {
-      public VariableType type;
+      public string name;
       public int count;
       public Stopwatch time = new Stopwatch();
       public float distance;
 
-      public Variable(VariableType type)
+      public Variable(string name)
       {
-        this.type = type;
+        this.name = name;
         Reset();
       }
 
@@ -37,12 +29,12 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         time.Reset();
         distance = 0;
       }
+
+      public List<string> Colums()
+      {
+        return new List<string>() { name + "Count", name + "Time", name + "Distance" };
+      }
     }
-
-    // Editor fields
-
-    [SerializeField]
-    private DeviceController deviceController;
 
     // Properties
 
@@ -52,86 +44,36 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected DateTime startDateTime;
 
-    public Variable selections = new Variable(VariableType.Selections);
+    public Variable selections = new Variable("Selections");
     protected int deselections = 0;
     protected int errors = 0;
     protected int success = 0;
 
-    public Variable pan = new Variable(VariableType.Pan);
-    public Variable zoom = new Variable(VariableType.Zoom);
-
-    protected Experiment.Task.Grid grid;
-
-    // MonoBehaviour methods
-
-    protected override void Awake()
-    {
-      base.Awake();
-
-      dataPath += "/Logs";
-
-      grid = deviceController.Grid;
-
-      deviceController.Configured += DeviceController_Configured;
-
-      grid.Configured += Grid_Configured;
-      grid.Completed += Grid_Completed;
-      grid.ItemSelected += Grid_ItemSelected;
-      grid.ItemClassed += Grid_ItemClassed;
-
-      grid.DraggingStarted += Grid_DraggingStarted;
-      grid.Dragging += Grid_Dragging;
-      grid.DraggingStopped += Grid_DraggingStopped;
-
-      grid.ZoomingStarted += Grid_ZoomingStarted;
-      grid.Zooming += Grid_Zooming;
-      grid.ZoomingStopped += Grid_ZoomingStopped;
-    }
-
-    protected override void OnDestroy()
-    {
-      base.OnDestroy();
-
-      deviceController.Configured -= DeviceController_Configured;
-
-      grid.Configured -= Grid_Configured;
-      grid.Completed -= Grid_Completed;
-      grid.ItemSelected -= Grid_ItemSelected;
-      grid.ItemClassed -= Grid_ItemClassed;
-
-      grid.DraggingStarted -= Grid_DraggingStarted;
-      grid.Dragging -= Grid_Dragging;
-      grid.DraggingStopped -= Grid_DraggingStopped;
-
-      grid.ZoomingStarted -= Grid_ZoomingStarted;
-      grid.Zooming -= Grid_Zooming;
-      grid.ZoomingStopped -= Grid_ZoomingStopped;
-    }
+    public Variable pan = new Variable("Pan");
+    public Variable zoom = new Variable("Zoom");
 
     // Methods
 
-    public override void StartLogger()
+    public override void Configure()
     {
       Filename = "participant-" + deviceController.ParticipantId + "_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".csv";
+
       Columns = new List<string>() {
         "ParticipantId", "Technique", "Distance", "TextSize", "TrialNumber",
-        "StartDateTime", "TotalTime",
-        "SelectionsCount", "SelectionsTime", "SelectionsDistance", "Deselections", "Errors", "Success",
-        "PanCount", "PanTime", "PanDistance",
-        "ZoomCount", "ZoomTime", "ZoomDistance",
-        "HeadPhoneDistance"
+        "StartDateTime", "TotalTime"
       };
-      base.StartLogger();
+      Columns.AddRange(selections.Colums());
+      Columns.AddRange(new string[]{ "Deselections", "Errors", "Success" });
+      Columns.AddRange(pan.Colums());
+      Columns.AddRange(zoom.Colums());
+      Columns.Add("HeadPhoneDistance");
+
+      base.Configure();
     }
 
-    protected virtual void DeviceController_Configured()
+    protected override void Grid_Configured()
     {
-      StartLogger();
-    }
-
-    protected virtual void Grid_Configured()
-    {
-      PrepareNextRow();
+      PrepareRow();
 
       startDateTime = DateTime.Now;
 
@@ -142,32 +84,32 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       pan.Reset();
       zoom.Reset();
 
-      AddToNextRow(deviceController.ParticipantId);
-      AddToNextRow(deviceController.StateController.GetIndependentVariable<IVTechnique>().CurrentCondition.id);
-      AddToNextRow(deviceController.StateController.GetIndependentVariable<IVClassificationDifficulty>().CurrentCondition.id);
-      AddToNextRow(deviceController.StateController.GetIndependentVariable<IVTextSize>().CurrentCondition.id);
-      AddToNextRow(deviceController.StateController.CurrentTrial);
+      AddToRow(deviceController.ParticipantId);
+      AddToRow(deviceController.StateController.GetIndependentVariable<IVTechnique>().CurrentCondition.id);
+      AddToRow(deviceController.StateController.GetIndependentVariable<IVClassificationDifficulty>().CurrentCondition.id);
+      AddToRow(deviceController.StateController.GetIndependentVariable<IVTextSize>().CurrentCondition.id);
+      AddToRow(deviceController.StateController.CurrentTrial);
     }
 
-    protected virtual void Grid_Completed()
+    protected override void Grid_Completed()
     {
-      AddToNextRow(startDateTime);
-      AddToNextRow((DateTime.Now - startDateTime).TotalSeconds);
+      AddToRow(startDateTime);
+      AddToRow((DateTime.Now - startDateTime).TotalSeconds);
 
-      AddToNextRow(selections);
-      AddToNextRow(deselections);
-      AddToNextRow(errors);
-      AddToNextRow(success);
+      AddToRow(selections);
+      AddToRow(deselections);
+      AddToRow(errors);
+      AddToRow(success);
 
-      AddToNextRow(pan);
-      AddToNextRow(zoom);
+      AddToRow(pan);
+      AddToRow(zoom);
 
-      AddToNextRow(HeadPhoneDistance);
+      AddToRow(HeadPhoneDistance);
 
       WriteRow();
     }
 
-    protected virtual void Grid_ItemSelected(Container container, Item item, bool selected)
+    protected override void Grid_ItemSelected(Container container, Item item, bool selected)
     {
       if (selected)
       {
@@ -181,7 +123,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       }
     }
 
-    protected virtual void Grid_ItemClassed(Container oldContainer, Container newContainer, Item item, bool success)
+    protected override void Grid_ItemClassed(Container oldContainer, Container newContainer, Item item, bool success)
     {
       if (success)
       {
@@ -194,13 +136,13 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       selections.time.Stop();
     }
 
-    protected virtual void Grid_DraggingStarted(IDraggable grid)
+    protected override void Grid_DraggingStarted(IDraggable grid)
     {
       pan.count++;
       pan.time.Start();
     }
 
-    protected virtual void Grid_Dragging(IDraggable grid, Vector3 translation)
+    protected override void Grid_Dragging(IDraggable grid, Vector3 translation)
     {
       var magnitude = translation.magnitude;
       pan.distance += magnitude;
@@ -211,18 +153,18 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       }
     }
 
-    protected virtual void Grid_DraggingStopped(IDraggable grid)
+    protected override void Grid_DraggingStopped(IDraggable grid)
     {
       pan.time.Stop();
     }
 
-    protected virtual void Grid_ZoomingStarted(IZoomable grid)
+    protected override void Grid_ZoomingStarted(IZoomable grid)
     {
       zoom.count++;
       zoom.time.Start();
     }
 
-    protected virtual void Grid_Zooming(IZoomable grid, float scaleFactor, Vector3 translation, Vector3[] cursors)
+    protected override void Grid_Zooming(IZoomable grid, float scaleFactor, Vector3 translation, Vector3[] cursors)
     {
       var distance = cursors[0] - cursors[1];
       var previousDistance = cursors[2] - cursors[3];
@@ -236,16 +178,16 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       }
     }
 
-    protected virtual void Grid_ZoomingStopped(IZoomable grid)
+    protected override void Grid_ZoomingStopped(IZoomable grid)
     {
       zoom.time.Stop();
     }
 
-    protected virtual void AddToNextRow(Variable variable)
+    protected virtual void AddToRow(Variable variable)
     {
-      AddToNextRow(variable.count);
-      AddToNextRow(variable.time.Elapsed.TotalSeconds);
-      AddToNextRow(variable.distance);
+      AddToRow(variable.count);
+      AddToRow(variable.time.Elapsed.TotalSeconds);
+      AddToRow(variable.distance);
     }
   }
 }

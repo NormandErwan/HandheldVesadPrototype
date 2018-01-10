@@ -48,7 +48,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public bool IsCompleted { get; protected set; }
     public int RemainingItemsToClassify { get; protected set; }
 
-    public Vector3 LossyScale { get{ return Vector3.Scale(Scale, transform.lossyScale); } }
+    public Vector3 LossyScale { get { return Vector3.Scale(Scale, transform.lossyScale); } }
 
     // Interfaces events
 

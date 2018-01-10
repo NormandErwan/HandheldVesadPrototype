@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4797950628684804}
   - component: {fileID: 114745862547150476}
+  - component: {fileID: 114755104426687954}
   m_Layer: 0
   m_Name: Loggers
   m_TagString: Untagged
@@ -51,4 +52,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32f1fca08794f9f48a8200271d7d6ce3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  head: {fileID: 0}
   deviceController: {fileID: 0}
+--- !u!114 &114755104426687954
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1690279760487372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3388340920fb74244b080011dbb314f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  head: {fileID: 0}
+  deviceController: {fileID: 0}
+  index: {fileID: 0}

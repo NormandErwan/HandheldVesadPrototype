@@ -127,7 +127,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
               var cursorPositions = new Vector3[4] {
                 zoomable.ProjectPosition(cursors[0].transform.position),
                 zoomable.ProjectPosition(latestPositions[cursors[0]]),
-                zoomable.ProjectPosition(cursors[1].transform.position),
+                zoomable.ProjectPosition(cursors[1].transform.position),  
                 zoomable.ProjectPosition(latestPositions[cursors[1]])
               };
 

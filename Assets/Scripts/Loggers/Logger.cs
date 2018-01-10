@@ -15,7 +15,9 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     public string FilePath { get; protected set; }
 
     public List<string> Columns { get; protected set; }
-    public List<string> NextRow { get; protected set; }
+    public List<string> Row { get; protected set; }
+
+    public bool IsConfigured { get; private set; }
 
     // Variables
 
@@ -27,6 +29,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected virtual void Awake()
     {
+      IsConfigured = false;
       dataPath = (Application.isEditor) ? Application.dataPath : Application.persistentDataPath;
     }
 
@@ -40,25 +43,27 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     // Methods
 
-    public virtual void StartLogger()
+    public virtual void Configure()
     {
-      NextRow = new List<string>(new string[Columns.Count]);
+      Row = new List<string>(new string[Columns.Count]);
 
       Directory.CreateDirectory(dataPath);
       FilePath = Path.Combine(dataPath, Filename);
 
       csvWriter = new CsvFileWriter(FilePath);
       csvWriter.WriteRow(Columns);
+
+      IsConfigured = true;
     }
 
-    public virtual void PrepareNextRow()
+    public virtual void PrepareRow()
     {
       columnIndex = 0;
     }
 
     public virtual void WriteRow()
     {
-      csvWriter.WriteRow(NextRow);
+      csvWriter.WriteRow(Row);
     }
 
     public virtual void StopLogger()
@@ -66,35 +71,67 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       csvWriter.Dispose();
     }
 
-    protected virtual void AddToNextRow(string text)
+    protected virtual void AddTransformToColumns(string transform, bool addScale = true)
     {
-      NextRow[columnIndex] = text;
+      AddVector3ToColumns(transform + "_position");
+      AddVector3ToColumns(transform + "_rotation");
+      if (addScale)
+      {
+        AddVector3ToColumns(transform + "_scale");
+      }
+    }
+
+    protected virtual void AddVector3ToColumns(string vector3)
+    {
+      Columns.AddRange(new string[] { vector3 + "_x", vector3 + "_y", vector3 + "_z" });
+    }
+
+    protected virtual void AddToRow(string text)
+    {
+      Row[columnIndex] = text;
       columnIndex++;
     }
 
-    protected virtual void AddToNextRow(int number)
+    protected virtual void AddToRow(bool boolean)
     {
-      AddToNextRow(number.ToString(CultureInfo.InvariantCulture));
+      AddToRow((boolean) ? "true" : "false");
     }
 
-    protected virtual void AddToNextRow(float number)
+    protected virtual void AddToRow(DateTime dateTime)
     {
-      AddToNextRow(number.ToString(CultureInfo.InvariantCulture));
+      AddToRow(dateTime.ToString("yyyy-MM-dd HH-mm-ss"));
     }
 
-    protected virtual void AddToNextRow(double number)
+    protected virtual void AddToRow(int number)
     {
-      AddToNextRow(number.ToString(CultureInfo.InvariantCulture));
+      AddToRow(number.ToString(CultureInfo.InvariantCulture));
     }
 
-    protected virtual void AddToNextRow(DateTime dateTime)
+    protected virtual void AddToRow(float number)
     {
-      AddToNextRow(dateTime.ToString("yyyy-MM-dd HH-mm-ss"));
+      AddToRow(number.ToString(CultureInfo.InvariantCulture));
     }
 
-    protected virtual void AddToNextRow(bool boolean)
+    protected virtual void AddToRow(double number)
     {
-      AddToNextRow((boolean) ? "true" : "false");
+      AddToRow(number.ToString(CultureInfo.InvariantCulture));
+    }
+
+    protected virtual void AddToRow(Transform transform, bool addScale = true)
+    {
+      AddToRow(transform.position);
+      AddToRow(transform.rotation.eulerAngles);
+      if (addScale)
+      {
+        AddToRow(transform.lossyScale);
+      }
+    }
+
+    protected virtual void AddToRow(Vector3 vector3)
+    {
+      AddToRow(vector3.x);
+      AddToRow(vector3.y);
+      AddToRow(vector3.z);
     }
   }
 }

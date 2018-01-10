@@ -409,6 +409,26 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 114755104426687954, guid: 8658a426d2cdf00469db7cc976cefe9c,
+        type: 2}
+      propertyPath: head
+      value: 
+      objectReference: {fileID: 1468961875}
+    - target: {fileID: 114755104426687954, guid: 8658a426d2cdf00469db7cc976cefe9c,
+        type: 2}
+      propertyPath: deviceController
+      value: 
+      objectReference: {fileID: 1578455496}
+    - target: {fileID: 114755104426687954, guid: 8658a426d2cdf00469db7cc976cefe9c,
+        type: 2}
+      propertyPath: index
+      value: 
+      objectReference: {fileID: 1865337871}
+    - target: {fileID: 114745862547150476, guid: 8658a426d2cdf00469db7cc976cefe9c,
+        type: 2}
+      propertyPath: head
+      value: 
+      objectReference: {fileID: 1468961875}
     - target: {fileID: 114745862547150476, guid: 8658a426d2cdf00469db7cc976cefe9c,
         type: 2}
       propertyPath: deviceController
@@ -1031,6 +1051,12 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 108385267}
   m_Script: {fileID: -822479833, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+--- !u!114 &1865337871 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114026836117134686, guid: 1af7da660e405ea4d88d276210dfa5c0,
+    type: 2}
+  m_PrefabInternal: {fileID: 1372156097}
+  m_Script: {fileID: 11500000, guid: 46ca95cf7f269e4488d919f571e44182, type: 3}
 --- !u!1 &2029972340
 GameObject:
   m_ObjectHideFlags: 0
