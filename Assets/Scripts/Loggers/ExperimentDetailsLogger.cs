@@ -22,7 +22,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected virtual void LateUpdate()
     {
-      if (IsConfigured)
+      if (IsConfigured && stateController.CurrentState.id == stateController.taskTrialState.id)
       {
         PrepareRow();
 

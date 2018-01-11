@@ -81,41 +81,47 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected override void Grid_Configured()
     {
-      PrepareRow();
+      if (stateController.CurrentState.id == stateController.taskTrialState.id)
+      {
+        PrepareRow();
 
-      startDateTime = DateTime.Now;
+        startDateTime = DateTime.Now;
 
-      selections.Reset();
-      deselections = 0;
-      errors = 0;
+        selections.Reset();
+        deselections = 0;
+        errors = 0;
 
-      pan.Reset();
-      zoom.Reset();
+        pan.Reset();
+        zoom.Reset();
 
-      AddToRow(deviceController.ParticipantId);
-      AddToRow(deviceController.StateController.GetIndependentVariable<IVTechnique>().CurrentCondition.id);
-      AddToRow(deviceController.StateController.GetIndependentVariable<IVClassificationDifficulty>().CurrentCondition.id);
-      AddToRow(deviceController.StateController.GetIndependentVariable<IVTextSize>().CurrentCondition.id);
-      AddToRow(deviceController.StateController.CurrentTrial);
-      AddToRow(grid.GridGenerator.ToString());
+        AddToRow(deviceController.ParticipantId);
+        AddToRow(stateController.GetIndependentVariable<IVTechnique>().CurrentCondition.id);
+        AddToRow(stateController.GetIndependentVariable<IVClassificationDifficulty>().CurrentCondition.id);
+        AddToRow(stateController.GetIndependentVariable<IVTextSize>().CurrentCondition.id);
+        AddToRow(stateController.CurrentTrial);
+        AddToRow(grid.GridGenerator.ToString());
+      }
     }
 
     protected override void Grid_Completed()
     {
-      AddToRow(startDateTime);
-      AddToRow((DateTime.Now - startDateTime).TotalSeconds);
+      if (stateController.CurrentState.id == stateController.taskTrialState.id)
+      {
+        AddToRow(startDateTime);
+        AddToRow((DateTime.Now - startDateTime).TotalSeconds);
 
-      AddToRow(selections);
-      AddToRow(deselections);
-      AddToRow(errors);
-      AddToRow(success);
+        AddToRow(selections);
+        AddToRow(deselections);
+        AddToRow(errors);
+        AddToRow(success);
 
-      AddToRow(pan);
-      AddToRow(zoom);
+        AddToRow(pan);
+        AddToRow(zoom);
 
-      AddToRow(headPhoneDistance);
+        AddToRow(headPhoneDistance);
 
-      WriteRow();
+        WriteRow();
+      }
     }
 
     protected override void Grid_ItemSelected(Container container, Item item, bool selected)

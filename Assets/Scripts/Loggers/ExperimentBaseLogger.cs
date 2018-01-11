@@ -1,4 +1,5 @@
 ﻿using NormandErwan.MasterThesis.Experiment.DeviceControllers;
+using NormandErwan.MasterThesis.Experiment.Experiment.States;
 using NormandErwan.MasterThesis.Experiment.Experiment.Task;
 using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using UnityEngine;
@@ -20,6 +21,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     // Variables
 
+    protected StateController stateController;
     protected Experiment.Task.Grid grid;
 
     // MonoBehaviour methods
@@ -30,6 +32,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
       dataPath += "/Logs";
 
+      stateController = deviceController.StateController;
       grid = deviceController.Grid;
 
       deviceController.Configured += DeviceController_Configured;
