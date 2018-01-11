@@ -13,6 +13,9 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     protected Transform head;
 
     [SerializeField]
+    protected Transform mobileDevice;
+
+    [SerializeField]
     protected DeviceController deviceController;
 
     // Variables

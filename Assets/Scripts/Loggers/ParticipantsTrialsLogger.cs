@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Loggers
 {
-  public class ExperimentLogger : ExperimentBaseLogger
+  public class ParticipantTrialsLogger : ExperimentBaseLogger
   {
     public class Variable
     {
@@ -36,27 +36,35 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       }
     }
 
-    // Properties
-
-    public int HeadPhoneDistance { get; set; }
-
     // Variables
 
     protected DateTime startDateTime;
 
-    public Variable selections = new Variable("Selections");
+    protected Variable selections = new Variable("Selections");
     protected int deselections = 0;
     protected int errors = 0;
     protected int success = 0;
 
-    public Variable pan = new Variable("Pan");
-    public Variable zoom = new Variable("Zoom");
+    protected Variable pan = new Variable("Pan");
+    protected Variable zoom = new Variable("Zoom");
+
+    protected float headPhoneDistance = 0;
+    protected float oldHeadPhoneDistance = 0;
+
+    // MonoBehaviour methods
+
+    protected virtual void LateUpdate()
+    {
+      float headPhoneDistance = (head.position - mobileDevice.position).magnitude;
+      this.headPhoneDistance += headPhoneDistance - oldHeadPhoneDistance;
+      oldHeadPhoneDistance = headPhoneDistance;
+    }
 
     // Methods
 
     public override void Configure()
     {
-      Filename = "participant-" + deviceController.ParticipantId + "_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".csv";
+      Filename = "participant-" + deviceController.ParticipantId + "_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + "_trials.csv";
 
       Columns = new List<string>() {
         "ParticipantId", "Technique", "Distance", "TextSize", "TrialNumber",
@@ -104,7 +112,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       AddToRow(pan);
       AddToRow(zoom);
 
-      AddToRow(HeadPhoneDistance);
+      AddToRow(headPhoneDistance);
 
       WriteRow();
     }

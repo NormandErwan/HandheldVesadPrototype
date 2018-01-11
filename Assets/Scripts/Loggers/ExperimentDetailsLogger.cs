@@ -29,7 +29,9 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         AddToRow(Time.frameCount);
         AddToRow(deviceController.ParticipantId);
         AddToRow(DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss.fff"));
+
         AddToRow(head, false);
+        AddToRow(mobileDevice, false);
 
         AddToRow(grid.transform, false);
         AddToRow(grid.LossyScale);
@@ -48,10 +50,12 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     public override void Configure()
     {
-      Filename = "participant-" + deviceController.ParticipantId + "-details_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".csv";
+      Filename = "participant-" + deviceController.ParticipantId + "_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + "_details.csv";
 
       Columns = new List<string>() { "FrameId", "ParticipantId", "DateTime" };
+
       AddTransformToColumns("head", false);
+      AddTransformToColumns("phone", false);
 
       AddTransformToColumns("grid");
       Columns.Add("gridConfigured");
