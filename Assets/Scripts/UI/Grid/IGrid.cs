@@ -19,9 +19,9 @@ namespace NormandErwan.MasterThesis.Experiment.UI.Grid
 
     // Methods
 
-    void BuildGrid();
-    void CleanGrid();
-    void AddElement(U cell);
-    void RemoveElement(U cell);
+    void Display();
+    void Clean();
+    void Append(U element);
+    void Remove(U element);
   }
 }

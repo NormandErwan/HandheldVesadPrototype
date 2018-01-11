@@ -150,17 +150,17 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       }
     }
 
-    public override void AddElement(Item item)
+    public override void Append(Item item)
     {
       item.SetCorrectlyClassified(item.ItemClass == ItemClass);
       item.Focused += Item_Focused;
-      base.AddElement(item);
+      base.Append(item);
     }
 
-    public override void RemoveElement(Item item)
+    public override void Remove(Item item)
     {
       item.Focused -= Item_Focused;
-      base.RemoveElement(item);
+      base.Remove(item);
     }
 
     protected virtual void UpdateBackground()

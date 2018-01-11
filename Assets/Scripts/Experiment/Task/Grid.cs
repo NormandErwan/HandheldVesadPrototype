@@ -73,7 +73,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public event Action Completed = delegate { };
 
     public event Action<Container, Item, bool> ItemSelected = delegate { };
-    public event Action<Container, Container, Item, bool> ItemClassed = delegate { };
+    public event Action<Container, Container, Item, bool> ItemMoved = delegate { };
 
     // Variables
 
@@ -203,7 +203,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       var classificationCondition = iVClassificationDifficulty.CurrentCondition;
 
       // Pre-configure the grid
-      CleanGrid();
+      Clean();
       base.Configure();
 
       // Generate a grid generator with average distance in current condition classification distance range
@@ -258,20 +258,20 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       transform.localScale = scaleFactor * Vector3.one; // Scales the canvas as it's in world reference
 
       // Configure the grid
-      CleanGrid();
+      Clean();
       base.Configure();
-      BuildGrid();
+      Display();
 
       // Configure containers and items
-      int containerRow = 0, containerColumn = 0;
+      Vector2Int position = Vector2Int.zero;
       foreach (var container in Elements)
       {
         container.Configure();
-        container.BuildGrid();
+        container.Display();
 
-        container.ItemClass = (ItemClass)GridGenerator.Containers[containerRow, containerColumn].GetMainItemId();
+        container.ItemClass = (ItemClass)GridGenerator.Containers[position.y, position.x].GetMainItemId();
         container.ItemFontSize = ivTextSize.CurrentCondition.fontSize;
-        container.ConfigureItems(GridGenerator.Containers[containerRow, containerColumn].items);
+        container.ConfigureItems(GridGenerator.Containers[position.y, position.x].items);
 
         container.Selected2 += Container_Selected;
         foreach (var item in container.Elements)
@@ -279,11 +279,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
           item.Selected2 += Item_Selected;
         }
 
-        containerColumn = (containerColumn + 1) % GridSize.x;
-        if (containerColumn == 0)
-        {
-          containerRow = (containerRow + 1) % GridSize.y;
-        }
+        position = GetNextPosition(position);
       }
 
       // Finish the grid configuration
@@ -330,19 +326,19 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
             {
               RemainingItemsToClassify++;
             }
-            ItemClassed(previousContainer, container, selectedItem, false);
+            ItemMoved(previousContainer, container, selectedItem, false);
           }
           else
           {
             RemainingItemsToClassify--;
-            ItemClassed(previousContainer, container, selectedItem, true);
+            ItemMoved(previousContainer, container, selectedItem, true);
           }
 
           // Move the selected item only if it's a different and not full container
           if (!container.IsFull)
           {
-            previousContainer.RemoveElement(selectedItem);
-            container.AddElement(selectedItem);
+            previousContainer.Remove(selectedItem);
+            container.Append(selectedItem);
           }
 
           // Deselect the item
@@ -410,7 +406,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       Container parentContainer = null;
       foreach (var container in Elements)
       {
-        if (container.Elements.Contains(selectedItem))
+        if (container.Elements.Contains(item))
         {
           parentContainer = container;
         }

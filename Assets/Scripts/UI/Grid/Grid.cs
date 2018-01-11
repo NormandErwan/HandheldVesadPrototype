@@ -80,7 +80,7 @@ namespace NormandErwan.MasterThesis.Experiment.UI.Grid
       }
     }
 
-    public virtual void BuildGrid()
+    public virtual void Display()
     {
       // Configure grid placement
       var gridPosition = 0.5f * Scale - ElementMargin - 0.5f * ElementScale;
@@ -88,23 +88,19 @@ namespace NormandErwan.MasterThesis.Experiment.UI.Grid
       ElementsParent.localScale = Vector3.one;
 
       // Configure elements placement
-      Vector2Int elementPositionOnGrid = Vector2Int.zero;
+      Vector2Int elementGridPos = Vector2Int.zero;
       foreach (var element in Elements)
       {
-        var elementPosition = Vector2.Scale(elementPositionOnGrid, ElementScale + ElementMargin);
+        var elementPosition = Vector2.Scale(elementGridPos, ElementScale + ElementMargin);
         element.GameObject.transform.localPosition = new Vector3(elementPosition.x, -elementPosition.y, 0);
         element.GameObject.transform.localRotation = Quaternion.identity;
         element.GameObject.transform.localScale = Vector3.one;
 
-        elementPositionOnGrid.x = (elementPositionOnGrid.x + 1) % GridSize.x;
-        if (elementPositionOnGrid.x == 0)
-        {
-          elementPositionOnGrid.y = (elementPositionOnGrid.y + 1) % GridSize.y;
-        }
+        elementGridPos = GetNextPosition(elementGridPos);
       }
     }
 
-    public virtual void CleanGrid()
+    public virtual void Clean()
     {
       foreach (var element in Elements)
       {
@@ -112,17 +108,37 @@ namespace NormandErwan.MasterThesis.Experiment.UI.Grid
       }
     }
 
-    public virtual void AddElement(U element)
+    public virtual void Append(U element)
     {
       element.GameObject.transform.SetParent(ElementsParent);
       Elements.Add(element);
-      BuildGrid();
+      Display();
     }
 
-    public virtual void RemoveElement(U element)
+    public virtual void Remove(U element)
     {
       Elements.Remove(element);
-      BuildGrid();
+      Display();
+    }
+
+    public virtual Vector2Int GetNextPosition(Vector2Int position)
+    {
+      position.x = (position.x + 1) % GridSize.x;
+      if (position.x == 0)
+      {
+        position.y = (position.y + 1) % GridSize.y;
+      }
+      return position;
+    }
+
+    public virtual Vector2Int GetPosition(U element)
+    {
+      Vector2Int position = Vector2Int.zero;
+      for (int i = 0; i < Elements.IndexOf(element); i++)
+      {
+        position = GetNextPosition(position);
+      }
+      return position;
     }
   }
 }
