@@ -118,6 +118,8 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
       yield return null;
       StateController.NextState();
+
+      yield return null;
       ActivateTask();
       Grid.Configure();
     }

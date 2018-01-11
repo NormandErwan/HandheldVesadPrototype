@@ -15,10 +15,9 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     // Variables
 
-    protected bool gridConfigured, gridCompleted;
     protected bool itemSelected, itemDeselected, itemMoved, itemClassified;
-    protected Container container, oldContainer;
-    protected Item item;
+    protected Container selectedContainer;
+    protected Item selectedItem;
     protected bool zoomMode;
 
     // MonoBehaviour methods
@@ -27,37 +26,44 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     {
       if (IsConfigured && stateController.CurrentState.id == stateController.taskTrialState.id)
       {
+        if (!itemSelected && itemDeselected)
+        {
+          selectedItem = null;
+          selectedContainer = null;
+        }
+
         PrepareRow();
 
         AddToRow(Time.frameCount);
         AddToRow(deviceController.ParticipantId);
         AddToRow(DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss.fff"));
 
-        AddToRow(head, false);
-        AddToRow(mobileDevice, false);
-
         AddToRow(grid.transform, false);
         AddToRow(grid.LossyScale);
-        AddToRow(gridConfigured);
-        AddToRow(gridCompleted);
+        AddToRow(grid.IsConfigured);
+        AddToRow(grid.IsCompleted);
+
         AddToRow(itemSelected);
         AddToRow(itemDeselected);
         AddToRow(itemMoved);
         AddToRow(itemClassified);
-        AddToRow(container);
-        AddToRow(item);
-        AddToRow(oldContainer);
+        AddToRow(selectedContainer);
+        AddToRow(selectedItem);
 
         AddToRow(index.transform, false);
         AddToRow(zoomMode);
 
+        AddToRow(head, false);
+        AddToRow(mobileDevice, false);
+
         WriteRow();
 
-        gridConfigured = gridCompleted = false;
+        if (itemMoved || itemClassified)
+        {
+          selectedItem = null;
+          selectedContainer = null;
+        }
         itemSelected = itemDeselected = itemMoved = itemClassified = false;
-        container = oldContainer = null;
-        item = null;
-        zoomMode = false;
       }
     }
 
@@ -69,30 +75,28 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
       Columns = new List<string>() { "frame_id", "participant_id", "date_time" };
 
-      AddTransformToColumns("head", false);
-      AddTransformToColumns("phone", false);
-
       AddTransformToColumns("grid");
       Columns.AddRange(new string[] {
-        "grid_configured", "grid_completed",
+        "grid_is_configured", "grid_is_completed",
         "item_selected", "item_deselected", "item_moved", "item_classified",
-        "container", "item", "old_container"
+        "selected_container", "selected_item"
       });
 
       AddTransformToColumns("index", false);
       Columns.Add("zoomMode");
+
+      AddTransformToColumns("head", false);
+      AddTransformToColumns("phone", false);
 
       base.Configure();
     }
 
     protected override void Grid_Configured()
     {
-      gridConfigured = true;
     }
 
     protected override void Grid_Completed()
     {
-      gridCompleted = true;
     }
 
     protected override void Grid_ItemSelected(Container container, Item item, bool selected)
@@ -100,13 +104,13 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       if (selected)
       {
         itemSelected = true;
+        selectedContainer = container;
+        selectedItem = item;
       }
       else
       {
         itemDeselected = true;
       }
-      this.container = container;
-      this.item = item;
     }
 
     protected override void Grid_ItemMoved(Container oldContainer, Container newContainer, Item item, bool classified)
@@ -116,9 +120,8 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       {
         itemClassified = true;
       }
-      container = newContainer;
-      this.item = item;
-      this.oldContainer = oldContainer;
+      selectedContainer = newContainer;
+      selectedItem = item;
     }
 
     protected override void Grid_DraggingStarted(IDraggable grid)
@@ -160,7 +163,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected virtual void AddToRow(Item item)
     {
-      AddToRow((item == null) ? "" : container.Elements.IndexOf(item).ToString());
+      AddToRow((item == null) ? "" : selectedContainer.Elements.IndexOf(item).ToString());
     }
   }
 }
