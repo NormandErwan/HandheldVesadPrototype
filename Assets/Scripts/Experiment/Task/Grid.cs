@@ -50,6 +50,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public Vector3 LossyScale { get { return Vector3.Scale(Scale, transform.lossyScale); } }
 
+    public GridGenerator GridGenerator { get; protected set; }
+
     // Interfaces events
 
     public event Action<IInteractable> Interactable = delegate { };
@@ -244,6 +246,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       {
         ivTextSize = stateController.GetIndependentVariable<IVTextSize>();
       }
+      GridGenerator = gridGenerator;
 
       SetInteractable(false);
       StartCoroutine(SetContainersItemsInteractable(false));
@@ -266,9 +269,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         container.Configure();
         container.BuildGrid();
 
-        container.ItemClass = (ItemClass)gridGenerator.Containers[containerRow, containerColumn].GetMainItemId();
+        container.ItemClass = (ItemClass)GridGenerator.Containers[containerRow, containerColumn].GetMainItemId();
         container.ItemFontSize = ivTextSize.CurrentCondition.fontSize;
-        container.ConfigureItems(gridGenerator.Containers[containerRow, containerColumn].items);
+        container.ConfigureItems(GridGenerator.Containers[containerRow, containerColumn].items);
 
         container.Selected2 += Container_Selected;
         foreach (var item in container.Elements)

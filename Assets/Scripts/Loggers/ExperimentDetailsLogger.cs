@@ -52,14 +52,14 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     {
       Filename = "participant-" + deviceController.ParticipantId + "_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + "_details.csv";
 
-      Columns = new List<string>() { "FrameId", "ParticipantId", "DateTime" };
+      Columns = new List<string>() { "frame_id", "participant_id", "date_time" };
 
       AddTransformToColumns("head", false);
       AddTransformToColumns("phone", false);
 
       AddTransformToColumns("grid");
-      Columns.Add("gridConfigured");
-      Columns.Add("gridCompleted");
+      Columns.Add("grid_configured");
+      Columns.Add("grid_completed");
 
       AddTransformToColumns("index", false);
 

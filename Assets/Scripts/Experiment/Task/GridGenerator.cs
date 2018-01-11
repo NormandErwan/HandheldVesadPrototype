@@ -238,26 +238,30 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public override string ToString()
     {
-      string s = "";
+      string s = "[";
 
       for (int r = 0; r < RowsNumber; ++r)
       {
+        if (r > 0) s += ", ";
+
+        s += "[";
         for (int c = 0; c < ColumnsNumber; ++c)
         {
-          if (c > 0) s += "  ";
+          if (c > 0) s += ", ";
+
+          s += "[";
           for (int i = 0; i < ItemsPerContainer; ++i)
           {
-            if (i > 0) s += ",";
-            s += string.Format("{0,2}", Containers[r, c].items[i]);
+            if (i > 0) s += ", ";
+            s += Containers[r, c].items[i].ToString();
           }
+          s += "]";
         }
-        s += "\n";
-      }
-      s += "Average distance: " + AverageDistance;
-      s += "; Initial incorrect containers number: " + InitialIncorrectContainersNumber;
-      s += "; Incorrect containers number: " + IncorrectContainersNumber;
-      s += "\n";
 
+        s += "]";
+      }
+
+      s += "]";
       return s;
     }
   }

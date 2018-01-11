@@ -30,7 +30,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         distance = 0;
       }
 
-      public List<string> Colums()
+      public List<string> Columns()
       {
         return new List<string>() { name + "Count", name + "Time", name + "Distance" };
       }
@@ -67,14 +67,14 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       Filename = "participant-" + deviceController.ParticipantId + "_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + "_trials.csv";
 
       Columns = new List<string>() {
-        "ParticipantId", "Technique", "Distance", "TextSize", "TrialNumber",
-        "StartDateTime", "TotalTime"
+        "participant_id", "technique", "distance", "text_size", "trial_number", "grid_config",
+        "start_date_time", "total_time"
       };
-      Columns.AddRange(selections.Colums());
-      Columns.AddRange(new string[]{ "Deselections", "Errors", "Success" });
-      Columns.AddRange(pan.Colums());
-      Columns.AddRange(zoom.Colums());
-      Columns.Add("HeadPhoneDistance");
+      Columns.AddRange(selections.Columns());
+      Columns.AddRange(new string[]{ "deselections", "errors", "success" });
+      Columns.AddRange(pan.Columns());
+      Columns.AddRange(zoom.Columns());
+      Columns.Add("head_phone_distance");
 
       base.Configure();
     }
@@ -97,6 +97,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       AddToRow(deviceController.StateController.GetIndependentVariable<IVClassificationDifficulty>().CurrentCondition.id);
       AddToRow(deviceController.StateController.GetIndependentVariable<IVTextSize>().CurrentCondition.id);
       AddToRow(deviceController.StateController.CurrentTrial);
+      AddToRow(grid.GridGenerator.ToString());
     }
 
     protected override void Grid_Completed()
