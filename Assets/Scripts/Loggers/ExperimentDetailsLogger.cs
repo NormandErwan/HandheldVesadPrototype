@@ -15,8 +15,11 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     // Variables
 
-    protected bool gridConfigured;
-    protected bool gridCompleted;
+    protected bool gridConfigured, gridCompleted;
+    protected bool itemSelected, itemDeselected, itemMoved, itemClassified;
+    protected Container container, oldContainer;
+    protected Item item;
+    protected bool zoomMode;
 
     // MonoBehaviour methods
 
@@ -37,12 +40,24 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         AddToRow(grid.LossyScale);
         AddToRow(gridConfigured);
         AddToRow(gridCompleted);
+        AddToRow(itemSelected);
+        AddToRow(itemDeselected);
+        AddToRow(itemMoved);
+        AddToRow(itemClassified);
+        AddToRow(container);
+        AddToRow(item);
+        AddToRow(oldContainer);
 
         AddToRow(index.transform, false);
+        AddToRow(zoomMode);
 
         WriteRow();
 
         gridConfigured = gridCompleted = false;
+        itemSelected = itemDeselected = itemMoved = itemClassified = false;
+        container = oldContainer = null;
+        item = null;
+        zoomMode = false;
       }
     }
 
@@ -58,10 +73,14 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       AddTransformToColumns("phone", false);
 
       AddTransformToColumns("grid");
-      Columns.Add("grid_configured");
-      Columns.Add("grid_completed");
+      Columns.AddRange(new string[] {
+        "grid_configured", "grid_completed",
+        "item_selected", "item_deselected", "item_moved", "item_classified",
+        "container", "item", "old_container"
+      });
 
       AddTransformToColumns("index", false);
+      Columns.Add("zoomMode");
 
       base.Configure();
     }
@@ -78,10 +97,28 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected override void Grid_ItemSelected(Container container, Item item, bool selected)
     {
+      if (selected)
+      {
+        itemSelected = true;
+      }
+      else
+      {
+        itemDeselected = true;
+      }
+      this.container = container;
+      this.item = item;
     }
 
-    protected override void Grid_ItemClassed(Container oldContainer, Container newContainer, Item item, bool success)
+    protected override void Grid_ItemMoved(Container oldContainer, Container newContainer, Item item, bool classified)
     {
+      itemMoved = true;
+      if (classified)
+      {
+        itemClassified = true;
+      }
+      container = newContainer;
+      this.item = item;
+      this.oldContainer = oldContainer;
     }
 
     protected override void Grid_DraggingStarted(IDraggable grid)
@@ -106,6 +143,24 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected override void Grid_ZoomingStopped(IZoomable grid)
     {
+    }
+
+    protected virtual void AddToRow(Container container)
+    {
+      if (container == null)
+      {
+        AddToRow("");
+      }
+      else
+      {
+        var position = grid.GetPosition(container);
+        AddToRow("(" + position.x + ", " + position.y + ")");
+      }
+    }
+
+    protected virtual void AddToRow(Item item)
+    {
+      AddToRow((item == null) ? "" : container.Elements.IndexOf(item).ToString());
     }
   }
 }

@@ -32,7 +32,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
       public List<string> Columns()
       {
-        return new List<string>() { name + "Count", name + "Time", name + "Distance" };
+        return new List<string>() { name + "_count", name + "_time", name + "_distance" };
       }
     }
 
@@ -40,18 +40,23 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected DateTime startDateTime;
 
-    protected Variable selections = new Variable("Selections");
+    protected Variable selections = new Variable("selections");
     protected int deselections = 0;
     protected int errors = 0;
-    protected int success = 0;
+    protected int classifications = 0;
 
-    protected Variable pan = new Variable("Pan");
-    protected Variable zoom = new Variable("Zoom");
+    protected Variable pan = new Variable("pan");
+    protected Variable zoom = new Variable("zoom");
 
     protected float headPhoneDistance = 0;
     protected float oldHeadPhoneDistance = 0;
 
     // MonoBehaviour methods
+
+    protected virtual void Start()
+    {
+      oldHeadPhoneDistance = (head.position - mobileDevice.position).magnitude;
+    }
 
     protected virtual void LateUpdate()
     {
@@ -71,7 +76,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         "start_date_time", "total_time"
       };
       Columns.AddRange(selections.Columns());
-      Columns.AddRange(new string[]{ "deselections", "errors", "success" });
+      Columns.AddRange(new string[]{ "deselections", "errors", "classifications" });
       Columns.AddRange(pan.Columns());
       Columns.AddRange(zoom.Columns());
       Columns.Add("head_phone_distance");
@@ -113,7 +118,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         AddToRow(selections);
         AddToRow(deselections);
         AddToRow(errors);
-        AddToRow(success);
+        AddToRow(classifications);
 
         AddToRow(pan);
         AddToRow(zoom);
@@ -138,11 +143,11 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       }
     }
 
-    protected override void Grid_ItemClassed(Container oldContainer, Container newContainer, Item item, bool success)
+    protected override void Grid_ItemMoved(Container oldContainer, Container newContainer, Item item, bool classified)
     {
-      if (success)
+      if (classified)
       {
-        this.success++;
+        classifications++;
       }
       else
       {

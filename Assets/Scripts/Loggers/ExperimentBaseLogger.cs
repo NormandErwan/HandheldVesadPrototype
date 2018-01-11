@@ -40,7 +40,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       grid.Configured += Grid_Configured;
       grid.Completed += Grid_Completed;
       grid.ItemSelected += Grid_ItemSelected;
-      grid.ItemClassed += Grid_ItemClassed;
+      grid.ItemMoved += Grid_ItemMoved;
 
       grid.DraggingStarted += Grid_DraggingStarted;
       grid.Dragging += Grid_Dragging;
@@ -60,7 +60,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       grid.Configured -= Grid_Configured;
       grid.Completed -= Grid_Completed;
       grid.ItemSelected -= Grid_ItemSelected;
-      grid.ItemClassed -= Grid_ItemClassed;
+      grid.ItemMoved -= Grid_ItemMoved;
 
       grid.DraggingStarted -= Grid_DraggingStarted;
       grid.Dragging -= Grid_Dragging;
@@ -82,7 +82,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     protected abstract void Grid_Completed();
 
     protected abstract void Grid_ItemSelected(Container container, Item item, bool selected);
-    protected abstract void Grid_ItemClassed(Container oldContainer, Container newContainer, Item item, bool success);
+    protected abstract void Grid_ItemMoved(Container oldContainer, Container newContainer, Item item, bool success);
 
     protected abstract void Grid_DraggingStarted(IDraggable grid);
     protected abstract void Grid_Dragging(IDraggable grid, Vector3 translation);
