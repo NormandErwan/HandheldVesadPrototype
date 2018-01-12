@@ -72,7 +72,10 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public event Action CompleteSync = delegate { };
     public event Action Completed = delegate { };
 
+    public event Action<Item> ItemSelectedSync = delegate { };
     public event Action<Container, Item, bool> ItemSelected = delegate { };
+
+    public event Action<Container, Container, Item, bool> ItemMovedSync = delegate { };
     public event Action<Container, Container, Item, bool> ItemMoved = delegate { };
 
     // Variables
@@ -80,7 +83,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     protected new BoxCollider collider;
 
     protected Item selectedItem;
-    protected bool itemSelectedThisFrame;
+    protected bool itemInteractedThisFrame;
 
     protected IVTextSize ivTextSize;
     protected IVClassificationDifficulty iVClassificationDifficulty;
@@ -105,7 +108,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     protected virtual void LateUpdate()
     {
-      itemSelectedThisFrame = false;
+      itemInteractedThisFrame = false;
     }
 
     protected virtual void OnDestroy()
@@ -230,6 +233,11 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       ConfigureSync(gridGenerator);
     }
 
+    public virtual void Complete()
+    {
+      CompleteSync();
+    }
+
     public virtual void Show(bool value)
     {
       foreach (var container in Elements)
@@ -237,6 +245,19 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         container.GameObject.SetActive(value);
       }
       background.SetActive(value);
+    }
+
+    public virtual Container GetContainer(Item item)
+    {
+      Container parentContainer = null;
+      foreach (var container in Elements)
+      {
+        if (container.Elements.Contains(item))
+        {
+          parentContainer = container;
+        }
+      }
+      return parentContainer;
     }
 
     internal virtual void SetConfiguration(GridGenerator gridGenerator)
@@ -309,9 +330,46 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       Completed();
     }
 
+    internal virtual void SetItemSelected(Item item, Container container)
+    {
+      // Deselect the previous selected item
+      if (selectedItem != null)
+      {
+        var oldSelectedItem = selectedItem;
+        selectedItem = null;
+        itemInteractedThisFrame = true;
+
+        oldSelectedItem.SetSelected(false);
+        ItemSelected(container, oldSelectedItem, false);
+      }
+
+      // Update selectedItem with the new item
+      if (item.IsSelected)
+      {
+        selectedItem = item;
+        itemInteractedThisFrame = true;
+
+        item.SetSelected(true);
+        ItemSelected(container, selectedItem, true);
+      }
+    }
+
+    internal virtual void SetItemMoved()
+    {
+      
+    }
+
+    protected virtual void Item_Selected(Item item)
+    {
+      if (!itemInteractedThisFrame)
+      {
+        ItemSelectedSync(item);
+      }
+    }
+
     protected virtual void Container_Selected(Container container)
     {
-      if (selectedItem != null && !itemSelectedThisFrame)
+      if (selectedItem != null && !itemInteractedThisFrame)
       {
         Container previousContainer = GetContainer(selectedItem);
         if (previousContainer == container) // Deselect the item if it's the same container
@@ -350,33 +408,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
           // Call Finished if all items are classified
           if (RemainingItemsToClassify == 0)
           {
-            CompleteSync();
+            Complete();
           }
         }
-      }
-    }
-
-    protected virtual void Item_Selected(Item item)
-    {
-      // Deselect the previous selected item
-      if (selectedItem != null)
-      {
-        var oldSelectedItem = selectedItem;
-        selectedItem = null;
-        ItemSelected(GetContainer(oldSelectedItem), oldSelectedItem, false);
-
-        if (item != oldSelectedItem)
-        {
-          oldSelectedItem.SetSelected(false);
-        }
-      }
-
-      // Update selectedItem with the new item
-      if (item.IsSelected)
-      {
-        selectedItem = item;
-        itemSelectedThisFrame = true;
-        ItemSelected(GetContainer(selectedItem), selectedItem, true);
       }
     }
 
@@ -400,19 +434,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
           }
         }
       }
-    }
-
-    protected virtual Container GetContainer(Item item)
-    {
-      Container parentContainer = null;
-      foreach (var container in Elements)
-      {
-        if (container.Elements.Contains(item))
-        {
-          parentContainer = container;
-        }
-      }
-      return parentContainer;
     }
 
     protected virtual void UpdateTransformRanges()

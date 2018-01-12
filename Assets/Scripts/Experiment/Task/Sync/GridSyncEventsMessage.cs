@@ -1,5 +1,6 @@
 ﻿using DevicesSyncUnity.Messages;
 using System;
+using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 {
@@ -7,7 +8,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
   {
     public enum GridEvent
     {
-      Completed
+      Completed,
+      ItemSelected,
+      ItemMoved
     };
 
     // Constructors and destructor
@@ -18,6 +21,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       SendToServer = sendToServer;
 
       grid.CompleteSync += Grid_CompleteSync;
+      grid.ItemSelectedSync += Grid_ItemSelectedSync;
     }
 
     public GridSyncEventsMessage()
@@ -41,15 +45,36 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 
     public int senderConnectionId;
     public GridEvent gridEvent;
+    public Vector2 containerPosition;
+    public int itemIndex;
 
     // Methods
 
     public void SyncGrid(Grid grid)
     {
-      if (gridEvent == GridEvent.Completed)
+      switch (gridEvent)
       {
-        grid.SetCompleted();
+        case GridEvent.Completed:
+          grid.SetCompleted();
+          break;
+
+        case GridEvent.ItemSelected:
+          var container = grid.At(new Vector2Int((int)containerPosition.x, (int)containerPosition.y));
+          grid.SetItemSelected(container.Elements[itemIndex], container);
+          break;
+
+        case GridEvent.ItemMoved:
+          break;
       }
+    }
+
+    private void Grid_ItemSelectedSync(Item item)
+    {
+      var container = Grid.GetContainer(item);
+      containerPosition = Grid.GetPosition(container);
+      itemIndex = container.Elements.IndexOf(item);
+      gridEvent = GridEvent.ItemSelected;
+      SendToServer();
     }
 
     protected void Grid_CompleteSync()

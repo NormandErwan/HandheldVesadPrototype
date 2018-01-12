@@ -121,6 +121,12 @@ namespace NormandErwan.MasterThesis.Experiment.UI.Grid
       Display();
     }
 
+    public virtual U At(Vector2Int position)
+    {
+      int index = position.x * GridSize.y + position.y;
+      return Elements[index];
+    }
+
     public virtual Vector2Int GetNextPosition(Vector2Int position)
     {
       position.x = (position.x + 1) % GridSize.x;

@@ -143,7 +143,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public void SetSelected(bool value)
     {
-      IsSelected = value & !IsSelected;
+      IsSelected = value;
       Selected(this);
       Selected2(this);
 
