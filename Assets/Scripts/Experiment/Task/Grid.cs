@@ -247,6 +247,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         ivTextSize = stateController.GetIndependentVariable<IVTextSize>();
       }
       GridGenerator = gridGenerator;
+      GridSize = new Vector2Int(GridGenerator.ColumnsNumber, GridGenerator.RowsNumber);
 
       SetInteractable(false);
       StartCoroutine(SetContainersItemsInteractable(false));

@@ -16,14 +16,15 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
     private float movementThresholdToSync;
 
     // Properties
-
+    
     public Grid Grid { get { return grid; } set { grid = value; } }
     public float MovementThresholdToSync { get { return movementThresholdToSync; } set { movementThresholdToSync = value; } }
 
     // Variables
 
-    protected GridSyncConfigureMessage gridConfigureMessage = new GridSyncConfigureMessage();
+    protected GridSyncConfigureMessage gridConfigureMessage;
     protected GridSyncTransformMessage gridTransformMessage = new GridSyncTransformMessage();
+    protected GridSyncEventsMessage gridEventsMessage;
 
     // MonoBehaviour methods
 
@@ -31,17 +32,19 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
     {
       base.Awake();
 
+      gridConfigureMessage = new GridSyncConfigureMessage(Grid, () =>
+      {
+        SendToServer(gridConfigureMessage, Channels.DefaultReliable);
+      });
+
+      gridEventsMessage = new GridSyncEventsMessage(Grid, () =>
+      {
+        SendToServer(gridEventsMessage, Channels.DefaultReliable);
+      });
+
       MessageTypes.Add(gridConfigureMessage.MessageType);
       MessageTypes.Add(gridTransformMessage.MessageType);
-
-      Grid.ConfigureSync += Grid_ConfigureSync;
-      Grid.CompleteSync += Grid_CompleteSync;
-    }
-
-    protected virtual void OnDestroy()
-    {
-      Grid.ConfigureSync -= Grid_ConfigureSync;
-      Grid.CompleteSync -= Grid_CompleteSync;
+      MessageTypes.Add(gridEventsMessage.MessageType);
     }
 
     // DevicesSync methods
@@ -70,18 +73,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 
     // Methods
 
-    protected virtual void Grid_ConfigureSync(GridGenerator gridGenerator)
-    {
-      gridConfigureMessage.Update(grid, gridGenerator);
-      SendToServer(gridConfigureMessage);
-    }
-
-    protected virtual void Grid_CompleteSync()
-    {
-      gridTransformMessage.completed = true;
-      SendToServer(gridTransformMessage);
-    }
-
     protected virtual DevicesSyncMessage ProcessReceivedMessage(NetworkMessage netMessage, bool onClient)
     {
       DevicesSyncMessage devicesSyncMessage = null;
@@ -90,13 +81,19 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
         devicesSyncMessage = ProcessReceivedMessage<GridSyncConfigureMessage>(netMessage, gridConfigureMessage.MessageType,
           (gridConfigureMessage) =>
           {
-            gridConfigureMessage.Restore(Grid);
+            gridConfigureMessage.ConfigureGrid(Grid);
           });
 
         devicesSyncMessage = ProcessReceivedMessage<GridSyncTransformMessage>(netMessage, gridTransformMessage.MessageType,
           (gridTransformMessage) =>
           {
             gridTransformMessage.Restore(Grid);
+          });
+
+        devicesSyncMessage = ProcessReceivedMessage<GridSyncEventsMessage>(netMessage, gridEventsMessage.MessageType,
+          (gridTransformMessage) =>
+          {
+            gridTransformMessage.SyncGrid(Grid);
           });
       }
       return devicesSyncMessage;

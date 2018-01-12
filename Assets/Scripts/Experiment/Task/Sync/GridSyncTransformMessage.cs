@@ -19,8 +19,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
     public Quaternion localRotation;
     public Vector3 localScale;
 
-    public bool completed;
-
     // Methods
 
     public void Update(Grid grid, float movementThreshold)
@@ -43,11 +41,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
         grid.transform.localPosition = localPosition;
         grid.transform.localRotation = localRotation;
         grid.transform.localScale = localScale;
-      }
-
-      if (completed)
-      {
-        grid.SetCompleted();
       }
     }
 

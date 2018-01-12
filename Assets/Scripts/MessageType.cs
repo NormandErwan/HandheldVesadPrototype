@@ -35,10 +35,12 @@ namespace NormandErwan.MasterThesis.Experiment
 
     public static short GridTransform { get { return (short)(Smallest + 7); } }
 
+    public static short GridEvents { get { return (short)(Smallest + 8); } }
+
     /// <summary>
     /// See <see cref="DevicesSyncUnity.Messages.MessageType.Highest"/>.
     /// </summary>
-    public static new short Highest { get { return GridTransform; } }
+    public static new short Highest { get { return GridEvents; } }
 
     // Variables
 
@@ -51,7 +53,8 @@ namespace NormandErwan.MasterThesis.Experiment
       { DeviceControllerConfigure, "DeviceControllerConfigureExperiment" },
       { DeviceControllerToggleZoom, "DeviceControllerToggleZoom" },
       { GridConfigure, "GridConfigure" },
-      { GridTransform, "GridTransform" }
+      { GridTransform, "GridTransform" },
+      { GridEvents, "GridEvents" }
     };
 
     // Methods
