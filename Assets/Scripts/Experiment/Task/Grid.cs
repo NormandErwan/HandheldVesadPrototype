@@ -72,10 +72,10 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public event Action CompleteSync = delegate { };
     public event Action Completed = delegate { };
 
-    public event Action<Item> ItemSelectedSync = delegate { };
+    public event Action<Item> ItemSelectSync = delegate { };
     public event Action<Container, Item, bool> ItemSelected = delegate { };
 
-    public event Action<Container, Container, Item, bool> ItemMovedSync = delegate { };
+    public event Action<Container, Container, Item, bool> ItemMoveSync = delegate { };
     public event Action<Container, Container, Item, bool> ItemMoved = delegate { };
 
     // Variables
@@ -83,7 +83,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     protected new BoxCollider collider;
 
     protected Item selectedItem;
-    protected bool itemInteractedThisFrame;
+    protected bool itemSelectedThisFrame;
 
     protected IVTextSize ivTextSize;
     protected IVClassificationDifficulty iVClassificationDifficulty;
@@ -108,7 +108,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     protected virtual void LateUpdate()
     {
-      itemInteractedThisFrame = false;
+      itemSelectedThisFrame = false;
     }
 
     protected virtual void OnDestroy()
@@ -336,10 +336,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       if (selectedItem != null)
       {
         var oldSelectedItem = selectedItem;
-        selectedItem = null;
-        itemInteractedThisFrame = true;
-
-        oldSelectedItem.SetSelected(false);
+        DeselectSelectedItem();
         ItemSelected(container, oldSelectedItem, false);
       }
 
@@ -347,71 +344,95 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       if (item.IsSelected)
       {
         selectedItem = item;
-        itemInteractedThisFrame = true;
-
+        itemSelectedThisFrame = true;
         item.SetSelected(true);
         ItemSelected(container, selectedItem, true);
       }
     }
 
-    internal virtual void SetItemMoved()
+    internal virtual void SetItemMoved(Container newContainer)
     {
-      
+      // Move the selected item only if it's the container is not full
+      var previousContainer = GetContainer(selectedItem);
+      if (!newContainer.IsFull)
+      {
+        previousContainer.Remove(selectedItem);
+        newContainer.Append(selectedItem);
+
+        if (previousContainer.ItemClass != selectedItem.ItemClass && newContainer.ItemClass == selectedItem.ItemClass)
+        {
+          ItemMoved(previousContainer, newContainer, selectedItem, true);
+        }
+        else if (previousContainer.ItemClass == selectedItem.ItemClass && newContainer.ItemClass != selectedItem.ItemClass)
+        {
+          ItemMoved(previousContainer, newContainer, selectedItem, false);
+        }
+      }
+      DeselectSelectedItem();
+
+      // Update RemainingItemsToClassify and classification events
+      if (newContainer.IsFull || newContainer.ItemClass != selectedItem.ItemClass)
+      {
+        if (previousContainer.ItemClass == selectedItem.ItemClass)
+        {
+          RemainingItemsToClassify++;
+        }
+        ItemMoved(previousContainer, newContainer, selectedItem, false);
+      }
+      else
+      {
+        RemainingItemsToClassify--;
+        ItemMoved(previousContainer, newContainer, selectedItem, true);
+      }
     }
 
     protected virtual void Item_Selected(Item item)
     {
-      if (!itemInteractedThisFrame)
+      if (!itemSelectedThisFrame)
       {
-        ItemSelectedSync(item);
+        ItemSelectSync(item);
       }
     }
 
-    protected virtual void Container_Selected(Container container)
+    protected virtual void Container_Selected(Container newContainer)
     {
-      if (selectedItem != null && !itemInteractedThisFrame)
+      if (selectedItem != null && !itemSelectedThisFrame) // NOTE: the item will be always selected before the container (see colliders)
       {
         Container previousContainer = GetContainer(selectedItem);
-        if (previousContainer == container) // Deselect the item if it's the same container
+        if (previousContainer == newContainer) // Deselect the item if it's the same container
         {
-          selectedItem.SetSelected(false);
+          DeselectSelectedItem();
         }
         else
         {
           // Update RemainingItemsToClassify and classification events
-          if (container.IsFull || container.ItemClass != selectedItem.ItemClass)
+          if (!newContainer.IsFull)
           {
-            if (previousContainer.ItemClass == selectedItem.ItemClass)
+            if (previousContainer.ItemClass != selectedItem.ItemClass && newContainer.ItemClass == selectedItem.ItemClass)
+            {
+              RemainingItemsToClassify--;
+            }
+            else if (previousContainer.ItemClass == selectedItem.ItemClass && newContainer.ItemClass != selectedItem.ItemClass)
             {
               RemainingItemsToClassify++;
             }
-            ItemMoved(previousContainer, container, selectedItem, false);
-          }
-          else
-          {
-            RemainingItemsToClassify--;
-            ItemMoved(previousContainer, container, selectedItem, true);
           }
 
-          // Move the selected item only if it's a different and not full container
-          if (!container.IsFull)
-          {
-            previousContainer.Remove(selectedItem);
-            container.Append(selectedItem);
-          }
-
-          // Deselect the item
-          var oldSelectedItem = selectedItem;
-          selectedItem = null;
-          oldSelectedItem.SetSelected(false);
-
-          // Call Finished if all items are classified
+          // Call Complete if all items are classified
           if (RemainingItemsToClassify == 0)
           {
             Complete();
           }
         }
       }
+    }
+
+    protected virtual void DeselectSelectedItem()
+    {
+      var oldSelectedItem = selectedItem;
+      selectedItem = null;
+      itemSelectedThisFrame = true;
+      selectedItem.SetSelected(false);
     }
 
     protected virtual IEnumerator SetContainersItemsInteractable(bool value)

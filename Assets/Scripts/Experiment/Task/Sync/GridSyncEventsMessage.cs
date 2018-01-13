@@ -20,8 +20,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       Grid = grid;
       SendToServer = sendToServer;
 
-      grid.CompleteSync += Grid_CompleteSync;
-      grid.ItemSelectedSync += Grid_ItemSelectedSync;
+      Grid.CompleteSync += Grid_CompleteSync;
+      Grid.ItemSelectSync += Grid_ItemSelectSync;
+      Grid.ItemMoveSync += Grid_ItemMoveSync;
     }
 
     public GridSyncEventsMessage()
@@ -31,6 +32,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
     ~GridSyncEventsMessage()
     {
       Grid.CompleteSync -= Grid_CompleteSync;
+      Grid.ItemSelectSync -= Grid_ItemSelectSync;
+      Grid.ItemMoveSync -= Grid_ItemMoveSync;
     }
 
     // Properties
@@ -52,23 +55,44 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 
     public void SyncGrid(Grid grid)
     {
+      if (gridEvent == GridEvent.Completed)
+      {
+        grid.SetCompleted();
+      }
+      else
+      {
+        var container = grid.At(new Vector2Int((int)containerPosition.x, (int)containerPosition.y));
+        var item = container.Elements[itemIndex];
+
+        if (gridEvent == GridEvent.ItemSelected)
+          grid.SetItemSelected(item, container);
+      }
+      else if (gridEvent == GridEvent.ItemMoved)
+      {
+
+      }
+
       switch (gridEvent)
       {
         case GridEvent.Completed:
-          grid.SetCompleted();
           break;
 
         case GridEvent.ItemSelected:
-          var container = grid.At(new Vector2Int((int)containerPosition.x, (int)containerPosition.y));
-          grid.SetItemSelected(container.Elements[itemIndex], container);
           break;
 
         case GridEvent.ItemMoved:
+          var container = grid.At(new Vector2Int((int)containerPosition.x, (int)containerPosition.y));
           break;
       }
     }
 
-    private void Grid_ItemSelectedSync(Item item)
+    protected virtual void Grid_CompleteSync()
+    {
+      gridEvent = GridEvent.Completed;
+      SendToServer();
+    }
+
+    protected virtual void Grid_ItemSelectSync(Item item)
     {
       var container = Grid.GetContainer(item);
       containerPosition = Grid.GetPosition(container);
@@ -77,9 +101,11 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       SendToServer();
     }
 
-    protected void Grid_CompleteSync()
+    protected virtual void Grid_ItemMoveSync(Container oldContainer, Container newContainer, Item item, bool classified)
     {
-      gridEvent = GridEvent.Completed;
+      containerPosition = Grid.GetPosition(newContainer);
+      itemIndex = newContainer.Elements.IndexOf(item);
+      gridEvent = GridEvent.ItemMoved;
       SendToServer();
     }
   }
