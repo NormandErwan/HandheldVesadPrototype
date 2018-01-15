@@ -19,9 +19,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers.Sync
 
     // Variables
 
-    protected ConfigureMessage configureMessage = new ConfigureMessage();
-    protected ActivateTaskMessage activateTaskMessage = new ActivateTaskMessage();
-    protected ToggleZoomMessage toggleZoomMessage = new ToggleZoomMessage();
+    protected DeviceControllerSyncMessage deviceControllerMessage;
 
     // Methods
 
@@ -29,20 +27,11 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers.Sync
     {
       base.Awake();
 
-      MessageTypes.Add(configureMessage.MessageType);
-      MessageTypes.Add(activateTaskMessage.MessageType);
-      MessageTypes.Add(toggleZoomMessage.MessageType);
-
-      DeviceController.ConfigureSync += DeviceController_ConfigureSync;
-      DeviceController.ActivateTaskSync += DeviceController_ActivateTaskSync;
-      DeviceController.ToogleZoomSync += DeviceController_ToogleZoomSync;
-    }
-
-    protected virtual void OnDestroy()
-    {
-      DeviceController.ConfigureSync -= DeviceController_ConfigureSync;
-      DeviceController.ActivateTaskSync -= DeviceController_ActivateTaskSync;
-      DeviceController.ToogleZoomSync -= DeviceController_ToogleZoomSync;
+      deviceControllerMessage = new DeviceControllerSyncMessage(DeviceController, () => 
+      {
+        SendToServer(deviceControllerMessage, Channels.DefaultReliable);
+      });
+      MessageTypes.Add(deviceControllerMessage.MessageType);
     }
 
     protected override DevicesSyncMessage OnServerMessageReceived(NetworkMessage netMessage)
@@ -55,57 +44,16 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers.Sync
       return ProcessReceivedMessage(netMessage, true);
     }
 
-    protected virtual void DeviceController_ConfigureSync()
-    {
-      configureMessage.participantId = DeviceController.ParticipantId;
-      configureMessage.conditionsOrdering = DeviceController.ConditionsOrdering;
-      configureMessage.participantIsRightHanded = DeviceController.ParticipantIsRightHanded;
-      SendToServer(configureMessage);
-    }
-
-    protected virtual void DeviceController_ActivateTaskSync()
-    {
-      SendToServer(activateTaskMessage);
-    }
-
-    protected virtual void DeviceController_ToogleZoomSync(bool zoomActivated)
-    {
-      toggleZoomMessage.activated = zoomActivated;
-      SendToServer(toggleZoomMessage);
-    }
-
     protected virtual DevicesSyncMessage ProcessReceivedMessage(NetworkMessage netMessage, bool onClient)
     {
       DevicesSyncMessage devicesSyncMessage = null;
-      if (netMessage.msgType == MessageType.DeviceControllerConfigure)
+      if (!onClient || (onClient && !isServer))
       {
-        if (!onClient || (onClient && !isServer))
-        {
-          var configureMessage = netMessage.ReadMessage<ConfigureMessage>();
-          devicesSyncMessage = configureMessage;
-
-          DeviceController.Configure(configureMessage.participantId, configureMessage.conditionsOrdering,
-            configureMessage.participantIsRightHanded);
-        }
-      }
-      else if (netMessage.msgType == MessageType.DeviceControllerActivateTask)
-      {
-        if (!onClient || (onClient && !isServer))
-        {
-          devicesSyncMessage = netMessage.ReadMessage<ActivateTaskMessage>();
-
-          DeviceController.ActivateTask();
-        }
-      }
-      else if (netMessage.msgType == MessageType.DeviceControllerToggleZoom)
-      {
-        if (!onClient || (onClient && !isServer))
-        {
-          var toggleZoomMessage = netMessage.ReadMessage<ToggleZoomMessage>();
-          devicesSyncMessage = toggleZoomMessage;
-
-          DeviceController.ToggleZoom(toggleZoomMessage.activated);
-        }
+        devicesSyncMessage = ProcessReceivedMessage<DeviceControllerSyncMessage>(netMessage, deviceControllerMessage.MessageType,
+          (deviceControllerMessage) =>
+          {
+            deviceControllerMessage.Sync(DeviceController);
+          });
       }
       return devicesSyncMessage;
     }

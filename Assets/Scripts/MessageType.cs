@@ -23,19 +23,15 @@ namespace NormandErwan.MasterThesis.Experiment
     /// <summary>
     /// Networking message for communicating <see cref="Variables.IndependentVariablesMessage"/>
     /// </summary>
-    public static short IndependentVariableManagers { get { return (short)(Smallest + 2); } }
+    public static short IndependentVariables { get { return (short)(Smallest + 2); } }
 
-    public static short DeviceControllerActivateTask { get { return (short)(Smallest + 3); } }
+    public static short DeviceController { get { return (short)(Smallest + 3); } }
 
-    public static short DeviceControllerConfigure { get { return (short)(Smallest + 4); } }
+    public static short GridConfigure { get { return (short)(Smallest + 4); } }
 
-    public static short DeviceControllerToggleZoom { get { return (short)(Smallest + 5); } }
+    public static short GridTransform { get { return (short)(Smallest + 5); } }
 
-    public static short GridConfigure { get { return (short)(Smallest + 6); } }
-
-    public static short GridTransform { get { return (short)(Smallest + 7); } }
-
-    public static short GridEvents { get { return (short)(Smallest + 8); } }
+    public static short GridEvents { get { return (short)(Smallest + 6); } }
 
     /// <summary>
     /// See <see cref="DevicesSyncUnity.Messages.MessageType.Highest"/>.
@@ -48,10 +44,8 @@ namespace NormandErwan.MasterThesis.Experiment
     private static Dictionary<short, string> messageTypeStrings = new Dictionary<short, string>()
     {
       { StateManager, "State" },
-      { IndependentVariableManagers, "IndependentVariableManagers" },
-      { DeviceControllerActivateTask, "DeviceControllerActivateTask" },
-      { DeviceControllerConfigure, "DeviceControllerConfigureExperiment" },
-      { DeviceControllerToggleZoom, "DeviceControllerToggleZoom" },
+      { IndependentVariables, "IndependentVariables" },
+      { DeviceController, "DeviceController" },
       { GridConfigure, "GridConfigure" },
       { GridTransform, "GridTransform" },
       { GridEvents, "GridEvents" }

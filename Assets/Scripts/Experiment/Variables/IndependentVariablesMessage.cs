@@ -15,7 +15,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Variables
     /// <summary>
     /// See <see cref="DevicesSyncMessage.MessageType"/>.
     /// </summary>
-    public override short MessageType { get { return MasterThesis.Experiment.MessageType.IndependentVariableManagers; } }
+    public override short MessageType { get { return MasterThesis.Experiment.MessageType.IndependentVariables; } }
 
     // Variables
 
