@@ -17,17 +17,16 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       base.Start();
 
-      Grid.Completed += Grid_Completed;
-
       serverHUD.BeginExperimentButtonPressed += ServerHUD_BeginExperimentButtonPressed;
       serverHUD.NextStateButtonPressed += ServerHUD_NextStateButtonPressed;
+
+      // TODO: remove, for debug testing only
+      //StartCoroutine(StartTaskDebug());
     }
 
     protected override void OnDestroy()
     {
       base.OnDestroy();
-
-      Grid.Completed -= Grid_Completed;
 
       serverHUD.BeginExperimentButtonPressed -= ServerHUD_BeginExperimentButtonPressed;
       serverHUD.NextStateButtonPressed -= ServerHUD_NextStateButtonPressed;

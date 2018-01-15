@@ -66,7 +66,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     public virtual void ActivateTask()
     {
-      Grid.Configure();
     }
 
     public virtual void ToggleZoom(bool activated)
@@ -85,7 +84,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     protected virtual void Grid_Completed()
     {
-      StateController.NextState();
     }
 
     /// <summary>
@@ -130,6 +128,9 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       if (Input.GetKeyUp(KeyCode.C))
       {
         Grid.SetCompleted();
+        StateController.NextState();
+        ActivateTask();
+        Grid.Configure();
       }
     }
   }

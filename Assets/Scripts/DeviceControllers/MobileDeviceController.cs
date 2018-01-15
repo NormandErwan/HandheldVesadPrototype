@@ -46,7 +46,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       MobileDeviceHUD.ZoomModeToggleButtonPressed += MobileDeviceHUD_ZoomModeToggleButtonPressed;
 
       // TODO: remove, for debug testing only
-      StartCoroutine(StartTaskDebug());
+      //StartCoroutine(StartTaskDebug());
     }
 
     protected override IEnumerator StartTaskDebug()
