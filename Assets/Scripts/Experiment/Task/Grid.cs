@@ -236,7 +236,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       {
         throw new Exception("Failed to generate a grid.");
       }
-      RemainingItemsToClassify = gridGenerator.IncorrectContainersNumber;
 
       ConfigureSync(gridGenerator);
     }
@@ -278,6 +277,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       }
       GridGenerator = gridGenerator;
       GridSize = new Vector2Int(GridGenerator.ColumnsNumber, GridGenerator.RowsNumber);
+      RemainingItemsToClassify = gridGenerator.IncorrectContainersNumber;
 
       SetInteractable(false);
       StartCoroutine(SetContainersItemsInteractable(false));
@@ -341,20 +341,25 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     internal virtual void SetItemSelected(Item item, Container container)
     {
+      itemSelectedThisFrame = true;
+
       // Deselect the previous selected item
+      var oldSelectedItem = selectedItem;
       if (selectedItem != null)
       {
-        var oldSelectedItem = selectedItem;
-        DeselectSelectedItem();
+        selectedItem = null;
+        oldSelectedItem.SetSelected(false);
         ItemSelected(container, oldSelectedItem);
       }
 
       // Update selectedItem with the new item
-      if (item.IsSelected)
+      if (oldSelectedItem != item)
       {
+        if (!item.IsSelected)
+        {
+          item.SetSelected(true);
+        }
         selectedItem = item;
-        itemSelectedThisFrame = true;
-        item.SetSelected(true);
         ItemSelected(container, selectedItem);
       }
     }
@@ -371,23 +376,26 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         if (previousContainer.ItemClass != selectedItem.ItemClass && newContainer.ItemClass == selectedItem.ItemClass)
         {
           ItemMoved(previousContainer, newContainer, selectedItem, ItemMovedType.Classified);
+          SetItemSelected(selectedItem, newContainer);
         }
         else if (previousContainer.ItemClass == selectedItem.ItemClass && newContainer.ItemClass != selectedItem.ItemClass)
         {
           ItemMoved(previousContainer, newContainer, selectedItem, ItemMovedType.Error);
+          SetItemSelected(selectedItem, newContainer);
         }
       }
       else
       {
         ItemMoved(previousContainer, previousContainer, selectedItem, ItemMovedType.Error);
+        SetItemSelected(selectedItem, previousContainer);
       }
-      DeselectSelectedItem();
     }
 
     protected virtual void Item_Selected(Item item)
     {
       if (!itemSelectedThisFrame)
       {
+        itemSelectedThisFrame = true;
         ItemSelectSync(item);
       }
     }
@@ -397,11 +405,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       if (selectedItem != null && !itemSelectedThisFrame) // NOTE: the item will be always selected before the container (see colliders)
       {
         Container previousContainer = GetContainer(selectedItem);
-        if (previousContainer == newContainer) // Deselect the item if it's the same container
-        {
-          DeselectSelectedItem();
-        }
-        else
+        if (previousContainer != newContainer) // Move the item only if it's a different container
         {
           // Update RemainingItemsToClassify and classification events
           if (!newContainer.IsFull)
@@ -426,14 +430,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
           }
         }
       }
-    }
-
-    protected virtual void DeselectSelectedItem()
-    {
-      var oldSelectedItem = selectedItem;
-      selectedItem = null;
-      itemSelectedThisFrame = true;
-      oldSelectedItem.SetSelected(false);
     }
 
     protected virtual IEnumerator SetContainersItemsInteractable(bool value)

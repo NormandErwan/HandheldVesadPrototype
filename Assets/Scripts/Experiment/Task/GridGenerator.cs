@@ -215,11 +215,12 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       AverageDistance /= IncorrectContainersNumber;
     }
 
-    public GridGenerator(Container[,] containers)
+    public GridGenerator(Container[,] containers, int incorrectContainersNumber)
     {
       RowsNumber = containers.GetLength(0);
       ColumnsNumber = containers.GetLength(1);
       ItemsPerContainer = containers[0,0].items.Length;
+      IncorrectContainersNumber = incorrectContainersNumber;
 
       Containers = containers;
     }

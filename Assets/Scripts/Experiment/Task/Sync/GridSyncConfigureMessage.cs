@@ -36,7 +36,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 
     public int senderConnectionId;
 
-    public int columnsNumber, rowsNumber, itemsPerContainer;
+    public int columnsNumber, rowsNumber, itemsPerContainer, incorrectContainersNumber;
     public int[] itemValues;
 
     // Methods
@@ -53,7 +53,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
         containers[row, col].items[itemIndex] = itemValues[valueIndex];
       });
 
-      var gridGenerator = new GridGenerator(containers);
+      var gridGenerator = new GridGenerator(containers, incorrectContainersNumber);
       grid.SetConfiguration(gridGenerator);
     }
 
@@ -62,6 +62,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       columnsNumber = gridGenerator.ColumnsNumber;
       rowsNumber = gridGenerator.RowsNumber;
       itemsPerContainer = gridGenerator.ItemsPerContainer;
+      incorrectContainersNumber = gridGenerator.IncorrectContainersNumber;
 
       itemValues = new int[rowsNumber * columnsNumber * itemsPerContainer];
       IterateContainers(rowsNumber, columnsNumber, itemsPerContainer, (row, col, itemIndex, valueIndex) =>
