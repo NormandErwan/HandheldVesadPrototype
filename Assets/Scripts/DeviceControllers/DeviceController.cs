@@ -49,16 +49,17 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     // TODO: remove, for debug testing only
     protected virtual void Update()
     {
-      if (Input.GetKeyUp(KeyCode.Space))
+      if (Input.GetKeyUp(KeyCode.B))
       {
-        Grid.SetCompleted();
-        StateController.NextState();
-        OnActivateTaskSync();
-        Grid.Configure();
+        OnConfigureExperimentSync();
+        StateController.BeginExperiment();
       }
       if (Input.GetKeyUp(KeyCode.N))
       {
-        Grid.SetCompleted();
+        if (Grid.IsConfigured)
+        {
+          Grid.SetCompleted();
+        }
         StateController.NextState();
       }
       if (Input.GetKeyUp(KeyCode.A))
@@ -67,6 +68,16 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       }
       if (Input.GetKeyUp(KeyCode.C))
       {
+        Grid.Configure();
+      }
+      if (Input.GetKeyUp(KeyCode.Space))
+      {
+        if (Grid.IsConfigured)
+        {
+          Grid.SetCompleted();
+        }
+        StateController.NextState();
+        OnActivateTaskSync();
         Grid.Configure();
       }
     }

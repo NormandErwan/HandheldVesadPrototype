@@ -1671,7 +1671,12 @@ Prefab:
     - target: {fileID: 114167442127256608, guid: 8da6483971380fd418dac0b21a143fad,
         type: 2}
       propertyPath: syncMode
-      value: 2
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114167442127256608, guid: 8da6483971380fd418dac0b21a143fad,
+        type: 2}
+      propertyPath: autoStartSending
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8da6483971380fd418dac0b21a143fad, type: 2}
@@ -2102,8 +2107,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 310.03787, y: 0}
-  m_SizeDelta: {x: 610.07574, y: 0}
+  m_AnchoredPosition: {x: 410.47406, y: 0}
+  m_SizeDelta: {x: 810.9481, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1446494422
 MonoBehaviour:
@@ -3305,6 +3310,16 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114717382359170248, guid: 1af7da660e405ea4d88d276210dfa5c0,
+        type: 2}
+      propertyPath: camera
+      value: 
+      objectReference: {fileID: 892795261}
+    - target: {fileID: 114717382359170248, guid: 1af7da660e405ea4d88d276210dfa5c0,
+        type: 2}
+      propertyPath: planeToProjectCursors
+      value: 
+      objectReference: {fileID: 1228041266}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1af7da660e405ea4d88d276210dfa5c0, type: 2}
   m_IsPrefabParent: 0

@@ -87,8 +87,11 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
         GridSyncTransformMessage gridTransformReceived;
         if (TryReadMessage(netMessage, gridTransformMessage.MessageType, out gridTransformReceived))
         {
-          gridTransformReceived.Restore(Grid);
-          return gridTransformReceived;
+          if (gridTransformReceived.SenderConnectionId != gridTransformMessage.SenderConnectionId)
+          {
+            gridTransformReceived.Restore(Grid);
+            return gridTransformReceived;
+          }
         }
 
         GridSyncEventsMessage gridEventsReceived;
