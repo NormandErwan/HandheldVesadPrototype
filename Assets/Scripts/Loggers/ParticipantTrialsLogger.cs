@@ -129,9 +129,9 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       }
     }
 
-    protected override void Grid_ItemSelected(Container container, Item item, bool selected)
+    protected override void Grid_ItemSelected(Container container, Item item)
     {
-      if (selected)
+      if (item.IsSelected)
       {
         selections.count++;
         selections.time.Start();
@@ -143,13 +143,13 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       }
     }
 
-    protected override void Grid_ItemMoved(Container oldContainer, Container newContainer, Item item, bool classified)
+    protected override void Grid_ItemMoved(Container oldContainer, Container newContainer, Item item, Experiment.Task.Grid.ItemMovedType moveType)
     {
-      if (classified)
+      if (moveType == Experiment.Task.Grid.ItemMovedType.Classified)
       {
         classifications++;
       }
-      else
+      else if (moveType == Experiment.Task.Grid.ItemMovedType.Error)
       {
         errors++;
       }

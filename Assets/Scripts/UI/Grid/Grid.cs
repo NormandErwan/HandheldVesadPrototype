@@ -123,7 +123,7 @@ namespace NormandErwan.MasterThesis.Experiment.UI.Grid
 
     public virtual U At(Vector2Int position)
     {
-      int index = position.x * GridSize.y + position.y;
+      int index = position.y * GridSize.x + position.x;
       return Elements[index];
     }
 

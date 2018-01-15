@@ -81,8 +81,8 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     protected abstract void Grid_Configured();
     protected abstract void Grid_Completed();
 
-    protected abstract void Grid_ItemSelected(Container container, Item item, bool selected);
-    protected abstract void Grid_ItemMoved(Container oldContainer, Container newContainer, Item item, bool success);
+    protected abstract void Grid_ItemSelected(Container container, Item item);
+    protected abstract void Grid_ItemMoved(Container oldContainer, Container newContainer, Item item, Experiment.Task.Grid.ItemMovedType moveType);
 
     protected abstract void Grid_DraggingStarted(IDraggable grid);
     protected abstract void Grid_Dragging(IDraggable grid, Vector3 translation);

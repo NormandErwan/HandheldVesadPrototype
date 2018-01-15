@@ -62,27 +62,15 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       else
       {
         var container = grid.At(new Vector2Int((int)containerPosition.x, (int)containerPosition.y));
-        var item = container.Elements[itemIndex];
-
         if (gridEvent == GridEvent.ItemSelected)
+        {
+          var item = container.Elements[itemIndex];
           grid.SetItemSelected(item, container);
-      }
-      else if (gridEvent == GridEvent.ItemMoved)
-      {
-
-      }
-
-      switch (gridEvent)
-      {
-        case GridEvent.Completed:
-          break;
-
-        case GridEvent.ItemSelected:
-          break;
-
-        case GridEvent.ItemMoved:
-          var container = grid.At(new Vector2Int((int)containerPosition.x, (int)containerPosition.y));
-          break;
+        }
+        else if (gridEvent == GridEvent.ItemMoved)
+        {
+          grid.SetItemMoved(container);
+        }
       }
     }
 
@@ -101,10 +89,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       SendToServer();
     }
 
-    protected virtual void Grid_ItemMoveSync(Container oldContainer, Container newContainer, Item item, bool classified)
+    protected virtual void Grid_ItemMoveSync(Container newContainer)
     {
       containerPosition = Grid.GetPosition(newContainer);
-      itemIndex = newContainer.Elements.IndexOf(item);
       gridEvent = GridEvent.ItemMoved;
       SendToServer();
     }

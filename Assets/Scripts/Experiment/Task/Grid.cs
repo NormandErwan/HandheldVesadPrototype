@@ -12,6 +12,14 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
   [RequireComponent(typeof(BoxCollider))]
   public class Grid : Grid<Grid, Container>, IDraggable, IZoomable
   {
+    // Enums
+
+    public enum ItemMovedType
+    {
+      Classified,
+      Error
+    }
+
     // Constants
 
     protected int gridGenerationMaxNumber = 1000;
@@ -73,10 +81,10 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public event Action Completed = delegate { };
 
     public event Action<Item> ItemSelectSync = delegate { };
-    public event Action<Container, Item, bool> ItemSelected = delegate { };
+    public event Action<Container, Item> ItemSelected = delegate { };
 
-    public event Action<Container, Container, Item, bool> ItemMoveSync = delegate { };
-    public event Action<Container, Container, Item, bool> ItemMoved = delegate { };
+    public event Action<Container> ItemMoveSync = delegate { };
+    public event Action<Container, Container, Item, ItemMovedType> ItemMoved = delegate { };
 
     // Variables
 
@@ -255,6 +263,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         if (container.Elements.Contains(item))
         {
           parentContainer = container;
+          break;
         }
       }
       return parentContainer;
@@ -337,7 +346,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       {
         var oldSelectedItem = selectedItem;
         DeselectSelectedItem();
-        ItemSelected(container, oldSelectedItem, false);
+        ItemSelected(container, oldSelectedItem);
       }
 
       // Update selectedItem with the new item
@@ -346,7 +355,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         selectedItem = item;
         itemSelectedThisFrame = true;
         item.SetSelected(true);
-        ItemSelected(container, selectedItem, true);
+        ItemSelected(container, selectedItem);
       }
     }
 
@@ -361,29 +370,18 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
         if (previousContainer.ItemClass != selectedItem.ItemClass && newContainer.ItemClass == selectedItem.ItemClass)
         {
-          ItemMoved(previousContainer, newContainer, selectedItem, true);
+          ItemMoved(previousContainer, newContainer, selectedItem, ItemMovedType.Classified);
         }
         else if (previousContainer.ItemClass == selectedItem.ItemClass && newContainer.ItemClass != selectedItem.ItemClass)
         {
-          ItemMoved(previousContainer, newContainer, selectedItem, false);
+          ItemMoved(previousContainer, newContainer, selectedItem, ItemMovedType.Error);
         }
-      }
-      DeselectSelectedItem();
-
-      // Update RemainingItemsToClassify and classification events
-      if (newContainer.IsFull || newContainer.ItemClass != selectedItem.ItemClass)
-      {
-        if (previousContainer.ItemClass == selectedItem.ItemClass)
-        {
-          RemainingItemsToClassify++;
-        }
-        ItemMoved(previousContainer, newContainer, selectedItem, false);
       }
       else
       {
-        RemainingItemsToClassify--;
-        ItemMoved(previousContainer, newContainer, selectedItem, true);
+        ItemMoved(previousContainer, previousContainer, selectedItem, ItemMovedType.Error);
       }
+      DeselectSelectedItem();
     }
 
     protected virtual void Item_Selected(Item item)
@@ -418,6 +416,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
             }
           }
 
+          // Sync the item move
+          ItemMoveSync(newContainer);
+
           // Call Complete if all items are classified
           if (RemainingItemsToClassify == 0)
           {
@@ -432,7 +433,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       var oldSelectedItem = selectedItem;
       selectedItem = null;
       itemSelectedThisFrame = true;
-      selectedItem.SetSelected(false);
+      oldSelectedItem.SetSelected(false);
     }
 
     protected virtual IEnumerator SetContainersItemsInteractable(bool value)
