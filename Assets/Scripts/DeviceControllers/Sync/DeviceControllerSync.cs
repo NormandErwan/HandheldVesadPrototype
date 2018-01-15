@@ -46,16 +46,16 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers.Sync
 
     protected virtual DevicesSyncMessage ProcessReceivedMessage(NetworkMessage netMessage, bool onClient)
     {
-      DevicesSyncMessage devicesSyncMessage = null;
       if (!onClient || (onClient && !isServer))
       {
-        devicesSyncMessage = ProcessReceivedMessage<DeviceControllerSyncMessage>(netMessage, deviceControllerMessage.MessageType,
-          (deviceControllerMessage) =>
-          {
-            deviceControllerMessage.Sync(DeviceController);
-          });
+        DeviceControllerSyncMessage deviceControllerReceived;
+        if (TryReadMessage(netMessage, deviceControllerMessage.MessageType, out deviceControllerReceived))
+        {
+          deviceControllerReceived.Sync(DeviceController);
+          return deviceControllerReceived;
+        }
       }
-      return devicesSyncMessage;
+      return null;
     }
   }
 }

@@ -46,6 +46,31 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       Grid.Show(false);
     }
 
+    // TODO: remove, for debug testing only
+    protected virtual void Update()
+    {
+      if (Input.GetKeyUp(KeyCode.Space))
+      {
+        Grid.SetCompleted();
+        StateController.NextState();
+        OnActivateTaskSync();
+        Grid.Configure();
+      }
+      if (Input.GetKeyUp(KeyCode.N))
+      {
+        Grid.SetCompleted();
+        StateController.NextState();
+      }
+      if (Input.GetKeyUp(KeyCode.A))
+      {
+        OnActivateTaskSync();
+      }
+      if (Input.GetKeyUp(KeyCode.C))
+      {
+        Grid.Configure();
+      }
+    }
+
     protected virtual void OnDestroy()
     {
       StateController.CurrentStateUpdated -= StateController_CurrentStateUpdated;
@@ -110,6 +135,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       ToogleZoomSync(zoomModeActivated);
     }
 
+    // TODO: remove, for debug testing only
     protected virtual IEnumerator StartTaskDebug()
     {
       yield return null;
@@ -120,18 +146,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       StateController.NextState();
 
       yield return null;
-      ActivateTask();
-    }
-
-    private void Update()
-    {
-      if (Input.GetKeyUp(KeyCode.C))
-      {
-        Grid.SetCompleted();
-        StateController.NextState();
-        ActivateTask();
-        Grid.Configure();
-      }
+      OnActivateTaskSync();
     }
   }
 }

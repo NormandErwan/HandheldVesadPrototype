@@ -23,7 +23,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
     // Variables
 
     protected GridSyncConfigureMessage gridConfigureMessage;
-    protected GridSyncTransformMessage gridTransformMessage = new GridSyncTransformMessage();
+    protected GridSyncTransformMessage gridTransformMessage;
     protected GridSyncEventsMessage gridEventsMessage;
 
     // MonoBehaviour methods
@@ -36,7 +36,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       {
         SendToServer(gridConfigureMessage, Channels.DefaultReliable);
       });
-
+      gridTransformMessage = new GridSyncTransformMessage();
       gridEventsMessage = new GridSyncEventsMessage(Grid, () =>
       {
         SendToServer(gridEventsMessage, Channels.DefaultReliable);
@@ -75,28 +75,30 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 
     protected virtual DevicesSyncMessage ProcessReceivedMessage(NetworkMessage netMessage, bool onClient)
     {
-      DevicesSyncMessage devicesSyncMessage = null;
       if (!onClient || (onClient && !isServer))
       {
-        devicesSyncMessage = ProcessReceivedMessage<GridSyncConfigureMessage>(netMessage, gridConfigureMessage.MessageType,
-          (gridConfigureMessage) =>
-          {
-            gridConfigureMessage.ConfigureGrid(Grid);
-          });
+        GridSyncConfigureMessage gridConfigureReceived;
+        if (TryReadMessage(netMessage, gridConfigureMessage.MessageType, out gridConfigureReceived))
+        {
+          gridConfigureReceived.ConfigureGrid(Grid);
+          return gridConfigureReceived;
+        }
 
-        devicesSyncMessage = ProcessReceivedMessage<GridSyncTransformMessage>(netMessage, gridTransformMessage.MessageType,
-          (gridTransformMessage) =>
-          {
-            gridTransformMessage.Restore(Grid);
-          });
+        GridSyncTransformMessage gridTransformReceived;
+        if (TryReadMessage(netMessage, gridTransformMessage.MessageType, out gridTransformReceived))
+        {
+          gridTransformReceived.Restore(Grid);
+          return gridTransformReceived;
+        }
 
-        devicesSyncMessage = ProcessReceivedMessage<GridSyncEventsMessage>(netMessage, gridEventsMessage.MessageType,
-          (gridTransformMessage) =>
-          {
-            gridTransformMessage.SyncGrid(Grid);
-          });
+        GridSyncEventsMessage gridEventsReceived;
+        if (TryReadMessage(netMessage, gridEventsMessage.MessageType, out gridEventsReceived))
+        {
+          gridEventsReceived.SyncGrid(Grid);
+          return gridEventsReceived;
+        }
       }
-      return devicesSyncMessage;
+      return null;
     }
   }
 }

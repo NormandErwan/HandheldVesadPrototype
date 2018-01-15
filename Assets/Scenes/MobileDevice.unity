@@ -192,12 +192,17 @@ Prefab:
     - target: {fileID: 114607292408350858, guid: 271a4db9a82ef2a42ad2918c1e923109,
         type: 2}
       propertyPath: m_NetworkAddress
-      value: 192.168.137.1
+      value: localhost
       objectReference: {fileID: 0}
     - target: {fileID: 114607292408350858, guid: 271a4db9a82ef2a42ad2918c1e923109,
         type: 2}
       propertyPath: m_LogLevel
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114607292408350858, guid: 271a4db9a82ef2a42ad2918c1e923109,
+        type: 2}
+      propertyPath: m_UseWebSockets
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 271a4db9a82ef2a42ad2918c1e923109, type: 2}
@@ -493,7 +498,7 @@ Prefab:
     - target: {fileID: 114230085306632826, guid: fbbef59b3dd39404ca1cd8b91b4498c2,
         type: 2}
       propertyPath: type
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fbbef59b3dd39404ca1cd8b91b4498c2, type: 2}
