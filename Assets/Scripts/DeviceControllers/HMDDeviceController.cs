@@ -1,6 +1,7 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
 using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
 using NormandErwan.MasterThesis.Experiment.Inputs;
+using NormandErwan.MasterThesis.Experiment.Loggers;
 using NormandErwan.MasterThesis.Experiment.UI.HUD;
 using UnityEngine;
 
@@ -14,28 +15,38 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     private HMDDeviceHUD hmdDeviceHUD;
 
     [SerializeField]
-    private GameObject leftLeapMotionHand;
+    private Inputs.Cursor rightIndexCursor;
 
     [SerializeField]
-    private GameObject leftHandCursors;
+    private Inputs.Cursor leftIndexCursor;
 
     [SerializeField]
-    private GameObject rightLeapMotionHand;
-
-    [SerializeField]
-    private GameObject rightHandCursors;
+    private bool activateLeapHands;
 
     [SerializeField]
     private LeapFingerCursorsInput leapFingerCursorsInput;
 
     [SerializeField]
+    private Renderer rightLeapHand;
+
+    [SerializeField]
+    private Renderer leftLeapHand;
+
+    [SerializeField]
     [Range(0f, 0.05f)]
     private float maxSelectableDistance = 0.001f;
+
+    [SerializeField]
+    private ExperimentDetailsLogger experimentDetailsLogger;
 
     // Properties
 
     public HMDDeviceHUD HMDDeviceHUD { get { return hmdDeviceHUD; } set { hmdDeviceHUD = value; } }
     public LeapFingerCursorsInput LeapFingerCursorsInput { get { return leapFingerCursorsInput; } set { leapFingerCursorsInput = value; } }
+
+    // Variables
+
+    IVTechnique technique;
 
     // Methods
 
@@ -43,10 +54,13 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       base.Start();
 
+      technique = StateController.GetIndependentVariable<IVTechnique>();
+
       LeapFingerCursorsInput.Configure(maxSelectableDistance);
-      LeapFingerCursorsInput.gameObject.SetActive(false);
+      LeapFingerCursorsInput.enabled = false;
       ActivateHand(true, false);
       ActivateHand(false, false);
+      ParticipantIsRightHanded = true;
 
       // TODO: remove, for debug testing only
       //StartCoroutine(StartTaskDebug());
@@ -57,6 +71,15 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     public override void ActivateTask()
     {
       base.ActivateTask();
+
+      if (technique.CurrentCondition.useLeapInput)
+      {
+        LeapFingerCursorsInput.enabled = true;
+        ActivateHand(ParticipantIsRightHanded, true);
+
+        experimentDetailsLogger.Index = (ParticipantIsRightHanded) ? rightIndexCursor : leftIndexCursor;
+      }
+
       HMDDeviceHUD.ShowContent(false);
     }
 
@@ -70,9 +93,8 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       base.StateController_CurrentStateUpdated(currentState);
 
-      bool useLeapInput = StateController.GetIndependentVariable<IVTechnique>().CurrentCondition.useLeapInput;
-      LeapFingerCursorsInput.gameObject.SetActive(currentState.ActivateTask && useLeapInput);
-      ActivateHand(ParticipantIsRightHanded, currentState.ActivateTask && useLeapInput);
+      LeapFingerCursorsInput.enabled = false;
+      ActivateHand(ParticipantIsRightHanded, false);
 
       // TODO: deactivate zoom mode
 
@@ -86,13 +108,13 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       if (rightHand)
       {
-        rightLeapMotionHand.SetActive(value);
-        rightHandCursors.SetActive(value);
+        rightLeapHand.gameObject.SetActive(activateLeapHands & value);
+        rightIndexCursor.gameObject.SetActive(value);
       }
       else
       {
-        leftLeapMotionHand.SetActive(value);
-        leftHandCursors.SetActive(value);
+        leftLeapHand.gameObject.SetActive(activateLeapHands & value);
+        leftIndexCursor.gameObject.SetActive(value);
       }
     }
   }

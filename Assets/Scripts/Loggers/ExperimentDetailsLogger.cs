@@ -13,6 +13,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     [SerializeField]
     private Inputs.Cursor index;
 
+    // Properties
+
+    public Inputs.Cursor Index { get { return index; } set { index = value; } }
+
     // Variables
 
     protected bool itemSelected, itemDeselected, itemMoved, itemClassified;
@@ -50,7 +54,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         AddToRow(selectedContainer);
         AddToRow(selectedItem);
 
-        AddToRow(index.transform, false);
+        AddToRow(Index.transform, false);
         AddToRow(zoomMode);
 
         AddToRow(head, false);

@@ -50,7 +50,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1114445518767178
 GameObject:
   m_ObjectHideFlags: 1
@@ -105,7 +105,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1289847447491222
 GameObject:
   m_ObjectHideFlags: 0
@@ -1126,7 +1126,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 6
-  deviceController: {fileID: 0}
 --- !u!114 &114029505999846332
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1139,7 +1138,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 8
-  deviceController: {fileID: 0}
 --- !u!114 &114245298380061518
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1152,7 +1150,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  deviceController: {fileID: 0}
 --- !u!114 &114286179544140628
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1165,7 +1162,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 2
-  deviceController: {fileID: 0}
 --- !u!114 &114304547472484076
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1178,7 +1174,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
-  deviceController: {fileID: 0}
 --- !u!114 &114329110569601582
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1191,10 +1186,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursors:
-  - {fileID: 114245298380061518}
-  - {fileID: 114304547472484076}
-  - {fileID: 114529553825851816}
   - {fileID: 114026836117134686}
+  - {fileID: 114304547472484076}
   leapServiceProvider: {fileID: 0}
   useStabilizedPositions: 0
 --- !u!114 &114529553825851816
@@ -1209,7 +1202,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 5
-  deviceController: {fileID: 0}
 --- !u!114 &114560577002036184
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1222,14 +1214,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 4
-  deviceController: {fileID: 0}
 --- !u!114 &114717382359170248
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1289847447491222}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a3a8bc350dfb3746b53440b824916f8, type: 3}
   m_Name: 
@@ -1251,7 +1242,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 3
-  deviceController: {fileID: 0}
 --- !u!114 &114773955637911080
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1264,7 +1254,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 7
-  deviceController: {fileID: 0}
 --- !u!114 &114789646245915216
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1277,7 +1266,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 10
-  deviceController: {fileID: 0}
 --- !u!114 &114933141613715370
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1290,7 +1278,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 9
-  deviceController: {fileID: 0}
 --- !u!135 &135027591974533164
 SphereCollider:
   m_ObjectHideFlags: 1

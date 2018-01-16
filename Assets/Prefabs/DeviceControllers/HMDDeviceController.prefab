@@ -87,12 +87,13 @@ MonoBehaviour:
   stateController: {fileID: 0}
   grid: {fileID: 0}
   hmdDeviceHUD: {fileID: 0}
-  leftLeapMotionHand: {fileID: 0}
-  leftHandCursors: {fileID: 0}
   rightLeapMotionHand: {fileID: 0}
-  rightHandCursors: {fileID: 0}
+  rightIndexCursor: {fileID: 0}
+  leftLeapMotionHand: {fileID: 0}
+  leftIndexCursor: {fileID: 0}
   leapFingerCursorsInput: {fileID: 0}
   maxSelectableDistance: 0.04
+  experimentDetailsLogger: {fileID: 0}
 --- !u!114 &114148178166964244
 MonoBehaviour:
   m_ObjectHideFlags: 1
