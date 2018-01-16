@@ -20,14 +20,14 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Variables
     public override void NextCondition()
     {
       int requestConditionIndex = (CurrentConditionIndex + 1) % Conditions.Count;
-      OnRequestCurrentConditionSync(id, Conditions.Values[requestConditionIndex].id);
+      OnRequestCurrentConditionSync(Id, Conditions.Values[requestConditionIndex].Id);
     }
 
     internal override void SetCurrentCondition(string currentConditionId)
     {
       CurrentCondition = Conditions[currentConditionId];
-      CurrentConditionId = CurrentCondition.id;
-      CurrentConditionIndex = Conditions.IndexOfKey(CurrentCondition.id);
+      CurrentConditionId = CurrentCondition.Id;
+      CurrentConditionIndex = Conditions.IndexOfKey(CurrentCondition.Id);
       OnCurrentConditionUpdated();
     }
 
@@ -36,11 +36,11 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Variables
       Conditions = new SortedList<string, T>();
       foreach (var condition in conditions)
       {
-        Conditions.Add(condition.id, condition);
+        Conditions.Add(condition.Id, condition);
       }
       ConditionsCount = Conditions.Count;
       CurrentConditionIndex = 0;
-      CurrentConditionId = Conditions.Values[CurrentConditionIndex].id;
+      CurrentConditionId = Conditions.Values[CurrentConditionIndex].Id;
       SetCurrentCondition(CurrentConditionId);
     }
   }

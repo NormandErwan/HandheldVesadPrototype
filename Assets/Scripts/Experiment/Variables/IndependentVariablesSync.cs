@@ -69,7 +69,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Variables
     {
       foreach (var independentVariable in IndependentVariables)
       {
-        independentVariablesMessage.Update(independentVariable.id, independentVariable.CurrentConditionId);
+        independentVariablesMessage.Update(independentVariable.Id, independentVariable.CurrentConditionId);
         SendToClient(deviceId, independentVariablesMessage);
       }
     }

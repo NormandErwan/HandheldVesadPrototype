@@ -40,7 +40,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Variables
     {
       foreach (var independentVariable in independentVariables)
       {
-        if (independentVariable.id == independentVariableId)
+        if (independentVariable.Id == independentVariableId)
         {
           independentVariable.SetCurrentCondition(currentConditionId);
         }

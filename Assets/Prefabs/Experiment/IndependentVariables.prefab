@@ -412,7 +412,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 932582d0b9ea20f4ca0cd4d85719337b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 2_Hard
+  id: 2
+  name: Hard
   title: Difficile
   minimumAverageClassificationDistance: 2.5
   maximumAverageClassificationDistance: 2.7
@@ -428,9 +429,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 1_MobileDeviceOnly
+  id: 1
+  name: MobileDeviceOnly
   title: "T\xE9l\xE9phone seul"
-  instructions: TODO Instructions Input Output
+  instructions: "Utilisez l'\xE9cran tactile du t\xE9l\xE9phone pour s\xE9lectionner
+    et d\xE9placer les disques."
   useLeapInput: 0
   useTouchInput: 1
 --- !u!114 &114158752525081080
@@ -444,7 +447,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5be6052bc8aff549bf21aea2eaf95e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: TextSize
+  id: 2
+  name: TextSize
   title: Taille du texte
   conditions:
   - {fileID: 114759187420252978}
@@ -460,9 +464,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 3_HandInput_AROutput
+  id: 3
+  name: HandInput_AROutput
   title: "R\xE9alit\xE9 augment\xE9e, interactions avec la main"
-  instructions: 
+  instructions: "S\xE9lectionnez et d\xE9placez les disques autour du t\xE9l\xE9phone
+    directement avec votre index."
   useLeapInput: 1
   useTouchInput: 0
 --- !u!114 &114303898851726862
@@ -508,7 +514,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 213dae45aa3411e4bb9d4c23cb1fa4c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: ClassificationDifficulty
+  id: 3
+  name: ClassificationDifficulty
   title: "Difficult\xE9 de la t\xE2che"
   conditions:
   - {fileID: 114712957325740358}
@@ -524,9 +531,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 2_MobileDeviceInput_AROutput
+  id: 2
+  name: MobileDeviceInput_AROutput
   title: "R\xE9alit\xE9 augment\xE9e, interactions sur le t\xE9l\xE9phone"
-  instructions: 
+  instructions: "Utilisez l'\xE9cran tactile du t\xE9l\xE9phone pour s\xE9lectionner
+    et d\xE9placer les disques."
   useLeapInput: 0
   useTouchInput: 1
 --- !u!114 &114501037082189576
@@ -540,8 +549,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54d15ff0339d5724b8195e2f7e966243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: Technique
-  title: "Syst\xE8me utilis\xE9"
+  id: 1
+  name: Technique
+  title: Technique d'interaction
   conditions:
   - {fileID: 114102835371396286}
   - {fileID: 114495023776505986}
@@ -557,7 +567,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 5_Peephole
+  id: 5
+  name: Peephole
   title: "R\xE9alit\xE9 augment\xE9e \xE0 travers le t\xE9l\xE9phone"
   instructions: 
   useLeapInput: 0
@@ -573,7 +584,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 932582d0b9ea20f4ca0cd4d85719337b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 1_Easy
+  id: 1
+  name: Easy
   title: Facile
   minimumAverageClassificationDistance: 1.25
   maximumAverageClassificationDistance: 1.45
@@ -589,7 +601,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc14585ef5e6c0f4e992ca1bb6cf090e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 1_Large
+  id: 1
+  name: Large
   title: Grand
   fontSize: 56
 --- !u!114 &114784559623597272
@@ -603,7 +616,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 4_GazeInput_AROutput
+  id: 4
+  name: GazeInput_AROutput
   title: "R\xE9alit\xE9 augment\xE9e, interactions HoloLens"
   instructions: 
   useLeapInput: 0
@@ -619,7 +633,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc14585ef5e6c0f4e992ca1bb6cf090e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 2_Small
+  id: 2
+  name: Small
   title: Petit
   fontSize: 32
 --- !u!114 &114999698179949338

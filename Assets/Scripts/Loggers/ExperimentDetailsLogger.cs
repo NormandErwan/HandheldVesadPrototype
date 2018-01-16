@@ -24,7 +24,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected virtual void LateUpdate()
     {
-      if (IsConfigured && stateController.CurrentState.id == stateController.taskTrialState.id)
+      if (IsConfigured && stateController.CurrentState.Id == stateController.taskTrialState.Id)
       {
         if (!itemSelected && itemDeselected)
         {

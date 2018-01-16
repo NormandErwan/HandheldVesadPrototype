@@ -52,13 +52,13 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
       if (stateController.CurrentState.ActivateTask)
       {
         var ivClassificationDifficulty = stateController.GetIndependentVariable<IVClassificationDifficulty>();
-        progressText.text += "\n" + ivClassificationDifficulty.title + " : " + ivClassificationDifficulty.CurrentCondition.title;
+        progressText.text += "\n" + ivClassificationDifficulty.Title + " : " + ivClassificationDifficulty.CurrentCondition.Title;
 
         var ivTextSize = stateController.GetIndependentVariable<IVTextSize>();
-        progressText.text += "\n" + ivTextSize.title + " : " + ivTextSize.CurrentCondition.title;
+        progressText.text += "\n" + ivTextSize.Title + " : " + ivTextSize.CurrentCondition.Title;
 
         var ivTechnique = stateController.GetIndependentVariable<IVTechnique>();
-        progressText.text += "\n" + ivTechnique.title + " : " + ivTechnique.CurrentCondition.title;
+        progressText.text += "\n" + ivTechnique.Title + " : " + ivTechnique.CurrentCondition.Title;
       }
     }
 

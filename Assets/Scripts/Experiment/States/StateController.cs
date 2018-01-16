@@ -52,11 +52,11 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.States
     {
       States = new Dictionary<string, State>()
       {
-        { experimentBeginState.id, experimentBeginState },
-        { taskTrainingState.id, taskTrainingState },
-        { taskTrialState.id, taskTrialState },
-        { restState.id, restState },
-        { experimentEndState.id, experimentEndState }
+        { experimentBeginState.Id, experimentBeginState },
+        { taskTrainingState.Id, taskTrainingState },
+        { taskTrialState.Id, taskTrialState },
+        { restState.Id, restState },
+        { experimentEndState.Id, experimentEndState }
       };
     }
 
@@ -82,15 +82,15 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.States
 
     public void NextState()
     {
-      if (CurrentState.id == experimentBeginState.id)
+      if (CurrentState.Id == experimentBeginState.Id)
       {
         CurrentStateSync(taskTrainingState);
       }
-      else if (CurrentState.id == taskTrainingState.id)
+      else if (CurrentState.Id == taskTrainingState.Id)
       {
         CurrentStateSync(taskTrialState);
       }
-      else if (CurrentState.id == taskTrialState.id)
+      else if (CurrentState.Id == taskTrialState.Id)
       {
         var nextState = taskTrialState;
         if (CurrentTrial == TrialsPerCondition)
@@ -113,11 +113,11 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.States
         }
         CurrentStateSync(nextState);
       }
-      else if (CurrentState.id == restState.id)
+      else if (CurrentState.Id == restState.Id)
       {
         CurrentStateSync(taskTrainingState);
       }
-      else if (CurrentState.id == experimentEndState.id)
+      else if (CurrentState.Id == experimentEndState.Id)
       {
         NextCondition();
         CurrentStateSync(experimentBeginState);
@@ -139,7 +139,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.States
 
     public override string ToString()
     {
-      return name + ": CurrentState: '" + CurrentState.id
+      return name + ": CurrentState: '" + CurrentState.Id
         + "', ConditionsProgress: " + ConditionsProgress + "/" + ConditionsTotal
         + ", TrialsProgress: " + TrialsProgress + "/" + TrialsTotal
         + " (current trial: " + CurrentTrial + "/" + TrialsPerCondition + ")"
@@ -150,25 +150,25 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.States
     {
       PreviousState = CurrentState;
       CurrentState = States[currentStateId];
-      if (CurrentState.id == experimentBeginState.id)
+      if (CurrentState.Id == experimentBeginState.Id)
       {
         StatesProgress = 0;
         ConditionsProgress = 1;
         TrialsProgress = 1;
         CurrentTrial = 1;
       }
-      else if (CurrentState.id == taskTrainingState.id)
+      else if (CurrentState.Id == taskTrainingState.Id)
       {
         StatesProgress++;
 
-        if (PreviousState.id == restState.id)
+        if (PreviousState.Id == restState.Id)
         {
           ConditionsProgress++;
           TrialsProgress++;
           CurrentTrial = 1;
         }
       }
-      else if (CurrentState.id == taskTrialState.id)
+      else if (CurrentState.Id == taskTrialState.Id)
       {
         StatesProgress++;
 
@@ -178,17 +178,17 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.States
           TrialsProgress++;
           CurrentTrial = 1;
         }
-        else if (PreviousState.id != taskTrainingState.id)
+        else if (PreviousState.Id != taskTrainingState.Id)
         {
           TrialsProgress++;
           CurrentTrial++;
         }
       }
-      else if (CurrentState.id == restState.id)
+      else if (CurrentState.Id == restState.Id)
       {
         StatesProgress++;
       }
-      else if (CurrentState.id == experimentEndState.id)
+      else if (CurrentState.Id == experimentEndState.Id)
       {
         StatesProgress++;
       }

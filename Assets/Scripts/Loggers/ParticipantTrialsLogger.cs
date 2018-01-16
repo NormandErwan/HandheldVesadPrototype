@@ -38,6 +38,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     // Variables
 
+    protected IVTechnique technique;
+    protected IVTextSize textSize;
+    protected IVClassificationDifficulty distance;
+
     protected DateTime startDateTime;
 
     protected Variable selections = new Variable("selections");
@@ -56,6 +60,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     protected virtual void Start()
     {
       oldHeadPhoneDistance = (head.position - mobileDevice.position).magnitude;
+
+      technique = stateController.GetIndependentVariable<IVTechnique>();
+      textSize = stateController.GetIndependentVariable<IVTextSize>();
+      distance = stateController.GetIndependentVariable<IVClassificationDifficulty>();
     }
 
     protected virtual void LateUpdate()
@@ -72,7 +80,11 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       Filename = "participant-" + deviceController.ParticipantId + "_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + "_trials.csv";
 
       Columns = new List<string>() {
-        "participant_id", "technique", "distance", "text_size", "trial_number", "grid_config",
+        "participant_id",
+        "technique_id", "technique_name",
+        "text_size_id", "text_size_name",
+        "distance_id", "distance_name",
+        "trial_number", "grid_config",
         "start_date_time", "total_time"
       };
       Columns.AddRange(selections.Columns());
@@ -86,7 +98,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected override void Grid_Configured()
     {
-      if (stateController.CurrentState.id == stateController.taskTrialState.id)
+      if (stateController.CurrentState.Id == stateController.taskTrialState.Id)
       {
         PrepareRow();
 
@@ -100,9 +112,9 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         zoom.Reset();
 
         AddToRow(deviceController.ParticipantId);
-        AddToRow(stateController.GetIndependentVariable<IVTechnique>().CurrentCondition.id);
-        AddToRow(stateController.GetIndependentVariable<IVClassificationDifficulty>().CurrentCondition.id);
-        AddToRow(stateController.GetIndependentVariable<IVTextSize>().CurrentCondition.id);
+        AddToRow(technique.CurrentCondition.Id); AddToRow(technique.CurrentCondition.Name);
+        AddToRow(textSize.CurrentCondition.Id); AddToRow(textSize.CurrentCondition.Name);
+        AddToRow(distance.CurrentCondition.Id); AddToRow(distance.CurrentCondition.Name);
         AddToRow(stateController.CurrentTrial);
         AddToRow(grid.GridGenerator.ToString());
       }
@@ -110,7 +122,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected override void Grid_Completed()
     {
-      if (stateController.CurrentState.id == stateController.taskTrialState.id)
+      if (stateController.CurrentState.Id == stateController.taskTrialState.Id)
       {
         AddToRow(startDateTime);
         AddToRow((DateTime.Now - startDateTime).TotalSeconds);

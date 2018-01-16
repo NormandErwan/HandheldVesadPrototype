@@ -59,7 +59,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.States
 
     protected virtual void StateManager_CurrentStateSync(State currentState)
     {
-      stateControllerMessage.currentStateId = currentState.id;
+      stateControllerMessage.currentStateId = currentState.Id;
       SendToServer(stateControllerMessage);
     }
   }

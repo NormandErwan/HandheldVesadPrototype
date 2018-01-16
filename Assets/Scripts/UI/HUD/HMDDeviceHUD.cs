@@ -31,11 +31,11 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
 
     public virtual void UpdateInstructionsProgress(StateController stateController)
     {
-      progressText.text = "État courant : " + stateController.CurrentState.title + " - "
+      progressText.text = "État courant : " + stateController.CurrentState.Title + " - "
           + "Progression : " + (stateController.StatesProgress * 100f / stateController.StatesTotal).ToString("F1") + "%";
 
       stateTextsParent.SetActive(true);
-      stateTitleText.text = stateController.CurrentState.title;
+      stateTitleText.text = stateController.CurrentState.Title;
       stateInstructionsText.text = stateController.CurrentState.Instructions;
     }
 
