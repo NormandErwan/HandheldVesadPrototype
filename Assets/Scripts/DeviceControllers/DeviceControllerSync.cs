@@ -3,7 +3,7 @@ using DevicesSyncUnity.Messages;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace NormandErwan.MasterThesis.Experiment.DeviceControllers.Sync
+namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 {
   public class DeviceControllerSync : DevicesSync
   {

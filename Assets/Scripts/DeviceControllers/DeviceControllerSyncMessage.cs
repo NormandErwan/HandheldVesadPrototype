@@ -1,7 +1,7 @@
 ﻿using DevicesSyncUnity.Messages;
 using System;
 
-namespace NormandErwan.MasterThesis.Experiment.DeviceControllers.Sync
+namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 {
   public class DeviceControllerSyncMessage : DevicesSyncMessage
   {
