@@ -71,7 +71,7 @@ GameObject:
   - component: {fileID: 4821446599834676}
   - component: {fileID: 114558040002357160}
   m_Layer: 0
-  m_Name: TaskTrialCompleteState
+  m_Name: RestState
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -204,11 +204,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   experimentBeginState: {fileID: 114406056564576534}
+  restState: {fileID: 114558040002357160}
   experimentEndState: {fileID: 114855766242606984}
-  taskBeginState: {fileID: 114429863715970740}
+  taskTrainingState: {fileID: 114429863715970740}
   taskTrialState: {fileID: 114661546425955246}
   TrialsPerCondition: 2
-  taskEndState: {fileID: 114558040002357160}
   independentVariables:
   - {fileID: 0}
   - {fileID: 0}
@@ -242,9 +242,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: TaskTrainingState
-  title: "Entrainement sur une nouvelle t\xE2che"
+  title: "Entra\xEEnement"
   instructions: "Ceci est un entra\xEEnement. Prenez autant de temps que vous voulez
-    pour vous familiariser avec la t\xE2che et e syst\xE8me."
+    pour vous familiariser avec la t\xE2che et la technique d'interaction."
   activateTask: 1
 --- !u!114 &114495959195748250
 MonoBehaviour:
@@ -270,10 +270,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5627d38ddd87084e825a08a58aef09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: TaskTrialCompleteState
-  title: "Essai termin\xE9"
-  instructions: "L'essai est termin\xE9. Vous pouvez enlever le casque et prendre
-    une pause avant le prochain essai."
+  id: RestState
+  title: Repos
+  instructions: Vous pouvez enlever le casque et prendre une pause avant les prochains
+    essais.
   activateTask: 0
 --- !u!114 &114661546425955246
 MonoBehaviour:
@@ -287,9 +287,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: TaskTrialState
-  title: "Essai sur la t\xE2che courante"
-  instructions: "Ceci est un essai r\xE9el. Mettez tous les disques verts. Allez le
-    plus vite possible en faisant le moins d'erreurs."
+  title: "Essai r\xE9el"
+  instructions: "Ceci est un essai r\xE9el. D\xE9placez les disques pour les mettre
+    tous en vert. Allez le plus vite possible en faisant le moins d'erreurs possible."
   activateTask: 1
 --- !u!114 &114798882843681932
 MonoBehaviour:

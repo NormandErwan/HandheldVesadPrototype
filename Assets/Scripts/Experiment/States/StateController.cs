@@ -14,13 +14,13 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.States
 
     [Header("Experiment States")]
     public State experimentBeginState;
+    public State restState;
     public State experimentEndState;
 
     [Header("Task States")]
-    public State taskBeginState;
+    public State taskTrainingState;
     public State taskTrialState;
     public uint TrialsPerCondition = 1;
-    public State taskEndState;
 
     [Header("Independent Variables")]
     public IIndependentVariable[] independentVariables;
@@ -29,6 +29,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.States
 
     public Dictionary<string, State> States { get; protected set; }
     public State CurrentState { get; protected set; }
+    public State PreviousState { get; protected set; }
     public int CurrentTrial { get; internal set; }
 
     public int StatesTotal { get; internal set; }
@@ -45,6 +46,33 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.States
     public event Action<State> CurrentStateSync = delegate { };
     public event Action<State> CurrentStateUpdated = delegate { };
 
+    // MonoBehaviour methods
+
+    protected virtual void Awake()
+    {
+      States = new Dictionary<string, State>()
+      {
+        { experimentBeginState.id, experimentBeginState },
+        { taskTrainingState.id, taskTrainingState },
+        { taskTrialState.id, taskTrialState },
+        { restState.id, restState },
+        { experimentEndState.id, experimentEndState }
+      };
+    }
+
+    protected virtual void Start()
+    {
+      ConditionsTotal = 1;
+      foreach (var independentVariable in independentVariables)
+      {
+        ConditionsTotal *= independentVariable.ConditionsCount;
+      }
+      TrialsTotal = ConditionsTotal * (int)TrialsPerCondition;
+      StatesTotal = 2 // experimentBeginState and experimentEndState
+        + independentVariables[0].ConditionsCount // trainings
+        + TrialsTotal; // trials
+    }
+
     // Methods
 
     public void BeginExperiment()
@@ -56,31 +84,42 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.States
     {
       if (CurrentState.id == experimentBeginState.id)
       {
-        CurrentStateSync(taskBeginState);
+        CurrentStateSync(taskTrainingState);
       }
-      else if (CurrentState.id == taskBeginState.id)
+      else if (CurrentState.id == taskTrainingState.id)
       {
         CurrentStateSync(taskTrialState);
       }
       else if (CurrentState.id == taskTrialState.id)
       {
-        CurrentStateSync((CurrentTrial < TrialsPerCondition) ? taskTrialState : taskEndState);
+        var nextState = taskTrialState;
+        if (CurrentTrial == TrialsPerCondition)
+        {
+          if (ConditionsProgress == ConditionsTotal)
+          {
+            nextState = experimentEndState;
+          }
+          else
+          {
+            var previousTechniqueConditionIndex = independentVariables[0].CurrentConditionIndex;
+            NextCondition();
+
+            // Rest+Training only when there is a new technique
+            if (independentVariables[0].CurrentConditionIndex != previousTechniqueConditionIndex)
+            {
+              nextState = restState;
+            }
+          }
+        }
+        CurrentStateSync(nextState);
       }
-      else if (CurrentState.id == taskEndState.id)
+      else if (CurrentState.id == restState.id)
       {
-        if (ConditionsProgress < ConditionsTotal)
-        {
-          UpdateIndependentVariablesCurrentCondition();
-          CurrentStateSync(taskBeginState);
-        }
-        else
-        {
-          CurrentStateSync(experimentEndState);
-        }
+        CurrentStateSync(taskTrainingState);
       }
       else if (CurrentState.id == experimentEndState.id)
       {
-        UpdateIndependentVariablesCurrentCondition();
+        NextCondition();
         CurrentStateSync(experimentBeginState);
       }
     }
@@ -109,67 +148,57 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.States
 
     internal virtual void SetCurrentState(string currentStateId)
     {
+      PreviousState = CurrentState;
       CurrentState = States[currentStateId];
       if (CurrentState.id == experimentBeginState.id)
       {
-        ResetProgress();
+        StatesProgress = 0;
+        ConditionsProgress = 1;
+        TrialsProgress = 1;
+        CurrentTrial = 1;
       }
-      else if (CurrentState.id == taskBeginState.id)
+      else if (CurrentState.id == taskTrainingState.id)
       {
         StatesProgress++;
-        ConditionsProgress++;
-        CurrentTrial = 0;
+
+        if (PreviousState.id == restState.id)
+        {
+          ConditionsProgress++;
+          TrialsProgress++;
+          CurrentTrial = 1;
+        }
       }
       else if (CurrentState.id == taskTrialState.id)
       {
         StatesProgress++;
-        TrialsProgress++;
-        CurrentTrial++;
+
+        if (CurrentTrial == TrialsPerCondition)
+        {
+          ConditionsProgress++;
+          TrialsProgress++;
+          CurrentTrial = 1;
+        }
+        else if (PreviousState.id != taskTrainingState.id)
+        {
+          TrialsProgress++;
+          CurrentTrial++;
+        }
       }
-      else if (CurrentState.id == taskEndState.id)
+      else if (CurrentState.id == restState.id)
       {
         StatesProgress++;
       }
       else if (CurrentState.id == experimentEndState.id)
       {
-        StatesProgress = StatesTotal;
-        ConditionsProgress = ConditionsTotal;
-        TrialsProgress = TrialsTotal;
+        StatesProgress++;
       }
-      CurrentStateUpdated.Invoke(CurrentState);
-    }
-
-    protected virtual void Awake()
-    {
-      States = new Dictionary<string, State>()
-      {
-        { experimentBeginState.id, experimentBeginState },
-        { taskBeginState.id, taskBeginState },
-        { taskTrialState.id, taskTrialState },
-        { taskEndState.id, taskEndState },
-        { experimentEndState.id, experimentEndState }
-      };
-    }
-
-    protected virtual void Start()
-    {
-      ConditionsTotal = 1;
-      foreach (var independentVariable in independentVariables)
-      {
-        ConditionsTotal *= independentVariable.ConditionsCount;
-      }
-      TrialsTotal = ConditionsTotal * (int)TrialsPerCondition;
-      StatesTotal = 2 // experimentBeginState and experimentEndState
-        + 2 * ConditionsTotal // taskBeginState and taskEndState
-        + TrialsTotal;
-
-      //BeginExperiment();
+      CurrentStateUpdated(CurrentState);
     }
 
     /// <summary>
     /// Update the last IVManager in list each time a task begins, and other IVManagers only if the next in list is on first condition.
     /// </summary>
-    protected virtual void UpdateIndependentVariablesCurrentCondition()
+    protected virtual void NextCondition()
     {
       int lastIVIndex = independentVariables.Length - 1;
       bool nextIVRequestedFirstCondition = false;
@@ -185,14 +214,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.States
           break;
         }
       }
-    }
-
-    protected virtual void ResetProgress()
-    {
-      CurrentTrial = 0;
-      StatesProgress = 0;
-      ConditionsProgress = 0;
-      TrialsProgress = 0;
     }
   }
 }

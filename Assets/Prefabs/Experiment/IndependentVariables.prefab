@@ -53,7 +53,7 @@ GameObject:
   - component: {fileID: 4768359814576080}
   - component: {fileID: 114102835371396286}
   m_Layer: 0
-  m_Name: A_MobileDeviceOnly
+  m_Name: 1_MobileDeviceOnly
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -85,7 +85,7 @@ GameObject:
   - component: {fileID: 4633448848570030}
   - component: {fileID: 114784559623597272}
   m_Layer: 0
-  m_Name: D_GazeInput_AROutput
+  m_Name: 4_GazeInput_AROutput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 4127288365583052}
   - component: {fileID: 114623683837749356}
   m_Layer: 0
-  m_Name: E_Peephole
+  m_Name: 5_Peephole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -117,7 +117,7 @@ GameObject:
   - component: {fileID: 4881476555587638}
   - component: {fileID: 114265026425476688}
   m_Layer: 0
-  m_Name: C_HandInput_AROutput
+  m_Name: 3_HandInput_AROutput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -150,7 +150,7 @@ GameObject:
   - component: {fileID: 4940331990316028}
   - component: {fileID: 114495023776505986}
   m_Layer: 0
-  m_Name: B_MobileDeviceInput_AROutput
+  m_Name: 2_MobileDeviceInput_AROutput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -428,7 +428,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: A_MobileDeviceOnly
+  id: 1_MobileDeviceOnly
   title: "T\xE9l\xE9phone seul"
   instructions: TODO Instructions Input Output
   useLeapInput: 0
@@ -460,7 +460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: C_HandInput_AROutput
+  id: 3_HandInput_AROutput
   title: "R\xE9alit\xE9 augment\xE9e, interactions avec la main"
   instructions: 
   useLeapInput: 1
@@ -524,7 +524,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: B_MobileDeviceInput_AROutput
+  id: 2_MobileDeviceInput_AROutput
   title: "R\xE9alit\xE9 augment\xE9e, interactions sur le t\xE9l\xE9phone"
   instructions: 
   useLeapInput: 0
@@ -544,6 +544,7 @@ MonoBehaviour:
   title: "Syst\xE8me utilis\xE9"
   conditions:
   - {fileID: 114102835371396286}
+  - {fileID: 114495023776505986}
   - {fileID: 114265026425476688}
 --- !u!114 &114623683837749356
 MonoBehaviour:
@@ -556,7 +557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: E_Peephole
+  id: 5_Peephole
   title: "R\xE9alit\xE9 augment\xE9e \xE0 travers le t\xE9l\xE9phone"
   instructions: 
   useLeapInput: 0
@@ -602,7 +603,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d522efe73ac094da7becf18599beb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: D_GazeInput_AROutput
+  id: 4_GazeInput_AROutput
   title: "R\xE9alit\xE9 augment\xE9e, interactions HoloLens"
   instructions: 
   useLeapInput: 0
