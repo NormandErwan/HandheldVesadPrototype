@@ -413,7 +413,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 2
-  name: Hard
+  name: FAR
   title: Difficile
   minimumAverageClassificationDistance: 2.5
   maximumAverageClassificationDistance: 2.7
@@ -430,7 +430,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 1
-  name: MobileDeviceOnly
+  name: PHONE_ONLY
   title: "T\xE9l\xE9phone seul"
   instructions: "Utilisez l'\xE9cran tactile du t\xE9l\xE9phone pour s\xE9lectionner
     et d\xE9placer les disques."
@@ -465,7 +465,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 3
-  name: HandInput_AROutput
+  name: LEAP_IN_AR_OUT
   title: "R\xE9alit\xE9 augment\xE9e, interactions avec la main"
   instructions: "S\xE9lectionnez et d\xE9placez les disques autour du t\xE9l\xE9phone
     directement avec votre index."
@@ -532,7 +532,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 2
-  name: MobileDeviceInput_AROutput
+  name: PHONE_IN_AR_OUT
   title: "R\xE9alit\xE9 augment\xE9e, interactions sur le t\xE9l\xE9phone"
   instructions: "Utilisez l'\xE9cran tactile du t\xE9l\xE9phone pour s\xE9lectionner
     et d\xE9placer les disques."
@@ -568,7 +568,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 5
-  name: Peephole
+  name: PEEPHOLE
   title: "R\xE9alit\xE9 augment\xE9e \xE0 travers le t\xE9l\xE9phone"
   instructions: 
   useLeapInput: 0
@@ -585,7 +585,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 1
-  name: Easy
+  name: NEAR
   title: Facile
   minimumAverageClassificationDistance: 1.25
   maximumAverageClassificationDistance: 1.45
@@ -602,7 +602,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 1
-  name: Large
+  name: BIG
   title: Grand
   fontSize: 56
 --- !u!114 &114784559623597272
@@ -617,7 +617,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 4
-  name: GazeInput_AROutput
+  name: HEAD_RAYCAST_IN_AR_OUT
   title: "R\xE9alit\xE9 augment\xE9e, interactions HoloLens"
   instructions: 
   useLeapInput: 0
@@ -634,7 +634,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 2
-  name: Small
+  name: SMALL
   title: Petit
   fontSize: 32
 --- !u!114 &114999698179949338
