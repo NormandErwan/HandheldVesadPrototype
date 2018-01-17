@@ -29,7 +29,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     public event Action ConfigureSync = delegate { };
     public event Action Configured = delegate { };
     public event Action ActivateTaskSync = delegate { };
-    public event Action<bool> ToogleZoomSync = delegate { };
+    public event Action<bool> SetDragToZoomSync = delegate { };
 
     // MonoBehaviour methods
 
@@ -80,6 +80,11 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
         OnActivateTaskSync();
         Grid.Configure();
       }
+
+      if (Input.GetKeyUp(KeyCode.Z))
+      {
+        OnSetDragToZoomSync(!Grid.DragToZoom);
+      }
     }
 
     protected virtual void OnDestroy()
@@ -104,13 +109,15 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
     }
 
-    public virtual void ToggleZoom(bool activated)
+    public virtual void SetDragToZoom(bool activated)
     {
+      Grid.DragToZoom = activated;
     }
 
     protected virtual void StateController_CurrentStateUpdated(State currentState)
     {
       Grid.Show(false);
+      SetDragToZoom(false);
     }
 
     protected virtual void Grid_Configured()
@@ -139,11 +146,11 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     }
 
     /// <summary>
-    /// Calls <see cref="ToogleZoomSync"/>.
+    /// Calls <see cref="SetDragToZoomSync"/>.
     /// </summary>
-    protected virtual void OnToogleZoomModeSync(bool zoomModeActivated)
+    protected virtual void OnSetDragToZoomSync(bool activated)
     {
-      ToogleZoomSync(zoomModeActivated);
+      SetDragToZoomSync(activated);
     }
 
     // TODO: remove, for debug testing only

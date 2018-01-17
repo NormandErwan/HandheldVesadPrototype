@@ -29,6 +29,10 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     public MobileDeviceHUD MobileDeviceHUD { get { return mobileDeviceHUD; } set { mobileDeviceHUD = value; } }
     public TouchFingerCursorsInput TouchFingerCursorsInput { get { return touchFingerCursorsInput; } set { touchFingerCursorsInput = value; } }
 
+    // Variables
+
+    protected IVTechnique technique;
+
     // Methods
 
     protected override void Start()
@@ -38,12 +42,14 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       camera.orthographic = true;
       camera.orthographicSize = 0.5f * Grid.transform.localScale.y * (Grid.ElementScale.y + Grid.ElementMargin.y);
 
+      technique = StateController.GetIndependentVariable<IVTechnique>();
+
       TouchFingerCursorsInput.Configure(maxSelectableDistance);
-      TouchFingerCursorsInput.gameObject.SetActive(false);
+      TouchFingerCursorsInput.enabled = false;
 
       MobileDeviceHUD.ActivateTaskButtonPressed += MobileDeviceHUD_ActivateTaskButtonPressed;
       MobileDeviceHUD.NextStateButtonPressed += MobileDeviceHUD_NextStateButtonPressed;
-      MobileDeviceHUD.ZoomModeToggleButtonPressed += MobileDeviceHUD_ZoomModeToggleButtonPressed;
+      MobileDeviceHUD.DragToZoomButtonPressed += MobileDeviceHUD_DragToZoomButtonPressed;
 
       // TODO: remove, for debug testing only
       //StartCoroutine(StartTaskDebug());
@@ -61,21 +67,20 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
       MobileDeviceHUD.ActivateTaskButtonPressed -= MobileDeviceHUD_ActivateTaskButtonPressed;
       MobileDeviceHUD.NextStateButtonPressed -= MobileDeviceHUD_NextStateButtonPressed;
-      MobileDeviceHUD.ZoomModeToggleButtonPressed -= MobileDeviceHUD_ZoomModeToggleButtonPressed;
+      MobileDeviceHUD.DragToZoomButtonPressed -= MobileDeviceHUD_DragToZoomButtonPressed;
     }
 
     public override void ActivateTask()
     {
       base.ActivateTask();
 
-      var ivTechnique = StateController.GetIndependentVariable<IVTechnique>();
-      if (ivTechnique.CurrentCondition.useLeapInput)
+      if (technique.CurrentCondition.useLeapInput)
       {
-        MobileDeviceHUD.ShowToggleButton(MobileDeviceHUD.ZoomModeToggleButton);
+        MobileDeviceHUD.ShowOneButton(MobileDeviceHUD.dragToZoomButton);
       }
-      else if (ivTechnique.CurrentCondition.useTouchInput)
+      if (technique.CurrentCondition.useTouchInput)
       {
-        TouchFingerCursorsInput.gameObject.SetActive(true);
+        TouchFingerCursorsInput.enabled = true;
       }
     }
 
@@ -83,15 +88,15 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       base.StateController_CurrentStateUpdated(currentState);
 
-      TouchFingerCursorsInput.gameObject.SetActive(false);
+      TouchFingerCursorsInput.enabled = false;
 
       if (currentState.ActivateTask)
       {
-        MobileDeviceHUD.ShowToggleButton(MobileDeviceHUD.ActivateTaskButton);
+        MobileDeviceHUD.ShowOneButton(MobileDeviceHUD.ActivateTaskButton);
       }
       else
       {
-        MobileDeviceHUD.ShowToggleButton(MobileDeviceHUD.NextStateButton);
+        MobileDeviceHUD.ShowOneButton(MobileDeviceHUD.NextStateButton);
       }
     }
 
@@ -107,9 +112,9 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       StateController.NextState();
     }
 
-    protected virtual void MobileDeviceHUD_ZoomModeToggleButtonPressed(bool zoomModeActivated)
+    protected virtual void MobileDeviceHUD_DragToZoomButtonPressed(bool activated)
     {
-      OnToogleZoomModeSync(zoomModeActivated);
+      OnSetDragToZoomSync(activated);
     }
   }
 }

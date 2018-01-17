@@ -49,6 +49,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       {
         return;
       }
+      //triggerColliders.Add(other);
 
       GetInteractable<IFocusable>(other, (focusable) =>
       {
@@ -68,7 +69,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
         GetInteractable<IZoomable>(other, (zoomable) =>
         {
-          if (latestCursorPositions[zoomable].Count == 2 && !zoomable.IsZooming)
+          if (latestCursorPositions[zoomable].Count == 2 && !zoomable.DragToZoom && !zoomable.IsZooming)
           {
             zoomable.SetZooming(true);
           }
@@ -118,27 +119,59 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       {
         GetInteractable<IZoomable>(other, (zoomable) =>
         {
-          if (zoomable.IsInteractable && zoomable.IsZooming)
+          if (latestCursorPositions[zoomable].Count == 1)
+          {
+            if (zoomable.DragToZoom && !zoomable.IsZooming)
+            {
+              var translation = zoomable.ProjectPosition(transform.position - latestCursorPositions[zoomable][this]);
+              if (translation.magnitude > MaxSelectableDistance)
+              {
+                zoomable.SetZooming(true);
+                latestCursorPositions[zoomable][this] = transform.position;
+              }
+            }
+            else if (!zoomable.DragToZoom && zoomable.IsZooming)
+            {
+              var draggable = other.GetComponent<IDraggable>();
+              if (draggable != null)
+              {
+                zoomable.SetZooming(false);
+                draggable.SetDragging(true);
+                latestCursorPositions[zoomable][this] = transform.position;
+              }
+            }
+          }
+
+          if (zoomable.IsZooming)
           {
             var latestPositions = latestCursorPositions[zoomable];
             var cursors = new List<Cursor>(latestPositions.Keys);
             if (cursors[0] == this) // Update only once per frame
             {
-              var cursorPositions = new Vector3[4] {
-                zoomable.ProjectPosition(cursors[0].transform.position),
-                zoomable.ProjectPosition(latestPositions[cursors[0]]),
-                zoomable.ProjectPosition(cursors[1].transform.position),  
-                zoomable.ProjectPosition(latestPositions[cursors[1]])
-              };
+              Vector3[] cursorPositions;
+              if (!zoomable.DragToZoom)
+              {
+                cursorPositions = new Vector3[4] {
+                  zoomable.ProjectPosition(cursors[0].transform.position), zoomable.ProjectPosition(latestPositions[cursors[0]]),
+                  zoomable.ProjectPosition(cursors[1].transform.position), zoomable.ProjectPosition(latestPositions[cursors[1]])
+                };
+              }
+              else
+              {
+                cursorPositions = new Vector3[4] {
+                  zoomable.ProjectPosition(cursors[0].transform.position), zoomable.ProjectPosition(latestPositions[cursors[0]]),
+                  zoomable.ProjectPosition(zoomable.Transform.position), zoomable.ProjectPosition(zoomable.Transform.position)
+                };
+              }
 
-              var distance = zoomable.ProjectPosition(cursors[0].transform.position - cursors[1].transform.position);
-              var previousDistance = zoomable.ProjectPosition(latestPositions[cursors[0]] - latestPositions[cursors[1]]);
-              float scaleFactor = distance.magnitude / previousDistance.magnitude;
+              var distance = (zoomable.ProjectPosition(cursorPositions[0] - cursorPositions[2])).magnitude;
+              var previousDistance = (zoomable.ProjectPosition(cursorPositions[1] - cursorPositions[3])).magnitude;
+              float scaleFactor = (previousDistance != 0) ? distance / previousDistance : 1f;
 
               bool hasClamped = Scale(zoomable, scaleFactor * zoomable.Transform.localScale);
               if (!hasClamped)
               {
-                var newPosition = cursors[0].transform.position - scaleFactor * (latestPositions[cursors[0]] - zoomable.Transform.position);
+                var newPosition = cursorPositions[0] - scaleFactor * (cursorPositions[1] - zoomable.Transform.position);
                 var translation = newPosition - zoomable.Transform.position;
                 Translate(zoomable, translation);
                 zoomable.Zoom(scaleFactor, translation, cursorPositions);
@@ -148,8 +181,11 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
                 zoomable.Zoom(scaleFactor, Vector3.zero, cursorPositions);
               }
 
-              latestPositions[cursors[0]] = cursors[0].transform.position;
-              latestPositions[cursors[1]] = cursors[1].transform.position;
+              latestPositions[cursors[0]] = cursorPositions[0];
+              if (!zoomable.DragToZoom)
+              {
+                latestPositions[cursors[1]] = cursorPositions[2];
+              }
             }
           }
         });
@@ -158,19 +194,32 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
         {
           GetInteractable<IDraggable>(other, (draggable) =>
           {
-            if (draggable.IsInteractable && latestCursorPositions[draggable].Count == 1)
+            if (latestCursorPositions[draggable].Count == 1)
             {
-              var translation = draggable.ProjectPosition(transform.position - latestCursorPositions[draggable][this]);
-              if (draggable.IsDragging)
+              var zoomable = other.GetComponent<IZoomable>();
+              if (zoomable != null && zoomable.DragToZoom)
               {
-                Translate(draggable, translation);
-                draggable.Drag(translation);
-                latestCursorPositions[draggable][this] = transform.position;
+                if (draggable.IsDragging)
+                {
+                  draggable.SetDragging(false);
+                  zoomable.SetZooming(true);
+                  latestCursorPositions[draggable][this] = transform.position;
+                }
               }
-              else if (translation.magnitude > MaxSelectableDistance)
+              else
               {
-                draggable.SetDragging(true);
-                latestCursorPositions[draggable][this] = transform.position;
+                var translation = draggable.ProjectPosition(transform.position - latestCursorPositions[draggable][this]);
+                if (draggable.IsDragging)
+                {
+                  Translate(draggable, translation);
+                  draggable.Drag(translation);
+                  latestCursorPositions[draggable][this] = transform.position;
+                }
+                else if (translation.magnitude > MaxSelectableDistance)
+                {
+                  draggable.SetDragging(true);
+                  latestCursorPositions[draggable][this] = transform.position;
+                }
               }
             }
           });
@@ -283,8 +332,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       {
         if (!transformable.FreezePosition[i])
         {
-          float value = transformable.Transform.position[i] + translation[i];
-          position[i] = transformable.PositionRange[i].Clamp(value);
+          position[i] = transformable.PositionRange[i].Clamp(position[i] + translation[i]);
         }
       }
       transformable.Transform.position = position;

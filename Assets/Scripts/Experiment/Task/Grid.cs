@@ -42,6 +42,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public bool IsDragging { get; protected set; }
     public bool IsZooming { get; protected set; }
 
+    public bool DragToZoom { get; set; }
+
     public Transform Transform { get { return transform; } }
 
     public GenericVector3<bool> FreezePosition { get; protected set; }
@@ -91,7 +93,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     protected new BoxCollider collider;
 
     protected Item selectedItem;
-    protected bool itemSelectedThisFrame;
+    protected bool itemSelectedThisFrame = false;
 
     protected IVTextSize ivTextSize;
     protected IVClassificationDifficulty iVClassificationDifficulty;
@@ -101,6 +103,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     protected override void Awake()
     {
       base.Awake();
+
       collider = GetComponent<BoxCollider>();
 
       FreezePosition = FreezeScale = new GenericVector3<bool>(false, false, true);
@@ -109,6 +112,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
       SetInteractable(false);
       StartCoroutine(SetContainersItemsInteractable(false));
+
+      DragToZoom = false;
 
       IsConfigured = false;
       IsCompleted = false;
@@ -151,16 +156,18 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public void SetDragging(bool value)
     {
-      IsDragging = value;
-      if (IsDragging)
+      if (IsDragging != value)
       {
-        DraggingStarted(this);
+        IsDragging = value;
+        if (IsDragging)
+        {
+          DraggingStarted(this);
+        }
+        else
+        {
+          DraggingStopped(this);
+        }
       }
-      else
-      {
-        DraggingStopped(this);
-      }
-
       StartCoroutine(SetContainersItemsInteractable(!IsDragging && !IsZooming));
     }
 
@@ -171,16 +178,18 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public void SetZooming(bool value)
     {
-      IsZooming = value;
-      if (IsZooming)
+      if (IsZooming != value)
       {
-        ZoomingStarted(this);
+        IsZooming = value;
+        if (IsZooming)
+        {
+          ZoomingStarted(this);
+        }
+        else
+        {
+          ZoomingStopped(this);
+        }
       }
-      else
-      {
-        ZoomingStopped(this);
-      }
-
       StartCoroutine(SetContainersItemsInteractable(!IsDragging && !IsZooming));
     }
 

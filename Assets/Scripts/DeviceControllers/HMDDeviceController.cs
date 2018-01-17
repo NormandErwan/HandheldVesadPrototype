@@ -83,20 +83,12 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       HMDDeviceHUD.ShowContent(false);
     }
 
-    public override void ToggleZoom(bool activated)
-    {
-      base.ToggleZoom(activated);
-      // TODO
-    }
-
     protected override void StateController_CurrentStateUpdated(State currentState)
     {
       base.StateController_CurrentStateUpdated(currentState);
 
       LeapFingerCursorsInput.enabled = false;
       ActivateHand(ParticipantIsRightHanded, false);
-
-      // TODO: deactivate zoom mode
 
       HMDDeviceHUD.ShowContent(true);
       HMDDeviceHUD.UpdateInstructionsProgress(StateController);

@@ -498,7 +498,7 @@ Prefab:
     - target: {fileID: 114230085306632826, guid: fbbef59b3dd39404ca1cd8b91b4498c2,
         type: 2}
       propertyPath: type
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fbbef59b3dd39404ca1cd8b91b4498c2, type: 2}
@@ -754,56 +754,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 6
       objectReference: {fileID: 0}
-    - target: {fileID: 114726499238018480, guid: 1af7da660e405ea4d88d276210dfa5c0,
-        type: 2}
-      propertyPath: deviceController
-      value: 
-      objectReference: {fileID: 1578455496}
-    - target: {fileID: 114286179544140628, guid: 1af7da660e405ea4d88d276210dfa5c0,
-        type: 2}
-      propertyPath: deviceController
-      value: 
-      objectReference: {fileID: 1578455496}
-    - target: {fileID: 114560577002036184, guid: 1af7da660e405ea4d88d276210dfa5c0,
-        type: 2}
-      propertyPath: deviceController
-      value: 
-      objectReference: {fileID: 1578455496}
-    - target: {fileID: 114245298380061518, guid: 1af7da660e405ea4d88d276210dfa5c0,
-        type: 2}
-      propertyPath: deviceController
-      value: 
-      objectReference: {fileID: 1578455496}
-    - target: {fileID: 114304547472484076, guid: 1af7da660e405ea4d88d276210dfa5c0,
-        type: 2}
-      propertyPath: deviceController
-      value: 
-      objectReference: {fileID: 1578455496}
-    - target: {fileID: 114773955637911080, guid: 1af7da660e405ea4d88d276210dfa5c0,
-        type: 2}
-      propertyPath: deviceController
-      value: 
-      objectReference: {fileID: 1578455496}
-    - target: {fileID: 114933141613715370, guid: 1af7da660e405ea4d88d276210dfa5c0,
-        type: 2}
-      propertyPath: deviceController
-      value: 
-      objectReference: {fileID: 1578455496}
-    - target: {fileID: 114029505999846332, guid: 1af7da660e405ea4d88d276210dfa5c0,
-        type: 2}
-      propertyPath: deviceController
-      value: 
-      objectReference: {fileID: 1578455496}
-    - target: {fileID: 114026836117134686, guid: 1af7da660e405ea4d88d276210dfa5c0,
-        type: 2}
-      propertyPath: deviceController
-      value: 
-      objectReference: {fileID: 1578455496}
-    - target: {fileID: 114529553825851816, guid: 1af7da660e405ea4d88d276210dfa5c0,
-        type: 2}
-      propertyPath: deviceController
-      value: 
-      objectReference: {fileID: 1578455496}
     - target: {fileID: 114717382359170248, guid: 1af7da660e405ea4d88d276210dfa5c0,
         type: 2}
       propertyPath: camera
@@ -866,6 +816,11 @@ Prefab:
     - target: {fileID: 4222087900461476, guid: a3b64898f2954384a989df0bbfd40e80, type: 2}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114102835371396286, guid: a3b64898f2954384a989df0bbfd40e80,
+        type: 2}
+      propertyPath: useLeapInput
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a3b64898f2954384a989df0bbfd40e80, type: 2}

@@ -15,44 +15,37 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
     private Button nextStateButton;
 
     [SerializeField]
-    private Button zoomModeToggleButton;
+    private Button toggleZoomButton;
+
+    [SerializeField]
+    private Text toggleZoomButtonText;
 
     // Properties
 
     public Button ActivateTaskButton { get { return activateTaskButton; } set { activateTaskButton = value; } }
     public Button NextStateButton { get { return nextStateButton; } set { nextStateButton = value; } }
-    public Button ZoomModeToggleButton { get { return zoomModeToggleButton; } set { zoomModeToggleButton = value; } }
+    public Button dragToZoomButton { get { return toggleZoomButton; } set { toggleZoomButton = value; } }
 
     // Events
 
     public event Action ActivateTaskButtonPressed = delegate { };
     public event Action NextStateButtonPressed = delegate { };
-    public event Action<bool> ZoomModeToggleButtonPressed = delegate { };
+    public event Action<bool> DragToZoomButtonPressed = delegate { };
 
     // Variables
 
-    protected bool zoomMode = false;
+    protected bool dragToZoomButtonActivated = false;
+    protected Color toggleZoomButtonDefaultNormalColor;
 
-    // Methods
-
-    public virtual void HideAllButtons()
-    {
-      ActivateTaskButton.gameObject.SetActive(false);
-      NextStateButton.gameObject.SetActive(false);
-      ZoomModeToggleButton.gameObject.SetActive(false);
-    }
-
-    public virtual void ShowToggleButton(Button button)
-    {
-      HideAllButtons();
-      button.gameObject.SetActive(true);
-    }
+    // MonoBehaviour methods
 
     protected virtual void Start()
     {
       ActivateTaskButton.onClick.AddListener(activateTaskButton_onClick);
       NextStateButton.onClick.AddListener(nextStateButtonButton_onClick);
-      ZoomModeToggleButton.onClick.AddListener(zoomModeToggleButtonButton_onClick);
+      dragToZoomButton.onClick.AddListener(toggleDragToZoomButton_onClick);
+
+      toggleZoomButtonDefaultNormalColor = dragToZoomButton.colors.normalColor;
 
       HideAllButtons();
     }
@@ -61,7 +54,26 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
     {
       ActivateTaskButton.onClick.RemoveListener(activateTaskButton_onClick);
       NextStateButton.onClick.RemoveListener(nextStateButtonButton_onClick);
-      ZoomModeToggleButton.onClick.RemoveListener(zoomModeToggleButtonButton_onClick);
+      dragToZoomButton.onClick.RemoveListener(toggleDragToZoomButton_onClick);
+    }
+
+    // Methods
+
+    public virtual void HideAllButtons()
+    {
+      ActivateTaskButton.gameObject.SetActive(false);
+      NextStateButton.gameObject.SetActive(false);
+      dragToZoomButton.gameObject.SetActive(false);
+    }
+
+    public virtual void ShowOneButton(Button button)
+    {
+      HideAllButtons();
+      if (button == dragToZoomButton)
+      {
+        dragToZoomButtonActivated = false;
+      }
+      button.gameObject.SetActive(true);
     }
 
     protected virtual void activateTaskButton_onClick()
@@ -74,10 +86,27 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
       NextStateButtonPressed();
     }
 
-    protected virtual void zoomModeToggleButtonButton_onClick()
+    protected virtual void toggleDragToZoomButton_onClick()
     {
-      zoomMode = !zoomMode;
-      ZoomModeToggleButtonPressed(zoomMode);
+      dragToZoomButtonActivated = !dragToZoomButtonActivated;
+      UpdateDragToZoomButton();
+      DragToZoomButtonPressed(dragToZoomButtonActivated);
+    }
+
+    protected virtual void UpdateDragToZoomButton()
+    {
+      var colors = dragToZoomButton.colors;
+      if (!dragToZoomButtonActivated)
+      {
+        toggleZoomButtonText.text = "Activer le mode zoom";
+        colors.normalColor = toggleZoomButtonDefaultNormalColor ;
+      }
+      else
+      {
+        toggleZoomButtonText.text = (!dragToZoomButtonActivated) ? "Activer le mode zoom" : "Désactiver le mode zoom";
+        colors.normalColor = colors.pressedColor;
+      }
+      dragToZoomButton.colors = colors; 
     }
   }
 }

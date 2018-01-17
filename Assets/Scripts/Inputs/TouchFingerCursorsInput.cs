@@ -76,7 +76,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
         }
       }
     }
-
+    
     protected virtual void UpdateCursor(int cursorId, Vector3 cursorScreenPosition)
     {
       var cursorPosition = Camera.ScreenToWorldPoint(cursorScreenPosition);

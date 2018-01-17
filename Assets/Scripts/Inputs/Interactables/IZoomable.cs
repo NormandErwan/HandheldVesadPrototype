@@ -8,6 +8,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Interactables
   {
     // Properties
 
+    bool DragToZoom { get; }
     bool IsZooming { get; }
     GenericVector3<bool> FreezeScale { get; }
     GenericVector3<Range<float>> ScaleRange { get; }

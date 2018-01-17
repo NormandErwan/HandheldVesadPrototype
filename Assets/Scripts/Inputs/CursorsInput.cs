@@ -21,9 +21,10 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     // Variables
 
-    protected Dictionary<CursorType, MeshRenderer> cursorMeshRenderers = new Dictionary<CursorType, MeshRenderer>();
+    protected Dictionary<CursorType, MeshRenderer> cursorRenderers = new Dictionary<CursorType, MeshRenderer>();
+    protected Dictionary<CursorType, Cursor> fakeCursors = new Dictionary<CursorType, Cursor>();
 
-    // Methods
+    // MonoBehaviour methods
 
     /// <summary>
     /// Initializes <see cref="Cursors"/>.
@@ -34,8 +35,13 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       foreach (var cursor in cursors)
       {
         Cursors.Add(cursor.Type, cursor);
-        cursorMeshRenderers.Add(cursor.Type, cursor.GetComponent<MeshRenderer>());
+        cursorRenderers.Add(cursor.Type, cursor.GetComponent<MeshRenderer>());
       }
+    }
+
+    protected virtual void Start()
+    {
+      DeactivateCursors();
     }
 
     /// <summary>
@@ -46,6 +52,8 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       DeactivateCursors();
       UpdateCursors();
     }
+
+    // Methods
 
     public virtual void Configure(float maxSelectableDistance)
     {
@@ -59,13 +67,13 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     {
       foreach (var cursor in Cursors)
       {
-        cursorMeshRenderers[cursor.Key].enabled = false;
+        cursorRenderers[cursor.Key].enabled = false;
       }
     }
 
     protected virtual void ActivateCursor(CursorType cursorType)
     {
-      cursorMeshRenderers[cursorType].enabled = true;
+      cursorRenderers[cursorType].enabled = true;
     }
 
     protected abstract void UpdateCursors();

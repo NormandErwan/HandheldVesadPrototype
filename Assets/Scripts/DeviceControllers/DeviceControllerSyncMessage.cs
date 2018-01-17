@@ -21,7 +21,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
       DeviceController.ConfigureSync += DeviceController_ConfigureSync;
       DeviceController.ActivateTaskSync += DeviceController_ActivateTaskSync;
-      DeviceController.ToogleZoomSync += DeviceController_ToogleZoomSync;
+      DeviceController.SetDragToZoomSync += DeviceController_ToogleZoomSync;
     }
 
     public DeviceControllerSyncMessage()
@@ -32,7 +32,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       DeviceController.ConfigureSync -= DeviceController_ConfigureSync;
       DeviceController.ActivateTaskSync -= DeviceController_ActivateTaskSync;
-      DeviceController.ToogleZoomSync -= DeviceController_ToogleZoomSync;
+      DeviceController.SetDragToZoomSync -= DeviceController_ToogleZoomSync;
     }
 
     // Properties
@@ -69,7 +69,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       }
       else if (type == Type.ToggleZoom)
       {
-        deviceController.ToggleZoom(zoomActivated);
+        deviceController.SetDragToZoom(zoomActivated);
       }
     }
 
