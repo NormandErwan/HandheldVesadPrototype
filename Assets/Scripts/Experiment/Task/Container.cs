@@ -6,7 +6,7 @@ using UnityEngine;
 namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 {
   [RequireComponent(typeof(BoxCollider))]
-  public class Container : Grid<Container, Item>, IFocusable, ITappable
+  public class Container : Grid<Container, Item>, IFocusable, ILongPressable
   {
     // Editor fields
 
