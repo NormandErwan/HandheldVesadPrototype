@@ -817,11 +817,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114102835371396286, guid: a3b64898f2954384a989df0bbfd40e80,
-        type: 2}
-      propertyPath: useLeapInput
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a3b64898f2954384a989df0bbfd40e80, type: 2}
   m_IsPrefabParent: 0
