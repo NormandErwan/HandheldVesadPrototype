@@ -271,12 +271,15 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       {
         GetInteractable<ITransformable>(other, (transformable) =>
         {
-          latestCursorPositions[transformable].Remove(this);
+          if (latestCursorPositions.ContainsKey(transformable))
+          {
+            latestCursorPositions[transformable].Remove(this);
+          }
         });
 
         GetInteractable<IZoomable>(other, (zoomable) =>
         {
-          if (latestCursorPositions[zoomable].Count < 2 && zoomable.IsZooming)
+          if (latestCursorPositions.ContainsKey(zoomable) && latestCursorPositions[zoomable].Count < 2 && zoomable.IsZooming)
           {
             zoomable.SetZooming(false);
           }
@@ -286,7 +289,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
         {
           GetInteractable<IDraggable>(other, (draggable) =>
           {
-            if (latestCursorPositions[draggable].Count == 0 && draggable.IsDragging)
+            if (latestCursorPositions.ContainsKey(draggable) && latestCursorPositions[draggable].Count == 0 && draggable.IsDragging)
             {
               draggable.SetDragging(false);
             }
