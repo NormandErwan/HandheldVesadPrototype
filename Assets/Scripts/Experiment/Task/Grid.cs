@@ -466,15 +466,15 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     protected virtual void UpdateTransformRanges()
     {
       var itemSize = Elements[0].ElementScale.x;
+      ScaleRange.X.Minimum = ScaleRange.Y.Minimum = scaleFactor * Mathf.Max(ElementScale.x / Scale.x, ElementScale.y / Scale.y);
+      ScaleRange.X.Maximum = ScaleRange.Y.Maximum = scaleFactor * Mathf.Min(ElementScale.x, ElementScale.y) / itemSize;
 
-      ScaleRange[0].Minimum = ScaleRange[1].Minimum = scaleFactor * Mathf.Max(ElementScale.x / Scale.x, ElementScale.y / Scale.y);
-      ScaleRange[0].Maximum = ScaleRange[1].Maximum = scaleFactor * Mathf.Min(ElementScale.x, ElementScale.y) / itemSize;
-
+      // Limit the grid position to the borders of the central container
       Vector2 positionMax = (Vector2.Scale(transform.localScale, Scale) - scaleFactor * ElementScale) / 2;
-      PositionRange[0].Minimum = -positionMax.x;
-      PositionRange[0].Maximum = positionMax.x;
-      PositionRange[1].Minimum = -positionMax.y;
-      PositionRange[1].Maximum = positionMax.y;
+      PositionRange.X.Minimum = -positionMax.x;
+      PositionRange.X.Maximum = positionMax.x;
+      PositionRange.Y.Minimum = -positionMax.y;
+      PositionRange.Y.Maximum = positionMax.y;
     }
   }
 }
