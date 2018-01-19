@@ -23,7 +23,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     private LeapFingerCursorsInput leapFingerCursorsInput;
 
     [SerializeField]
-    private ProjectedCursorsController projectedCursorsController;
+    private ProjectedCursorsSync projectedCursorsSync;
 
     [SerializeField]
     [Range(0f, 0.05f)]
@@ -57,13 +57,32 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       leapFingerCursorsInput.enabled = false;
       ActivateHand(true, false);
       ActivateHand(false, false);
-      ParticipantIsRightHanded = true;
 
       // TODO: remove, for debug testing only
+      //ParticipantIsRightHanded = true;
       //StartCoroutine(StartTaskDebug());
     }
 
     // DeviceController methods
+
+    public override void Configure(int participantId, int conditionsOrdering, bool participantIsRightHanded)
+    {
+      base.Configure(participantId, conditionsOrdering, participantIsRightHanded);
+
+      experimentDetailsLogger.Index = (ParticipantIsRightHanded) ? rightIndexCursor : leftIndexCursor;
+      if (ParticipantIsRightHanded)
+      {
+        leapFingerCursorsInput.Cursors.Remove(CursorType.LeftIndex);
+        experimentDetailsLogger.ProjectedIndex = projectedCursorsSync.ProjectedCursors[CursorType.RightIndex];
+        experimentDetailsLogger.ProjectedThumb = projectedCursorsSync.ProjectedCursors[CursorType.RightThumb];
+      }
+      else
+      {
+        leapFingerCursorsInput.Cursors.Remove(CursorType.RightIndex);
+        experimentDetailsLogger.ProjectedIndex = projectedCursorsSync.ProjectedCursors[CursorType.LeftIndex];
+        experimentDetailsLogger.ProjectedThumb = projectedCursorsSync.ProjectedCursors[CursorType.LeftThumb];
+      }
+    }
 
     public override void ActivateTask()
     {
@@ -73,8 +92,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       {
         leapFingerCursorsInput.enabled = true;
         ActivateHand(ParticipantIsRightHanded, true);
-
-        experimentDetailsLogger.Index = (ParticipantIsRightHanded) ? rightIndexCursor : leftIndexCursor;
       }
 
       hmdDeviceHUD.ShowContent(false);
@@ -95,16 +112,11 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     protected virtual void ActivateHand(bool isRightHand, bool value)
     {
-      if (isRightHand)
-      {
-        rightIndexCursor.gameObject.SetActive(value);
-        rightLeapHand.gameObject.SetActive(activateLeapHands & value);
-      }
-      else
-      {
-        leftIndexCursor.gameObject.SetActive(value);
-        leftLeapHand.gameObject.SetActive(activateLeapHands & value);
-      }
+      var cursor = (isRightHand) ? rightIndexCursor : leftIndexCursor;
+      var leapHand = (isRightHand) ? rightLeapHand : leftLeapHand;
+
+      cursor.SetActive(value);
+      leapHand.gameObject.SetActive(activateLeapHands & value);
     }
   }
 }

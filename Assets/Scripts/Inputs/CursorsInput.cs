@@ -35,11 +35,6 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       }
     }
 
-    protected virtual void Start()
-    {
-      DeactivateCursors();
-    }
-
     /// <summary>
     /// Deactivates each cursor's gameObject in <see cref="Cursors"/>.
     /// </summary>
@@ -64,13 +59,13 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     {
       foreach (var cursor in Cursors)
       {
-        cursor.Value.SetActivated(false);
+        cursor.Value.SetActive(false);
       }
     }
 
     protected virtual void ActivateCursor(CursorType cursorType)
     {
-      Cursors[cursorType].SetActivated(true);
+      Cursors[cursorType].SetActive(true);
     }
 
     protected abstract void UpdateCursors();

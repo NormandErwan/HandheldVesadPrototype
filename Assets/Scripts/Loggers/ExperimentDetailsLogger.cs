@@ -1,4 +1,5 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.Task;
+using NormandErwan.MasterThesis.Experiment.Inputs;
 using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using System;
 using System.Collections.Generic;
@@ -8,21 +9,20 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 {
   public class ExperimentDetailsLogger : ExperimentBaseLogger
   {
-    // Editor fields
-
-    [SerializeField]
-    private Inputs.Cursor index;
-
     // Properties
 
-    public Inputs.Cursor Index { get { return index; } set { index = value; } }
+    public Inputs.Cursor Index { get; set; }
+    public ProjectedCursor ProjectedIndex { get; set; }
+    public ProjectedCursor ProjectedThumb { get; set; }
 
     // Variables
 
     protected bool itemSelected, itemDeselected, itemMoved, itemClassified;
     protected Container selectedContainer;
     protected Item selectedItem;
-    protected bool zoomMode;
+    protected bool panning, zooming;
+    protected Vector3 panningTranslation, zoomingTranslation;
+    protected float zoomingFactor = 1f;
 
     // MonoBehaviour methods
 
@@ -30,7 +30,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     {
       if (IsConfigured && stateController.CurrentState.Id == stateController.taskTrialState.Id)
       {
-        if (!itemSelected && itemDeselected)
+        if (itemDeselected && !itemSelected && !itemMoved)
         {
           selectedItem = null;
           selectedContainer = null;
@@ -46,6 +46,14 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         AddToRow(grid.LossyScale);
         AddToRow(grid.IsConfigured);
         AddToRow(grid.IsCompleted);
+        AddToRow(grid.DragToZoom);
+
+        AddToRow(panning);
+        AddToRow(panningTranslation);
+
+        AddToRow(zooming);
+        AddToRow(zoomingFactor);
+        AddToRow(zoomingTranslation);
 
         AddToRow(itemSelected);
         AddToRow(itemDeselected);
@@ -55,8 +63,8 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         AddToRow(selectedItem);
 
         AddToRow(Index.transform, false);
-        AddToRow(zoomMode);
-
+        AddToRow(ProjectedIndex.transform, false);
+        AddToRow(ProjectedThumb.transform, false);
         AddToRow(head, false);
         AddToRow(mobileDevice, false);
 
@@ -68,6 +76,18 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
           selectedContainer = null;
         }
         itemSelected = itemDeselected = itemMoved = itemClassified = false;
+
+        if (panning)
+        {
+          panning = false;
+          panningTranslation = Vector3.zero;
+        }
+        if (zooming)
+        {
+          zooming = false;
+          zoomingFactor = 1f;
+          zoomingTranslation = Vector3.zero;
+        }
       }
     }
 
@@ -80,15 +100,22 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       Columns = new List<string>() { "frame_id", "participant_id", "date_time" };
 
       AddTransformToColumns("grid");
+      Columns.AddRange(new string[] { "grid_is_configured", "grid_is_completed", "zoom_button_is_pressed" });
+
+      Columns.Add("panning");
+      AddVector3ToColumns("panning_translation");
+
+      Columns.AddRange(new string[] { "zooming", "zooming_factor" });
+      AddVector3ToColumns("zooming_translation");
+
       Columns.AddRange(new string[] {
-        "grid_is_configured", "grid_is_completed",
         "item_selected", "item_deselected", "item_moved", "item_classified",
         "selected_container", "selected_item"
       });
 
       AddTransformToColumns("index", false);
-      Columns.Add("zoomMode");
-
+      AddTransformToColumns("projected_index", false);
+      AddTransformToColumns("projected_thumb", false);
       AddTransformToColumns("head", false);
       AddTransformToColumns("phone", false);
 
@@ -134,6 +161,8 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected override void Grid_Dragging(IDraggable grid, Vector3 translation)
     {
+      panning = true;
+      panningTranslation = translation;
     }
 
     protected override void Grid_DraggingStopped(IDraggable grid)
@@ -146,6 +175,9 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected override void Grid_Zooming(IZoomable grid, float scaleFactor, Vector3 translation, Vector3[] cursors)
     {
+      zooming = true;
+      zoomingFactor = scaleFactor;
+      zoomingTranslation = translation;
     }
 
     protected override void Grid_ZoomingStopped(IZoomable grid)

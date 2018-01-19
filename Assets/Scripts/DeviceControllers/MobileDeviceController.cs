@@ -4,6 +4,7 @@ using NormandErwan.MasterThesis.Experiment.UI.HUD;
 using UnityEngine;
 using System.Collections;
 using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
+using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 
 namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 {
@@ -33,7 +34,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     protected IVTechnique technique;
 
-    // Methods
+    // MonoBehaviour methods
 
     protected override void Start()
     {
@@ -68,6 +69,15 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       MobileDeviceHUD.ActivateTaskButtonPressed -= MobileDeviceHUD_ActivateTaskButtonPressed;
       MobileDeviceHUD.NextStateButtonPressed -= MobileDeviceHUD_NextStateButtonPressed;
       MobileDeviceHUD.DragToZoomButtonPressed -= MobileDeviceHUD_DragToZoomButtonPressed;
+    }
+
+    // Methods
+
+    public override void Configure(int participantId, int conditionsOrdering, bool participantIsRightHanded)
+    {
+      base.Configure(participantId, conditionsOrdering, participantIsRightHanded);
+
+      touchFingerCursorsInput.ParticipantIsRightHanded = ParticipantIsRightHanded;
     }
 
     public override void ActivateTask()

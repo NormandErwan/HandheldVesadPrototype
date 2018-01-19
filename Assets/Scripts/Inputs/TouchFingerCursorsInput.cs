@@ -22,6 +22,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     public Camera Camera { get { return camera; } set { camera = value; } }
     public Transform PlaneToProjectCursors { get { return planeToProjectCursors; } set { planeToProjectCursors = value; } }
+    public bool ParticipantIsRightHanded { get; set; }
 
     // Variables
 
@@ -53,7 +54,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 #if UNITY_EDITOR || !UNITY_ANDROID
       if (Input.GetKey(KeyCode.Mouse0))
       {
-        UpdateCursor(0, Input.mousePosition);
+        UpdateCursor(GetIndex(), Input.mousePosition);
       }
 
       if (Input.GetKeyUp(KeyCode.Mouse1))
@@ -63,7 +64,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       }
       if (updateCursor1)
       {
-        UpdateCursor(1, mouse1Position);
+        UpdateCursor(GetThumb(), mouse1Position);
       }
 #endif
 
@@ -72,17 +73,32 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
         var touch = Input.GetTouch(i);
         if (touch.phase != TouchPhase.Ended && touch.phase != TouchPhase.Canceled)
         {
-          UpdateCursor(i, touch.position);
+          switch (i)
+          {
+            case 0: UpdateCursor(GetIndex(), touch.position); break;
+            case 1: UpdateCursor(GetThumb(), touch.position); break;
+            default: break;
+          }
         }
       }
     }
-    
-    protected virtual void UpdateCursor(int cursorId, Vector3 cursorScreenPosition)
+
+    protected virtual CursorType GetIndex()
+    {
+      return (ParticipantIsRightHanded) ? CursorType.RightIndex : CursorType.LeftIndex;
+    }
+
+    protected virtual CursorType GetThumb()
+    {
+      return (ParticipantIsRightHanded) ? CursorType.RightThumb : CursorType.LeftThumb;
+    }
+
+    protected virtual void UpdateCursor(CursorType cursorType, Vector3 cursorScreenPosition)
     {
       var cursorPosition = Camera.ScreenToWorldPoint(cursorScreenPosition);
       cursorPosition = Vector3.ProjectOnPlane(cursorPosition, -PlaneToProjectCursors.forward);
 
-      var cursor = Cursors[keys[cursorId]];
+      var cursor = Cursors[cursorType];
       cursor.transform.position = new Vector3(cursorPosition.x, cursorPosition.y, PlaneToProjectCursors.position.z);
       cursor.transform.forward = planeToProjectCursors.forward;
       cursor.transform.localScale = fingerWidth * Vector3.one;

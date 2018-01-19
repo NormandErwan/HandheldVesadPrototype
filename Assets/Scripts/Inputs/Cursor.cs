@@ -45,17 +45,12 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     protected new Renderer renderer;
 
-    // Methods
-
-    public void SetActivated(bool value)
-    {
-      IsActivated = value;
-      renderer.enabled = IsActivated;
-    }
+    // MonoBehaviour methods
 
     protected virtual void Awake()
     {
       renderer = GetComponent<Renderer>();
+      SetActive(false);
     }
 
     protected virtual void OnTriggerEnter(Collider other)
@@ -317,6 +312,20 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
             }
           });
         }
+      }
+    }
+
+    // Methods
+
+    public void SetActive(bool value)
+    {
+      IsActivated = value;
+      renderer.enabled = IsActivated;
+
+      if (!IsActivated)
+      {
+        transform.position = Vector3.zero;
+        transform.rotation = Quaternion.identity;
       }
     }
 
