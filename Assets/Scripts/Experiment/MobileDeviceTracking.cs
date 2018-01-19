@@ -36,9 +36,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment
 
     protected virtual void LateUpdate()
     {
-      Vector3 position = Vector3.zero;
-      Quaternion rotation = Quaternion.identity;
-
       bool activated = false;
       for (int i = 0; i < markers.Length; i++)
       {
@@ -47,17 +44,15 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment
           if (!activated)
           {
             activated = true;
-            position = markers[i].transform.position + positionOffsets[i];
-            rotation = markers[i].transform.rotation;
+            transform.position = markers[i].transform.position + positionOffsets[i];
+            transform.rotation = markers[i].transform.rotation;
+            break;
           }
         }
       }
 
       if (activated)
       {
-        transform.position = position;
-        transform.rotation = rotation;
-
         // Smooth the rotation
         if (activatedPreviousFrame)
         {
