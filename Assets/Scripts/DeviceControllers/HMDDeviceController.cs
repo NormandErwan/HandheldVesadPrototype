@@ -1,6 +1,7 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
 using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
 using NormandErwan.MasterThesis.Experiment.Inputs;
+using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using NormandErwan.MasterThesis.Experiment.Loggers;
 using NormandErwan.MasterThesis.Experiment.UI.HUD;
 using UnityEngine;
@@ -15,16 +16,21 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     private HMDDeviceHUD hmdDeviceHUD;
 
     [SerializeField]
-    private Inputs.Cursor rightIndexCursor;
+    private ExperimentDetailsLogger experimentDetailsLogger;
+
+    [Header("Cursors")]
+    [SerializeField]
+    private LeapFingerCursorsInput leapFingerCursorsInput;
 
     [SerializeField]
-    private Inputs.Cursor leftIndexCursor;
+    private ProjectedCursorsController projectedCursorsController;
+
+    [SerializeField]
+    [Range(0f, 0.05f)]
+    private float maxSelectableDistance = 0.001f;
 
     [SerializeField]
     private bool activateLeapHands;
-
-    [SerializeField]
-    private LeapFingerCursorsInput leapFingerCursorsInput;
 
     [SerializeField]
     private Renderer rightLeapHand;
@@ -32,21 +38,10 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     [SerializeField]
     private Renderer leftLeapHand;
 
-    [SerializeField]
-    [Range(0f, 0.05f)]
-    private float maxSelectableDistance = 0.001f;
-
-    [SerializeField]
-    private ExperimentDetailsLogger experimentDetailsLogger;
-
-    // Properties
-
-    public HMDDeviceHUD HMDDeviceHUD { get { return hmdDeviceHUD; } set { hmdDeviceHUD = value; } }
-    public LeapFingerCursorsInput LeapFingerCursorsInput { get { return leapFingerCursorsInput; } set { leapFingerCursorsInput = value; } }
-
     // Variables
 
-    IVTechnique technique;
+    protected IVTechnique technique;
+    protected Inputs.Cursor rightIndexCursor, leftIndexCursor;
 
     // Methods
 
@@ -55,9 +50,11 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       base.Start();
 
       technique = StateController.GetIndependentVariable<IVTechnique>();
+      rightIndexCursor = leapFingerCursorsInput.Cursors[CursorType.RightIndex];
+      leftIndexCursor = leapFingerCursorsInput.Cursors[CursorType.LeftIndex];
 
-      LeapFingerCursorsInput.Configure(maxSelectableDistance);
-      LeapFingerCursorsInput.enabled = false;
+      leapFingerCursorsInput.Configure(maxSelectableDistance);
+      leapFingerCursorsInput.enabled = false;
       ActivateHand(true, false);
       ActivateHand(false, false);
       ParticipantIsRightHanded = true;
@@ -74,39 +71,39 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
       if (technique.CurrentCondition.useLeapInput)
       {
-        LeapFingerCursorsInput.enabled = true;
+        leapFingerCursorsInput.enabled = true;
         ActivateHand(ParticipantIsRightHanded, true);
 
         experimentDetailsLogger.Index = (ParticipantIsRightHanded) ? rightIndexCursor : leftIndexCursor;
       }
 
-      HMDDeviceHUD.ShowContent(false);
+      hmdDeviceHUD.ShowContent(false);
     }
 
     protected override void StateController_CurrentStateUpdated(State currentState)
     {
       base.StateController_CurrentStateUpdated(currentState);
 
-      LeapFingerCursorsInput.enabled = false;
+      leapFingerCursorsInput.enabled = false;
       ActivateHand(ParticipantIsRightHanded, false);
 
-      HMDDeviceHUD.ShowContent(true);
-      HMDDeviceHUD.UpdateInstructionsProgress(StateController);
+      hmdDeviceHUD.ShowContent(true);
+      hmdDeviceHUD.UpdateInstructionsProgress(StateController);
     }
 
     // Methods
 
-    protected virtual void ActivateHand(bool rightHand, bool value)
+    protected virtual void ActivateHand(bool isRightHand, bool value)
     {
-      if (rightHand)
+      if (isRightHand)
       {
-        rightLeapHand.gameObject.SetActive(activateLeapHands & value);
         rightIndexCursor.gameObject.SetActive(value);
+        rightLeapHand.gameObject.SetActive(activateLeapHands & value);
       }
       else
       {
-        leftLeapHand.gameObject.SetActive(activateLeapHands & value);
         leftIndexCursor.gameObject.SetActive(value);
+        leftLeapHand.gameObject.SetActive(activateLeapHands & value);
       }
     }
   }
