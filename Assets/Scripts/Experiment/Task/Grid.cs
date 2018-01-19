@@ -382,16 +382,17 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         previousContainer.Remove(selectedItem);
         newContainer.Append(selectedItem);
 
+        ItemMovedType type;
         if (previousContainer.ItemClass != selectedItem.ItemClass && newContainer.ItemClass == selectedItem.ItemClass)
         {
-          ItemMoved(previousContainer, newContainer, selectedItem, ItemMovedType.Classified);
-          SetItemSelected(selectedItem, newContainer);
+          type = ItemMovedType.Classified;
         }
-        else if (previousContainer.ItemClass == selectedItem.ItemClass && newContainer.ItemClass != selectedItem.ItemClass)
+        else
         {
-          ItemMoved(previousContainer, newContainer, selectedItem, ItemMovedType.Error);
-          SetItemSelected(selectedItem, newContainer);
+          type = ItemMovedType.Error;
         }
+        ItemMoved(previousContainer, newContainer, selectedItem, type);
+        SetItemSelected(selectedItem, newContainer);
       }
       else
       {
