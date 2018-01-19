@@ -17,9 +17,6 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     [SerializeField]
     private ProjectedCursor[] projectedCursors;
 
-    [SerializeField]
-    private Experiment.Task.Grid grid;
-
     // Properties
 
     public Dictionary<CursorType, ProjectedCursor> ProjectedCursors { get; protected set; }
