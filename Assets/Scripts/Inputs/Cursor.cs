@@ -28,6 +28,8 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     public float MaxSelectableDistance { get; set; }
 
+    public bool IsActivated { get; protected set; }
+
     public bool IsFinger { get { return Type != CursorType.Look; } }
     public bool IsIndex { get { return Type == CursorType.LeftIndex || Type == CursorType.RightIndex; } }
     public bool IsThumb { get { return Type == CursorType.LeftThumb || Type == CursorType.RightThumb; } }
@@ -41,7 +43,20 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     protected Dictionary<ILongPressable, float> longPressTimers = new Dictionary<ILongPressable, float>();
     protected Dictionary<ITappable, float> tapTimers = new Dictionary<ITappable, float>();
 
+    protected new Renderer renderer;
+
     // Methods
+
+    public void SetActivated(bool value)
+    {
+      IsActivated = value;
+      renderer.enabled = IsActivated;
+    }
+
+    protected virtual void Awake()
+    {
+      renderer = GetComponent<Renderer>();
+    }
 
     protected virtual void OnTriggerEnter(Collider other)
     {
@@ -49,7 +64,6 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       {
         return;
       }
-      //triggerColliders.Add(other);
 
       GetInteractable<IFocusable>(other, (focusable) =>
       {

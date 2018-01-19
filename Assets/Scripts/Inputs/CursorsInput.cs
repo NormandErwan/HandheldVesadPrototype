@@ -1,4 +1,5 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,23 +20,18 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     public Dictionary<CursorType, Cursor> Cursors { get; protected set; }
 
-    // Variables
+    // Events
 
-    protected Dictionary<CursorType, MeshRenderer> cursorRenderers = new Dictionary<CursorType, MeshRenderer>();
-    protected Dictionary<CursorType, Cursor> fakeCursors = new Dictionary<CursorType, Cursor>();
+    public event Action Updated = delegate { };
 
     // MonoBehaviour methods
 
-    /// <summary>
-    /// Initializes <see cref="Cursors"/>.
-    /// </summary>
     protected virtual void Awake()
     {
       Cursors = new Dictionary<CursorType, Cursor>();
       foreach (var cursor in cursors)
       {
         Cursors.Add(cursor.Type, cursor);
-        cursorRenderers.Add(cursor.Type, cursor.GetComponent<MeshRenderer>());
       }
     }
 
@@ -51,6 +47,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     {
       DeactivateCursors();
       UpdateCursors();
+      Updated();
     }
 
     // Methods
@@ -67,13 +64,13 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     {
       foreach (var cursor in Cursors)
       {
-        cursorRenderers[cursor.Key].enabled = false;
+        cursor.Value.SetActivated(false);
       }
     }
 
     protected virtual void ActivateCursor(CursorType cursorType)
     {
-      cursorRenderers[cursorType].enabled = true;
+      Cursors[cursorType].SetActivated(true);
     }
 
     protected abstract void UpdateCursors();
