@@ -31,17 +31,17 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     {
       base.Awake();
 
+      projectedCursorsMessage = new ProjectedCursorsSyncMessage();
+      projectedCursorsMessage.cursors = new CursorType[projectedCursors.Length];
+      projectedCursorsMessage.localPositions = new Vector3[projectedCursors.Length];
+      MessageTypes.Add(projectedCursorsMessage.MessageType);
+
       ProjectedCursors = new Dictionary<CursorType, ProjectedCursor>(projectedCursors.Length);
       for (int i = 0; i < projectedCursors.Length; i++)
       {
+        projectedCursorsMessage.cursors[i] = projectedCursors[i].Cursor.Type;
         ProjectedCursors.Add(projectedCursors[i].Cursor.Type, projectedCursors[i]);
       }
-
-      projectedCursorsMessage = new ProjectedCursorsSyncMessage();
-      projectedCursorsMessage.cursors = new CursorType[ProjectedCursors.Count];
-      projectedCursorsMessage.localPositions = new Vector3[ProjectedCursors.Count];
-
-      MessageTypes.Add(projectedCursorsMessage.MessageType);
 
       cursorsInput.Updated += CursorsInput_Updated;
     }

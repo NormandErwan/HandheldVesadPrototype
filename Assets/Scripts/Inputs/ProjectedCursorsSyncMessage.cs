@@ -23,13 +23,14 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     public void Update(Dictionary<CursorType, ProjectedCursor> projectedCursors)
     {
+      TransformChanged = false;
+
       for (int i = 0; i < cursors.Length; i++)
       {
         var projectedCursor = projectedCursors[cursors[i]];
-        TransformChanged = !VectorEquals(localPositions[i], projectedCursor.transform.localPosition);
-        if (TransformChanged)
+        if (!VectorEquals(localPositions[i], projectedCursor.transform.localPosition))
         {
-          cursors[i] = projectedCursor.Cursor.Type;
+          TransformChanged = true;
           localPositions[i] = projectedCursor.transform.localPosition;
         }
       }
