@@ -5,25 +5,20 @@ using UnityEngine.Networking;
 
 namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 {
-  public class GridSync : DevicesSyncInterval
+  public class GridSync : DevicesSync
   {
     // Editor fields
 
     [SerializeField]
     private Grid grid;
 
-    [SerializeField]
-    private float movementThresholdToSync;
-
     // Properties
     
     public Grid Grid { get { return grid; } set { grid = value; } }
-    public float MovementThresholdToSync { get { return movementThresholdToSync; } set { movementThresholdToSync = value; } }
 
     // Variables
 
     protected GridSyncConfigureMessage gridConfigureMessage;
-    protected GridSyncTransformMessage gridTransformMessage;
     protected GridSyncEventsMessage gridEventsMessage;
 
     // MonoBehaviour methods
@@ -36,30 +31,16 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       {
         SendToServer(gridConfigureMessage, Channels.DefaultReliable);
       });
-      gridTransformMessage = new GridSyncTransformMessage();
       gridEventsMessage = new GridSyncEventsMessage(Grid, () =>
       {
         SendToServer(gridEventsMessage, Channels.DefaultReliable);
       });
 
       MessageTypes.Add(gridConfigureMessage.MessageType);
-      MessageTypes.Add(gridTransformMessage.MessageType);
       MessageTypes.Add(gridEventsMessage.MessageType);
     }
 
     // DevicesSync methods
-
-    protected override void OnSendToServerIntervalIteration(bool shouldSendThisFrame)
-    {
-      if (shouldSendThisFrame && Grid.IsConfigured)
-      {
-        gridTransformMessage.Update(Grid, MovementThresholdToSync);
-        if (gridTransformMessage.transformChanged)
-        {
-          SendToServer(gridTransformMessage);
-        }
-      }
-    }
 
     protected override DevicesSyncMessage OnServerMessageReceived(NetworkMessage netMessage)
     {
@@ -82,16 +63,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
         {
           gridConfigureReceived.ConfigureGrid(Grid);
           return gridConfigureReceived;
-        }
-
-        GridSyncTransformMessage gridTransformReceived;
-        if (TryReadMessage(netMessage, gridTransformMessage.MessageType, out gridTransformReceived))
-        {
-          if (gridTransformReceived.SenderConnectionId != gridTransformMessage.SenderConnectionId)
-          {
-            gridTransformReceived.Restore(Grid);
-            return gridTransformReceived;
-          }
         }
 
         GridSyncEventsMessage gridEventsReceived;
