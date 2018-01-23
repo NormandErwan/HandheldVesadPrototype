@@ -1004,6 +1004,11 @@ Prefab:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114584788806543988, guid: 1af7da660e405ea4d88d276210dfa5c0,
+        type: 2}
+      propertyPath: cursorsInput
+      value: 
+      objectReference: {fileID: 1372156098}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1af7da660e405ea4d88d276210dfa5c0, type: 2}
   m_IsPrefabParent: 0

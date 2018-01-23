@@ -89,7 +89,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     protected abstract void Grid_DraggingStopped(IDraggable grid);
 
     protected abstract void Grid_ZoomingStarted(IZoomable grid);
-    protected abstract void Grid_Zooming(IZoomable grid, float scaleFactor, Vector3 translation, Vector3[] cursors);
+    protected abstract void Grid_Zooming(IZoomable grid, Vector3 scaling, Vector3 translation);
     protected abstract void Grid_ZoomingStopped(IZoomable grid);
   }
 }

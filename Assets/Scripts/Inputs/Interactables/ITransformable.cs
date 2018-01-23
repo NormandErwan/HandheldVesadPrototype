@@ -8,7 +8,6 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Interactables
     // Properties
 
     Transform Transform { get; }
-    GenericVector3<bool> FreezePosition { get; }
     GenericVector3<Range<float>> PositionRange { get; }
 
     // Methods

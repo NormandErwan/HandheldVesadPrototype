@@ -130,7 +130,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
         {
           if (latestCursorPositions[zoomable].Count == 1)
           {
-            // Zoom with one finger
+            // Zoom with one finger if DragToZoom is true
             if (zoomable.DragToZoom && !zoomable.IsZooming)
             {
               var translation = zoomable.ProjectPosition(transform.position - latestCursorPositions[zoomable][this]);
@@ -176,39 +176,20 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
                 };
               }
               
-              // Computes scale facor
+              // Computes scaling
               var distance = (zoomable.ProjectPosition(cursorPositions[0] - cursorPositions[2])).magnitude;
               var previousDistance = (zoomable.ProjectPosition(cursorPositions[1] - cursorPositions[3])).magnitude;
               float scaleFactor = (previousDistance != 0) ? distance / previousDistance : 1f;
+              Vector3 scaling = ClampScaling(zoomable, scaleFactor * Vector3.one);
 
-              // Try to scale
-              Vector3 newLocalScale = zoomable.Transform.localScale;
-              for (int i = 0; i < 2; i++)
+              if (scaling != Vector3.one)
               {
-                if (!zoomable.FreezeScale[i])
-                {
-                  newLocalScale[i] = zoomable.ScaleRange[i].Clamp(scaleFactor * zoomable.Transform.localScale[i]);
-
-                  // Correct the scale factor, taking account of the clamp
-                  if (scaleFactor < 1f)
-                  {
-                    scaleFactor = Mathf.Max(scaleFactor, newLocalScale[i] / zoomable.Transform.localScale[i]);
-                  }
-                  else
-                  {
-                    scaleFactor = Mathf.Min(scaleFactor, newLocalScale[i] / zoomable.Transform.localScale[i]);
-                  }
-                }
-              }
-              zoomable.Transform.localScale = newLocalScale;
-
-              // Translate if it has scaled
-              if (scaleFactor != 1f)
-              {
+                // Translate if it has scaled
                 var newPosition = cursorPositions[0] - scaleFactor * (cursorPositions[1] - zoomable.Transform.position);
                 var translation = newPosition - zoomable.Transform.position;
-                Translate(zoomable, translation);
-                zoomable.Zoom(scaleFactor, translation, cursorPositions);
+                translation = ClampTranslation(zoomable, translation);
+
+                zoomable.Zoom(scaling, translation);
               }
 
               // Update cursors
@@ -230,6 +211,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
               var zoomable = other.GetComponent<IZoomable>();
               if (zoomable != null && zoomable.DragToZoom)
               {
+                // Switch to zooming if was dragging
                 if (draggable.IsDragging)
                 {
                   draggable.SetDragging(false);
@@ -237,22 +219,26 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
                   latestCursorPositions[draggable][this] = transform.position;
                 }
               }
+              // Drag if not zooming with DragToZoom to true
               else
               {
+                // Computes the translation
                 var translation = draggable.ProjectPosition(transform.position - latestCursorPositions[draggable][this]);
-                if (draggable.IsDragging)
+                translation = ClampTranslation(draggable, translation);
+                if (translation != Vector3.zero)
                 {
-                  bool hasClamped = Translate(draggable, translation);
-                  if (!hasClamped)
+                  // Drag
+                  if (draggable.IsDragging)
                   {
                     draggable.Drag(translation);
+                    latestCursorPositions[draggable][this] = transform.position;
                   }
-                  latestCursorPositions[draggable][this] = transform.position;
-                }
-                else if (translation.magnitude > MaxSelectableDistance)
-                {
-                  draggable.SetDragging(true);
-                  latestCursorPositions[draggable][this] = transform.position;
+                  // Start dragging if it has moved enough
+                  else if (translation.magnitude > MaxSelectableDistance)
+                  {
+                    draggable.SetDragging(true);
+                    latestCursorPositions[draggable][this] = transform.position;
+                  }
                 }
               }
             }
@@ -376,18 +362,26 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       }
     }
 
-    protected virtual void Translate(ITransformable transformable, Vector3 translation)
+    protected virtual Vector3 ClampTranslation(ITransformable transformable, Vector3 translation)
     {
-      Vector3 position = transformable.Transform.position;
+      Vector3 clampedTranslation = Vector3.zero;
       for (int i = 0; i < 2; i++)
       {
-        if (!transformable.FreezePosition[i])
-        {
-          hasClamped |= !transformable.PositionRange[i].ContainsValue(position[i] + translation[i]);
-          position[i] = transformable.PositionRange[i].Clamp(position[i] + translation[i]);
-        }
+        clampedTranslation[i] = transformable.PositionRange[i].Clamp(transformable.Transform.localPosition[i] + translation[i])
+          - transformable.Transform.localPosition[i];
       }
-      transformable.Transform.position = position;
+      return clampedTranslation;
+    }
+
+    protected virtual Vector3 ClampScaling(IZoomable zoomable, Vector3 scaling)
+    {
+      Vector3 clampedScaling = Vector3.one;
+      for (int i = 0; i < 2; i++)
+      {
+        clampedScaling[i] = zoomable.ScaleRange[i].Clamp(zoomable.Transform.localScale[i] * scaling[i])
+          / zoomable.Transform.localScale[i];
+      }
+      return clampedScaling;
     }
 
     protected virtual IEnumerator SetSelected(ISelectable selectable)

@@ -196,9 +196,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       zoom.time.Start();
     }
 
-    protected override void Grid_Zooming(IZoomable grid, float scaleFactor, Vector3 translation, Vector3[] cursors)
+    protected override void Grid_Zooming(IZoomable grid, Vector3 scaling, Vector3 translation)
     {
-      var distance = cursors[0] - cursors[1];
+      // TODO: fix
+      /*var distance = cursors[0] - cursors[1];
       var previousDistance = cursors[2] - cursors[3];
       var magnitude = (distance - previousDistance).magnitude;
 
@@ -207,7 +208,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       if (selections.time.IsRunning)
       {
         selections.distance += magnitude;
-      }
+      }*/
     }
 
     protected override void Grid_ZoomingStopped(IZoomable grid)

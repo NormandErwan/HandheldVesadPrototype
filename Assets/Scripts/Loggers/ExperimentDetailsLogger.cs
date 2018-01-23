@@ -22,7 +22,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     protected Item selectedItem;
     protected bool panning, zooming;
     protected Vector3 panningTranslation, zoomingTranslation;
-    protected float zoomingFactor = 1f;
+    protected Vector3 zoomingScaling = Vector3.one;
 
     // MonoBehaviour methods
 
@@ -52,7 +52,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         AddToRow(panningTranslation);
 
         AddToRow(zooming);
-        AddToRow(zoomingFactor);
+        AddToRow(zoomingScaling);
         AddToRow(zoomingTranslation);
 
         AddToRow(itemSelected);
@@ -85,7 +85,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         if (zooming)
         {
           zooming = false;
-          zoomingFactor = 1f;
+          zoomingScaling = Vector3.one;
           zoomingTranslation = Vector3.zero;
         }
       }
@@ -105,7 +105,8 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       Columns.Add("panning");
       AddVector3ToColumns("panning_translation");
 
-      Columns.AddRange(new string[] { "zooming", "zooming_factor" });
+      Columns.Add("zooming");
+      AddVector3ToColumns("zooming_scaling");
       AddVector3ToColumns("zooming_translation");
 
       Columns.AddRange(new string[] {
@@ -173,10 +174,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     {
     }
 
-    protected override void Grid_Zooming(IZoomable grid, float scaleFactor, Vector3 translation, Vector3[] cursors)
+    protected override void Grid_Zooming(IZoomable grid, Vector3 scaling, Vector3 translation)
     {
       zooming = true;
-      zoomingFactor = scaleFactor;
+      zoomingScaling = scaling;
       zoomingTranslation = translation;
     }
 

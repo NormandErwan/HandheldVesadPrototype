@@ -84,9 +84,9 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       UpdatePositionRanges();
     }
 
-    protected virtual void Grid_Zooming(Interactables.IZoomable grid, float scaleFactor, Vector3 translation, Vector3[] cursors)
+    protected virtual void Grid_Zooming(Interactables.IZoomable grid, Vector3 scaling, Vector3 translation)
     {
-      transform.localScale /= scaleFactor;
+      transform.localScale = new Vector3(transform.localScale.x / scaling.x, transform.localScale.y / scaling.y, transform.localScale.z / scaling.z);
       UpdatePositionRanges();
     }
 

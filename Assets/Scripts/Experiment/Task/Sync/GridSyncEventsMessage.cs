@@ -9,6 +9,10 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
     public enum GridEvent
     {
       Completed,
+      SetDragging,
+      Dragged,
+      SetZooming,
+      Zoomed,
       ItemSelected,
       ItemMoved
     };
@@ -21,6 +25,13 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       SendToServer = sendToServer;
 
       Grid.CompleteSync += Grid_CompleteSync;
+
+      Grid.SetDraggingSync += Grid_SetDraggingSync;
+      Grid.DragSync += Grid_DragSync;
+
+      Grid.SetZoomingSync += Grid_SetZoomingSync;
+      Grid.ZoomSync += Grid_ZoomSync;
+
       Grid.ItemSelectSync += Grid_ItemSelectSync;
       Grid.ItemMoveSync += Grid_ItemMoveSync;
     }
@@ -32,6 +43,13 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
     ~GridSyncEventsMessage()
     {
       Grid.CompleteSync -= Grid_CompleteSync;
+
+      Grid.SetDraggingSync -= Grid_SetDraggingSync;
+      Grid.DragSync -= Grid_DragSync;
+
+      Grid.SetZoomingSync -= Grid_SetZoomingSync;
+      Grid.ZoomSync -= Grid_ZoomSync;
+
       Grid.ItemSelectSync -= Grid_ItemSelectSync;
       Grid.ItemMoveSync -= Grid_ItemMoveSync;
     }
@@ -48,6 +66,12 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 
     public int senderConnectionId;
     public GridEvent gridEvent;
+
+    public bool isDragging;
+    public bool isZooming;
+    public Vector3 translation;
+    public Vector3 scaling;
+
     public Vector2 containerPosition;
     public int itemIndex;
 
@@ -58,6 +82,22 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       if (gridEvent == GridEvent.Completed)
       {
         grid.SetCompleted();
+      }
+      else if (gridEvent == GridEvent.SetDragging)
+      {
+        grid.SetDragged(isDragging);
+      }
+      else if (gridEvent == GridEvent.Dragged)
+      {
+        grid.SetDragged(translation);
+      }
+      else if (gridEvent == GridEvent.SetZooming)
+      {
+        grid.SetZoomed(isZooming);
+      }
+      else if (gridEvent == GridEvent.Zoomed)
+      {
+        grid.SetZoomed(scaling, translation);
       }
       else
       {
@@ -77,6 +117,35 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
     protected virtual void Grid_CompleteSync()
     {
       gridEvent = GridEvent.Completed;
+      SendToServer();
+    }
+
+    protected virtual void Grid_SetDraggingSync(bool isDragging)
+    {
+      this.isDragging = isDragging;
+      gridEvent = GridEvent.SetDragging;
+      SendToServer();
+    }
+
+    protected virtual void Grid_DragSync(Vector3 translation)
+    {
+      this.translation = translation;
+      gridEvent = GridEvent.Dragged;
+      SendToServer();
+    }
+
+    protected virtual void Grid_SetZoomingSync(bool isZooming)
+    {
+      this.isZooming = isZooming;
+      gridEvent = GridEvent.SetZooming;
+      SendToServer();
+    }
+
+    protected virtual void Grid_ZoomSync(Vector3 scaling, Vector3 translation)
+    {
+      this.scaling = scaling;
+      this.translation = translation;
+      gridEvent = GridEvent.Zoomed;
       SendToServer();
     }
 
