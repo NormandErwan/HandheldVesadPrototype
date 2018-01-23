@@ -198,14 +198,11 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       UpdateTransformRanges();
 
       // Fix resize bug of the colliders of the items
-      if (translation.sqrMagnitude > 0)
+      foreach (var container in Elements)
       {
-        foreach (var container in Elements)
+        foreach (var item in container.Elements)
         {
-          foreach (var item in container.Elements)
-          {
-            item.Collider.radius *= scaleFactor;
-          }
+          item.Collider.radius *= scaleFactor;
         }
       }
 

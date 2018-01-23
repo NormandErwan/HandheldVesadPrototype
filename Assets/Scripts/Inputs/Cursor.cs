@@ -130,6 +130,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
         {
           if (latestCursorPositions[zoomable].Count == 1)
           {
+            // Zoom with one finger
             if (zoomable.DragToZoom && !zoomable.IsZooming)
             {
               var translation = zoomable.ProjectPosition(transform.position - latestCursorPositions[zoomable][this]);
@@ -139,6 +140,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
                 latestCursorPositions[zoomable][this] = transform.position;
               }
             }
+            // Switch to dragging if was zooming
             else if (!zoomable.DragToZoom && zoomable.IsZooming)
             {
               var draggable = other.GetComponent<IDraggable>();
@@ -157,6 +159,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
             var cursors = new List<Cursor>(latestPositions.Keys);
             if (cursors[0] == this) // Update only once per frame
             {
+              // Set cursors list
               Vector3[] cursorPositions;
               if (!zoomable.DragToZoom)
               {
@@ -172,24 +175,43 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
                   zoomable.ProjectPosition(zoomable.Transform.position), zoomable.ProjectPosition(zoomable.Transform.position)
                 };
               }
-
+              
+              // Computes scale facor
               var distance = (zoomable.ProjectPosition(cursorPositions[0] - cursorPositions[2])).magnitude;
               var previousDistance = (zoomable.ProjectPosition(cursorPositions[1] - cursorPositions[3])).magnitude;
               float scaleFactor = (previousDistance != 0) ? distance / previousDistance : 1f;
 
-              bool hasClamped = Scale(zoomable, scaleFactor * zoomable.Transform.localScale);
-              if (!hasClamped)
+              // Try to scale
+              Vector3 newLocalScale = zoomable.Transform.localScale;
+              for (int i = 0; i < 2; i++)
+              {
+                if (!zoomable.FreezeScale[i])
+                {
+                  newLocalScale[i] = zoomable.ScaleRange[i].Clamp(scaleFactor * zoomable.Transform.localScale[i]);
+
+                  // Correct the scale factor, taking account of the clamp
+                  if (scaleFactor < 1f)
+                  {
+                    scaleFactor = Mathf.Max(scaleFactor, newLocalScale[i] / zoomable.Transform.localScale[i]);
+                  }
+                  else
+                  {
+                    scaleFactor = Mathf.Min(scaleFactor, newLocalScale[i] / zoomable.Transform.localScale[i]);
+                  }
+                }
+              }
+              zoomable.Transform.localScale = newLocalScale;
+
+              // Translate if it has scaled
+              if (scaleFactor != 1f)
               {
                 var newPosition = cursorPositions[0] - scaleFactor * (cursorPositions[1] - zoomable.Transform.position);
                 var translation = newPosition - zoomable.Transform.position;
                 Translate(zoomable, translation);
                 zoomable.Zoom(scaleFactor, translation, cursorPositions);
               }
-              else
-              {
-                zoomable.Zoom(scaleFactor, Vector3.zero, cursorPositions);
-              }
 
+              // Update cursors
               latestPositions[cursors[0]] = cursorPositions[0];
               if (!zoomable.DragToZoom)
               {
@@ -220,8 +242,11 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
                 var translation = draggable.ProjectPosition(transform.position - latestCursorPositions[draggable][this]);
                 if (draggable.IsDragging)
                 {
-                  Translate(draggable, translation);
-                  draggable.Drag(translation);
+                  bool hasClamped = Translate(draggable, translation);
+                  if (!hasClamped)
+                  {
+                    draggable.Drag(translation);
+                  }
                   latestCursorPositions[draggable][this] = transform.position;
                 }
                 else if (translation.magnitude > MaxSelectableDistance)
@@ -358,28 +383,11 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       {
         if (!transformable.FreezePosition[i])
         {
+          hasClamped |= !transformable.PositionRange[i].ContainsValue(position[i] + translation[i]);
           position[i] = transformable.PositionRange[i].Clamp(position[i] + translation[i]);
         }
       }
       transformable.Transform.position = position;
-    }
-
-    protected virtual bool Scale(IZoomable zoomable, Vector3 newValue)
-    {
-      bool hasClamped = false;
-
-      Vector3 localScale = zoomable.Transform.localScale;
-      for (int i = 0; i < 2; i++)
-      {
-        if (!zoomable.FreezeScale[i])
-        {
-          hasClamped |= !zoomable.ScaleRange[i].ContainsValue(newValue[i]);
-          localScale[i] = zoomable.ScaleRange[i].Clamp(newValue[i]);
-        }
-      }
-      zoomable.Transform.localScale = localScale;
-
-      return hasClamped;
     }
 
     protected virtual IEnumerator SetSelected(ISelectable selectable)
