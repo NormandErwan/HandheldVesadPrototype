@@ -17,6 +17,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     public int senderConnectionId;
     public CursorType[] cursors;
+    public bool[] isActive;
     public Vector3[] localPositions;
 
     // Methods
@@ -31,6 +32,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
         if (!VectorEquals(localPositions[i], projectedCursor.transform.localPosition))
         {
           TransformChanged = true;
+          isActive[i] = true;
           localPositions[i] = projectedCursor.transform.localPosition;
         }
       }
@@ -40,6 +42,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     {
       for (int i = 0; i < cursors.Length; i++)
       {
+        projectedCursors[cursors[i]].SetActive(isActive[i]);
         projectedCursors[cursors[i]].transform.localPosition = localPositions[i];
       }
     }

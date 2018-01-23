@@ -33,6 +33,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
       projectedCursorsMessage = new ProjectedCursorsSyncMessage();
       projectedCursorsMessage.cursors = new CursorType[projectedCursors.Length];
+      projectedCursorsMessage.isActive = new bool[projectedCursors.Length];
       projectedCursorsMessage.localPositions = new Vector3[projectedCursors.Length];
       MessageTypes.Add(projectedCursorsMessage.MessageType);
 
@@ -61,7 +62,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     protected override DevicesSyncMessage OnClientMessageReceived(NetworkMessage netMessage)
     {
       var projectedCursorsReceived = netMessage.ReadMessage<ProjectedCursorsSyncMessage>();
-      if (projectedCursorsReceived.SenderConnectionId != projectedCursorsReceived.SenderConnectionId)
+      if (projectedCursorsReceived.SenderConnectionId != NetworkManager.client.connection.connectionId)
       {
         projectedCursorsReceived.Restore(ProjectedCursors);
         return projectedCursorsReceived;
