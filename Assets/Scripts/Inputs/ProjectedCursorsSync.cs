@@ -31,10 +31,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     {
       base.Awake();
 
-      projectedCursorsMessage = new ProjectedCursorsSyncMessage();
-      projectedCursorsMessage.cursors = new CursorType[projectedCursors.Length];
-      projectedCursorsMessage.isActive = new bool[projectedCursors.Length];
-      projectedCursorsMessage.localPositions = new Vector3[projectedCursors.Length];
+      projectedCursorsMessage = new ProjectedCursorsSyncMessage(projectedCursors.Length);
       MessageTypes.Add(projectedCursorsMessage.MessageType);
 
       ProjectedCursors = new Dictionary<CursorType, ProjectedCursor>(projectedCursors.Length);
@@ -62,25 +59,16 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     protected override DevicesSyncMessage OnClientMessageReceived(NetworkMessage netMessage)
     {
       var projectedCursorsReceived = netMessage.ReadMessage<ProjectedCursorsSyncMessage>();
-      if (projectedCursorsReceived.SenderConnectionId != NetworkManager.client.connection.connectionId)
-      {
-        projectedCursorsReceived.Restore(ProjectedCursors);
-        return projectedCursorsReceived;
-      }
-      return null;
+      projectedCursorsReceived.Restore(ProjectedCursors);
+      return projectedCursorsReceived;
     }
 
     // Methods
 
     protected virtual void CursorsInput_Updated()
     {
-      foreach (var projectedCursor in ProjectedCursors)
-      {
-        projectedCursor.Value.UpdateProjection();
-      }
-
       projectedCursorsMessage.Update(ProjectedCursors);
-      if (projectedCursorsMessage.TransformChanged)
+      if (projectedCursorsMessage.CursorsChanged)
       {
         SendToServer(projectedCursorsMessage);
       }

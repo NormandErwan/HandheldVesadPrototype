@@ -271,6 +271,12 @@ Transform:
   m_PrefabParentObject: {fileID: 4176781208488272, guid: 456b9f837743b804eb41fd68ebf44f8c,
     type: 2}
   m_PrefabInternal: {fileID: 126093789}
+--- !u!114 &126467210 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114755104426687954, guid: 8658a426d2cdf00469db7cc976cefe9c,
+    type: 2}
+  m_PrefabInternal: {fileID: 649830050}
+  m_Script: {fileID: 11500000, guid: 3388340920fb74244b080011dbb314f9, type: 3}
 --- !u!114 &204920262 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114376850109258518, guid: a3b64898f2954384a989df0bbfd40e80,
@@ -705,6 +711,16 @@ Prefab:
       propertyPath: camera
       value: 
       objectReference: {fileID: 1468961874}
+    - target: {fileID: 114394180611686014, guid: 7058ab5c7e35fb14fbfc6efdeb93268b,
+        type: 2}
+      propertyPath: experimentDetailsLogger
+      value: 
+      objectReference: {fileID: 126467210}
+    - target: {fileID: 114394180611686014, guid: 7058ab5c7e35fb14fbfc6efdeb93268b,
+        type: 2}
+      propertyPath: projectedCursorsSync
+      value: 
+      objectReference: {fileID: 1432904208}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7058ab5c7e35fb14fbfc6efdeb93268b, type: 2}
   m_IsPrefabParent: 0
@@ -1083,6 +1099,12 @@ Transform:
   m_PrefabParentObject: {fileID: 4222087900461476, guid: a3b64898f2954384a989df0bbfd40e80,
     type: 2}
   m_PrefabInternal: {fileID: 1408397270}
+--- !u!114 &1432904208 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114584788806543988, guid: 1af7da660e405ea4d88d276210dfa5c0,
+    type: 2}
+  m_PrefabInternal: {fileID: 1372156097}
+  m_Script: {fileID: 11500000, guid: dbf541ddf8b564a4182e83ff4b7a5ca0, type: 3}
 --- !u!1 &1468961871
 GameObject:
   m_ObjectHideFlags: 0

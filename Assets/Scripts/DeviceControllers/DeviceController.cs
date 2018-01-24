@@ -1,4 +1,7 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
+using NormandErwan.MasterThesis.Experiment.Inputs;
+using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
+using NormandErwan.MasterThesis.Experiment.Loggers;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -13,6 +16,12 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     private StateController stateController;
 
     [SerializeField]
+    private ExperimentDetailsLogger experimentDetailsLogger;
+
+    [SerializeField]
+    private ProjectedCursorsSync projectedCursorsSync;
+
+    [SerializeField]
     private Experiment.Task.Grid grid;
 
     // Properties
@@ -23,6 +32,8 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     public int ParticipantId { get; protected set; }
     public int ConditionsOrdering { get; protected set; }
     public bool ParticipantIsRightHanded { get; protected set; }
+
+    protected virtual CursorsInput CursorsInput { get; }
 
     // Events
 
@@ -102,6 +113,22 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       ParticipantId = participantId;
       ConditionsOrdering = conditionsOrdering;
       ParticipantIsRightHanded = participantIsRightHanded;
+
+      if (CursorsInput != null)
+      {
+        experimentDetailsLogger.Index = (ParticipantIsRightHanded) ? CursorsInput.Cursors[CursorType.RightIndex] : CursorsInput.Cursors[CursorType.LeftIndex];
+        if (ParticipantIsRightHanded)
+        {
+          experimentDetailsLogger.ProjectedIndex = projectedCursorsSync.ProjectedCursors[CursorType.RightIndex];
+          experimentDetailsLogger.ProjectedThumb = projectedCursorsSync.ProjectedCursors[CursorType.RightThumb];
+        }
+        else
+        {
+          experimentDetailsLogger.ProjectedIndex = projectedCursorsSync.ProjectedCursors[CursorType.LeftIndex];
+          experimentDetailsLogger.ProjectedThumb = projectedCursorsSync.ProjectedCursors[CursorType.LeftThumb];
+        }
+      }
+
       Configured();
     }
 

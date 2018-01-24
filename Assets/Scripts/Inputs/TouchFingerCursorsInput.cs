@@ -26,17 +26,8 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     // Variables
 
-    protected List<CursorType> keys;
     protected Vector3 mouse1Position = Vector3.zero;
     protected bool updateCursor1;
-
-    // MonoBehaviour methods
-
-    protected override void Awake()
-    {
-      base.Awake();
-      keys = new List<CursorType>(Cursors.Keys);
-    }
 
     // CursorsInput methods
 

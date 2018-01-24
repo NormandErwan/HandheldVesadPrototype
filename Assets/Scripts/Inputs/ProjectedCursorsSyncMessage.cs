@@ -7,11 +7,28 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 {
   public class ProjectedCursorsSyncMessage : DevicesSyncMessage
   {
+    // Constructors and destructor
+
+    public ProjectedCursorsSyncMessage(int cursorsNumber)
+    {
+      cursors = new CursorType[cursorsNumber];
+      isActive = new bool[cursorsNumber];
+      localPositions = new Vector3[cursorsNumber];
+    }
+
+    public ProjectedCursorsSyncMessage()
+    {
+    }
+
+    ~ProjectedCursorsSyncMessage()
+    {
+    }
+
     // Properties
 
     public override int SenderConnectionId { get { return senderConnectionId; } set { senderConnectionId = value; } }
     public override short MessageType { get { return MasterThesis.Experiment.MessageType.ProjectedCursors; } }
-    public bool TransformChanged { get; protected set; }
+    public virtual bool CursorsChanged { get; protected set; }
 
     // Variables
 
@@ -24,16 +41,25 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     public void Update(Dictionary<CursorType, ProjectedCursor> projectedCursors)
     {
-      TransformChanged = false;
+      CursorsChanged = false;
 
       for (int i = 0; i < cursors.Length; i++)
       {
         var projectedCursor = projectedCursors[cursors[i]];
+        bool wasActive = projectedCursor.IsActive;
+
+        projectedCursor.UpdateProjection();
+        isActive[i] = projectedCursor.IsActive;
+        
         if (!VectorEquals(localPositions[i], projectedCursor.transform.localPosition))
         {
-          TransformChanged = true;
-          isActive[i] = true;
+          CursorsChanged = true;
           localPositions[i] = projectedCursor.transform.localPosition;
+        }
+        if (wasActive != projectedCursor.IsActive)
+        {
+          CursorsChanged = true;
+          localPositions[i] = Vector3.zero;
         }
       }
     }

@@ -2,7 +2,6 @@
 using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
 using NormandErwan.MasterThesis.Experiment.Inputs;
 using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
-using NormandErwan.MasterThesis.Experiment.Loggers;
 using NormandErwan.MasterThesis.Experiment.UI.HUD;
 using UnityEngine;
 
@@ -15,15 +14,9 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     [SerializeField]
     private HMDDeviceHUD hmdDeviceHUD;
 
-    [SerializeField]
-    private ExperimentDetailsLogger experimentDetailsLogger;
-
     [Header("Cursors")]
     [SerializeField]
     private LeapFingerCursorsInput leapFingerCursorsInput;
-
-    [SerializeField]
-    private ProjectedCursorsSync projectedCursorsSync;
 
     [SerializeField]
     [Range(0f, 0.05f)]
@@ -38,10 +31,13 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     [SerializeField]
     private Renderer leftLeapHand;
 
+    // Properties
+
+    protected override CursorsInput CursorsInput { get { return leapFingerCursorsInput; } }
+
     // Variables
 
     protected IVTechnique technique;
-    protected Inputs.Cursor rightIndexCursor, leftIndexCursor;
 
     // Methods
 
@@ -50,8 +46,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       base.Start();
 
       technique = StateController.GetIndependentVariable<IVTechnique>();
-      rightIndexCursor = leapFingerCursorsInput.Cursors[CursorType.RightIndex];
-      leftIndexCursor = leapFingerCursorsInput.Cursors[CursorType.LeftIndex];
 
       leapFingerCursorsInput.Configure(maxSelectableDistance);
       leapFingerCursorsInput.enabled = false;
@@ -69,19 +63,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       base.Configure(participantId, conditionsOrdering, participantIsRightHanded);
 
-      experimentDetailsLogger.Index = (ParticipantIsRightHanded) ? rightIndexCursor : leftIndexCursor;
-      if (ParticipantIsRightHanded)
-      {
-        leapFingerCursorsInput.Cursors.Remove(CursorType.LeftIndex);
-        experimentDetailsLogger.ProjectedIndex = projectedCursorsSync.ProjectedCursors[CursorType.RightIndex];
-        experimentDetailsLogger.ProjectedThumb = projectedCursorsSync.ProjectedCursors[CursorType.RightThumb];
-      }
-      else
-      {
-        leapFingerCursorsInput.Cursors.Remove(CursorType.RightIndex);
-        experimentDetailsLogger.ProjectedIndex = projectedCursorsSync.ProjectedCursors[CursorType.LeftIndex];
-        experimentDetailsLogger.ProjectedThumb = projectedCursorsSync.ProjectedCursors[CursorType.LeftThumb];
-      }
+      leapFingerCursorsInput.Cursors.Remove((ParticipantIsRightHanded) ? CursorType.LeftIndex : CursorType.RightIndex);
     }
 
     public override void ActivateTask()
@@ -112,7 +94,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     protected virtual void ActivateHand(bool isRightHand, bool value)
     {
-      var cursor = (isRightHand) ? rightIndexCursor : leftIndexCursor;
+      var cursor = (isRightHand) ? leapFingerCursorsInput.Cursors[CursorType.RightIndex] : leapFingerCursorsInput.Cursors[CursorType.LeftIndex];
       var leapHand = (isRightHand) ? rightLeapHand : leftLeapHand;
 
       cursor.SetActive(value);

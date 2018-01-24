@@ -4,7 +4,6 @@ using NormandErwan.MasterThesis.Experiment.UI.HUD;
 using UnityEngine;
 using System.Collections;
 using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
-using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 
 namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 {
@@ -27,8 +26,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     // Properties
 
-    public MobileDeviceHUD MobileDeviceHUD { get { return mobileDeviceHUD; } set { mobileDeviceHUD = value; } }
-    public TouchFingerCursorsInput TouchFingerCursorsInput { get { return touchFingerCursorsInput; } set { touchFingerCursorsInput = value; } }
+    protected override CursorsInput CursorsInput { get { return touchFingerCursorsInput; } }
 
     // Variables
 
@@ -45,12 +43,12 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
       technique = StateController.GetIndependentVariable<IVTechnique>();
 
-      TouchFingerCursorsInput.Configure(maxSelectableDistance);
-      TouchFingerCursorsInput.enabled = false;
+      touchFingerCursorsInput.Configure(maxSelectableDistance);
+      touchFingerCursorsInput.enabled = false;
 
-      MobileDeviceHUD.ActivateTaskButtonPressed += MobileDeviceHUD_ActivateTaskButtonPressed;
-      MobileDeviceHUD.NextStateButtonPressed += MobileDeviceHUD_NextStateButtonPressed;
-      MobileDeviceHUD.DragToZoomButtonPressed += MobileDeviceHUD_DragToZoomButtonPressed;
+      mobileDeviceHUD.ActivateTaskButtonPressed += MobileDeviceHUD_ActivateTaskButtonPressed;
+      mobileDeviceHUD.NextStateButtonPressed += MobileDeviceHUD_NextStateButtonPressed;
+      mobileDeviceHUD.DragToZoomButtonPressed += MobileDeviceHUD_DragToZoomButtonPressed;
 
       // TODO: remove, for debug testing only
       //StartCoroutine(StartTaskDebug());
@@ -59,16 +57,16 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     protected override IEnumerator StartTaskDebug()
     {
       yield return base.StartTaskDebug();
-      MobileDeviceHUD.HideAllButtons();
+      mobileDeviceHUD.HideAllButtons();
     }
 
     protected override void OnDestroy()
     {
       base.OnDestroy();
 
-      MobileDeviceHUD.ActivateTaskButtonPressed -= MobileDeviceHUD_ActivateTaskButtonPressed;
-      MobileDeviceHUD.NextStateButtonPressed -= MobileDeviceHUD_NextStateButtonPressed;
-      MobileDeviceHUD.DragToZoomButtonPressed -= MobileDeviceHUD_DragToZoomButtonPressed;
+      mobileDeviceHUD.ActivateTaskButtonPressed -= MobileDeviceHUD_ActivateTaskButtonPressed;
+      mobileDeviceHUD.NextStateButtonPressed -= MobileDeviceHUD_NextStateButtonPressed;
+      mobileDeviceHUD.DragToZoomButtonPressed -= MobileDeviceHUD_DragToZoomButtonPressed;
     }
 
     // Methods
@@ -86,11 +84,11 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
       if (technique.CurrentCondition.useLeapInput)
       {
-        MobileDeviceHUD.ShowOneButton(MobileDeviceHUD.dragToZoomButton);
+        mobileDeviceHUD.ShowOneButton(mobileDeviceHUD.dragToZoomButton);
       }
       if (technique.CurrentCondition.useTouchInput)
       {
-        TouchFingerCursorsInput.enabled = true;
+        touchFingerCursorsInput.enabled = true;
       }
     }
 
@@ -98,27 +96,27 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       base.StateController_CurrentStateUpdated(currentState);
 
-      TouchFingerCursorsInput.enabled = false;
+      touchFingerCursorsInput.enabled = false;
 
       if (currentState.ActivateTask)
       {
-        MobileDeviceHUD.ShowOneButton(MobileDeviceHUD.ActivateTaskButton);
+        mobileDeviceHUD.ShowOneButton(mobileDeviceHUD.ActivateTaskButton);
       }
       else
       {
-        MobileDeviceHUD.ShowOneButton(MobileDeviceHUD.NextStateButton);
+        mobileDeviceHUD.ShowOneButton(mobileDeviceHUD.NextStateButton);
       }
     }
 
     protected virtual void MobileDeviceHUD_ActivateTaskButtonPressed()
     {
-      MobileDeviceHUD.HideAllButtons();
+      mobileDeviceHUD.HideAllButtons();
       OnActivateTaskSync();
     }
 
     protected virtual void MobileDeviceHUD_NextStateButtonPressed()
     {
-      MobileDeviceHUD.HideAllButtons();
+      mobileDeviceHUD.HideAllButtons();
       StateController.NextState();
     }
 

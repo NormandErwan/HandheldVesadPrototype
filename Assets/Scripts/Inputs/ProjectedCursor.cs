@@ -17,10 +17,10 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     public Cursor Cursor { get { return cursor; } set { cursor = value; } }
     public GameObject ProjectionLine { get { return line; } set { line = value; } }
+    public bool IsActive { get; protected set; }
 
     // Variables
 
-    protected bool wasActive = false;
     protected Experiment.Task.Grid grid;
     protected GenericVector3<Range<float>> positionRanges = new GenericVector3<Range<float>>();
 
@@ -47,14 +47,14 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     public virtual void UpdateProjection()
     {
-      bool active = false;
+      IsActive = false;
       if (Cursor.IsActivated)
       {
         var projectedPosition = Vector3.ProjectOnPlane(Cursor.transform.position, -grid.transform.forward);
         transform.position = new Vector3(projectedPosition.x, projectedPosition.y, transform.position.z);
         if (positionRanges.X.ContainsValue(transform.localPosition.x) && positionRanges.Y.ContainsValue(transform.localPosition.y))
         {
-          active = true;
+          IsActive = true;
 
           float yRotation = (transform.position.z > Cursor.transform.position.z) ? 0f : 180f;
           ProjectionLine.transform.rotation = Quaternion.Euler(0f, yRotation, 0f);
@@ -63,19 +63,14 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
           ProjectionLine.transform.localScale = new Vector3(ProjectionLine.transform.localScale.x, ProjectionLine.transform.localScale.y, distance);
         }
       }
-
-      if (active != wasActive)
-      {
-        SetActive(active);
-        wasActive = active;
-      }
     }
 
     public virtual void SetActive(bool value)
     {
+      IsActive = value;
       foreach (Transform child in transform)
       {
-        child.gameObject.SetActive(value);
+        child.gameObject.SetActive(IsActive);
       }
     }
 

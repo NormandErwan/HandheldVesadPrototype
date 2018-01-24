@@ -60,6 +60,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       foreach (var cursor in Cursors)
       {
         cursor.Value.SetActive(false);
+        cursor.Value.transform.position = Vector3.zero;
       }
     }
 
