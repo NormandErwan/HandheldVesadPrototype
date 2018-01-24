@@ -36,7 +36,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
             cursor.transform.position = (UseStabilizedPositions ? finger.StabilizedTipPosition : finger.TipPosition).ToVector3();
             cursor.transform.forward = finger.Direction.ToVector3();
             cursor.transform.localScale = finger.Width * Vector3.one;
-            ActivateCursor(cursorType);
+            cursor.SetVisible(true);
           }
         }
       }

@@ -48,7 +48,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     public virtual void UpdateProjection()
     {
       IsActive = false;
-      if (Cursor.IsActivated)
+      if (Cursor.gameObject.activeSelf && Cursor.IsVisible)
       {
         var projectedPosition = Vector3.ProjectOnPlane(Cursor.transform.position, -grid.transform.forward);
         transform.position = new Vector3(projectedPosition.x, projectedPosition.y, transform.position.z);

@@ -1,6 +1,7 @@
 ﻿using NormandErwan.MasterThesis.Experiment.DeviceControllers;
 using NormandErwan.MasterThesis.Experiment.Experiment.States;
 using NormandErwan.MasterThesis.Experiment.Experiment.Task;
+using NormandErwan.MasterThesis.Experiment.Inputs;
 using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using UnityEngine;
 
@@ -18,6 +19,14 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     [SerializeField]
     protected DeviceController deviceController;
+
+    // Properties
+
+    public Inputs.Cursor Index { get; set; }
+    public ProjectedCursor ProjectedIndex { get; set; }
+
+    public Inputs.Cursor Thumb { get; set; }
+    public ProjectedCursor ProjectedThumb { get; set; }
 
     // Variables
 
@@ -75,6 +84,23 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected virtual void DeviceController_Configured()
     {
+      if (deviceController.ParticipantIsRightHanded)
+      {
+        Index = deviceController.CursorsInput.Cursors[CursorType.RightIndex];
+        ProjectedIndex = deviceController.ProjectedCursorsSync.ProjectedCursors[CursorType.RightIndex];
+
+        Thumb = deviceController.CursorsInput.Cursors[CursorType.RightThumb];
+        ProjectedThumb = deviceController.ProjectedCursorsSync.ProjectedCursors[CursorType.RightThumb];
+      }
+      else
+      {
+        Index = deviceController.CursorsInput.Cursors[CursorType.LeftIndex];
+        ProjectedIndex = deviceController.ProjectedCursorsSync.ProjectedCursors[CursorType.LeftIndex];
+
+        Thumb = deviceController.CursorsInput.Cursors[CursorType.LeftThumb];
+        ProjectedThumb = deviceController.ProjectedCursorsSync.ProjectedCursors[CursorType.LeftThumb];
+      }
+
       Configure();
     }
 

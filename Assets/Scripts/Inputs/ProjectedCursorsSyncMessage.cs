@@ -50,16 +50,15 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
         projectedCursor.UpdateProjection();
         isActive[i] = projectedCursor.IsActive;
-        
+
+        if (wasActive != projectedCursor.IsActive)
+        {
+          CursorsChanged = true;
+        }
         if (!VectorEquals(localPositions[i], projectedCursor.transform.localPosition))
         {
           CursorsChanged = true;
           localPositions[i] = projectedCursor.transform.localPosition;
-        }
-        if (wasActive != projectedCursor.IsActive)
-        {
-          CursorsChanged = true;
-          localPositions[i] = Vector3.zero;
         }
       }
     }

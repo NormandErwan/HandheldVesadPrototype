@@ -1,5 +1,4 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.Task;
-using NormandErwan.MasterThesis.Experiment.Inputs;
 using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using System;
 using System.Collections.Generic;
@@ -9,12 +8,6 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 {
   public class ExperimentDetailsLogger : ExperimentBaseLogger
   {
-    // Properties
-
-    public Inputs.Cursor Index { get; set; }
-    public ProjectedCursor ProjectedIndex { get; set; }
-    public ProjectedCursor ProjectedThumb { get; set; }
-
     // Variables
 
     protected bool itemSelected, itemDeselected, itemMoved, itemClassified;
@@ -62,9 +55,18 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         AddToRow(selectedContainer);
         AddToRow(selectedItem);
 
+        AddToRow(Index.IsVisible);
         AddToRow(Index.transform, false);
+
+        AddToRow(Thumb.IsVisible);
+        AddToRow(Thumb.transform, false);
+
+        AddToRow(ProjectedIndex.IsActive);
         AddToRow(ProjectedIndex.transform, false);
+
+        AddToRow(ProjectedThumb.IsActive);
         AddToRow(ProjectedThumb.transform, false);
+
         AddToRow(head, false);
         AddToRow(mobileDevice, false);
 
@@ -114,9 +116,18 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         "selected_container", "selected_item"
       });
 
+      Columns.Add("index_active");
       AddTransformToColumns("index", false);
+
+      Columns.Add("thumb_active");
+      AddTransformToColumns("thumb", false);
+
+      Columns.Add("projected_index_active");
       AddTransformToColumns("projected_index", false);
+
+      Columns.Add("projected_thumb_active");
       AddTransformToColumns("projected_thumb", false);
+
       AddTransformToColumns("head", false);
       AddTransformToColumns("phone", false);
 

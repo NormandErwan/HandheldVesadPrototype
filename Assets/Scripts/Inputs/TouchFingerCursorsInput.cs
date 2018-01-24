@@ -1,5 +1,4 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Inputs
@@ -30,15 +29,6 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     protected bool updateCursor1;
 
     // CursorsInput methods
-
-    protected override void DeactivateCursors()
-    {
-      base.DeactivateCursors();
-      foreach (var cursor in Cursors)
-      {
-        cursor.Value.transform.position = new Vector3(cursor.Value.transform.position.x, cursor.Value.transform.position.y, Camera.transform.position.z);
-      }
-    }
 
     protected override void UpdateCursors()
     {
@@ -93,8 +83,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       cursor.transform.position = new Vector3(cursorPosition.x, cursorPosition.y, PlaneToProjectCursors.position.z);
       cursor.transform.forward = planeToProjectCursors.forward;
       cursor.transform.localScale = fingerWidth * Vector3.one;
-
-      ActivateCursor(cursor.Type);
+      cursor.SetVisible(true);
     }
   }
 }

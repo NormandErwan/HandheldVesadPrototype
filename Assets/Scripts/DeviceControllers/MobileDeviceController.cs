@@ -26,7 +26,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     // Properties
 
-    protected override CursorsInput CursorsInput { get { return touchFingerCursorsInput; } }
+    public override CursorsInput CursorsInput { get { return touchFingerCursorsInput; } }
 
     // Variables
 
@@ -89,6 +89,11 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       if (technique.CurrentCondition.useTouchInput)
       {
         touchFingerCursorsInput.enabled = true;
+      }
+
+      foreach (var cursor in touchFingerCursorsInput.Cursors)
+      {
+        cursor.Value.SetActive(technique.CurrentCondition.useTouchInput);
       }
     }
 

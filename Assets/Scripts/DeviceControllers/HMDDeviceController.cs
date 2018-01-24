@@ -23,9 +23,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     private float maxSelectableDistance = 0.001f;
 
     [SerializeField]
-    private bool activateLeapHands;
-
-    [SerializeField]
     private Renderer rightLeapHand;
 
     [SerializeField]
@@ -33,7 +30,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     // Properties
 
-    protected override CursorsInput CursorsInput { get { return leapFingerCursorsInput; } }
+    public override CursorsInput CursorsInput { get { return leapFingerCursorsInput; } }
 
     // Variables
 
@@ -49,8 +46,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
       leapFingerCursorsInput.Configure(maxSelectableDistance);
       leapFingerCursorsInput.enabled = false;
-      ActivateHand(true, false);
-      ActivateHand(false, false);
 
       // TODO: remove, for debug testing only
       //ParticipantIsRightHanded = true;
@@ -63,17 +58,28 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       base.Configure(participantId, conditionsOrdering, participantIsRightHanded);
 
-      leapFingerCursorsInput.Cursors.Remove((ParticipantIsRightHanded) ? CursorType.LeftIndex : CursorType.RightIndex);
+      if (ParticipantIsRightHanded)
+      {
+        leapFingerCursorsInput.Cursors.Remove(CursorType.LeftIndex);
+        leapFingerCursorsInput.Cursors.Remove(CursorType.LeftThumb);
+        leapFingerCursorsInput.Cursors[CursorType.RightThumb].gameObject.SetActive(false);
+      }
+      else
+      {
+        leapFingerCursorsInput.Cursors.Remove(CursorType.RightIndex);
+        leapFingerCursorsInput.Cursors.Remove(CursorType.RightThumb);
+        leapFingerCursorsInput.Cursors[CursorType.LeftThumb].gameObject.SetActive(false);
+      }
     }
 
     public override void ActivateTask()
     {
       base.ActivateTask();
 
-      if (technique.CurrentCondition.useLeapInput)
+      leapFingerCursorsInput.enabled = true;
+      foreach (var cursor in leapFingerCursorsInput.Cursors)
       {
-        leapFingerCursorsInput.enabled = true;
-        ActivateHand(ParticipantIsRightHanded, true);
+        cursor.Value.SetActive(technique.CurrentCondition.useLeapInput);
       }
 
       hmdDeviceHUD.ShowContent(false);
@@ -84,21 +90,9 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       base.StateController_CurrentStateUpdated(currentState);
 
       leapFingerCursorsInput.enabled = false;
-      ActivateHand(ParticipantIsRightHanded, false);
 
       hmdDeviceHUD.ShowContent(true);
       hmdDeviceHUD.UpdateInstructionsProgress(StateController);
-    }
-
-    // Methods
-
-    protected virtual void ActivateHand(bool isRightHand, bool value)
-    {
-      var cursor = (isRightHand) ? leapFingerCursorsInput.Cursors[CursorType.RightIndex] : leapFingerCursorsInput.Cursors[CursorType.LeftIndex];
-      var leapHand = (isRightHand) ? rightLeapHand : leftLeapHand;
-
-      cursor.SetActive(value);
-      leapHand.gameObject.SetActive(activateLeapHands & value);
     }
   }
 }

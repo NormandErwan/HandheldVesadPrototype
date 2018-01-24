@@ -15,7 +15,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       public string name;
       public int count;
       public Stopwatch time = new Stopwatch();
-      public float distance;
+      public float distance, projectedDistance;
 
       public Variable(string name)
       {
@@ -28,11 +28,12 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         count = 0;
         time.Reset();
         distance = 0;
+        projectedDistance = 0;
       }
 
       public List<string> Columns()
       {
-        return new List<string>() { name + "_count", name + "_time", name + "_distance" };
+        return new List<string>() { name + "_count", name + "_time", name + "_distance", name + "_projected_distance" };
       }
     }
 
@@ -52,6 +53,9 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     protected Variable pan = new Variable("pan");
     protected Variable zoom = new Variable("zoom");
 
+    protected Vector3 oldIndexPosition, oldProjectedIndexPosition;
+    protected Vector3 oldThumbPosition, oldProjectedThumbPosition;
+
     protected float headPhoneDistance = 0;
     protected float oldHeadPhoneDistance = 0;
 
@@ -68,9 +72,38 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected virtual void LateUpdate()
     {
-      float headPhoneDistance = (head.position - mobileDevice.position).magnitude;
-      this.headPhoneDistance += headPhoneDistance - oldHeadPhoneDistance;
-      oldHeadPhoneDistance = headPhoneDistance;
+      if (IsConfigured && stateController.CurrentState.Id == stateController.taskTrialState.Id)
+      {
+        float distance = (Index.transform.position - oldIndexPosition).magnitude 
+          + (Thumb.transform.position - oldThumbPosition).magnitude;
+        oldIndexPosition = Index.transform.position;
+        oldThumbPosition = Thumb.transform.position;
+
+        float projectedDistance = (ProjectedIndex.transform.position - oldProjectedIndexPosition).magnitude 
+          + (ProjectedThumb.transform.position - oldProjectedThumbPosition).magnitude;
+        oldProjectedIndexPosition = ProjectedIndex.transform.position;
+        oldProjectedThumbPosition = ProjectedThumb.transform.position;
+
+        if (selections.time.IsRunning)
+        {
+          selections.distance += distance;
+          selections.projectedDistance += projectedDistance;
+        }
+        if (pan.time.IsRunning)
+        {
+          pan.distance += distance;
+          pan.projectedDistance += projectedDistance;
+        }
+        if (zoom.time.IsRunning)
+        {
+          zoom.distance += distance;
+          zoom.projectedDistance += projectedDistance;
+        }
+
+        float headPhoneDistance = (head.position - mobileDevice.position).magnitude;
+        this.headPhoneDistance += headPhoneDistance - oldHeadPhoneDistance;
+        oldHeadPhoneDistance = headPhoneDistance;
+      }
     }
 
     // Methods
@@ -176,13 +209,6 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected override void Grid_Dragging(IDraggable grid, Vector3 translation)
     {
-      var magnitude = translation.magnitude;
-      pan.distance += magnitude;
-
-      if (selections.time.IsRunning)
-      {
-        selections.distance += magnitude;
-      }
     }
 
     protected override void Grid_DraggingStopped(IDraggable grid)
@@ -198,17 +224,6 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected override void Grid_Zooming(IZoomable grid, Vector3 scaling, Vector3 translation)
     {
-      // TODO: fix
-      /*var distance = cursors[0] - cursors[1];
-      var previousDistance = cursors[2] - cursors[3];
-      var magnitude = (distance - previousDistance).magnitude;
-
-      zoom.distance += magnitude;
-
-      if (selections.time.IsRunning)
-      {
-        selections.distance += magnitude;
-      }*/
     }
 
     protected override void Grid_ZoomingStopped(IZoomable grid)
@@ -221,6 +236,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       AddToRow(variable.count);
       AddToRow(variable.time.Elapsed.TotalSeconds);
       AddToRow(variable.distance);
+      AddToRow(variable.projectedDistance);
     }
   }
 }

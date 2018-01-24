@@ -59,14 +59,9 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     {
       foreach (var cursor in Cursors)
       {
-        cursor.Value.SetActive(false);
-        cursor.Value.transform.position = Vector3.zero;
+        cursor.Value.SetVisible(false);
+        cursor.Value.transform.position = new Vector3(cursor.Value.transform.position.x, cursor.Value.transform.position.y, -10); // keep the cursor far away if not visible to activate OnTriggerExit
       }
-    }
-
-    protected virtual void ActivateCursor(CursorType cursorType)
-    {
-      Cursors[cursorType].SetActive(true);
     }
 
     protected abstract void UpdateCursors();

@@ -28,7 +28,8 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     public float MaxSelectableDistance { get; set; }
 
-    public bool IsActivated { get; protected set; }
+    public bool IsVisible { get; protected set; }
+    public bool IsActive { get; protected set; }
 
     public bool IsFinger { get { return Type != CursorType.Look; } }
     public bool IsIndex { get { return Type == CursorType.LeftIndex || Type == CursorType.RightIndex; } }
@@ -44,12 +45,15 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     protected Dictionary<ITappable, float> tapTimers = new Dictionary<ITappable, float>();
 
     protected new Renderer renderer;
+    protected new Collider collider;
 
     // MonoBehaviour methods
 
     protected virtual void Awake()
     {
       renderer = GetComponent<Renderer>();
+      collider = GetComponent<Collider>();
+      SetVisible(false);
       SetActive(false);
     }
 
@@ -331,16 +335,16 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     // Methods
 
+    public void SetVisible(bool value)
+    {
+      IsVisible = value;
+      renderer.enabled = IsVisible;
+    }
+
     public void SetActive(bool value)
     {
-      IsActivated = value;
-      renderer.enabled = IsActivated;
-
-      if (!IsActivated)
-      {
-        transform.position = Vector3.zero;
-        transform.rotation = Quaternion.identity;
-      }
+      IsActive = value;
+      collider.enabled = IsActive;
     }
 
     protected virtual bool IsInteractable(Component component)
