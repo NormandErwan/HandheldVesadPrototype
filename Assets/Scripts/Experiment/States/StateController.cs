@@ -70,6 +70,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.States
       TrialsTotal = ConditionsTotal * (int)TrialsPerCondition;
       StatesTotal = 2 // experimentBeginState and experimentEndState
         + independentVariables[0].ConditionsCount // trainings
+        + (independentVariables[0].ConditionsCount - 2) // rests
         + TrialsTotal; // trials
     }
 

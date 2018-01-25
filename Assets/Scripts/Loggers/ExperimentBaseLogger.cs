@@ -20,13 +20,25 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     [SerializeField]
     protected DeviceController deviceController;
 
+    [SerializeField]
+    protected ProjectedCursor projectedRightIndex;
+
+    [SerializeField]
+    protected ProjectedCursor projectedLeftIndex;
+
+    [SerializeField]
+    protected ProjectedCursor projectedRightThumb;
+
+    [SerializeField]
+    protected ProjectedCursor projectedLeftThumb;
+
     // Properties
 
-    public Inputs.Cursor Index { get; set; }
-    public ProjectedCursor ProjectedIndex { get; set; }
+    protected Inputs.Cursor Index { get; set; }
+    protected ProjectedCursor ProjectedIndex { get; set; }
 
-    public Inputs.Cursor Thumb { get; set; }
-    public ProjectedCursor ProjectedThumb { get; set; }
+    protected Inputs.Cursor Thumb { get; set; }
+    protected ProjectedCursor ProjectedThumb { get; set; }
 
     // Variables
 
@@ -86,20 +98,17 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     {
       if (deviceController.ParticipantIsRightHanded)
       {
-        Index = deviceController.CursorsInput.Cursors[CursorType.RightIndex];
-        ProjectedIndex = deviceController.ProjectedCursorsSync.ProjectedCursors[CursorType.RightIndex];
-
-        Thumb = deviceController.CursorsInput.Cursors[CursorType.RightThumb];
-        ProjectedThumb = deviceController.ProjectedCursorsSync.ProjectedCursors[CursorType.RightThumb];
+        ProjectedIndex = projectedRightIndex;
+        ProjectedThumb = projectedRightThumb;
       }
       else
       {
-        Index = deviceController.CursorsInput.Cursors[CursorType.LeftIndex];
-        ProjectedIndex = deviceController.ProjectedCursorsSync.ProjectedCursors[CursorType.LeftIndex];
-
-        Thumb = deviceController.CursorsInput.Cursors[CursorType.LeftThumb];
-        ProjectedThumb = deviceController.ProjectedCursorsSync.ProjectedCursors[CursorType.LeftThumb];
+        ProjectedIndex = projectedLeftIndex;
+        ProjectedThumb = projectedLeftThumb;
       }
+
+      Index = ProjectedIndex.Cursor;
+      Thumb = ProjectedThumb.Cursor;
 
       Configure();
     }

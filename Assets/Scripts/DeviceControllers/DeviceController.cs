@@ -14,15 +14,11 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     private StateController stateController;
 
     [SerializeField]
-    private ProjectedCursorsSync projectedCursorsSync;
-
-    [SerializeField]
     private Experiment.Task.Grid grid;
 
     // Properties
 
     public StateController StateController { get { return stateController; } set { stateController = value; } }
-    public ProjectedCursorsSync ProjectedCursorsSync { get { return projectedCursorsSync; } set { projectedCursorsSync = value; } }
     public Experiment.Task.Grid Grid { get { return grid; } set { grid = value; } }
     public virtual CursorsInput CursorsInput { get; }
 

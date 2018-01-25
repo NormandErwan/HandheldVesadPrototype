@@ -1,4 +1,5 @@
-﻿using NormandErwan.MasterThesis.Experiment.Utilities;
+﻿using NormandErwan.MasterThesis.Experiment.DeviceControllers;
+using NormandErwan.MasterThesis.Experiment.Utilities;
 using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Inputs
@@ -11,58 +12,60 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     private Cursor cursor;
 
     [SerializeField]
-    protected GameObject line;
+    protected GameObject projectionLine;
+
+    [SerializeField]
+    private DeviceController deviceController;
 
     // Properties
 
     public Cursor Cursor { get { return cursor; } set { cursor = value; } }
-    public GameObject ProjectionLine { get { return line; } set { line = value; } }
+    public GameObject ProjectionLine { get { return projectionLine; } set { projectionLine = value; } }
     public bool IsActive { get; protected set; }
 
     // Variables
 
+    protected GenericVector3<Range<float>> positionRanges = new GenericVector3<Range<float>>(new Range<float>(), new Range<float>(), null);
     protected Experiment.Task.Grid grid;
-    protected GenericVector3<Range<float>> positionRanges = new GenericVector3<Range<float>>();
 
     // Methods
 
-    protected virtual void Awake()
+    protected virtual void Start()
     {
-      grid = transform.parent.GetComponent<Experiment.Task.Grid>();
-      grid.Configured += Grid_Configured;
-      grid.Zooming += Grid_Zooming;
+      deviceController.CursorsInput.Updated += CursorsInput_Updated;
 
-      positionRanges.X = new Range<float>();
-      positionRanges.Y = new Range<float>();
-      UpdatePositionRanges();
+      grid = deviceController.Grid;
+      grid.Configured += Grid_Configured;
 
       SetActive(false);
     }
 
     protected virtual void OnDestroy()
     {
+      deviceController.CursorsInput.Updated -= CursorsInput_Updated;
       grid.Configured -= Grid_Configured;
-      grid.Zooming -= Grid_Zooming;
     }
 
-    public virtual void UpdateProjection()
+    protected virtual void CursorsInput_Updated()
     {
       IsActive = false;
       if (Cursor.gameObject.activeSelf && Cursor.IsVisible)
       {
-        var projectedPosition = Vector3.ProjectOnPlane(Cursor.transform.position, -grid.transform.forward);
-        transform.position = new Vector3(projectedPosition.x, projectedPosition.y, transform.position.z);
-        if (positionRanges.X.ContainsValue(transform.localPosition.x) && positionRanges.Y.ContainsValue(transform.localPosition.y))
+        float cursorGridDistance = Vector3.Dot(Cursor.transform.position - grid.transform.position, -grid.transform.forward);
+        transform.position = Cursor.transform.position + cursorGridDistance * grid.transform.forward;
+
+        var positionToGrid = Vector3.ProjectOnPlane(transform.position - grid.transform.position, -grid.transform.forward);
+        positionToGrid = transform.position - grid.transform.position;
+        print(positionToGrid.ToString("F3"));
+        if (positionRanges.X.ContainsValue(positionToGrid.x) && positionRanges.Y.ContainsValue(positionToGrid.y))
         {
           IsActive = true;
-
-          float yRotation = (transform.position.z > Cursor.transform.position.z) ? 0f : 180f;
-          ProjectionLine.transform.rotation = Quaternion.Euler(0f, yRotation, 0f);
-
-          var distance = Vector3.Distance(transform.position, Cursor.transform.position) / 2f / transform.lossyScale.z;
-          ProjectionLine.transform.localScale = new Vector3(ProjectionLine.transform.localScale.x, ProjectionLine.transform.localScale.y, distance);
+          transform.forward = grid.transform.forward;
+          ProjectionLine.transform.localScale = new Vector3(ProjectionLine.transform.localScale.x, cursorGridDistance, ProjectionLine.transform.localScale.z);
         }
       }
+
+      SetActive(IsActive);
     }
 
     public virtual void SetActive(bool value)
@@ -70,27 +73,17 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       IsActive = value;
       foreach (Transform child in transform)
       {
-        child.gameObject.SetActive(IsActive);
+        child.gameObject.SetActive(value);
       }
     }
 
     protected virtual void Grid_Configured()
     {
-      UpdatePositionRanges();
-    }
-
-    protected virtual void Grid_Zooming(Interactables.IZoomable grid, Vector3 scaling, Vector3 translation)
-    {
-      transform.localScale = new Vector3(transform.localScale.x / scaling.x, transform.localScale.y / scaling.y, transform.localScale.z / scaling.z);
-      UpdatePositionRanges();
-    }
-
-    protected virtual void UpdatePositionRanges()
-    {
-      positionRanges.X.Minimum = -grid.Scale.x / 2f;
-      positionRanges.X.Maximum = grid.Scale.x / 2f;
-      positionRanges.Y.Minimum = -grid.Scale.y / 2f;
-      positionRanges.Y.Maximum = grid.Scale.y / 2f;
+      var gridScale = Vector3.Scale(grid.transform.lossyScale, grid.Scale);
+      positionRanges.X.Minimum = -gridScale.x / 2f;
+      positionRanges.X.Maximum = gridScale.x / 2f;
+      positionRanges.Y.Minimum = -gridScale.y / 2f;
+      positionRanges.Y.Maximum = gridScale.y / 2f;
     }
   }
 }
