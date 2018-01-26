@@ -39,7 +39,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       base.Start();
 
       camera.orthographic = true;
-      camera.orthographicSize = 0.5f * Grid.transform.localScale.y * (Grid.ElementScale.y + Grid.ElementMargin.y);
+      camera.orthographicSize = 0.5f * TaskGrid.transform.localScale.y * (TaskGrid.ElementScale.y + TaskGrid.ElementMargin.y);
 
       technique = StateController.GetIndependentVariable<IVTechnique>();
 

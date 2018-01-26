@@ -37,7 +37,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     public override void ActivateTask()
     {
       base.ActivateTask();
-      Grid.Configure();
+      TaskGrid.Configure();
     }
 
     protected override void StateController_CurrentStateUpdated(State currentState)
@@ -48,9 +48,9 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     // Methods
 
-    protected override void Grid_Completed()
+    protected override void TaskGrid_Completed()
     {
-      base.Grid_Completed();
+      base.TaskGrid_Completed();
       StateController.NextState();
     }
 

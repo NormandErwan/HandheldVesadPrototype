@@ -21,29 +21,29 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     protected DeviceController deviceController;
 
     [SerializeField]
-    protected ProjectedCursor projectedRightIndex;
+    protected BaseCursor projectedRightIndex;
 
     [SerializeField]
-    protected ProjectedCursor projectedLeftIndex;
+    protected BaseCursor projectedLeftIndex;
 
     [SerializeField]
-    protected ProjectedCursor projectedRightThumb;
+    protected BaseCursor projectedRightThumb;
 
     [SerializeField]
-    protected ProjectedCursor projectedLeftThumb;
+    protected BaseCursor projectedLeftThumb;
 
     // Properties
 
-    protected Inputs.Cursor Index { get; set; }
-    protected ProjectedCursor ProjectedIndex { get; set; }
+    protected BaseCursor Index { get; set; }
+    protected BaseCursor ProjectedIndex { get; set; }
 
-    protected Inputs.Cursor Thumb { get; set; }
-    protected ProjectedCursor ProjectedThumb { get; set; }
+    protected BaseCursor Thumb { get; set; }
+    protected BaseCursor ProjectedThumb { get; set; }
 
     // Variables
 
     protected StateController stateController;
-    protected Experiment.Task.Grid grid;
+    protected TaskGrid taskGrid;
 
     // MonoBehaviour methods
 
@@ -54,22 +54,22 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       dataPath += "/Logs";
 
       stateController = deviceController.StateController;
-      grid = deviceController.Grid;
+      taskGrid = deviceController.TaskGrid;
 
       deviceController.Configured += DeviceController_Configured;
 
-      grid.Configured += Grid_Configured;
-      grid.Completed += Grid_Completed;
-      grid.ItemSelected += Grid_ItemSelected;
-      grid.ItemMoved += Grid_ItemMoved;
+      taskGrid.Configured += TaskGrid_Configured;
+      taskGrid.Completed += TaskGrid_Completed;
+      taskGrid.ItemSelected += TaskGrid_ItemSelected;
+      taskGrid.ItemMoved += TaskGrid_ItemMoved;
 
-      grid.DraggingStarted += Grid_DraggingStarted;
-      grid.Dragging += Grid_Dragging;
-      grid.DraggingStopped += Grid_DraggingStopped;
+      taskGrid.DraggingStarted += TaskGrid_DraggingStarted;
+      taskGrid.Dragging += TaskGrid_Dragging;
+      taskGrid.DraggingStopped += TaskGrid_DraggingStopped;
 
-      grid.ZoomingStarted += Grid_ZoomingStarted;
-      grid.Zooming += Grid_Zooming;
-      grid.ZoomingStopped += Grid_ZoomingStopped;
+      taskGrid.ZoomingStarted += TaskGrid_ZoomingStarted;
+      taskGrid.Zooming += TaskGrid_Zooming;
+      taskGrid.ZoomingStopped += TaskGrid_ZoomingStopped;
     }
 
     protected override void OnDestroy()
@@ -78,18 +78,18 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
       deviceController.Configured -= DeviceController_Configured;
 
-      grid.Configured -= Grid_Configured;
-      grid.Completed -= Grid_Completed;
-      grid.ItemSelected -= Grid_ItemSelected;
-      grid.ItemMoved -= Grid_ItemMoved;
+      taskGrid.Configured -= TaskGrid_Configured;
+      taskGrid.Completed -= TaskGrid_Completed;
+      taskGrid.ItemSelected -= TaskGrid_ItemSelected;
+      taskGrid.ItemMoved -= TaskGrid_ItemMoved;
 
-      grid.DraggingStarted -= Grid_DraggingStarted;
-      grid.Dragging -= Grid_Dragging;
-      grid.DraggingStopped -= Grid_DraggingStopped;
+      taskGrid.DraggingStarted -= TaskGrid_DraggingStarted;
+      taskGrid.Dragging -= TaskGrid_Dragging;
+      taskGrid.DraggingStopped -= TaskGrid_DraggingStopped;
 
-      grid.ZoomingStarted -= Grid_ZoomingStarted;
-      grid.Zooming -= Grid_Zooming;
-      grid.ZoomingStopped -= Grid_ZoomingStopped;
+      taskGrid.ZoomingStarted -= TaskGrid_ZoomingStarted;
+      taskGrid.Zooming -= TaskGrid_Zooming;
+      taskGrid.ZoomingStopped -= TaskGrid_ZoomingStopped;
     }
 
     // Methods
@@ -98,33 +98,36 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     {
       if (deviceController.ParticipantIsRightHanded)
       {
+        Index = deviceController.CursorsInput.Cursors[CursorType.RightIndex];
+        Thumb = deviceController.CursorsInput.Cursors[CursorType.RightThumb];
+
         ProjectedIndex = projectedRightIndex;
         ProjectedThumb = projectedRightThumb;
       }
       else
       {
+        Index = deviceController.CursorsInput.Cursors[CursorType.LeftIndex];
+        Thumb = deviceController.CursorsInput.Cursors[CursorType.LeftThumb];
+
         ProjectedIndex = projectedLeftIndex;
         ProjectedThumb = projectedLeftThumb;
       }
 
-      Index = ProjectedIndex.Cursor;
-      Thumb = ProjectedThumb.Cursor;
-
       Configure();
     }
 
-    protected abstract void Grid_Configured();
-    protected abstract void Grid_Completed();
+    protected abstract void TaskGrid_Configured();
+    protected abstract void TaskGrid_Completed();
 
-    protected abstract void Grid_ItemSelected(Container container, Item item);
-    protected abstract void Grid_ItemMoved(Container oldContainer, Container newContainer, Item item, Experiment.Task.Grid.ItemMovedType moveType);
+    protected abstract void TaskGrid_ItemSelected(Container container, Item item);
+    protected abstract void TaskGrid_ItemMoved(Container oldContainer, Container newContainer, Item item, TaskGrid.ItemMovedType moveType);
 
-    protected abstract void Grid_DraggingStarted(IDraggable grid);
-    protected abstract void Grid_Dragging(IDraggable grid, Vector3 translation);
-    protected abstract void Grid_DraggingStopped(IDraggable grid);
+    protected abstract void TaskGrid_DraggingStarted(IDraggable grid);
+    protected abstract void TaskGrid_Dragging(IDraggable grid, Vector3 translation);
+    protected abstract void TaskGrid_DraggingStopped(IDraggable grid);
 
-    protected abstract void Grid_ZoomingStarted(IZoomable grid);
-    protected abstract void Grid_Zooming(IZoomable grid, Vector3 scaling, Vector3 translation);
-    protected abstract void Grid_ZoomingStopped(IZoomable grid);
+    protected abstract void TaskGrid_ZoomingStarted(IZoomable grid);
+    protected abstract void TaskGrid_Zooming(IZoomable grid, Vector3 scaling, Vector3 translation);
+    protected abstract void TaskGrid_ZoomingStopped(IZoomable grid);
   }
 }

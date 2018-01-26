@@ -129,7 +129,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       base.Configure();
     }
 
-    protected override void Grid_Configured()
+    protected override void TaskGrid_Configured()
     {
       if (stateController.CurrentState.Id == stateController.taskTrialState.Id)
       {
@@ -149,11 +149,11 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         AddToRow(textSize.CurrentCondition.Id); AddToRow(textSize.CurrentCondition.Name);
         AddToRow(distance.CurrentCondition.Id); AddToRow(distance.CurrentCondition.Name);
         AddToRow(stateController.CurrentTrial);
-        AddToRow(grid.GridGenerator.ToString());
+        AddToRow(taskGrid.GridGenerator.ToString());
       }
     }
 
-    protected override void Grid_Completed()
+    protected override void TaskGrid_Completed()
     {
       if (stateController.CurrentState.Id == stateController.taskTrialState.Id)
       {
@@ -174,7 +174,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       }
     }
 
-    protected override void Grid_ItemSelected(Container container, Item item)
+    protected override void TaskGrid_ItemSelected(Container container, Item item)
     {
       if (item.IsSelected)
       {
@@ -188,45 +188,45 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       }
     }
 
-    protected override void Grid_ItemMoved(Container oldContainer, Container newContainer, Item item, Experiment.Task.Grid.ItemMovedType moveType)
+    protected override void TaskGrid_ItemMoved(Container oldContainer, Container newContainer, Item item, TaskGrid.ItemMovedType moveType)
     {
-      if (moveType == Experiment.Task.Grid.ItemMovedType.Classified)
+      if (moveType == TaskGrid.ItemMovedType.Classified)
       {
         classifications++;
       }
-      else if (moveType == Experiment.Task.Grid.ItemMovedType.Error)
+      else if (moveType == TaskGrid.ItemMovedType.Error)
       {
         errors++;
       }
       selections.time.Stop();
     }
 
-    protected override void Grid_DraggingStarted(IDraggable grid)
+    protected override void TaskGrid_DraggingStarted(IDraggable grid)
     {
       pan.count++;
       pan.time.Start();
     }
 
-    protected override void Grid_Dragging(IDraggable grid, Vector3 translation)
+    protected override void TaskGrid_Dragging(IDraggable grid, Vector3 translation)
     {
     }
 
-    protected override void Grid_DraggingStopped(IDraggable grid)
+    protected override void TaskGrid_DraggingStopped(IDraggable grid)
     {
       pan.time.Stop();
     }
 
-    protected override void Grid_ZoomingStarted(IZoomable grid)
+    protected override void TaskGrid_ZoomingStarted(IZoomable grid)
     {
       zoom.count++;
       zoom.time.Start();
     }
 
-    protected override void Grid_Zooming(IZoomable grid, Vector3 scaling, Vector3 translation)
+    protected override void TaskGrid_Zooming(IZoomable grid, Vector3 scaling, Vector3 translation)
     {
     }
 
-    protected override void Grid_ZoomingStopped(IZoomable grid)
+    protected override void TaskGrid_ZoomingStopped(IZoomable grid)
     {
       zoom.time.Stop();
     }

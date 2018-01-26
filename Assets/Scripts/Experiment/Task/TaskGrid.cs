@@ -10,7 +10,7 @@ using UnityEngine;
 namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 {
   [RequireComponent(typeof(BoxCollider))]
-  public class Grid : Grid<Grid, Container>, IDraggable, IZoomable
+  public class TaskGrid : Grid<TaskGrid, Container>, IDraggable, IZoomable
   {
     // Enums
 
@@ -96,8 +96,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     protected Item selectedItem;
     protected bool itemSelectedThisFrame = false;
 
-    protected IVTextSize ivTextSize;
-    protected IVClassificationDifficulty iVClassificationDifficulty;
+    protected IVTechnique technique;
+    protected IVTextSize textSize;
+    protected IVClassificationDifficulty classificationDifficulty;
 
     // MonoBehaviour methods
 
@@ -111,12 +112,20 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       ScaleRange = new GenericVector3<Range<float>>(new Range<float>(), new Range<float>(), new Range<float>());
 
       SetInteractable(false);
-      StartCoroutine(SetContainersItemsInteractable(false));
 
       DragToZoom = false;
 
       IsConfigured = false;
       IsCompleted = false;
+    }
+
+    protected virtual void Start()
+    {
+      technique = stateController.GetIndependentVariable<IVTechnique>();
+      textSize = stateController.GetIndependentVariable<IVTextSize>();
+      classificationDifficulty = stateController.GetIndependentVariable<IVClassificationDifficulty>();
+
+      StartCoroutine(SetElementsInteractables(false));
     }
 
     protected virtual void LateUpdate()
@@ -126,19 +135,12 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     protected virtual void OnDestroy()
     {
-      foreach (var container in Elements)
-      {
-        container.Selected2 -= Container_Selected;
-        foreach (var item in container.Elements)
-        {
-          item.Selected2 -= Item_Selected;
-        }
-      }
+      UnsubscribeFromElements();
     }
 
     // Interfaces methods
 
-    public override Grid Instantiate()
+    public override TaskGrid Instantiate()
     {
       return Instantiate(this);
     }
@@ -156,6 +158,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public void SetDragging(bool value)
     {
+      SetDragged(value);
       SetDraggingSync(value);
     }
 
@@ -178,7 +181,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
           DraggingStopped(this);
         }
       }
-      StartCoroutine(SetContainersItemsInteractable(!IsDragging && !IsZooming));
+      StartCoroutine(SetElementsInteractables(!IsDragging && !IsZooming));
     }
 
     public void SetDragged(Vector3 translation)
@@ -189,6 +192,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public void SetZooming(bool value)
     {
+      SetZoomed(value);
       SetZoomingSync(value);
     }
 
@@ -211,7 +215,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
           ZoomingStopped(this);
         }
       }
-      StartCoroutine(SetContainersItemsInteractable(!IsDragging && !IsZooming));
+      StartCoroutine(SetElementsInteractables(!IsDragging && !IsZooming));
     }
 
     public void SetZoomed(Vector3 scaling, Vector3 translation)
@@ -244,11 +248,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public override void Configure()
     {
-      if (iVClassificationDifficulty == null)
-      {
-        iVClassificationDifficulty = stateController.GetIndependentVariable<IVClassificationDifficulty>();
-      }
-      var classificationCondition = iVClassificationDifficulty.CurrentCondition;
+      var classificationCondition = classificationDifficulty.CurrentCondition;
 
       // Pre-configure the grid
       Clean();
@@ -262,7 +262,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         int itemsPerContainer = Elements[0].ElementsInstantiatedAtConfigure;
         gridGenerator = new GridGenerator(GridSize.y, GridSize.x, itemsPerContainer,
           classificationCondition.NumberOfItemsToClass,
-          (GridGenerator.DistanceTypes)iVClassificationDifficulty.CurrentConditionIndex);
+          (GridGenerator.DistanceTypes)classificationDifficulty.CurrentConditionIndex);
         gridNumber++;
       }
       while (!classificationCondition.AverageClassificationDistanceRange.ContainsValue(gridGenerator.AverageDistance)
@@ -308,16 +308,12 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     internal virtual void SetConfiguration(GridGenerator gridGenerator)
     {
       // Init the variables and properties
-      if (ivTextSize == null)
-      {
-        ivTextSize = stateController.GetIndependentVariable<IVTextSize>();
-      }
       GridGenerator = gridGenerator;
       GridSize = new Vector2Int(GridGenerator.ColumnsNumber, GridGenerator.RowsNumber);
       RemainingItemsToClassify = gridGenerator.IncorrectContainersNumber;
 
       SetInteractable(false);
-      StartCoroutine(SetContainersItemsInteractable(false));
+      StartCoroutine(SetElementsInteractables(false));
 
       IsConfigured = false;
       IsCompleted = false;
@@ -326,6 +322,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       transform.localScale = scaleFactor * Vector3.one; // Scales the canvas as it's in world reference
 
       // Configure the grid
+      UnsubscribeFromElements();
       Clean();
       base.Configure();
       Display();
@@ -338,7 +335,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         container.Display();
 
         container.ItemClass = (ItemClass)GridGenerator.Containers[position.y, position.x].GetMainItemId();
-        container.ItemFontSize = ivTextSize.CurrentCondition.fontSize;
+        container.ItemFontSize = textSize.CurrentCondition.fontSize;
         container.ConfigureItems(GridGenerator.Containers[position.y, position.x].items);
 
         container.Selected2 += Container_Selected;
@@ -361,7 +358,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
       // Update grid state
       SetInteractable(true);
-      StartCoroutine(SetContainersItemsInteractable(true));
+      StartCoroutine(SetElementsInteractables(true));
 
       IsConfigured = true;
       Configured();
@@ -369,7 +366,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     internal virtual void SetCompleted()
     {
-      StartCoroutine(SetContainersItemsInteractable(false));
+      StartCoroutine(SetElementsInteractables(false));
       SetInteractable(false);
 
       IsCompleted = true;
@@ -429,6 +426,21 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       }
     }
 
+    protected virtual void UnsubscribeFromElements()
+    {
+      if (IsConfigured)
+      {
+        foreach (var container in Elements)
+        {
+          container.Selected2 -= Container_Selected;
+          foreach (var item in container.Elements)
+          {
+            item.Selected2 -= Item_Selected;
+          }
+        }
+      }
+    }
+
     protected virtual void Item_Selected(Item item)
     {
       if (!itemSelectedThisFrame)
@@ -467,10 +479,14 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
             Complete();
           }
         }
+        else
+        {
+          selectedItem.SetSelected(false);
+        }
       }
     }
 
-    protected virtual IEnumerator SetContainersItemsInteractable(bool value)
+    protected virtual IEnumerator SetElementsInteractables(bool value)
     {
       if (value == true)
       {
@@ -480,13 +496,21 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       foreach (var container in Elements)
       {
         container.SetInteractable(value);
+        container.SetLongPressable(technique.CurrentCondition.useLeapInput);
+        container.SetTappable(technique.CurrentCondition.useTouchInput);
+        if (value == false)
+        {
+          container.SetFocused(false); // Defocus
+        }
+
         foreach (var item in container.Elements)
         {
           item.SetInteractable(value);
-
+          item.SetLongPressable(technique.CurrentCondition.useLeapInput);
+          item.SetTappable(technique.CurrentCondition.useTouchInput);
           if (value == false)
           {
-            item.SetFocused(value);
+            item.SetFocused(false); // Defocus
           }
         }
       }

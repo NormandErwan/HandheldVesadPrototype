@@ -7,7 +7,7 @@ using UnityEngine;
 namespace NormandErwan.MasterThesis.Experiment.Inputs
 {
   [RequireComponent(typeof(SphereCollider))]
-  public class Cursor : MonoBehaviour, ICursor
+  public class Cursor : BaseCursor
   {
     // Constants
 
@@ -21,15 +21,11 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     // ICursor properties
 
-    public CursorType Type { get { return type; } set { type = value; } }
-    public GameObject GameObject { get { return gameObject; } }
+    public override CursorType Type { get { return type; } set { type = value; } }
     
     // Properties
 
     public float MaxSelectableDistance { get; set; }
-
-    public bool IsVisible { get; protected set; }
-    public bool IsActive { get; protected set; }
 
     public bool IsFinger { get { return Type != CursorType.Look; } }
     public bool IsIndex { get { return Type == CursorType.LeftIndex || Type == CursorType.RightIndex; } }
@@ -104,7 +100,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
           GetInteractable<ILongPressable>(other, (longPressable) =>
           {
-            if (longPressable.IsSelectable)
+            if (longPressable.IsSelectable && longPressable.IsLongPressable)
             {
               longPressTimers.Add(longPressable, 0);
             }
@@ -112,7 +108,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
           GetInteractable<ITappable>(other, (tappable) =>
           {
-            if (tappable.IsSelectable)
+            if (tappable.IsSelectable && tappable.IsTappable)
             {
               tapTimers.Add(tappable, 0);
             }
@@ -335,15 +331,15 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     // Methods
 
-    public void SetVisible(bool value)
+    public override void SetVisible(bool value)
     {
-      IsVisible = value;
+      base.SetVisible(value);
       renderer.enabled = IsVisible;
     }
 
-    public void SetActive(bool value)
+    public override void SetActive(bool value)
     {
-      IsActive = value;
+      base.SetActive(value);
       collider.enabled = IsActive;
     }
 

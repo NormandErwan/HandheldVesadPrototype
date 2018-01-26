@@ -35,11 +35,11 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         AddToRow(deviceController.ParticipantId);
         AddToRow(DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss.fff"));
 
-        AddToRow(grid.transform, false);
-        AddToRow(grid.LossyScale);
-        AddToRow(grid.IsConfigured);
-        AddToRow(grid.IsCompleted);
-        AddToRow(grid.DragToZoom);
+        AddToRow(taskGrid.transform, false);
+        AddToRow(taskGrid.LossyScale);
+        AddToRow(taskGrid.IsConfigured);
+        AddToRow(taskGrid.IsCompleted);
+        AddToRow(taskGrid.DragToZoom);
 
         AddToRow(panning);
         AddToRow(panningTranslation);
@@ -134,15 +134,15 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       base.Configure();
     }
 
-    protected override void Grid_Configured()
+    protected override void TaskGrid_Configured()
     {
     }
 
-    protected override void Grid_Completed()
+    protected override void TaskGrid_Completed()
     {
     }
 
-    protected override void Grid_ItemSelected(Container container, Item item)
+    protected override void TaskGrid_ItemSelected(Container container, Item item)
     {
       if (item.IsSelected)
       {
@@ -156,10 +156,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       }
     }
 
-    protected override void Grid_ItemMoved(Container oldContainer, Container newContainer, Item item, Experiment.Task.Grid.ItemMovedType moveType)
+    protected override void TaskGrid_ItemMoved(Container oldContainer, Container newContainer, Item item, TaskGrid.ItemMovedType moveType)
     {
       itemMoved = true;
-      if (moveType == Experiment.Task.Grid.ItemMovedType.Classified)
+      if (moveType == TaskGrid.ItemMovedType.Classified)
       {
         itemClassified = true;
       }
@@ -167,32 +167,32 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       selectedItem = item;
     }
 
-    protected override void Grid_DraggingStarted(IDraggable grid)
+    protected override void TaskGrid_DraggingStarted(IDraggable grid)
     {
     }
 
-    protected override void Grid_Dragging(IDraggable grid, Vector3 translation)
+    protected override void TaskGrid_Dragging(IDraggable grid, Vector3 translation)
     {
       panning = true;
       panningTranslation = translation;
     }
 
-    protected override void Grid_DraggingStopped(IDraggable grid)
+    protected override void TaskGrid_DraggingStopped(IDraggable grid)
     {
     }
 
-    protected override void Grid_ZoomingStarted(IZoomable grid)
+    protected override void TaskGrid_ZoomingStarted(IZoomable grid)
     {
     }
 
-    protected override void Grid_Zooming(IZoomable grid, Vector3 scaling, Vector3 translation)
+    protected override void TaskGrid_Zooming(IZoomable grid, Vector3 scaling, Vector3 translation)
     {
       zooming = true;
       zoomingScaling = scaling;
       zoomingTranslation = translation;
     }
 
-    protected override void Grid_ZoomingStopped(IZoomable grid)
+    protected override void TaskGrid_ZoomingStopped(IZoomable grid)
     {
     }
 
@@ -204,7 +204,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       }
       else
       {
-        var position = grid.GetPosition(container);
+        var position = taskGrid.GetPosition(container);
         AddToRow("(" + position.x + ", " + position.y + ")");
       }
     }

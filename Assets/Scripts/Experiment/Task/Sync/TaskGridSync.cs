@@ -5,21 +5,21 @@ using UnityEngine.Networking;
 
 namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 {
-  public class GridSync : DevicesSync
+  public class TaskGridSync : DevicesSync
   {
     // Editor fields
 
     [SerializeField]
-    private Grid grid;
+    private TaskGrid taskGrid;
 
     // Properties
     
-    public Grid Grid { get { return grid; } set { grid = value; } }
+    public TaskGrid TaskGrid { get { return taskGrid; } set { taskGrid = value; } }
 
     // Variables
 
-    protected GridSyncConfigureMessage gridConfigureMessage;
-    protected GridSyncEventsMessage gridEventsMessage;
+    protected TaskGridSyncConfigureMessage gridConfigureMessage;
+    protected TaskGridSyncEventsMessage gridEventsMessage;
 
     // MonoBehaviour methods
 
@@ -27,11 +27,11 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
     {
       base.Awake();
 
-      gridConfigureMessage = new GridSyncConfigureMessage(Grid, () =>
+      gridConfigureMessage = new TaskGridSyncConfigureMessage(TaskGrid, () =>
       {
         SendToServer(gridConfigureMessage, Channels.DefaultReliable);
       });
-      gridEventsMessage = new GridSyncEventsMessage(Grid, () =>
+      gridEventsMessage = new TaskGridSyncEventsMessage(TaskGrid, () =>
       {
         SendToServer(gridEventsMessage, Channels.DefaultReliable);
       });
@@ -58,17 +58,17 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
     {
       if (!onClient || (onClient && !isServer))
       {
-        GridSyncConfigureMessage gridConfigureReceived;
+        TaskGridSyncConfigureMessage gridConfigureReceived;
         if (TryReadMessage(netMessage, gridConfigureMessage.MessageType, out gridConfigureReceived))
         {
-          gridConfigureReceived.ConfigureGrid(Grid);
+          gridConfigureReceived.ConfigureGrid(TaskGrid);
           return gridConfigureReceived;
         }
 
-        GridSyncEventsMessage gridEventsReceived;
+        TaskGridSyncEventsMessage gridEventsReceived;
         if (TryReadMessage(netMessage, gridEventsMessage.MessageType, out gridEventsReceived))
         {
-          gridEventsReceived.SyncGrid(Grid);
+          gridEventsReceived.SyncGrid(TaskGrid);
           return gridEventsReceived;
         }
       }

@@ -3,25 +3,25 @@ using System;
 
 namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 {
-  public class GridSyncConfigureMessage : DevicesSyncMessage
+  public class TaskGridSyncConfigureMessage : DevicesSyncMessage
   {
     // Constructors and destructor
 
-    public GridSyncConfigureMessage(Grid grid, Action sendToServer) : base()
+    public TaskGridSyncConfigureMessage(TaskGrid taskGrid, Action sendToServer) : base()
     {
-      Grid = grid;
+      TaskGrid = taskGrid;
       SendToServer = sendToServer;
 
-      grid.ConfigureSync += Grid_ConfigureSync;
+      taskGrid.ConfigureSync += TaskGrid_ConfigureSync;
     }
 
-    public GridSyncConfigureMessage() : base()
+    public TaskGridSyncConfigureMessage() : base()
     {
     }
 
-    ~GridSyncConfigureMessage()
+    ~TaskGridSyncConfigureMessage()
     {
-      Grid.ConfigureSync -= Grid_ConfigureSync;
+      TaskGrid.ConfigureSync -= TaskGrid_ConfigureSync;
     }
 
     // Properties
@@ -29,8 +29,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
     public override int SenderConnectionId { get { return senderConnectionId; } set { senderConnectionId = value; } }
     public override short MessageType { get { return MasterThesis.Experiment.MessageType.GridConfigure; } }
 
-    protected Grid Grid { get; }
-    protected Action SendToServer { get; }
+    protected TaskGrid TaskGrid { get; private set; }
+    protected Action SendToServer { get; private set; }
 
     // Variables
 
@@ -41,7 +41,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 
     // Methods
 
-    public void ConfigureGrid(Grid grid)
+    public void ConfigureGrid(TaskGrid grid)
     {
       var containers = new GridGenerator.Container[rowsNumber, columnsNumber];
       IterateContainers(rowsNumber, columnsNumber, itemsPerContainer, (row, col, itemIndex, valueIndex) =>
@@ -57,7 +57,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       grid.SetConfiguration(gridGenerator);
     }
 
-    protected void Grid_ConfigureSync(GridGenerator gridGenerator)
+    protected void TaskGrid_ConfigureSync(GridGenerator gridGenerator)
     {
       columnsNumber = gridGenerator.ColumnsNumber;
       rowsNumber = gridGenerator.RowsNumber;

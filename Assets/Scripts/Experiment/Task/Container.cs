@@ -6,7 +6,7 @@ using UnityEngine;
 namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 {
   [RequireComponent(typeof(BoxCollider))]
-  public class Container : Grid<Container, Item>, IFocusable, ILongPressable
+  public class Container : Grid<Container, Item>, IFocusable, ILongPressable, ITappable
   {
     // Editor fields
 
@@ -29,6 +29,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public bool IsSelectable { get; protected set; }
     public bool IsSelected { get; protected set; }
 
+    public bool IsLongPressable { get; protected set; }
+    public bool IsTappable { get; protected set; }
+
     // Properties
 
     public ItemClass ItemClass { get; set; }
@@ -44,6 +47,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public event Action<ISelectable> Selected = delegate { };
     public event Action<Container> Selected2 = delegate { };
 
+    public event Action<ILongPressable> LongPressable = delegate { };
+    public event Action<ITappable> Tappable = delegate { };
+
     // Variables
 
     protected new BoxCollider collider;
@@ -58,10 +64,10 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
       collider = GetComponent<BoxCollider>();
 
-      SetInteractable(true);
-      SetFocused(false);
       SetSelectable(true);
-      SetSelected(false);
+      SetLongPressable(false);
+      SetTappable(false);
+      UpdateBackground();
     }
 
     // GridLayoutController methods
@@ -98,38 +104,68 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public void SetInteractable(bool value)
     {
-      IsInteractable = value;
-      Interactable(this);
+      if (IsInteractable != value)
+      {
+        IsInteractable = value;
+        Interactable(this);
+      }
     }
 
     public void SetFocused(bool value)
     {
-      IsFocused = value;
-      Focused(this);
-
-      focusedItems = 0;
-      foreach (var item in Elements)
+      if (IsFocused != value)
       {
-        if (item.IsFocused)
+        IsFocused = value;
+        Focused(this);
+
+        focusedItems = 0;
+        foreach (var item in Elements)
         {
-          focusedItems++;
+          if (item.IsFocused)
+          {
+            focusedItems++;
+          }
         }
+        UpdateBackground();
       }
-      UpdateBackground();
     }
 
     public void SetSelectable(bool value)
     {
-      IsSelectable = value;
-      Selectable(this);
+      if (IsSelectable != value)
+      {
+        IsSelectable = value;
+        Selectable(this);
+      }
     }
 
     public void SetSelected(bool value)
     {
-      IsSelected = value;
-      Selected(this);
-      Selected2(this);
-      IsSelected = false;
+      if (value == true)
+      {
+        IsSelected = value;
+        Selected(this);
+        Selected2(this);
+        IsSelected = false;
+      }
+    }
+
+    public void SetLongPressable(bool value)
+    {
+      if (IsLongPressable != value)
+      {
+        IsLongPressable = value;
+        LongPressable(this);
+      }
+    }
+
+    public void SetTappable(bool value)
+    {
+      if (IsTappable != value)
+      {
+        IsTappable = value;
+        Tappable(this);
+      }
     }
 
     // Methods

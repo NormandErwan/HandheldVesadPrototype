@@ -6,7 +6,7 @@ using UnityEngine;
 namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 {
   [RequireComponent(typeof(SphereCollider))]
-  public class Item : MonoBehaviour, IGridElement<Item>, IFocusable, ILongPressable
+  public class Item : MonoBehaviour, IGridElement<Item>, IFocusable, ILongPressable, ITappable
   {
     // Editor fields
 
@@ -59,6 +59,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public bool IsSelectable { get; protected set; }
     public bool IsSelected { get; protected set; }
 
+    public bool IsLongPressable { get; protected set; }
+    public bool IsTappable { get; protected set; }
+
     // Properties
 
     public ItemClass ItemClass
@@ -100,6 +103,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public event Action<ISelectable> Selected = delegate { };
     public event Action<Item> Selected2 = delegate { };
 
+    public event Action<ILongPressable> LongPressable = delegate { };
+    public event Action<ITappable> Tappable = delegate { };
+
     // Variables
 
     protected Renderer itemClassTextRenderer;
@@ -111,8 +117,11 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     protected virtual void Awake()
     {
       Collider = GetComponent<SphereCollider>();
-      SetInteractable(false);
-      SetSelectable(false);
+
+      SetSelectable(true);
+      SetLongPressable(false);
+      SetTappable(false);
+      UpdateBackground();
     }
 
     // Interfaces methods
@@ -124,21 +133,30 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public void SetInteractable(bool value)
     {
-      IsInteractable = value;
-      Interactable(this);
+      if (IsInteractable != value)
+      {
+        IsInteractable = value;
+        Interactable(this);
+      }
     }
 
     public void SetFocused(bool value)
     {
-      IsFocused = value;
-      Focused(this);
-      UpdateBackgroundMaterial();
+      if (IsFocused != value)
+      {
+        IsFocused = value;
+        Focused(this);
+        UpdateBackground();
+      }
     }
 
     public void SetSelectable(bool value)
     {
-      IsSelectable = value;
-      Selectable(this);
+      if (IsSelectable != value)
+      {
+        IsSelectable = value;
+        Selectable(this);
+      }
     }
 
     public void SetSelected(bool value)
@@ -146,7 +164,45 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       IsSelected = value;
       Selected(this);
       Selected2(this);
+      UpdateBackground();
+    }
 
+    public void SetLongPressable(bool value)
+    {
+      if (IsLongPressable != value)
+      {
+        IsLongPressable = value;
+        LongPressable(this);
+      }
+    }
+
+    public void SetTappable(bool value)
+    {
+      if (IsTappable != value)
+      {
+        IsTappable = value;
+        Tappable(this);
+      }
+    }
+
+    // Methods
+
+    public virtual void Configure()
+    {
+      border.transform.localScale = new Vector3(Scale.x, Scale.y, 1f);
+
+      Collider.center = Vector3.zero;
+      Collider.radius = 0.5f * Scale.x;
+    }
+
+    public void SetCorrectlyClassified(bool value)
+    {
+      CorrectlyClassified = value;
+      UpdateBackground();
+    }
+
+    protected virtual void UpdateBackground()
+    {
       if (IsSelected)
       {
         border.material = borderMaterial_Selected;
@@ -157,34 +213,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         border.material = borderMaterial;
         background.transform.localScale = new Vector3(Scale.x - 2 * borderMargins, Scale.y - 2 * borderMargins, 1f);
       }
-    }
 
-    // Methods
-
-    public virtual void Configure()
-    {
-      // Configure the border
-      border.transform.localScale = new Vector3(Scale.x, Scale.y, 1f);
-
-      // Configure the collider
-      Collider.center = Vector3.zero;
-      Collider.radius = 0.5f * Scale.x;
-
-      // Configure interactions
-      SetInteractable(true);
-      SetFocused(false);
-      SetSelectable(true);
-      SetSelected(false);
-    }
-
-    public void SetCorrectlyClassified(bool value)
-    {
-      CorrectlyClassified = value;
-      UpdateBackgroundMaterial();
-    }
-
-    protected virtual void UpdateBackgroundMaterial()
-    {
       if (CorrectlyClassified)
       {
         background.material = (IsFocused) ? correctlyClassifiedMaterial_Focused : correctlyClassifiedMaterial;

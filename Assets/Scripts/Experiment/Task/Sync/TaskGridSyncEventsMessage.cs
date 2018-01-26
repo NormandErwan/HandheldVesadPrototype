@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 {
-  public class GridSyncEventsMessage : DevicesSyncMessage
+  public class TaskGridSyncEventsMessage : DevicesSyncMessage
   {
     public enum GridEvent
     {
@@ -19,39 +19,39 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 
     // Constructors and destructor
 
-    public GridSyncEventsMessage(Grid grid, Action sendToServer)
+    public TaskGridSyncEventsMessage(TaskGrid taskGrid, Action sendToServer)
     {
-      Grid = grid;
+      TaskGrid = taskGrid;
       SendToServer = sendToServer;
 
-      Grid.CompleteSync += Grid_CompleteSync;
+      TaskGrid.CompleteSync += TaskGrid_CompleteSync;
 
-      Grid.SetDraggingSync += Grid_SetDraggingSync;
-      Grid.DragSync += Grid_DragSync;
+      TaskGrid.SetDraggingSync += TaskGrid_SetDraggingSync;
+      TaskGrid.DragSync += TaskGrid_DragSync;
 
-      Grid.SetZoomingSync += Grid_SetZoomingSync;
-      Grid.ZoomSync += Grid_ZoomSync;
+      TaskGrid.SetZoomingSync += TaskGrid_SetZoomingSync;
+      TaskGrid.ZoomSync += TaskGrid_ZoomSync;
 
-      Grid.ItemSelectSync += Grid_ItemSelectSync;
-      Grid.ItemMoveSync += Grid_ItemMoveSync;
+      TaskGrid.ItemSelectSync += TaskGrid_ItemSelectSync;
+      TaskGrid.ItemMoveSync += TaskGrid_ItemMoveSync;
     }
 
-    public GridSyncEventsMessage()
+    public TaskGridSyncEventsMessage()
     {
     }
 
-    ~GridSyncEventsMessage()
+    ~TaskGridSyncEventsMessage()
     {
-      Grid.CompleteSync -= Grid_CompleteSync;
+      TaskGrid.CompleteSync -= TaskGrid_CompleteSync;
 
-      Grid.SetDraggingSync -= Grid_SetDraggingSync;
-      Grid.DragSync -= Grid_DragSync;
+      TaskGrid.SetDraggingSync -= TaskGrid_SetDraggingSync;
+      TaskGrid.DragSync -= TaskGrid_DragSync;
 
-      Grid.SetZoomingSync -= Grid_SetZoomingSync;
-      Grid.ZoomSync -= Grid_ZoomSync;
+      TaskGrid.SetZoomingSync -= TaskGrid_SetZoomingSync;
+      TaskGrid.ZoomSync -= TaskGrid_ZoomSync;
 
-      Grid.ItemSelectSync -= Grid_ItemSelectSync;
-      Grid.ItemMoveSync -= Grid_ItemMoveSync;
+      TaskGrid.ItemSelectSync -= TaskGrid_ItemSelectSync;
+      TaskGrid.ItemMoveSync -= TaskGrid_ItemMoveSync;
     }
 
     // Properties
@@ -59,8 +59,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
     public override int SenderConnectionId { get { return senderConnectionId; } set { senderConnectionId = value; } }
     public override short MessageType { get { return MasterThesis.Experiment.MessageType.GridEvents; } }
 
-    protected Grid Grid { get; }
-    protected Action SendToServer { get; }
+    protected TaskGrid TaskGrid { get; private set; }
+    protected Action SendToServer { get; private set; }
 
     // Variables
 
@@ -77,7 +77,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 
     // Methods
 
-    public void SyncGrid(Grid grid)
+    public void SyncGrid(TaskGrid grid)
     {
       if (gridEvent == GridEvent.Completed)
       {
@@ -114,34 +114,34 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       }
     }
 
-    protected virtual void Grid_CompleteSync()
+    protected virtual void TaskGrid_CompleteSync()
     {
       gridEvent = GridEvent.Completed;
       SendToServer();
     }
 
-    protected virtual void Grid_SetDraggingSync(bool isDragging)
+    protected virtual void TaskGrid_SetDraggingSync(bool isDragging)
     {
       this.isDragging = isDragging;
       gridEvent = GridEvent.SetDragging;
       SendToServer();
     }
 
-    protected virtual void Grid_DragSync(Vector3 translation)
+    protected virtual void TaskGrid_DragSync(Vector3 translation)
     {
       this.translation = translation;
       gridEvent = GridEvent.Dragged;
       SendToServer();
     }
 
-    protected virtual void Grid_SetZoomingSync(bool isZooming)
+    protected virtual void TaskGrid_SetZoomingSync(bool isZooming)
     {
       this.isZooming = isZooming;
       gridEvent = GridEvent.SetZooming;
       SendToServer();
     }
 
-    protected virtual void Grid_ZoomSync(Vector3 scaling, Vector3 translation)
+    protected virtual void TaskGrid_ZoomSync(Vector3 scaling, Vector3 translation)
     {
       this.scaling = scaling;
       this.translation = translation;
@@ -149,18 +149,18 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       SendToServer();
     }
 
-    protected virtual void Grid_ItemSelectSync(Item item)
+    protected virtual void TaskGrid_ItemSelectSync(Item item)
     {
-      var container = Grid.GetContainer(item);
-      containerPosition = Grid.GetPosition(container);
+      var container = TaskGrid.GetContainer(item);
+      containerPosition = TaskGrid.GetPosition(container);
       itemIndex = container.Elements.IndexOf(item);
       gridEvent = GridEvent.ItemSelected;
       SendToServer();
     }
 
-    protected virtual void Grid_ItemMoveSync(Container newContainer)
+    protected virtual void TaskGrid_ItemMoveSync(Container newContainer)
     {
-      containerPosition = Grid.GetPosition(newContainer);
+      containerPosition = TaskGrid.GetPosition(newContainer);
       gridEvent = GridEvent.ItemMoved;
       SendToServer();
     }

@@ -1,4 +1,5 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
+using NormandErwan.MasterThesis.Experiment.Experiment.Task;
 using NormandErwan.MasterThesis.Experiment.Inputs;
 using System;
 using System.Collections;
@@ -14,13 +15,13 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     private StateController stateController;
 
     [SerializeField]
-    private Experiment.Task.Grid grid;
+    private TaskGrid taskGrid;
 
     // Properties
 
     public StateController StateController { get { return stateController; } set { stateController = value; } }
-    public Experiment.Task.Grid Grid { get { return grid; } set { grid = value; } }
-    public virtual CursorsInput CursorsInput { get; }
+    public TaskGrid TaskGrid { get { return taskGrid; } set { taskGrid = value; } }
+    public virtual CursorsInput CursorsInput { get { return null; } }
 
     public int ParticipantId { get; protected set; }
     public int ConditionsOrdering { get; protected set; }
@@ -39,13 +40,13 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       StateController.CurrentStateUpdated += StateController_CurrentStateUpdated;
 
-      Grid.Configured += Grid_Configured;
-      Grid.Completed += Grid_Completed;
+      TaskGrid.Configured += TaskGrid_Configured;
+      TaskGrid.Completed += TaskGrid_Completed;
     }
 
     protected virtual void Start()
     {
-      Grid.Show(false);
+      TaskGrid.Show(false);
     }
 
     // TODO: remove, for debug testing only
@@ -58,9 +59,9 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       }
       if (Input.GetKeyUp(KeyCode.N))
       {
-        if (Grid.IsConfigured)
+        if (TaskGrid.IsConfigured)
         {
-          Grid.SetCompleted();
+          TaskGrid.SetCompleted();
         }
         StateController.NextState();
       }
@@ -70,22 +71,22 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       }
       if (Input.GetKeyUp(KeyCode.C))
       {
-        Grid.Configure();
+        TaskGrid.Configure();
       }
       if (Input.GetKeyUp(KeyCode.Space))
       {
-        if (Grid.IsConfigured)
+        if (TaskGrid.IsConfigured)
         {
-          Grid.SetCompleted();
+          TaskGrid.SetCompleted();
         }
         StateController.NextState();
         OnActivateTaskSync();
-        Grid.Configure();
+        TaskGrid.Configure();
       }
 
       if (Input.GetKeyUp(KeyCode.Z))
       {
-        OnSetDragToZoomSync(!Grid.DragToZoom);
+        OnSetDragToZoomSync(!TaskGrid.DragToZoom);
       }
     }
 
@@ -93,8 +94,8 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       StateController.CurrentStateUpdated -= StateController_CurrentStateUpdated;
 
-      Grid.Configured -= Grid_Configured;
-      Grid.Completed -= Grid_Completed;
+      TaskGrid.Configured -= TaskGrid_Configured;
+      TaskGrid.Completed -= TaskGrid_Completed;
     }
 
     // Methods
@@ -113,21 +114,21 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     public virtual void SetDragToZoom(bool activated)
     {
-      Grid.DragToZoom = activated;
+      TaskGrid.DragToZoom = activated;
     }
 
     protected virtual void StateController_CurrentStateUpdated(State currentState)
     {
-      Grid.Show(false);
+      TaskGrid.Show(false);
       SetDragToZoom(false);
     }
 
-    protected virtual void Grid_Configured()
+    protected virtual void TaskGrid_Configured()
     {
-      Grid.Show(true);
+      TaskGrid.Show(true);
     }
 
-    protected virtual void Grid_Completed()
+    protected virtual void TaskGrid_Completed()
     {
     }
 
