@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace NormandErwan.MasterThesis.Experiment.Inputs.Interactables
+﻿namespace NormandErwan.MasterThesis.Experiment.Inputs.Interactables
 {
   public interface ICursor
   {
@@ -9,6 +7,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Interactables
     CursorType Type { get; }
     bool IsActive { get; }
     bool IsVisible { get; }
+    bool IsRightHanded { get; }
 
     // Methods
 

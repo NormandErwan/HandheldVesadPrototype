@@ -61,10 +61,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         AddToRow(Thumb.IsVisible);
         AddToRow(Thumb.transform, false);
 
-        AddToRow(ProjectedIndex.IsActive);
+        AddToRow(ProjectedIndex.IsVisible);
         AddToRow(ProjectedIndex.transform, false);
 
-        AddToRow(ProjectedThumb.IsActive);
+        AddToRow(ProjectedThumb.IsVisible);
         AddToRow(ProjectedThumb.transform, false);
 
         AddToRow(head, false);

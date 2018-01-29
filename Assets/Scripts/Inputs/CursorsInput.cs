@@ -55,7 +55,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       }
     }
 
-    protected virtual void DeactivateCursors()
+    public virtual void DeactivateCursors()
     {
       foreach (var cursor in Cursors)
       {

@@ -8,8 +8,27 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     // ICursor properties
 
     public virtual CursorType Type { get; set; }
+
     public virtual bool IsActive { get; protected set; }
     public virtual bool IsVisible { get; protected set; }
+
+    public bool IsFinger { get { return Type != CursorType.Look; } }
+    public bool IsRightHanded
+    {
+      get
+      {
+        return Type == CursorType.RightThumb
+          || Type == CursorType.RightIndex
+          || Type == CursorType.RightMiddle
+          || Type == CursorType.RightPinky
+          || Type == CursorType.RightRing;
+      }
+    }
+    public bool IsThumb { get { return Type == CursorType.LeftThumb || Type == CursorType.RightThumb; } }
+    public bool IsIndex { get { return Type == CursorType.LeftIndex || Type == CursorType.RightIndex; } }
+    public bool IsMiddle { get { return Type == CursorType.LeftMiddle || Type == CursorType.RightMiddle; } }
+    public bool IsPinky { get { return Type == CursorType.LeftPinky || Type == CursorType.RightPinky; } }
+    public bool IsRing { get { return Type == CursorType.LeftRing || Type == CursorType.RightRing; } }
 
     // ICursor methods
 

@@ -35,32 +35,27 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     // Methods
 
-    protected virtual void Start()
+    protected virtual void Awake()
     {
-      SetActive(Cursor.IsActive);
+      SetVisible(false);
+      SetActive(true);
 
-      if (IsActive)
-      {
-        deviceController.CursorsInput.Updated += CursorsInput_Updated;
+      deviceController.CursorsInput.Updated += CursorsInput_Updated;
 
-        taskGrid = deviceController.TaskGrid;
-        taskGrid.Configured += TaskGrid_Configured;
-      }
+      taskGrid = deviceController.TaskGrid;
+      taskGrid.Configured += TaskGrid_Configured;
     }
 
     protected virtual void OnDestroy()
     {
-      if (IsActive)
-      {
-        deviceController.CursorsInput.Updated -= CursorsInput_Updated;
-        taskGrid.Configured -= TaskGrid_Configured;
-      }
+      deviceController.CursorsInput.Updated -= CursorsInput_Updated;
+      taskGrid.Configured -= TaskGrid_Configured;
     }
 
     protected virtual void CursorsInput_Updated()
     {
       IsVisible = false;
-      if (Cursor.gameObject.activeSelf && Cursor.IsVisible)
+      if (Cursor.gameObject.activeSelf && Cursor.IsActive && Cursor.IsVisible)
       {
         float cursorGridDistance = Vector3.Dot(Cursor.transform.position - taskGrid.transform.position, -taskGrid.transform.forward);
         transform.position = Cursor.transform.position + cursorGridDistance * taskGrid.transform.forward;
@@ -75,7 +70,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
         }
       }
 
-      SetActive(IsVisible);
+      SetVisible(IsVisible);
     }
 
     public override void SetVisible(bool value)

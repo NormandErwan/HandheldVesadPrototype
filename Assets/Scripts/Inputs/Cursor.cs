@@ -27,11 +27,6 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     public float MaxSelectableDistance { get; set; }
 
-    public bool IsFinger { get { return Type != CursorType.Look; } }
-    public bool IsIndex { get { return Type == CursorType.LeftIndex || Type == CursorType.RightIndex; } }
-    public bool IsThumb { get { return Type == CursorType.LeftThumb || Type == CursorType.RightThumb; } }
-    public bool IsMiddle { get { return Type == CursorType.LeftMiddle || Type == CursorType.RightMiddle; } }
-
     // Variables
 
     protected static Dictionary<ITransformable, Dictionary<Cursor, Vector3>> latestCursorPositions 
@@ -49,8 +44,8 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     {
       renderer = GetComponent<Renderer>();
       collider = GetComponent<Collider>();
-      SetVisible(false);
-      SetActive(false);
+      SetVisible(false); // Set by CursorsInput every frame
+      SetActive(false); // Set by DeviceController when TaskGrid is configured
     }
 
     protected virtual void OnTriggerEnter(Collider other)

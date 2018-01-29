@@ -604,7 +604,7 @@ MonoBehaviour:
   id: 1
   name: BIG
   title: Grand
-  fontSize: 56
+  fontSize: 48
 --- !u!114 &114784559623597272
 MonoBehaviour:
   m_ObjectHideFlags: 1

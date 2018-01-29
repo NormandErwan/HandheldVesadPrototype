@@ -130,6 +130,11 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     protected virtual void TaskGrid_Completed()
     {
+      if (CursorsInput != null)
+      {
+        CursorsInput.DeactivateCursors();
+        CursorsInput.enabled = false;
+      }
     }
 
     /// <summary>
@@ -168,6 +173,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
       yield return null;
       OnActivateTaskSync();
+      TaskGrid.Configure();
     }
   }
 }

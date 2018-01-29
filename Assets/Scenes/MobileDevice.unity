@@ -394,7 +394,7 @@ Prefab:
     - target: {fileID: 114230085306632826, guid: fbbef59b3dd39404ca1cd8b91b4498c2,
         type: 2}
       propertyPath: type
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fbbef59b3dd39404ca1cd8b91b4498c2, type: 2}
@@ -805,6 +805,14 @@ Prefab:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1204568640870374, guid: 1af7da660e405ea4d88d276210dfa5c0, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1068655420723030, guid: 1af7da660e405ea4d88d276210dfa5c0, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
   m_ParentPrefab: {fileID: 100100000, guid: 1af7da660e405ea4d88d276210dfa5c0, type: 2}
@@ -876,11 +884,6 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4222087900461476, guid: a3b64898f2954384a989df0bbfd40e80, type: 2}
       propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114102835371396286, guid: a3b64898f2954384a989df0bbfd40e80,
-        type: 2}
-      propertyPath: useLeapInput
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

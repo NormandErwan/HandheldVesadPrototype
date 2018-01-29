@@ -101,8 +101,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       base.StateController_CurrentStateUpdated(currentState);
 
-      touchFingerCursorsInput.enabled = false;
-
       if (currentState.ActivateTask)
       {
         mobileDeviceHUD.ShowOneButton(mobileDeviceHUD.ActivateTaskButton);

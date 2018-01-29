@@ -54,24 +54,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     // DeviceController methods
 
-    public override void Configure(int participantId, int conditionsOrdering, bool participantIsRightHanded)
-    {
-      base.Configure(participantId, conditionsOrdering, participantIsRightHanded);
-
-      if (ParticipantIsRightHanded)
-      {
-        leapFingerCursorsInput.Cursors.Remove(CursorType.LeftIndex);
-        leapFingerCursorsInput.Cursors.Remove(CursorType.LeftThumb);
-        leapFingerCursorsInput.Cursors[CursorType.RightThumb].gameObject.SetActive(false);
-      }
-      else
-      {
-        leapFingerCursorsInput.Cursors.Remove(CursorType.RightIndex);
-        leapFingerCursorsInput.Cursors.Remove(CursorType.RightThumb);
-        leapFingerCursorsInput.Cursors[CursorType.LeftThumb].gameObject.SetActive(false);
-      }
-    }
-
     public override void ActivateTask()
     {
       base.ActivateTask();
@@ -79,7 +61,9 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       leapFingerCursorsInput.enabled = true;
       foreach (var cursor in leapFingerCursorsInput.Cursors)
       {
-        cursor.Value.SetActive(technique.CurrentCondition.useLeapInput);
+        cursor.Value.SetActive(cursor.Value.IsIndex 
+          && technique.CurrentCondition.useLeapInput
+          && (ParticipantIsRightHanded == cursor.Value.IsRightHanded));
       }
 
       hmdDeviceHUD.ShowContent(false);
@@ -88,8 +72,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     protected override void StateController_CurrentStateUpdated(State currentState)
     {
       base.StateController_CurrentStateUpdated(currentState);
-
-      leapFingerCursorsInput.enabled = false;
 
       hmdDeviceHUD.ShowContent(true);
       hmdDeviceHUD.UpdateInstructionsProgress(StateController);
