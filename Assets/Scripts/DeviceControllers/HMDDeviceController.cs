@@ -1,7 +1,7 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
+using NormandErwan.MasterThesis.Experiment.Experiment.Task;
 using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
 using NormandErwan.MasterThesis.Experiment.Inputs;
-using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using NormandErwan.MasterThesis.Experiment.UI.HUD;
 using UnityEngine;
 
@@ -10,6 +10,9 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
   public class HMDDeviceController : DeviceController
   {
     // Editor fields
+
+    [SerializeField]
+    private TaskGridMasks taskGridMasks;
 
     [SerializeField]
     private HMDDeviceHUD hmdDeviceHUD;
@@ -75,6 +78,18 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
       hmdDeviceHUD.ShowContent(true);
       hmdDeviceHUD.UpdateInstructionsProgress(StateController);
+    }
+
+    protected override void TaskGrid_Configured()
+    {
+      base.TaskGrid_Configured();
+      taskGridMasks.Configure(!technique.CurrentCondition.showTaskGridOnlyOnMobileDevice);
+    }
+
+    protected override void TaskGrid_Completed()
+    {
+      base.TaskGrid_Completed();
+      taskGridMasks.Hide();
     }
   }
 }

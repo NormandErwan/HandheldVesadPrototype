@@ -30,6 +30,7 @@ namespace NormandErwan.MasterThesis.Experiment.UI.Grid
 
     public GameObject GameObject { get { return gameObject; } }
     public Vector2 Scale { get; set; }
+    public Vector3 LossyScale { get { return Vector3.Scale(Scale, transform.lossyScale); } }
     public Vector2 Margin { get; set; }
 
     public Vector2Int GridSize { get { return gridSize; } set { gridSize = value; } }

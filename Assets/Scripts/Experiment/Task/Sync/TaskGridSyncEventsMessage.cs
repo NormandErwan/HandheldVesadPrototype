@@ -77,39 +77,39 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 
     // Methods
 
-    public void SyncGrid(TaskGrid grid)
+    public void SyncGrid(TaskGrid taskGrid)
     {
       if (gridEvent == GridEvent.Completed)
       {
-        grid.SetCompleted();
+        taskGrid.SetCompleted();
       }
       else if (gridEvent == GridEvent.SetDragging)
       {
-        grid.SetDragged(isDragging);
+        taskGrid.SetDragged(isDragging);
       }
       else if (gridEvent == GridEvent.Dragged)
       {
-        grid.SetDragged(translation);
+        taskGrid.SetDragged(translation);
       }
       else if (gridEvent == GridEvent.SetZooming)
       {
-        grid.SetZoomed(isZooming);
+        taskGrid.SetZoomed(isZooming);
       }
       else if (gridEvent == GridEvent.Zoomed)
       {
-        grid.SetZoomed(scaling, translation);
+        taskGrid.SetZoomed(scaling, translation);
       }
       else
       {
-        var container = grid.At(new Vector2Int((int)containerPosition.x, (int)containerPosition.y));
+        var container = taskGrid.At(new Vector2Int((int)containerPosition.x, (int)containerPosition.y));
         if (gridEvent == GridEvent.ItemSelected)
         {
           var item = container.Elements[itemIndex];
-          grid.SetItemSelected(item, container);
+          taskGrid.SetItemSelected(item, container);
         }
         else if (gridEvent == GridEvent.ItemMoved)
         {
-          grid.SetItemMoved(container);
+          taskGrid.SetItemMoved(container);
         }
       }
     }
@@ -118,6 +118,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
     {
       gridEvent = GridEvent.Completed;
       SendToServer();
+
+      TaskGrid.SetCompleted();
     }
 
     protected virtual void TaskGrid_SetDraggingSync(bool isDragging)
@@ -125,6 +127,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       this.isDragging = isDragging;
       gridEvent = GridEvent.SetDragging;
       SendToServer();
+
+      TaskGrid.SetDragged(isDragging);
     }
 
     protected virtual void TaskGrid_DragSync(Vector3 translation)
@@ -132,6 +136,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       this.translation = translation;
       gridEvent = GridEvent.Dragged;
       SendToServer();
+
+      TaskGrid.SetDragged(translation);
     }
 
     protected virtual void TaskGrid_SetZoomingSync(bool isZooming)
@@ -139,6 +145,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       this.isZooming = isZooming;
       gridEvent = GridEvent.SetZooming;
       SendToServer();
+
+      TaskGrid.SetZoomed(isZooming);
     }
 
     protected virtual void TaskGrid_ZoomSync(Vector3 scaling, Vector3 translation)
@@ -147,6 +155,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       this.translation = translation;
       gridEvent = GridEvent.Zoomed;
       SendToServer();
+
+      TaskGrid.SetZoomed(scaling, translation);
     }
 
     protected virtual void TaskGrid_ItemSelectSync(Item item)
@@ -156,13 +166,17 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       itemIndex = container.Elements.IndexOf(item);
       gridEvent = GridEvent.ItemSelected;
       SendToServer();
+
+      TaskGrid.SetItemSelected(item, container);
     }
 
-    protected virtual void TaskGrid_ItemMoveSync(Container newContainer)
+    protected virtual void TaskGrid_ItemMoveSync(Container container)
     {
-      containerPosition = TaskGrid.GetPosition(newContainer);
+      containerPosition = TaskGrid.GetPosition(container);
       gridEvent = GridEvent.ItemMoved;
       SendToServer();
+
+      TaskGrid.SetItemMoved(container);
     }
   }
 }

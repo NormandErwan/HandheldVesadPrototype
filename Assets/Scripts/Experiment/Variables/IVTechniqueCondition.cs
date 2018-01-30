@@ -12,5 +12,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Variables
     public bool useLeapInput;
 
     public bool useTouchInput;
+
+    public bool showTaskGridOnlyOnMobileDevice;
   }
 }

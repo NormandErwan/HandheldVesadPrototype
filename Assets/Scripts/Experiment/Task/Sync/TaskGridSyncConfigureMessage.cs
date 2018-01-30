@@ -41,7 +41,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 
     // Methods
 
-    public void ConfigureGrid(TaskGrid grid)
+    public void ConfigureGrid(TaskGrid taskGrid)
     {
       var containers = new GridGenerator.Container[rowsNumber, columnsNumber];
       IterateContainers(rowsNumber, columnsNumber, itemsPerContainer, (row, col, itemIndex, valueIndex) =>
@@ -54,7 +54,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       });
 
       var gridGenerator = new GridGenerator(containers, incorrectContainersNumber);
-      grid.SetConfiguration(gridGenerator);
+      taskGrid.SetConfiguration(gridGenerator);
     }
 
     protected void TaskGrid_ConfigureSync(GridGenerator gridGenerator)

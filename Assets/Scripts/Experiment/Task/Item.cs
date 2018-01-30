@@ -162,9 +162,10 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public void SetSelected(bool value)
     {
       IsSelected = value;
+      UpdateBackground();
+
       Selected(this);
       Selected2(this);
-      UpdateBackground();
     }
 
     public void SetLongPressable(bool value)

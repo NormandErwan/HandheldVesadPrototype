@@ -436,6 +436,7 @@ MonoBehaviour:
     et d\xE9placer les disques."
   useLeapInput: 0
   useTouchInput: 1
+  showTaskGridOnlyOnMobileDevice: 1
 --- !u!114 &114158752525081080
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -471,6 +472,7 @@ MonoBehaviour:
     directement avec votre index."
   useLeapInput: 1
   useTouchInput: 0
+  showTaskGridOnlyOnMobileDevice: 0
 --- !u!114 &114303898851726862
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -538,6 +540,7 @@ MonoBehaviour:
     et d\xE9placer les disques."
   useLeapInput: 0
   useTouchInput: 1
+  showTaskGridOnlyOnMobileDevice: 0
 --- !u!114 &114501037082189576
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -573,6 +576,7 @@ MonoBehaviour:
   instructions: 
   useLeapInput: 0
   useTouchInput: 1
+  showTaskGridOnlyOnMobileDevice: 0
 --- !u!114 &114712957325740358
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -622,6 +626,7 @@ MonoBehaviour:
   instructions: 
   useLeapInput: 0
   useTouchInput: 0
+  showTaskGridOnlyOnMobileDevice: 0
 --- !u!114 &114940950492825338
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -4,13 +4,12 @@ using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using NormandErwan.MasterThesis.Experiment.UI.Grid;
 using NormandErwan.MasterThesis.Experiment.Utilities;
 using System;
-using System.Collections;
 using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 {
   [RequireComponent(typeof(BoxCollider))]
-  public class TaskGrid : Grid<TaskGrid, Container>, IDraggable, IZoomable
+  public class TaskGrid : Grid<TaskGrid, Container>, IFocusable, IDraggable, IZoomable
   {
     // Enums
 
@@ -39,6 +38,10 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     // Interfaces properties
 
     public bool IsInteractable { get; protected set; }
+
+    public bool IsFocusable { get; protected set; }
+    public bool IsFocused { get; protected set; }
+
     public bool IsDragging { get; protected set; }
     public bool IsZooming { get; protected set; }
 
@@ -53,13 +56,13 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public bool IsCompleted { get; protected set; }
     public int RemainingItemsToClassify { get; protected set; }
 
-    public Vector3 LossyScale { get { return Vector3.Scale(Scale, transform.lossyScale); } }
-
     public GridGenerator GridGenerator { get; protected set; }
 
     // Interfaces events
 
     public event Action<IInteractable> Interactable = delegate { };
+
+    public event Action<IFocusable> Focused = delegate { };
 
     public event Action<IDraggable> DraggingStarted = delegate { };
     public event Action<IDraggable, Vector3> Dragging = delegate { };
@@ -94,7 +97,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     protected new BoxCollider collider;
 
     protected Item selectedItem;
-    protected bool itemSelectedThisFrame = false;
+    protected bool ignoreNextItemSelected = false;
 
     protected IVTechnique technique;
     protected IVTextSize textSize;
@@ -107,14 +110,10 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       base.Awake();
 
       collider = GetComponent<BoxCollider>();
-
       PositionRange = new GenericVector3<Range<float>>(new Range<float>(), new Range<float>(), new Range<float>());
       ScaleRange = new GenericVector3<Range<float>>(new Range<float>(), new Range<float>(), new Range<float>());
 
-      SetInteractable(false);
-
       DragToZoom = false;
-
       IsConfigured = false;
       IsCompleted = false;
     }
@@ -125,17 +124,13 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       textSize = stateController.GetIndependentVariable<IVTextSize>();
       classificationDifficulty = stateController.GetIndependentVariable<IVClassificationDifficulty>();
 
-      StartCoroutine(SetElementsInteractables(false));
+      SetInteractable(false);
+      SetElementsInteractables(false);
     }
-
-    protected virtual void LateUpdate()
-    {
-      itemSelectedThisFrame = false;
-    }
-
+    
     protected virtual void OnDestroy()
     {
-      UnsubscribeFromElements();
+      UnsubscribeFromElementEvents();
     }
 
     // Interfaces methods
@@ -151,6 +146,14 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       Interactable(this);
     }
 
+    public void SetFocused(bool value)
+    {
+      SetElementsInteractables(true);
+
+      IsFocused = value;
+      Focused(this);
+    }
+
     public Vector3 ProjectPosition(Vector3 position)
     {
       return Vector3.ProjectOnPlane(position, -transform.forward);
@@ -158,7 +161,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public void SetDragging(bool value)
     {
-      SetDragged(value);
       SetDraggingSync(value);
     }
 
@@ -181,7 +183,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
           DraggingStopped(this);
         }
       }
-      StartCoroutine(SetElementsInteractables(!IsDragging && !IsZooming));
+      SetElementsInteractables(false);
     }
 
     public void SetDragged(Vector3 translation)
@@ -192,7 +194,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public void SetZooming(bool value)
     {
-      SetZoomed(value);
       SetZoomingSync(value);
     }
 
@@ -215,7 +216,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
           ZoomingStopped(this);
         }
       }
-      StartCoroutine(SetElementsInteractables(!IsDragging && !IsZooming));
+      SetElementsInteractables(false);
     }
 
     public void SetZoomed(Vector3 scaling, Vector3 translation)
@@ -313,7 +314,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       RemainingItemsToClassify = gridGenerator.IncorrectContainersNumber;
 
       SetInteractable(false);
-      StartCoroutine(SetElementsInteractables(false));
+      SetElementsInteractables(false);
 
       IsConfigured = false;
       IsCompleted = false;
@@ -322,7 +323,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       transform.localScale = scaleFactor * Vector3.one; // Scales the canvas as it's in world reference
 
       // Configure the grid
-      UnsubscribeFromElements();
+      UnsubscribeFromElementEvents();
       Clean();
       base.Configure();
       Display();
@@ -358,7 +359,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
       // Update grid state
       SetInteractable(true);
-      StartCoroutine(SetElementsInteractables(true));
+      SetElementsInteractables(true);
 
       IsConfigured = true;
       Configured();
@@ -366,8 +367,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     internal virtual void SetCompleted()
     {
-      StartCoroutine(SetElementsInteractables(false));
       SetInteractable(false);
+      SetElementsInteractables(false);
 
       IsCompleted = true;
       Completed();
@@ -375,27 +376,29 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     internal virtual void SetItemSelected(Item item, Container container)
     {
-      itemSelectedThisFrame = true;
-
       // Deselect the previous selected item
-      var oldSelectedItem = selectedItem;
+      var previousSelectedItem = selectedItem;
       if (selectedItem != null)
       {
         selectedItem = null;
-        oldSelectedItem.SetSelected(false);
-        ItemSelected(container, oldSelectedItem);
+        ignoreNextItemSelected = true;
+        previousSelectedItem.SetSelected(false);
+        ItemSelected(container, previousSelectedItem);
       }
 
       // Update selectedItem with the new item
-      if (oldSelectedItem != item)
+      if (item != previousSelectedItem)
       {
+        selectedItem = item;
         if (!item.IsSelected)
         {
+          ignoreNextItemSelected = true;
           item.SetSelected(true);
         }
-        selectedItem = item;
         ItemSelected(container, selectedItem);
       }
+
+      SetElementsInteractables(false);
     }
 
     internal virtual void SetItemMoved(Container newContainer)
@@ -424,9 +427,11 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         ItemMoved(previousContainer, previousContainer, selectedItem, ItemMovedType.Error);
         SetItemSelected(selectedItem, previousContainer);
       }
+
+      SetElementsInteractables(false);
     }
 
-    protected virtual void UnsubscribeFromElements()
+    protected virtual void UnsubscribeFromElementEvents()
     {
       if (IsConfigured)
       {
@@ -443,16 +448,17 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     protected virtual void Item_Selected(Item item)
     {
-      if (!itemSelectedThisFrame)
+      if (ignoreNextItemSelected)
       {
-        itemSelectedThisFrame = true;
-        ItemSelectSync(item);
+        ignoreNextItemSelected = false;
+        return;
       }
+      ItemSelectSync(item);
     }
 
     protected virtual void Container_Selected(Container newContainer)
     {
-      if (selectedItem != null && !itemSelectedThisFrame) // NOTE: the item will be always selected before the container (see colliders)
+      if (selectedItem != null)
       {
         Container previousContainer = GetContainer(selectedItem);
         if (previousContainer != newContainer) // Move the item only if it's a different container
@@ -486,13 +492,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       }
     }
 
-    protected virtual IEnumerator SetElementsInteractables(bool value)
+    protected virtual void SetElementsInteractables(bool value)
     {
-      if (value == true)
-      {
-        yield return null; // wait a frame before reactivacting the containers and items
-      }
-
       foreach (var container in Elements)
       {
         container.SetInteractable(value);
@@ -500,7 +501,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         container.SetTappable(technique.CurrentCondition.useTouchInput);
         if (value == false)
         {
-          container.SetFocused(false); // Defocus
+          container.SetFocused(false); // Force defocus
         }
 
         foreach (var item in container.Elements)
@@ -510,7 +511,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
           item.SetTappable(technique.CurrentCondition.useTouchInput);
           if (value == false)
           {
-            item.SetFocused(false); // Defocus
+            item.SetFocused(false); // Force defocus
           }
         }
       }
