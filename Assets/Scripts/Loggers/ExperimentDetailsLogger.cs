@@ -39,7 +39,8 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         AddToRow(taskGrid.LossyScale);
         AddToRow(taskGrid.IsConfigured);
         AddToRow(taskGrid.IsCompleted);
-        AddToRow(taskGrid.DragToZoom);
+        AddToRow((int)taskGrid.Mode);
+        AddToRow(GetTaskGridModeName());
 
         AddToRow(panning);
         AddToRow(panningTranslation);
@@ -68,7 +69,8 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         AddToRow(ProjectedThumb.transform, false);
 
         AddToRow(head, false);
-        AddToRow(mobileDevice, false);
+        AddToRow(mobileDevice.IsTracking);
+        AddToRow(mobileDevice.transform, false);
 
         WriteRow();
 
@@ -102,7 +104,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       Columns = new List<string>() { "frame_id", "participant_id", "date_time" };
 
       AddTransformToColumns("grid");
-      Columns.AddRange(new string[] { "grid_is_configured", "grid_is_completed", "zoom_button_is_pressed" });
+      Columns.AddRange(new string[] {
+        "grid_is_configured", "grid_is_completed",
+        "grid_mode", "grid_mode_name"
+      });
 
       Columns.Add("panning");
       AddVector3ToColumns("panning_translation");
@@ -112,7 +117,8 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       AddVector3ToColumns("zooming_translation");
 
       Columns.AddRange(new string[] {
-        "item_selected", "item_deselected", "item_moved", "item_classified",
+        "item_selected", "item_deselected",
+        "item_moved", "item_classified",
         "selected_container", "selected_item"
       });
 
@@ -129,6 +135,8 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       AddTransformToColumns("projected_thumb", false);
 
       AddTransformToColumns("head", false);
+
+      Columns.Add("phone_tracked");
       AddTransformToColumns("phone", false);
 
       base.Configure();
@@ -212,6 +220,17 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     protected virtual void AddToRow(Item item)
     {
       AddToRow((item == null) ? "" : selectedContainer.Elements.IndexOf(item).ToString());
+    }
+
+    protected virtual string GetTaskGridModeName()
+    {
+      switch (taskGrid.Mode)
+      {
+        case TaskGrid.InteractionMode.Select: return "select";
+        case TaskGrid.InteractionMode.Pan: return "pan";
+        case TaskGrid.InteractionMode.Zoom: return "zoom";
+        default: return "all"; // Possibilities are only one mode activated or all of them
+      }
     }
   }
 }

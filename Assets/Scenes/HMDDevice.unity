@@ -469,6 +469,12 @@ Transform:
   m_PrefabParentObject: {fileID: 4983984577677870, guid: 9b75a8a0bd521bb4a9d36aaf3742d21b,
     type: 2}
   m_PrefabInternal: {fileID: 1786725734}
+--- !u!114 &362882268 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114825696479755494, guid: 0e9e3a1020f3b0d408719d087b17f487,
+    type: 2}
+  m_PrefabInternal: {fileID: 1251841889}
+  m_Script: {fileID: 11500000, guid: 675d9d5c8a748184aa566f00720fa43e, type: 3}
 --- !u!1001 &384991605
 Prefab:
   m_ObjectHideFlags: 0
@@ -803,12 +809,12 @@ Prefab:
         type: 2}
       propertyPath: mobileDevice
       value: 
-      objectReference: {fileID: 1722598758}
+      objectReference: {fileID: 362882268}
     - target: {fileID: 114755104426687954, guid: 8658a426d2cdf00469db7cc976cefe9c,
         type: 2}
       propertyPath: mobileDevice
       value: 
-      objectReference: {fileID: 1722598758}
+      objectReference: {fileID: 362882268}
     - target: {fileID: 114755104426687954, guid: 8658a426d2cdf00469db7cc976cefe9c,
         type: 2}
       propertyPath: index
@@ -1285,7 +1291,7 @@ Prefab:
     - target: {fileID: 114825696479755494, guid: 0e9e3a1020f3b0d408719d087b17f487,
         type: 2}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0e9e3a1020f3b0d408719d087b17f487, type: 2}
@@ -1725,7 +1731,7 @@ Prefab:
     - target: {fileID: 224280364903364314, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 224280364903364314, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
@@ -1735,7 +1741,7 @@ Prefab:
     - target: {fileID: 224280364903364314, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 17.9
       objectReference: {fileID: 0}
     - target: {fileID: 224936207022536966, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
@@ -1755,12 +1761,12 @@ Prefab:
     - target: {fileID: 224936207022536966, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 15.7
       objectReference: {fileID: 0}
     - target: {fileID: 224538788333267750, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 48.600002
       objectReference: {fileID: 0}
     - target: {fileID: 224556241811007488, guid: b9264159c123e9f439134357a240dc36,
         type: 2}
@@ -2697,13 +2703,13 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114102835371396286, guid: a3b64898f2954384a989df0bbfd40e80,
         type: 2}
-      propertyPath: showTaskGridOnlyOnMobileDevice
-      value: 0
+      propertyPath: useLeapInput
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114102835371396286, guid: a3b64898f2954384a989df0bbfd40e80,
         type: 2}
-      propertyPath: useLeapInput
-      value: 1
+      propertyPath: showTaskGridOnlyOnMobileDevice
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114102835371396286, guid: a3b64898f2954384a989df0bbfd40e80,
         type: 2}

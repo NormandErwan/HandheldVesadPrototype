@@ -1,4 +1,5 @@
 ﻿using NormandErwan.MasterThesis.Experiment.DeviceControllers;
+using NormandErwan.MasterThesis.Experiment.Experiment;
 using NormandErwan.MasterThesis.Experiment.Experiment.States;
 using NormandErwan.MasterThesis.Experiment.Experiment.Task;
 using NormandErwan.MasterThesis.Experiment.Inputs;
@@ -15,7 +16,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     protected Transform head;
 
     [SerializeField]
-    protected Transform mobileDevice;
+    protected MobileDeviceTracking mobileDevice;
 
     [SerializeField]
     protected DeviceController deviceController;

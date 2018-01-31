@@ -17,6 +17,10 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment
     [Range(0.0f, 1.0f)]
     private float smoothTrackingWeigth = 0.01f;
 
+    // Properties
+
+    public bool IsTracking { get; protected set; }
+
     // Variables
 
     protected Vector3[] positionOffsets;
@@ -36,14 +40,14 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment
 
     protected virtual void LateUpdate()
     {
-      bool activated = false;
+      IsTracking = false;
       for (int i = 0; i < markers.Length; i++)
       {
         if (markers[i].gameObject.activeSelf)
         {
-          if (!activated)
+          if (!IsTracking)
           {
-            activated = true;
+            IsTracking = true;
             transform.position = markers[i].transform.position + positionOffsets[i];
             transform.rotation = markers[i].transform.rotation;
             break;
@@ -51,7 +55,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment
         }
       }
 
-      if (activated)
+      if (IsTracking)
       {
         // Smooth the rotation
         if (activatedPreviousFrame)
@@ -73,8 +77,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment
       }
       else
       {
-        transform.position = camera.transform.position - camera.transform.forward;
-        transform.rotation = camera.transform.rotation;
+        transform.position = new Vector3(transform.position.x, transform.position.y, -10f);
         activatedPreviousFrame = false;
       }
     }
