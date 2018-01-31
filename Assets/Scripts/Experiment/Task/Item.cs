@@ -190,7 +190,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public virtual void Configure()
     {
-      border.transform.localScale = new Vector3(Scale.x, Scale.y, 1f);
+      border.transform.localScale = new Vector3(Scale.x, Scale.y, 0);
 
       Collider.center = Vector3.zero;
       Collider.radius = 0.5f * Scale.x;
@@ -207,12 +207,12 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       if (IsSelected)
       {
         border.material = borderMaterial_Selected;
-        background.transform.localScale = new Vector3(Scale.x - 2 * borderMargins_Selected, Scale.y - 2 * borderMargins_Selected, 1f);
+        background.transform.localScale = new Vector3(Scale.x - 2 * borderMargins_Selected, Scale.y - 2 * borderMargins_Selected, 0);
       }
       else
       {
         border.material = borderMaterial;
-        background.transform.localScale = new Vector3(Scale.x - 2 * borderMargins, Scale.y - 2 * borderMargins, 1f);
+        background.transform.localScale = new Vector3(Scale.x - 2 * borderMargins, Scale.y - 2 * borderMargins, 0);
       }
 
       if (CorrectlyClassified)
