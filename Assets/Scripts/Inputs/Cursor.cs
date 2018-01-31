@@ -64,51 +64,54 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       {
         GetInteractable<ITransformable>(other, (transformable) =>
         {
-          if (!latestCursorPositions.ContainsKey(transformable))
+          if (transformable.IsTransformable)
           {
-            latestCursorPositions.Add(transformable, new Dictionary<Cursor, Vector3>());
+            if (!latestCursorPositions.ContainsKey(transformable))
+            {
+              latestCursorPositions.Add(transformable, new Dictionary<Cursor, Vector3>());
+            }
+            latestCursorPositions[transformable][this] = transform.position;
           }
-          latestCursorPositions[transformable][this] = transform.position;
         });
 
         GetInteractable<IZoomable>(other, (zoomable) =>
         {
-          if (latestCursorPositions[zoomable].Count == 2 && !zoomable.DragToZoom && !zoomable.IsZooming)
+          if (zoomable.IsTransformable)
           {
-            zoomable.SetZooming(true);
-          }
-          else if (latestCursorPositions[zoomable].Count > 2 && zoomable.IsZooming)
-          {
-            zoomable.SetZooming(false);
+            if (latestCursorPositions[zoomable].Count == 2 && !zoomable.DragToZoom && !zoomable.IsZooming)
+            {
+              zoomable.SetZooming(true);
+            }
+            else if (latestCursorPositions[zoomable].Count > 2 && zoomable.IsZooming)
+            {
+              zoomable.SetZooming(false);
+            }
           }
         });
 
-        if (IsIndex)
+        GetInteractable<IDraggable>(other, (draggable) =>
         {
-          GetInteractable<IDraggable>(other, (draggable) =>
+          if (draggable.IsTransformable && latestCursorPositions[draggable].Count > 1 && draggable.IsDragging)
           {
-            if (latestCursorPositions[draggable].Count > 1 && draggable.IsDragging)
-            {
-              draggable.SetDragging(false); // Only one finger can drag, cancel if more than one finger
-            }
-          });
+            draggable.SetDragging(false); // Only one finger can drag, cancel if more than one finger
+          }
+        });
 
-          GetInteractable<ILongPressable>(other, (longPressable) =>
+        GetInteractable<ILongPressable>(other, (longPressable) =>
+        {
+          if (longPressable.IsSelectable && longPressable.IsLongPressable)
           {
-            if (longPressable.IsSelectable && longPressable.IsLongPressable)
-            {
-              longPressTimers.Add(longPressable, 0);
-            }
-          });
+            longPressTimers.Add(longPressable, 0);
+          }
+        });
 
-          GetInteractable<ITappable>(other, (tappable) =>
+        GetInteractable<ITappable>(other, (tappable) =>
+        {
+          if (tappable.IsSelectable && tappable.IsTappable)
           {
-            if (tappable.IsSelectable && tappable.IsTappable)
-            {
-              tapTimers.Add(tappable, 0);
-            }
-          });
-        }
+            tapTimers.Add(tappable, 0);
+          }
+        });
       }
     }
 
@@ -123,146 +126,146 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       {
         GetInteractable<IZoomable>(other, (zoomable) =>
         {
-          if (latestCursorPositions[zoomable].Count == 1)
+          if (zoomable.IsTransformable)
           {
-            // Zoom with one finger if DragToZoom is true
-            if (zoomable.DragToZoom && !zoomable.IsZooming)
+            if (latestCursorPositions[zoomable].Count == 1)
             {
-              var translation = zoomable.ProjectPosition(transform.position - latestCursorPositions[zoomable][this]);
-              if (translation.magnitude > MaxSelectableDistance)
+              // Zoom with one finger if DragToZoom is true
+              if (zoomable.DragToZoom && !zoomable.IsZooming)
               {
-                zoomable.SetZooming(true);
-                latestCursorPositions[zoomable][this] = transform.position;
+                var translation = zoomable.ProjectPosition(transform.position - latestCursorPositions[zoomable][this]);
+                if (translation.magnitude > MaxSelectableDistance)
+                {
+                  zoomable.SetZooming(true);
+                  latestCursorPositions[zoomable][this] = transform.position;
+                }
+              }
+              // Switch to dragging if was zooming
+              else if (!zoomable.DragToZoom && zoomable.IsZooming)
+              {
+                var draggable = other.GetComponent<IDraggable>();
+                if (draggable != null)
+                {
+                  zoomable.SetZooming(false);
+                  draggable.SetDragging(true);
+                  latestCursorPositions[zoomable][this] = transform.position;
+                }
               }
             }
-            // Switch to dragging if was zooming
-            else if (!zoomable.DragToZoom && zoomable.IsZooming)
-            {
-              var draggable = other.GetComponent<IDraggable>();
-              if (draggable != null)
-              {
-                zoomable.SetZooming(false);
-                draggable.SetDragging(true);
-                latestCursorPositions[zoomable][this] = transform.position;
-              }
-            }
-          }
 
-          if (zoomable.IsZooming)
-          {
-            var latestPositions = latestCursorPositions[zoomable];
-            var cursors = new List<Cursor>(latestPositions.Keys);
-            if (cursors[0] == this) // Update only once per frame
+            if (zoomable.IsZooming)
             {
-              // Set cursors list
-              Vector3[] cursorPositions;
-              if (!zoomable.DragToZoom)
+              var latestPositions = latestCursorPositions[zoomable];
+              var cursors = new List<Cursor>(latestPositions.Keys);
+              if (cursors[0] == this) // Update only once per frame
               {
-                cursorPositions = new Vector3[4] {
+                // Set cursors list
+                Vector3[] cursorPositions;
+                if (!zoomable.DragToZoom)
+                {
+                  cursorPositions = new Vector3[4] {
                   zoomable.ProjectPosition(cursors[0].transform.position), zoomable.ProjectPosition(latestPositions[cursors[0]]),
                   zoomable.ProjectPosition(cursors[1].transform.position), zoomable.ProjectPosition(latestPositions[cursors[1]])
                 };
-              }
-              else
-              {
-                cursorPositions = new Vector3[4] {
+                }
+                else
+                {
+                  cursorPositions = new Vector3[4] {
                   zoomable.ProjectPosition(cursors[0].transform.position), zoomable.ProjectPosition(latestPositions[cursors[0]]),
                   zoomable.ProjectPosition(zoomable.Transform.position), zoomable.ProjectPosition(zoomable.Transform.position)
                 };
-              }
-              
-              // Computes scaling
-              var distance = (zoomable.ProjectPosition(cursorPositions[0] - cursorPositions[2])).magnitude;
-              var previousDistance = (zoomable.ProjectPosition(cursorPositions[1] - cursorPositions[3])).magnitude;
-              float scaleFactor = (previousDistance != 0) ? distance / previousDistance : 1f;
-              Vector3 scaling = ClampScaling(zoomable, scaleFactor * Vector3.one);
+                }
 
-              if (scaling != Vector3.one)
-              {
-                // Translate if it has scaled
-                var newPosition = cursorPositions[0] - scaleFactor * (cursorPositions[1] - zoomable.Transform.position);
-                var translation = newPosition - zoomable.Transform.position;
-                translation = ClampTranslation(zoomable, translation);
+                // Computes scaling
+                var distance = (zoomable.ProjectPosition(cursorPositions[0] - cursorPositions[2])).magnitude;
+                var previousDistance = (zoomable.ProjectPosition(cursorPositions[1] - cursorPositions[3])).magnitude;
+                float scaleFactor = (previousDistance != 0) ? distance / previousDistance : 1f;
+                Vector3 scaling = ClampScaling(zoomable, scaleFactor * Vector3.one);
 
-                zoomable.Zoom(scaling, translation);
-              }
+                if (scaling != Vector3.one)
+                {
+                  // Translate if it has scaled
+                  var newPosition = cursorPositions[0] - scaleFactor * (cursorPositions[1] - zoomable.Transform.position);
+                  var translation = newPosition - zoomable.Transform.position;
+                  translation = ClampTranslation(zoomable, translation);
 
-              // Update cursors
-              latestPositions[cursors[0]] = cursorPositions[0];
-              if (!zoomable.DragToZoom)
-              {
-                latestPositions[cursors[1]] = cursorPositions[2];
+                  zoomable.Zoom(scaling, translation);
+                }
+
+                // Update cursors
+                latestPositions[cursors[0]] = cursorPositions[0];
+                if (!zoomable.DragToZoom)
+                {
+                  latestPositions[cursors[1]] = cursorPositions[2];
+                }
               }
             }
           }
         });
 
-        if (IsIndex)
+        GetInteractable<IDraggable>(other, (draggable) =>
         {
-          GetInteractable<IDraggable>(other, (draggable) =>
+          if (draggable.IsTransformable && latestCursorPositions[draggable].Count == 1)
           {
-            if (latestCursorPositions[draggable].Count == 1)
+            var zoomable = other.GetComponent<IZoomable>();
+            if (zoomable != null && zoomable.DragToZoom)
             {
-              var zoomable = other.GetComponent<IZoomable>();
-              if (zoomable != null && zoomable.DragToZoom)
+              // Switch to zooming if was dragging
+              if (draggable.IsDragging)
               {
-                // Switch to zooming if was dragging
+                draggable.SetDragging(false);
+                zoomable.SetZooming(true);
+                latestCursorPositions[draggable][this] = transform.position;
+              }
+            }
+            // Drag if not zooming with DragToZoom to true
+            else
+            {
+              // Computes the translation
+              var translation = draggable.ProjectPosition(transform.position - latestCursorPositions[draggable][this]);
+              translation = ClampTranslation(draggable, translation);
+              if (translation != Vector3.zero)
+              {
+                // Drag
                 if (draggable.IsDragging)
                 {
-                  draggable.SetDragging(false);
-                  zoomable.SetZooming(true);
+                  draggable.Drag(translation);
+                  latestCursorPositions[draggable][this] = transform.position;
+                }
+                // Start dragging if it has moved enough
+                else if (translation.magnitude > MaxSelectableDistance)
+                {
+                  draggable.SetDragging(true);
                   latestCursorPositions[draggable][this] = transform.position;
                 }
               }
-              // Drag if not zooming with DragToZoom to true
-              else
-              {
-                // Computes the translation
-                var translation = draggable.ProjectPosition(transform.position - latestCursorPositions[draggable][this]);
-                translation = ClampTranslation(draggable, translation);
-                if (translation != Vector3.zero)
-                {
-                  // Drag
-                  if (draggable.IsDragging)
-                  {
-                    draggable.Drag(translation);
-                    latestCursorPositions[draggable][this] = transform.position;
-                  }
-                  // Start dragging if it has moved enough
-                  else if (translation.magnitude > MaxSelectableDistance)
-                  {
-                    draggable.SetDragging(true);
-                    latestCursorPositions[draggable][this] = transform.position;
-                  }
-                }
-              }
             }
-          });
+          }
+        });
 
-          GetInteractable<ILongPressable>(other, (longPressable) =>
+        GetInteractable<ILongPressable>(other, (longPressable) =>
+        {
+          if (longPressTimers.ContainsKey(longPressable))
           {
-            if (longPressTimers.ContainsKey(longPressable))
+            if (longPressTimers[longPressable] < longPressMinTime)
             {
-              if (longPressTimers[longPressable] < longPressMinTime)
-              {
-                longPressTimers[longPressable] += Time.deltaTime;
-              }
-              else
-              {
-                StartCoroutine(SetSelected(longPressable));
-                longPressTimers.Remove(longPressable);
-              }
+              longPressTimers[longPressable] += Time.deltaTime;
             }
-          });
+            else
+            {
+              StartCoroutine(SetSelected(longPressable));
+              longPressTimers.Remove(longPressable);
+            }
+          }
+        });
 
-          GetInteractable<ITappable>(other, (tappable) =>
+        GetInteractable<ITappable>(other, (tappable) =>
+        {
+          if (tapTimers.ContainsKey(tappable) && tapTimers[tappable] < tapTimeout)
           {
-            if (tapTimers.ContainsKey(tappable) && tapTimers[tappable] < tapTimeout)
-            {
-              tapTimers[tappable] += Time.deltaTime;
-            }
-          });
-        }
+            tapTimers[tappable] += Time.deltaTime;
+          }
+        });
       }
     }
 
@@ -291,36 +294,33 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
           }
         });
 
-        if (IsIndex)
+        GetInteractable<IDraggable>(other, (draggable) =>
         {
-          GetInteractable<IDraggable>(other, (draggable) =>
+          if (latestCursorPositions.ContainsKey(draggable) && latestCursorPositions[draggable].Count == 0 && draggable.IsDragging)
           {
-            if (latestCursorPositions.ContainsKey(draggable) && latestCursorPositions[draggable].Count == 0 && draggable.IsDragging)
-            {
-              draggable.SetDragging(false);
-            }
-          });
+            draggable.SetDragging(false);
+          }
+        });
 
-          GetInteractable<ILongPressable>(other, (longPressable) =>
+        GetInteractable<ILongPressable>(other, (longPressable) =>
+        {
+          if (longPressTimers.ContainsKey(longPressable))
           {
-            if (longPressTimers.ContainsKey(longPressable))
-            {
-              longPressTimers.Remove(longPressable);
-            }
-          });
+            longPressTimers.Remove(longPressable);
+          }
+        });
 
-          GetInteractable<ITappable>(other, (tappable) =>
+        GetInteractable<ITappable>(other, (tappable) =>
+        {
+          if (tapTimers.ContainsKey(tappable))
           {
-            if (tapTimers.ContainsKey(tappable))
+            if (tapTimers[tappable] < tapTimeout)
             {
-              if (tapTimers[tappable] < tapTimeout)
-              {
-                StartCoroutine(SetSelected(tappable));
-              }
-              tapTimers.Remove(tappable);
+              StartCoroutine(SetSelected(tappable));
             }
-          });
-        }
+            tapTimers.Remove(tappable);
+          }
+        });
       }
     }
 

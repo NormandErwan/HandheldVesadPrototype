@@ -1,5 +1,6 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
 using NormandErwan.MasterThesis.Experiment.Experiment.Task;
+using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
 using NormandErwan.MasterThesis.Experiment.Inputs;
 using System;
 using System.Collections;
@@ -32,7 +33,11 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     public event Action ConfigureSync = delegate { };
     public event Action Configured = delegate { };
     public event Action ActivateTaskSync = delegate { };
-    public event Action<bool> SetDragToZoomSync = delegate { };
+    public event Action<TaskGrid.InteractionMode> SetTaskGridModeSync = delegate { };
+
+    // Variables
+
+    protected IVTechnique technique;
 
     // MonoBehaviour methods
 
@@ -46,6 +51,8 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     protected virtual void Start()
     {
+      technique = StateController.GetIndependentVariable<IVTechnique>();
+
       TaskGrid.Show(false);
     }
 
@@ -68,9 +75,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       if (Input.GetKeyUp(KeyCode.A))
       {
         OnActivateTaskSync();
-      }
-      if (Input.GetKeyUp(KeyCode.C))
-      {
         TaskGrid.Configure();
       }
       if (Input.GetKeyUp(KeyCode.Space))
@@ -86,7 +90,19 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
       if (Input.GetKeyUp(KeyCode.Z))
       {
-        OnSetDragToZoomSync(!TaskGrid.DragToZoom);
+        SetTaskGridModeSync(TaskGrid.InteractionMode.Zoom);
+      }
+      if (Input.GetKeyUp(KeyCode.X))
+      {
+        SetTaskGridModeSync(TaskGrid.InteractionMode.Pan);
+      }
+      if (Input.GetKeyUp(KeyCode.C))
+      {
+        SetTaskGridModeSync(TaskGrid.InteractionMode.Select);
+      }
+      if (Input.GetKeyUp(KeyCode.V))
+      {
+        SetTaskGridModeSync(TaskGrid.InteractionMode.Zoom | TaskGrid.InteractionMode.Pan | TaskGrid.InteractionMode.Select);
       }
     }
 
@@ -110,17 +126,18 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     public virtual void ActivateTask()
     {
-    }
-
-    public virtual void SetDragToZoom(bool activated)
-    {
-      TaskGrid.DragToZoom = activated;
+      if (technique.CurrentCondition.useTouchInput)
+      {
+        OnSetTaskGridModeSync(TaskGrid.InteractionMode.Select | TaskGrid.InteractionMode.Pan | TaskGrid.InteractionMode.Zoom);
+      }
+      else if (technique.CurrentCondition.useLeapInput)
+      {
+        OnSetTaskGridModeSync(TaskGrid.InteractionMode.Select);
+      }
     }
 
     protected virtual void StateController_CurrentStateUpdated(State currentState)
     {
-      TaskGrid.Show(false);
-      SetDragToZoom(false);
     }
 
     protected virtual void TaskGrid_Configured()
@@ -130,6 +147,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     protected virtual void TaskGrid_Completed()
     {
+      TaskGrid.Show(false);
       if (CursorsInput != null)
       {
         CursorsInput.DeactivateCursors();
@@ -137,28 +155,19 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       }
     }
 
-    /// <summary>
-    /// Calls <see cref="ActivateTaskSync"/>.
-    /// </summary>
     protected virtual void OnActivateTaskSync()
     {
       ActivateTaskSync();
     }
 
-    /// <summary>
-    /// Calls <see cref="ConfigureSync"/>.
-    /// </summary>
     protected virtual void OnConfigureExperimentSync()
     {
       ConfigureSync();
     }
 
-    /// <summary>
-    /// Calls <see cref="SetDragToZoomSync"/>.
-    /// </summary>
-    protected virtual void OnSetDragToZoomSync(bool activated)
+    protected virtual void OnSetTaskGridModeSync(TaskGrid.InteractionMode interactionMode)
     {
-      SetDragToZoomSync(activated);
+      SetTaskGridModeSync(interactionMode);
     }
 
     // TODO: remove, for debug testing only

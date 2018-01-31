@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NormandErwan.MasterThesis.Experiment.Experiment.Task;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,37 +16,50 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
     private Button nextStateButton;
 
     [SerializeField]
-    private Button toggleZoomButton;
+    private GameObject taskGridButtons;
 
     [SerializeField]
-    private Text toggleZoomButtonText;
+    private Button taskGridSelectModeButton;
+
+    [SerializeField]
+    private Button taskGridPanModeButton;
+
+    [SerializeField]
+    private Button taskGridZoomModeButton;
 
     // Properties
 
     public Button ActivateTaskButton { get { return activateTaskButton; } set { activateTaskButton = value; } }
     public Button NextStateButton { get { return nextStateButton; } set { nextStateButton = value; } }
-    public Button dragToZoomButton { get { return toggleZoomButton; } set { toggleZoomButton = value; } }
+
+    public GameObject TaskGridButtons { get { return taskGridButtons; } set { taskGridButtons = value; } }
+    public Button TaskGridSelectModeButton { get { return taskGridSelectModeButton; } set { taskGridSelectModeButton = value; } }
+    public Button TaskGridPanModeButton { get { return taskGridPanModeButton; } set { taskGridPanModeButton = value; } }
+    public Button TaskGridZoomModeButton { get { return taskGridZoomModeButton; } set { taskGridZoomModeButton = value; } }
 
     // Events
 
     public event Action ActivateTaskButtonPressed = delegate { };
     public event Action NextStateButtonPressed = delegate { };
-    public event Action<bool> DragToZoomButtonPressed = delegate { };
+    public event Action<TaskGrid.InteractionMode> TaskGridModeButtonPressed = delegate { };
 
     // Variables
 
-    protected bool dragToZoomButtonActivated = false;
-    protected Color toggleZoomButtonDefaultNormalColor;
+    protected Button[] taskGridButtonsList;
+    protected Color taskGridButtonNormalColor;
 
     // MonoBehaviour methods
 
     protected virtual void Start()
     {
+      taskGridButtonsList = new Button[] { TaskGridSelectModeButton, TaskGridPanModeButton, TaskGridZoomModeButton };
+      taskGridButtonNormalColor = TaskGridSelectModeButton.colors.normalColor;
+
       ActivateTaskButton.onClick.AddListener(activateTaskButton_onClick);
       NextStateButton.onClick.AddListener(nextStateButtonButton_onClick);
-      dragToZoomButton.onClick.AddListener(toggleDragToZoomButton_onClick);
-
-      toggleZoomButtonDefaultNormalColor = dragToZoomButton.colors.normalColor;
+      TaskGridZoomModeButton.onClick.AddListener(selectModeButton_onClick);
+      TaskGridZoomModeButton.onClick.AddListener(panModeButton_onClick);
+      TaskGridZoomModeButton.onClick.AddListener(zoomModeButton_onClick);
 
       HideAllButtons();
     }
@@ -54,7 +68,9 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
     {
       ActivateTaskButton.onClick.RemoveListener(activateTaskButton_onClick);
       NextStateButton.onClick.RemoveListener(nextStateButtonButton_onClick);
-      dragToZoomButton.onClick.RemoveListener(toggleDragToZoomButton_onClick);
+      TaskGridZoomModeButton.onClick.RemoveListener(selectModeButton_onClick);
+      TaskGridZoomModeButton.onClick.RemoveListener(panModeButton_onClick);
+      TaskGridZoomModeButton.onClick.RemoveListener(zoomModeButton_onClick);
     }
 
     // Methods
@@ -63,17 +79,13 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
     {
       ActivateTaskButton.gameObject.SetActive(false);
       NextStateButton.gameObject.SetActive(false);
-      dragToZoomButton.gameObject.SetActive(false);
+      taskGridButtons.gameObject.SetActive(false);
     }
 
-    public virtual void ShowOneButton(Button button)
+    public virtual void ToggleButtons(GameObject button)
     {
       HideAllButtons();
-      if (button == dragToZoomButton)
-      {
-        dragToZoomButtonActivated = false;
-      }
-      button.gameObject.SetActive(true);
+      button.SetActive(true);
     }
 
     protected virtual void activateTaskButton_onClick()
@@ -86,27 +98,32 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
       NextStateButtonPressed();
     }
 
-    protected virtual void toggleDragToZoomButton_onClick()
+    protected virtual void selectModeButton_onClick()
     {
-      dragToZoomButtonActivated = !dragToZoomButtonActivated;
-      UpdateDragToZoomButton();
-      DragToZoomButtonPressed(dragToZoomButtonActivated);
+      UpdateTaskGridButtonBackgrounds(TaskGridSelectModeButton);
+      TaskGridModeButtonPressed(TaskGrid.InteractionMode.Select);
     }
 
-    protected virtual void UpdateDragToZoomButton()
+    protected virtual void panModeButton_onClick()
     {
-      var colors = dragToZoomButton.colors;
-      if (!dragToZoomButtonActivated)
+      UpdateTaskGridButtonBackgrounds(TaskGridPanModeButton);
+      TaskGridModeButtonPressed(TaskGrid.InteractionMode.Pan);
+    }
+
+    protected virtual void zoomModeButton_onClick()
+    {
+      UpdateTaskGridButtonBackgrounds(TaskGridZoomModeButton);
+      TaskGridModeButtonPressed(TaskGrid.InteractionMode.Zoom);
+    }
+
+    protected virtual void UpdateTaskGridButtonBackgrounds(Button activatedButton)
+    {
+      foreach (var taskGridButton in taskGridButtonsList)
       {
-        toggleZoomButtonText.text = "Activer le mode zoom";
-        colors.normalColor = toggleZoomButtonDefaultNormalColor ;
+        var colors = taskGridButton.colors;
+        colors.normalColor = (taskGridButton == activatedButton) ? taskGridButton.colors.pressedColor : taskGridButtonNormalColor;
+        taskGridButton.colors = colors;
       }
-      else
-      {
-        toggleZoomButtonText.text = (!dragToZoomButtonActivated) ? "Activer le mode zoom" : "Désactiver le mode zoom";
-        colors.normalColor = colors.pressedColor;
-      }
-      dragToZoomButton.colors = colors; 
     }
   }
 }

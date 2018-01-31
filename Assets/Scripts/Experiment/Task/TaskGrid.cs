@@ -19,6 +19,13 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       Error
     }
 
+    public enum InteractionMode
+    {
+      Select = 1,
+      Pan = 2,
+      Zoom = 4
+    }
+
     // Constants
 
     protected int gridGenerationMaxNumber = 1000;
@@ -38,6 +45,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     // Interfaces properties
 
     public bool IsInteractable { get; protected set; }
+    public bool IsTransformable { get; protected set; }
 
     public bool IsFocusable { get; protected set; }
     public bool IsFocused { get; protected set; }
@@ -45,12 +53,14 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public bool IsDragging { get; protected set; }
     public bool IsZooming { get; protected set; }
 
-    public bool DragToZoom { get; set; }
+    public bool DragToZoom { get; protected set; }
     public Transform Transform { get { return transform; } }
     public GenericVector3<Range<float>> PositionRange { get; protected set; }
     public GenericVector3<Range<float>> ScaleRange { get; protected set; }
 
     // Properties
+
+    public InteractionMode Mode { get; protected set; }
 
     public bool IsConfigured { get; protected set; }
     public bool IsCompleted { get; protected set; }
@@ -61,6 +71,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     // Interfaces events
 
     public event Action<IInteractable> Interactable = delegate { };
+    public event Action<ITransformable> Transformable = delegate { };
 
     public event Action<IFocusable> Focused = delegate { };
 
@@ -125,6 +136,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       classificationDifficulty = stateController.GetIndependentVariable<IVClassificationDifficulty>();
 
       SetInteractable(false);
+      SetTransformable(false);
       SetElementsInteractables(false);
     }
     
@@ -144,6 +156,12 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     {
       IsInteractable = value;
       Interactable(this);
+    }
+
+    public void SetTransformable(bool value)
+    {
+      IsTransformable = value;
+      Transformable(this);
     }
 
     public void SetFocused(bool value)
@@ -290,6 +308,13 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         container.GameObject.SetActive(value);
       }
       background.SetActive(value);
+    }
+
+    public virtual void SetMode(InteractionMode mode)
+    {
+      Mode = mode;
+      DragToZoom = (Mode & InteractionMode.Zoom) == InteractionMode.Zoom && (Mode & InteractionMode.Pan) != InteractionMode.Pan; // If Zoom and Pan
+      SetTransformable(Mode != InteractionMode.Select); // Deactivate transformable if Select only
     }
 
     public virtual Container GetContainer(Item item)

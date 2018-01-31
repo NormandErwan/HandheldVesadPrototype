@@ -9,6 +9,10 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 {
   public class HMDDeviceController : DeviceController
   {
+    // Constants
+
+    protected float maxSelectableDistance = 0f;
+
     // Editor fields
 
     [SerializeField]
@@ -22,10 +26,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     private LeapFingerCursorsInput leapFingerCursorsInput;
 
     [SerializeField]
-    [Range(0f, 0.05f)]
-    private float maxSelectableDistance = 0.001f;
-
-    [SerializeField]
     private Renderer rightLeapHand;
 
     [SerializeField]
@@ -35,17 +35,11 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     public override CursorsInput CursorsInput { get { return leapFingerCursorsInput; } }
 
-    // Variables
-
-    protected IVTechnique technique;
-
     // Methods
 
     protected override void Start()
     {
       base.Start();
-
-      technique = StateController.GetIndependentVariable<IVTechnique>();
 
       leapFingerCursorsInput.Configure(maxSelectableDistance);
       leapFingerCursorsInput.enabled = false;

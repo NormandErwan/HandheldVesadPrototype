@@ -1539,14 +1539,9 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114080777705383798, guid: 8794a4a705c4d734f8bd8b41746e6e72,
-        type: 2}
-      propertyPath: type
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1020339554765748, guid: 8794a4a705c4d734f8bd8b41746e6e72, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8794a4a705c4d734f8bd8b41746e6e72, type: 2}
@@ -1873,6 +1868,10 @@ Prefab:
     - target: {fileID: 4827977451641156, guid: fbbef59b3dd39404ca1cd8b91b4498c2, type: 2}
       propertyPath: m_RootOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1922629280324382, guid: fbbef59b3dd39404ca1cd8b91b4498c2, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fbbef59b3dd39404ca1cd8b91b4498c2, type: 2}
@@ -2428,6 +2427,12 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -0.5}
   m_SizeDelta: {x: -20, y: -13}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1681253199 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114719098960501060, guid: 8da6483971380fd418dac0b21a143fad,
+    type: 2}
+  m_PrefabInternal: {fileID: 1228041264}
+  m_Script: {fileID: 11500000, guid: df4710b2e9b6c114a848996acfb1cf07, type: 3}
 --- !u!1 &1735529692
 GameObject:
   m_ObjectHideFlags: 0
@@ -2885,7 +2890,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateController: {fileID: 653876119}
-  taskGrid: {fileID: 0}
+  taskGrid: {fileID: 1681253199}
   serverHUD: {fileID: 236921176}
 --- !u!4 &2002128908
 Transform:

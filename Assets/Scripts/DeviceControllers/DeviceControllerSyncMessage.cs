@@ -1,4 +1,5 @@
 ﻿using DevicesSyncUnity.Messages;
+using NormandErwan.MasterThesis.Experiment.Experiment.Task;
 using System;
 
 namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
@@ -9,7 +10,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       Configure,
       ActivateTask,
-      ToggleZoom
+      ToggleMode
     }
 
     // Constructors and destructor
@@ -21,7 +22,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
       DeviceController.ConfigureSync += DeviceController_ConfigureSync;
       DeviceController.ActivateTaskSync += DeviceController_ActivateTaskSync;
-      DeviceController.SetDragToZoomSync += DeviceController_ToogleZoomSync;
+      DeviceController.SetTaskGridModeSync += DeviceController_SetTaskGridModeSync;
     }
 
     public DeviceControllerSyncMessage()
@@ -32,7 +33,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       DeviceController.ConfigureSync -= DeviceController_ConfigureSync;
       DeviceController.ActivateTaskSync -= DeviceController_ActivateTaskSync;
-      DeviceController.SetDragToZoomSync -= DeviceController_ToogleZoomSync;
+      DeviceController.SetTaskGridModeSync -= DeviceController_SetTaskGridModeSync;
     }
 
     // Properties
@@ -49,7 +50,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     public Type type;
 
-    public bool zoomActivated;
+    public TaskGrid.InteractionMode interactionMode;
 
     public int participantId;
     public int conditionsOrdering;
@@ -67,9 +68,9 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       {
         deviceController.ActivateTask();
       }
-      else if (type == Type.ToggleZoom)
+      else if (type == Type.ToggleMode)
       {
-        deviceController.SetDragToZoom(zoomActivated);
+        deviceController.TaskGrid.SetMode(interactionMode);
       }
     }
 
@@ -88,10 +89,10 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       SendToServer();
     }
 
-    protected virtual void DeviceController_ToogleZoomSync(bool zoomActivated)
+    protected virtual void DeviceController_SetTaskGridModeSync(TaskGrid.InteractionMode interactionMode)
     {
-      type = Type.ToggleZoom;
-      this.zoomActivated = zoomActivated;
+      type = Type.ToggleMode;
+      this.interactionMode = interactionMode;
       SendToServer();
     }
   }
