@@ -54,6 +54,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public bool IsZooming { get; protected set; }
 
     public bool DragToZoom { get; protected set; }
+    public Vector3 DragToZoomPivot { get; protected set; }
+
     public Transform Transform { get { return transform; } }
     public GenericVector3<Range<float>> PositionRange { get; protected set; }
     public GenericVector3<Range<float>> ScaleRange { get; protected set; }
@@ -123,6 +125,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       collider = GetComponent<BoxCollider>();
       PositionRange = new GenericVector3<Range<float>>(new Range<float>(), new Range<float>(), new Range<float>());
       ScaleRange = new GenericVector3<Range<float>>(new Range<float>(), new Range<float>(), new Range<float>());
+      DragToZoomPivot = transform.position;
 
       DragToZoom = false;
       IsConfigured = false;
