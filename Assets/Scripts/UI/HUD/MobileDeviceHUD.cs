@@ -57,8 +57,8 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
 
       ActivateTaskButton.onClick.AddListener(activateTaskButton_onClick);
       NextStateButton.onClick.AddListener(nextStateButtonButton_onClick);
-      TaskGridZoomModeButton.onClick.AddListener(selectModeButton_onClick);
-      TaskGridZoomModeButton.onClick.AddListener(panModeButton_onClick);
+      TaskGridSelectModeButton.onClick.AddListener(selectModeButton_onClick);
+      TaskGridPanModeButton.onClick.AddListener(panModeButton_onClick);
       TaskGridZoomModeButton.onClick.AddListener(zoomModeButton_onClick);
 
       HideAllButtons();
@@ -68,8 +68,8 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
     {
       ActivateTaskButton.onClick.RemoveListener(activateTaskButton_onClick);
       NextStateButton.onClick.RemoveListener(nextStateButtonButton_onClick);
-      TaskGridZoomModeButton.onClick.RemoveListener(selectModeButton_onClick);
-      TaskGridZoomModeButton.onClick.RemoveListener(panModeButton_onClick);
+      TaskGridSelectModeButton.onClick.RemoveListener(selectModeButton_onClick);
+      TaskGridPanModeButton.onClick.RemoveListener(panModeButton_onClick);
       TaskGridZoomModeButton.onClick.RemoveListener(zoomModeButton_onClick);
     }
 

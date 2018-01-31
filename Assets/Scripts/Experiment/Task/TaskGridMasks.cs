@@ -16,6 +16,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     // Variables
 
     protected Vector3 maskScale;
+    protected Vector3 maskPositionOffset;
 
     protected GameObject centerMask;
 
@@ -37,6 +38,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     protected virtual void Awake()
     {
       maskScale = maskPrefab.transform.localScale;
+      maskPositionOffset = new Vector3(0f, 0f, 40f / 100f * maskScale.z);
 
       centerMask = Instantiate(maskPrefab, transform);
       centerMask.transform.localPosition = Vector3.zero;
@@ -80,12 +82,12 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         centerMask.transform.SetParent(sideMasksParent);
         centerMask.transform.localScale = new Vector3(taskGrid.LossyScale.x, taskGrid.LossyScale.y, maskScale.z);
       }
-      centerMask.transform.localPosition = Vector3.zero;
+      centerMask.transform.localPosition = maskPositionOffset;
       centerMask.transform.localRotation = Quaternion.identity;
 
       for (int i = 0; i < sideMasks.Length; i++)
       {
-        sideMasks[i].transform.localPosition = Vector3.Scale((i / 2 == 0 ? 1 : -1) * sideMasksPositions[i % 2], taskGrid.LossyScale);
+        sideMasks[i].transform.localPosition = Vector3.Scale((i / 2 == 0 ? 1 : -1) * sideMasksPositions[i % 2], taskGrid.LossyScale) + maskPositionOffset;
         sideMasks[i].transform.localScale = Vector3.Scale(sideMaskScales[i % 2], taskGrid.LossyScale) + maskScale;
       }
 
