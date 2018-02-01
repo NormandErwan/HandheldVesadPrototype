@@ -127,7 +127,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       {
         GetInteractable<IZoomable>(other, (zoomable) =>
         {
-          if (zoomable.IsTransformable)
+          if (zoomable.IsTransformable && latestCursorPositions.ContainsKey(zoomable))
           {
             if (latestCursorPositions[zoomable].Count == 1)
             {
@@ -206,7 +206,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
         GetInteractable<IDraggable>(other, (draggable) =>
         {
-          if (draggable.IsTransformable && latestCursorPositions[draggable].Count == 1)
+          if (draggable.IsTransformable && latestCursorPositions.ContainsKey(draggable) && latestCursorPositions[draggable].Count == 1)
           {
             var zoomable = other.GetComponent<IZoomable>();
             if (zoomable != null && zoomable.DragToZoom)
