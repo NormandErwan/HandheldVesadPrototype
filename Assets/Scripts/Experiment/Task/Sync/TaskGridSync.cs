@@ -68,7 +68,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
         TaskGridSyncEventsMessage gridEventsReceived;
         if (TryReadMessage(netMessage, gridEventsMessage.MessageType, out gridEventsReceived))
         {
-          if (gridEventsReceived.SenderConnectionId != gridEventsMessage.SenderConnectionId)
+          if (gridEventsReceived.SenderConnectionId != ConnectionId)
           {
             gridEventsReceived.SyncGrid(TaskGrid);
           }
