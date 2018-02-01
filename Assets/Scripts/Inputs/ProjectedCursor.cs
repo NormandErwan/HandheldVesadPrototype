@@ -60,12 +60,11 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
         float cursorGridDistance = Vector3.Dot(Cursor.transform.position - taskGrid.transform.position, -taskGrid.transform.forward);
         transform.position = Cursor.transform.position + cursorGridDistance * taskGrid.transform.forward;
 
-        var positionToGrid = Vector3.ProjectOnPlane(transform.position - taskGrid.transform.position, -taskGrid.transform.forward);
-        positionToGrid = transform.position - taskGrid.transform.position;
+        var positionToGrid = transform.position - taskGrid.transform.position;
         if (positionRanges.X.ContainsValue(positionToGrid.x) && positionRanges.Y.ContainsValue(positionToGrid.y))
         {
           IsVisible = true;
-          transform.forward = taskGrid.transform.forward;
+          transform.rotation = taskGrid.transform.rotation;
           ProjectionLine.transform.localScale = new Vector3(ProjectionLine.transform.localScale.x, cursorGridDistance, ProjectionLine.transform.localScale.z);
         }
       }
