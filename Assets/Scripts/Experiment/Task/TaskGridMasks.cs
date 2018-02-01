@@ -20,7 +20,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     protected GameObject centerMask;
 
-    protected Transform sideMasksParent;
     protected GameObject[] sideMasks = new GameObject[4];
     protected Vector3[] sideMasksPositions = new Vector3[2]
     {
@@ -45,15 +44,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       centerMask.transform.localRotation = Quaternion.identity;
       centerMask.name = "MobileDeviceMask";
 
-      sideMasksParent = new GameObject("SideMasks").transform;
-      sideMasksParent.SetParent(transform);
-      sideMasksParent.transform.localPosition = Vector3.zero;
-      sideMasksParent.transform.localRotation = Quaternion.identity;
-      sideMasksParent.transform.localScale = Vector3.one;
-
       for (int i = 0; i < sideMasks.Length; i++)
       {
-        var sideMask = Instantiate(maskPrefab, sideMasksParent);
+        var sideMask = Instantiate(maskPrefab, transform);
         sideMask.transform.localPosition = Vector3.zero;
         sideMask.transform.localRotation = Quaternion.identity;
         sideMask.name = "SideMask (" + i + ")";
@@ -61,29 +54,19 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       }
 
       Hide();
-
-      taskGrid.Dragging += TaskGrid_Dragging;
-    }
-
-    protected virtual void OnDestroy()
-    {
-      taskGrid.Dragging -= TaskGrid_Dragging;
     }
 
     public virtual void Configure(bool showGrid)
     {
+      centerMask.transform.localPosition = maskPositionOffset;
       if (showGrid)
       {
-        centerMask.transform.SetParent(transform);
         centerMask.transform.localScale = Vector3.Scale(taskGrid.ElementScale, taskGrid.transform.lossyScale) + maskScale;
       }
       else
       {
-        centerMask.transform.SetParent(sideMasksParent);
         centerMask.transform.localScale = new Vector3(taskGrid.LossyScale.x, taskGrid.LossyScale.y, maskScale.z);
       }
-      centerMask.transform.localPosition = maskPositionOffset;
-      centerMask.transform.localRotation = Quaternion.identity;
 
       for (int i = 0; i < sideMasks.Length; i++)
       {
@@ -97,11 +80,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public virtual void Hide()
     {
       SetMaskActives(false);
-    }
-
-    protected virtual void TaskGrid_Dragging(IDraggable taskGrid, Vector3 translation)
-    {
-      sideMasksParent.localPosition += translation;
     }
 
     protected virtual void SetMaskActives(bool value)
