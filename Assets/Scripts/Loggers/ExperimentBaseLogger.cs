@@ -35,10 +35,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     // Properties
 
-    protected BaseCursor Index { get; set; }
+    protected Inputs.Cursor Index { get; set; }
     protected BaseCursor ProjectedIndex { get; set; }
 
-    protected BaseCursor Thumb { get; set; }
+    protected Inputs.Cursor Thumb { get; set; }
     protected BaseCursor ProjectedThumb { get; set; }
 
     // Variables

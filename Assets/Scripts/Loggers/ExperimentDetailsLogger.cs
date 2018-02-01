@@ -57,9 +57,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         AddToRow(selectedItem);
 
         AddToRow(Index.IsVisible);
+        AddToRow(Index.IsTracked);
         AddToRow(Index.transform, false);
 
-        AddToRow(Thumb.IsVisible);
+        AddToRow(Thumb.IsTracked);
         AddToRow(Thumb.transform, false);
 
         AddToRow(ProjectedIndex.IsVisible);
@@ -123,9 +124,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       });
 
       Columns.Add("index_active");
+      Columns.Add("index_tracked");
       AddTransformToColumns("index", false);
 
-      Columns.Add("thumb_active");
+      Columns.Add("thumb_tracked");
       AddTransformToColumns("thumb", false);
 
       Columns.Add("projected_index_active");

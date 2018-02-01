@@ -89,7 +89,6 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
           if (!Started)
           {
             Started = true;
-            TotalDistance = 0;
           }
           else
           {
@@ -99,10 +98,19 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         }
       }
     }
+
+    protected class BaseCursorDistance : Distance
+    {
+      public BaseCursorDistance(BaseCursor cursor)
+        : base(() => { return cursor.IsVisible; }, () => { return cursor.transform.position; })
+      {
+      }
+    }
+
     protected class CursorDistance : Distance
     {
-      public CursorDistance(BaseCursor cursor) 
-        : base(() => { return cursor.IsVisible; }, () => { return cursor.transform.position; })
+      public CursorDistance(Inputs.Cursor cursor) 
+        : base(() => { return cursor.IsTracked; }, () => { return cursor.transform.position; })
       {
       }
     }
@@ -123,8 +131,8 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     protected Variable pan = new Variable("pan");
     protected Variable zoom = new Variable("zoom");
 
-    protected Distance indexDistance, thumbDistance;
-    protected Distance projectedIndexDistance, projectedThumbDistance;
+    protected CursorDistance indexDistance, thumbDistance;
+    protected BaseCursorDistance projectedIndexDistance, projectedThumbDistance;
     protected Distance headPhoneDistance;
 
     // MonoBehaviour methods
@@ -187,8 +195,8 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
       indexDistance = new CursorDistance(Index);
       thumbDistance = new CursorDistance(Thumb);
-      projectedIndexDistance = new CursorDistance(ProjectedIndex);
-      projectedThumbDistance = new CursorDistance(ProjectedThumb);
+      projectedIndexDistance = new BaseCursorDistance(ProjectedIndex);
+      projectedThumbDistance = new BaseCursorDistance(ProjectedThumb);
       headPhoneDistance = new Distance(() => { return mobileDevice.IsTracking; }, () => { return (head.position - mobileDevice.transform.position).magnitude; });
 
       base.Configure();

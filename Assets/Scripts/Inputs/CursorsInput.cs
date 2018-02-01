@@ -59,6 +59,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     {
       foreach (var cursor in Cursors)
       {
+        cursor.Value.IsTracked = false;
         cursor.Value.SetVisible(false);
         cursor.Value.transform.position = new Vector3(cursor.Value.transform.position.x, cursor.Value.transform.position.y, -10); // keep the cursor far away if not visible to activate OnTriggerExit
       }
