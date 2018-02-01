@@ -177,7 +177,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public Vector3 ProjectPosition(Vector3 position)
     {
-      return Vector3.ProjectOnPlane(position, -transform.forward);
+      var angle = Quaternion.FromToRotation(transform.forward, Vector3.forward);
+      var projection = Vector3.ProjectOnPlane(position, -transform.forward);
+      return angle * projection;
     }
 
     public void SetDragging(bool value)
@@ -553,7 +555,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       ScaleRange.Z.Minimum = ScaleRange.Z.Maximum = transform.localScale.z;
 
       // Limit the grid position to the borders of the central container
-      Vector2 positionMax = (Vector2.Scale(transform.localScale, Scale) - scaleFactor * ElementScale) / 2;
+      var positionMax = (LossyScale - Vector3.Scale(ElementScale, transform.lossyScale)) / 2;
       PositionRange.X.Minimum = -positionMax.x;
       PositionRange.X.Maximum = positionMax.x;
       PositionRange.Y.Minimum = -positionMax.y;

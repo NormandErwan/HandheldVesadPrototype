@@ -3,7 +3,6 @@ using NormandErwan.MasterThesis.Experiment.Inputs;
 using NormandErwan.MasterThesis.Experiment.UI.HUD;
 using UnityEngine;
 using System.Collections;
-using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
 using NormandErwan.MasterThesis.Experiment.Experiment.Task;
 
 namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
