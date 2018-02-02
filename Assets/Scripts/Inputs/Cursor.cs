@@ -35,6 +35,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     protected Dictionary<ILongPressable, float> longPressTimers = new Dictionary<ILongPressable, float>();
     protected Dictionary<ITappable, float> tapTimers = new Dictionary<ITappable, float>();
+    protected List<ITappable> tapped = new List<ITappable>();
 
     protected new Renderer renderer;
     protected new Collider collider;
@@ -47,6 +48,30 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
       collider = GetComponent<Collider>();
       SetVisible(false); // Set by CursorsInput every frame
       SetActive(false); // Set by DeviceController when TaskGrid is configured
+    }
+
+    protected virtual void Update()
+    {
+      if (tapped.Count > 0)
+      {
+        int triggerStayCount = 0;
+        foreach (var latestCursorPosition in latestCursorPositions)
+        {
+          triggerStayCount += latestCursorPosition.Value.Count;
+        }
+
+        if (triggerStayCount == 0)
+        {
+          for (int i = tapped.Count - 1; i >= 0; i--)
+          {
+            if (tapped[i].IsInteractable && tapped[i].IsSelectable)
+            {
+              tapped[i].SetSelected(true);
+            }
+            tapped.RemoveAt(i);
+          }
+        }
+      }
     }
 
     protected virtual void OnTriggerEnter(Collider other)
@@ -254,7 +279,10 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
             }
             else
             {
-              StartCoroutine(SetSelected(longPressable));
+              if (longPressable.IsInteractable && longPressable.IsSelectable)
+              {
+                longPressable.SetSelected(true);
+              }
               longPressTimers.Remove(longPressable);
             }
           }
@@ -317,7 +345,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
           {
             if (tapTimers[tappable] < tapTimeout)
             {
-              StartCoroutine(SetSelected(tappable));
+              tapped.Add(tappable);
             }
             tapTimers.Remove(tappable);
           }
@@ -378,16 +406,6 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
           / zoomable.Transform.localScale[i];
       }
       return clampedScaling;
-    }
-
-    protected virtual IEnumerator SetSelected(ISelectable selectable)
-    {
-      yield return null; // wait the next frame
-
-      if (selectable.IsInteractable && selectable.IsSelectable)
-      {
-        selectable.SetSelected(true);
-      }
     }
   }
 }
