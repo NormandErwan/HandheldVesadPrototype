@@ -147,7 +147,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     protected virtual void TaskGrid_Configured()
     {
-      TaskGrid.Show(true);
     }
 
     protected virtual void TaskGrid_Completed()

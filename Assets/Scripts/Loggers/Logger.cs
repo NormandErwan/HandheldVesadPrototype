@@ -18,6 +18,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     public List<string> Row { get; protected set; }
 
     public bool IsConfigured { get; private set; }
+    public bool CurrentRowCompleted { get; protected set; }
 
     // Variables
 
@@ -46,6 +47,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     public virtual void Configure()
     {
       Row = new List<string>(new string[Columns.Count]);
+      CurrentRowCompleted = false;
 
       Directory.CreateDirectory(dataPath);
       FilePath = Path.Combine(dataPath, Filename);
@@ -58,11 +60,13 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     public virtual void PrepareRow()
     {
+      CurrentRowCompleted = false;
       columnIndex = 0;
     }
 
     public virtual void WriteRow()
     {
+      CurrentRowCompleted = true;
       csvWriter.WriteRow(Row);
     }
 

@@ -77,7 +77,8 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     protected override void TaskGrid_Configured()
     {
       base.TaskGrid_Configured();
-      taskGridMasks.Configure(!technique.CurrentCondition.showTaskGridOnlyOnMobileDevice);
+      taskGridMasks.Configure();
+      TaskGrid.Show(!technique.CurrentCondition.showTaskGridOnlyOnMobileDevice);
     }
 
     protected override void TaskGrid_Completed()

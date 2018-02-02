@@ -105,6 +105,12 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       }
     }
 
+    protected override void TaskGrid_Configured()
+    {
+      base.TaskGrid_Configured();
+      TaskGrid.Show(true);
+    }
+
     protected virtual void MobileDeviceHUD_ActivateTaskButtonPressed()
     {
       mobileDeviceHUD.HideAllButtons();

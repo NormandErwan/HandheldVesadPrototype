@@ -28,9 +28,11 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     public Cursor Cursor { get { return cursor; } set { cursor = value; } }
     public GameObject ProjectionLine { get { return projectionLine; } set { projectionLine = value; } }
 
-    // Variables
+    public bool IsOnGrid { get; protected set; }
 
-    protected GenericVector3<Range<float>> positionRanges = new GenericVector3<Range<float>>(new Range<float>(), new Range<float>(), null);
+        // Variables
+
+        protected GenericVector3<Range<float>> positionRanges = new GenericVector3<Range<float>>(new Range<float>(), new Range<float>(), null);
     protected TaskGrid taskGrid;
 
     // Methods
@@ -39,6 +41,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     {
       SetVisible(false);
       SetActive(true);
+      IsOnGrid = false;
 
       deviceController.CursorsInput.Updated += CursorsInput_Updated;
 
@@ -54,21 +57,23 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     protected virtual void CursorsInput_Updated()
     {
-      IsVisible = false;
-      if (Cursor.gameObject.activeSelf && Cursor.IsActive && Cursor.IsVisible)
+      IsOnGrid = false;
+      if (Cursor.gameObject.activeSelf && Cursor.IsTracked)
       {
         float cursorGridDistance = Vector3.Dot(Cursor.transform.position - taskGrid.transform.position, -taskGrid.transform.forward);
-        transform.position = Cursor.transform.position + cursorGridDistance * taskGrid.transform.forward;
+        var position = Cursor.transform.position + cursorGridDistance * taskGrid.transform.forward;
 
-        var positionToGrid = transform.position - taskGrid.transform.position;
+        var positionToGrid = position - taskGrid.transform.position;
         if (positionRanges.X.ContainsValue(positionToGrid.x) && positionRanges.Y.ContainsValue(positionToGrid.y))
         {
-          IsVisible = true;
+          IsOnGrid = true;
+          transform.position = position;
           transform.rotation = taskGrid.transform.rotation;
           ProjectionLine.transform.localScale = new Vector3(ProjectionLine.transform.localScale.x, cursorGridDistance, ProjectionLine.transform.localScale.z);
         }
       }
 
+      IsVisible = Cursor.gameObject.activeSelf && Cursor.IsVisible && IsOnGrid;
       SetVisible(IsVisible);
     }
 

@@ -63,10 +63,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         AddToRow(Thumb.IsTracked);
         AddToRow(Thumb.transform, false);
 
-        AddToRow(ProjectedIndex.IsVisible);
+        AddToRow(ProjectedIndex.IsOnGrid);
         AddToRow(ProjectedIndex.transform, false);
 
-        AddToRow(ProjectedThumb.IsVisible);
+        AddToRow(ProjectedThumb.IsOnGrid);
         AddToRow(ProjectedThumb.transform, false);
 
         AddToRow(head, false);

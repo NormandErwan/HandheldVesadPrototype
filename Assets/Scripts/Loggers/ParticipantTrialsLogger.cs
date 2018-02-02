@@ -99,18 +99,18 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       }
     }
 
-    protected class BaseCursorDistance : Distance
-    {
-      public BaseCursorDistance(BaseCursor cursor)
-        : base(() => { return cursor.IsVisible; }, () => { return cursor.transform.position; })
-      {
-      }
-    }
-
     protected class CursorDistance : Distance
     {
       public CursorDistance(Inputs.Cursor cursor) 
         : base(() => { return cursor.IsTracked; }, () => { return cursor.transform.position; })
+      {
+      }
+    }
+
+    protected class ProjectedCursorDistance : Distance
+    {
+      public ProjectedCursorDistance(ProjectedCursor projectedCursor)
+        : base(() => { return projectedCursor.IsOnGrid; }, () => { return projectedCursor.transform.position; })
       {
       }
     }
@@ -132,7 +132,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     protected Variable zoom = new Variable("zoom");
 
     protected CursorDistance indexDistance, thumbDistance;
-    protected BaseCursorDistance projectedIndexDistance, projectedThumbDistance;
+    protected ProjectedCursorDistance projectedIndexDistance, projectedThumbDistance;
     protected Distance headPhoneDistance;
 
     // MonoBehaviour methods
@@ -149,22 +149,26 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       if (IsConfigured && stateController.CurrentState.Id == stateController.taskTrialState.Id)
       {
         indexDistance.Update();
-        thumbDistance.Update();
         projectedIndexDistance.Update();
-        projectedThumbDistance.Update();
 
         if (selections.Time.IsRunning)
         {
-          selections.Distance += indexDistance.CurrentDistance + thumbDistance.CurrentDistance;
-          selections.ProjectedDistance += projectedIndexDistance.CurrentDistance + projectedThumbDistance.CurrentDistance;
+          selections.Distance += indexDistance.CurrentDistance;
+          selections.ProjectedDistance += projectedIndexDistance.CurrentDistance;
         }
         if (pan.Time.IsRunning)
         {
-          pan.Distance += indexDistance.CurrentDistance + thumbDistance.CurrentDistance;
-          pan.ProjectedDistance += projectedIndexDistance.CurrentDistance + projectedThumbDistance.CurrentDistance;
+          pan.Distance += indexDistance.CurrentDistance;
+          pan.ProjectedDistance += projectedIndexDistance.CurrentDistance;
         }
         if (zoom.Time.IsRunning)
         {
+          if (technique.CurrentCondition.useTouchInput)
+          {
+            thumbDistance.Update();
+            projectedThumbDistance.Update();
+          }
+
           zoom.Distance += indexDistance.CurrentDistance + thumbDistance.CurrentDistance;
           zoom.ProjectedDistance += projectedIndexDistance.CurrentDistance + projectedThumbDistance.CurrentDistance;
         }
@@ -195,8 +199,8 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
       indexDistance = new CursorDistance(Index);
       thumbDistance = new CursorDistance(Thumb);
-      projectedIndexDistance = new BaseCursorDistance(ProjectedIndex);
-      projectedThumbDistance = new BaseCursorDistance(ProjectedThumb);
+      projectedIndexDistance = new ProjectedCursorDistance(ProjectedIndex);
+      projectedThumbDistance = new ProjectedCursorDistance(ProjectedThumb);
       headPhoneDistance = new Distance(() => { return mobileDevice.IsTracking; }, () => { return (head.position - mobileDevice.transform.position).magnitude; });
 
       base.Configure();
@@ -244,9 +248,9 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected override void TaskGrid_Completed()
     {
-      // Complete the row
-      if (stateController.CurrentState.Id == stateController.taskTrialState.Id)
+      if (!CurrentRowCompleted)
       {
+        // Complete the row
         AddToRow(startDateTime);
         AddToRow((DateTime.Now - startDateTime).TotalSeconds);
 

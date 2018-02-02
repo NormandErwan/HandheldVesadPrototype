@@ -40,7 +40,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       maskPositionOffset = new Vector3(0f, 0f, 40f / 100f * maskScale.z);
 
       centerMask = Instantiate(maskPrefab, transform);
-      centerMask.transform.localPosition = Vector3.zero;
+      centerMask.transform.localPosition = maskPositionOffset;
       centerMask.transform.localRotation = Quaternion.identity;
       centerMask.name = "MobileDeviceMask";
 
@@ -56,18 +56,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       Hide();
     }
 
-    public virtual void Configure(bool showGrid)
+    public virtual void Configure()
     {
-      centerMask.transform.localPosition = maskPositionOffset;
-      if (showGrid)
-      {
-        centerMask.transform.localScale = Vector3.Scale(taskGrid.ElementScale, taskGrid.transform.lossyScale) + maskScale;
-      }
-      else
-      {
-        centerMask.transform.localScale = new Vector3(taskGrid.LossyScale.x, taskGrid.LossyScale.y, maskScale.z);
-      }
-
+      centerMask.transform.localScale = Vector3.Scale(taskGrid.ElementScale, taskGrid.transform.lossyScale) + maskScale;
       for (int i = 0; i < sideMasks.Length; i++)
       {
         sideMasks[i].transform.localPosition = Vector3.Scale((i / 2 == 0 ? 1 : -1) * sideMasksPositions[i % 2], taskGrid.LossyScale) + maskPositionOffset;

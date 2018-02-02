@@ -22,24 +22,24 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     protected DeviceController deviceController;
 
     [SerializeField]
-    protected BaseCursor projectedRightIndex;
+    protected ProjectedCursor projectedRightIndex;
 
     [SerializeField]
-    protected BaseCursor projectedLeftIndex;
+    protected ProjectedCursor projectedLeftIndex;
 
     [SerializeField]
-    protected BaseCursor projectedRightThumb;
+    protected ProjectedCursor projectedRightThumb;
 
     [SerializeField]
-    protected BaseCursor projectedLeftThumb;
+    protected ProjectedCursor projectedLeftThumb;
 
     // Properties
 
     protected Inputs.Cursor Index { get; set; }
-    protected BaseCursor ProjectedIndex { get; set; }
+    protected ProjectedCursor ProjectedIndex { get; set; }
 
     protected Inputs.Cursor Thumb { get; set; }
-    protected BaseCursor ProjectedThumb { get; set; }
+    protected ProjectedCursor ProjectedThumb { get; set; }
 
     // Variables
 
