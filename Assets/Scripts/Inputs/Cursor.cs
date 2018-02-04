@@ -1,6 +1,5 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -319,6 +318,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
         {
           if (latestCursorPositions.ContainsKey(zoomable) && latestCursorPositions[zoomable].Count < 2 && zoomable.IsZooming)
           {
+            tapped.Clear();
             zoomable.SetZooming(false);
           }
         });
@@ -327,6 +327,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
         {
           if (latestCursorPositions.ContainsKey(draggable) && latestCursorPositions[draggable].Count == 0 && draggable.IsDragging)
           {
+            tapped.Clear();
             draggable.SetDragging(false);
           }
         });
