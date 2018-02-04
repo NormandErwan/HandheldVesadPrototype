@@ -223,6 +223,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         selections.Reset();
         deselections = 0;
         errors = 0;
+        classifications = 0;
 
         pan.Reset();
         zoom.Reset();
