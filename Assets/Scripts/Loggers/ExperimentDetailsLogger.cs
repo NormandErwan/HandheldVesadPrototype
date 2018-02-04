@@ -32,8 +32,16 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         PrepareRow();
 
         AddToRow(Time.frameCount);
-        AddToRow(deviceController.ParticipantId);
         AddToRow(DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss.fff"));
+
+        AddToRow(deviceController.ParticipantId);
+        AddToRow(technique.CurrentCondition.Id);
+        AddToRow(technique.CurrentCondition.Name);
+        AddToRow(textSize.CurrentCondition.Id);
+        AddToRow(textSize.CurrentCondition.Name);
+        AddToRow(distance.CurrentCondition.Id);
+        AddToRow(distance.CurrentCondition.Name);
+        AddToRow(stateController.CurrentTrial);
 
         AddToRow(taskGrid.transform, false);
         AddToRow(taskGrid.LossyScale);
@@ -102,7 +110,14 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     {
       Filename = "participant-" + deviceController.ParticipantId + "_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + "_details.csv";
 
-      Columns = new List<string>() { "frame_id", "participant_id", "date_time" };
+      Columns = new List<string>() {
+        "frame_id", "datetime",
+        "participant_id",
+        "technique_id", "technique_name",
+        "text_size_id", "text_size_name",
+        "distance_id", "distance_name",
+        "trial"
+      };
 
       AddTransformToColumns("grid");
       Columns.AddRange(new string[] {

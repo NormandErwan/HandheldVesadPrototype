@@ -117,10 +117,6 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     // Variables
 
-    protected IVTechnique technique;
-    protected IVTextSize textSize;
-    protected IVClassificationDifficulty distance;
-
     protected DateTime startDateTime;
 
     protected Variable selections = new Variable("selections");
@@ -136,13 +132,6 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     protected Distance headPhoneDistance;
 
     // MonoBehaviour methods
-
-    protected virtual void Start()
-    {
-      technique = stateController.GetIndependentVariable<IVTechnique>();
-      textSize = stateController.GetIndependentVariable<IVTextSize>();
-      distance = stateController.GetIndependentVariable<IVClassificationDifficulty>();
-    }
 
     protected virtual void LateUpdate()
     {
@@ -188,7 +177,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         "technique_id", "technique_name",
         "text_size_id", "text_size_name",
         "distance_id", "distance_name",
-        "trial_number", "grid_config",
+        "trial", "grid_config",
         "start_date_time", "total_time"
       };
       Columns.AddRange(selections.Columns());

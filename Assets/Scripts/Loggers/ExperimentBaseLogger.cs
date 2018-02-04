@@ -2,6 +2,7 @@
 using NormandErwan.MasterThesis.Experiment.Experiment;
 using NormandErwan.MasterThesis.Experiment.Experiment.States;
 using NormandErwan.MasterThesis.Experiment.Experiment.Task;
+using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
 using NormandErwan.MasterThesis.Experiment.Inputs;
 using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using UnityEngine;
@@ -46,6 +47,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     protected StateController stateController;
     protected TaskGrid taskGrid;
 
+    protected IVTechnique technique;
+    protected IVTextSize textSize;
+    protected IVClassificationDifficulty distance;
+
     // MonoBehaviour methods
 
     protected override void Awake()
@@ -71,6 +76,13 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       taskGrid.ZoomingStarted += TaskGrid_ZoomingStarted;
       taskGrid.Zooming += TaskGrid_Zooming;
       taskGrid.ZoomingStopped += TaskGrid_ZoomingStopped;
+    }
+
+    protected virtual void Start()
+    {
+      technique = stateController.GetIndependentVariable<IVTechnique>();
+      textSize = stateController.GetIndependentVariable<IVTextSize>();
+      distance = stateController.GetIndependentVariable<IVClassificationDifficulty>();
     }
 
     protected override void OnDestroy()
