@@ -18,33 +18,27 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     [SerializeField]
     private Renderer border;
 
-    [SerializeField]
-    private Material borderMaterial;
-
-    [SerializeField]
-    private int borderMargins;
-
-    [SerializeField]
-    private Material borderMaterial_Selected;
-
-    [SerializeField]
-    private int borderMargins_Selected;
-
     [Header("Background")]
     [SerializeField]
     private Renderer background;
 
     [SerializeField]
-    private Material correctlyClassifiedMaterial;
+    private Material classifiedMaterial;
 
     [SerializeField]
-    private Material correctlyClassifiedMaterial_Focused;
+    private Material focusedClassifiedMaterial;
 
     [SerializeField]
-    private Material incorrectlyClassifiedMaterial;
+    private Material notClassifiedMaterial;
 
     [SerializeField]
-    private Material incorrectlyClassifiedMaterial_Focused;
+    private Material focusedNotClassifiedMaterial;
+
+    [SerializeField]
+    private Material selectedMaterial;
+
+    [SerializeField]
+    private Material focusedSelectedClassifiedMaterial;
 
     // Interfaces properties
 
@@ -89,7 +83,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       }
     }
 
-    public bool CorrectlyClassified { get; protected set; }
+    public bool Classified { get; protected set; }
 
     public SphereCollider Collider { get; protected set; }
 
@@ -196,9 +190,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       Collider.radius = 0.5f * Scale.x;
     }
 
-    public void SetCorrectlyClassified(bool value)
+    public void SetClassified(bool value)
     {
-      CorrectlyClassified = value;
+      Classified = value;
       UpdateBackground();
     }
 
@@ -206,22 +200,15 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     {
       if (IsSelected)
       {
-        border.material = borderMaterial_Selected;
-        background.transform.localScale = new Vector3(Scale.x - 2 * borderMargins_Selected, Scale.y - 2 * borderMargins_Selected, 0);
+        background.material = (IsFocused) ? focusedSelectedClassifiedMaterial : selectedMaterial;
+      }
+      else if (Classified)
+      {
+        background.material = (IsFocused) ? focusedClassifiedMaterial : classifiedMaterial;
       }
       else
       {
-        border.material = borderMaterial;
-        background.transform.localScale = new Vector3(Scale.x - 2 * borderMargins, Scale.y - 2 * borderMargins, 0);
-      }
-
-      if (CorrectlyClassified)
-      {
-        background.material = (IsFocused) ? correctlyClassifiedMaterial_Focused : correctlyClassifiedMaterial;
-      }
-      else
-      {
-        background.material = (IsFocused) ? incorrectlyClassifiedMaterial_Focused : incorrectlyClassifiedMaterial;
+        background.material = (IsFocused) ? focusedNotClassifiedMaterial : notClassifiedMaterial;
       }
     }
   }

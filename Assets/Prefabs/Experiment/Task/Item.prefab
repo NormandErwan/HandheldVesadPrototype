@@ -88,7 +88,7 @@ Transform:
   m_GameObject: {fileID: 1354887161675136}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 342.5, y: 342.5, z: 0}
+  m_LocalScale: {x: 326, y: 326, z: 1}
   m_Children: []
   m_Father: {fileID: 4443275701100482}
   m_RootOrder: 1
@@ -117,7 +117,7 @@ Transform:
   m_GameObject: {fileID: 1744866466497448}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 352.5, y: 352.5, z: 0}
+  m_LocalScale: {x: 334, y: 334, z: 1}
   m_Children: []
   m_Father: {fileID: 4443275701100482}
   m_RootOrder: 0
@@ -130,7 +130,7 @@ Transform:
   m_GameObject: {fileID: 1670596829703382}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4443275701100482}
   m_RootOrder: 2
@@ -306,13 +306,15 @@ MonoBehaviour:
     type: 2}
   borderMargins_Selected: 15
   background: {fileID: 23397033672243848}
-  correctlyClassifiedMaterial: {fileID: 2100000, guid: 0a9e0615156122744a2ab6908e34133e,
+  classifiedMaterial: {fileID: 2100000, guid: 0a9e0615156122744a2ab6908e34133e, type: 2}
+  focusedClassifiedMaterial: {fileID: 2100000, guid: 227d0fcd131d9ab4a823c20a8677cb02,
     type: 2}
-  correctlyClassifiedMaterial_Focused: {fileID: 2100000, guid: 227d0fcd131d9ab4a823c20a8677cb02,
+  notClassifiedMaterial: {fileID: 2100000, guid: 57c7d98b1acef0f49967632816a6cedb,
     type: 2}
-  incorrectlyClassifiedMaterial: {fileID: 2100000, guid: 57c7d98b1acef0f49967632816a6cedb,
+  focusedNotClassifiedMaterial: {fileID: 2100000, guid: c7221b4879017a440a24f4c727142375,
     type: 2}
-  incorrectlyClassifiedMaterial_Focused: {fileID: 2100000, guid: c7221b4879017a440a24f4c727142375,
+  selectedMaterial: {fileID: 2100000, guid: 8b65b2294d1a1ff4bae865bfd9f38c8c, type: 2}
+  focusedSelectedClassifiedMaterial: {fileID: 2100000, guid: 5868415ce6e2b9e418092e3bdc071d57,
     type: 2}
 --- !u!135 &135541905464627406
 SphereCollider:
@@ -324,5 +326,5 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 176.25
+  m_Radius: 167
   m_Center: {x: 0, y: 0, z: 0}

@@ -177,7 +177,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       {
         item.ItemClass = (ItemClass)itemValues[index];
         item.FontSize = ItemFontSize;
-        item.SetCorrectlyClassified(item.ItemClass == ItemClass);
+        item.SetClassified(item.ItemClass == ItemClass);
         item.Configure();
 
         item.Focused += Item_Focused;
@@ -188,7 +188,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public override void Append(Item item)
     {
-      item.SetCorrectlyClassified(item.ItemClass == ItemClass);
+      item.SetClassified(item.ItemClass == ItemClass);
       item.Focused += Item_Focused;
       base.Append(item);
     }
