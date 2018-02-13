@@ -4,7 +4,7 @@ using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using NormandErwan.MasterThesis.Experiment.Utilities;
 using UnityEngine;
 
-namespace NormandErwan.MasterThesis.Experiment.Inputs
+namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 {
   public class ProjectedCursor : BaseCursor
   {
@@ -30,9 +30,9 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     public bool IsOnGrid { get; protected set; }
 
-        // Variables
+    // Variables
 
-        protected GenericVector3<Range<float>> positionRanges = new GenericVector3<Range<float>>(new Range<float>(), new Range<float>(), null);
+    protected GenericVector3<Range<float>> positionRanges = new GenericVector3<Range<float>>(new Range<float>(), new Range<float>(), null);
     protected TaskGrid taskGrid;
 
     // Methods

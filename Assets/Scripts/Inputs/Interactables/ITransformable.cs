@@ -9,6 +9,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Interactables
     // Properties
 
     bool IsTransformable { get; }
+    bool IsTransforming { get; }
 
     Transform Transform { get; }
     GenericVector3<Range<float>> PositionRange { get; }

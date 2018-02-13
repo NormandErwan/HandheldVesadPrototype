@@ -30,7 +30,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
         {
           var cursorType = GetCursorType(hand.IsRight, finger.Type);
 
-          Cursor cursor;
+          Cursors.Cursor cursor;
           if (Cursors.TryGetValue(cursorType, out cursor))
           {
             cursor.transform.position = (UseStabilizedPositions ? finger.StabilizedTipPosition : finger.TipPosition).ToVector3();

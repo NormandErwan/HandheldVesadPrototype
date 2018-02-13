@@ -1,4 +1,4 @@
-﻿using NormandErwan.MasterThesis.Experiment.Inputs;
+﻿using NormandErwan.MasterThesis.Experiment.Inputs.Cursors;
 using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Loggers.Utilities

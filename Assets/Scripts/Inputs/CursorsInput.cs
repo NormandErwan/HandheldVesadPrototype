@@ -14,11 +14,11 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     // Editor fields
 
     [SerializeField]
-    private Cursor[] cursors;
+    private Cursors.Cursor[] cursors;
 
     // Properties
 
-    public Dictionary<CursorType, Cursor> Cursors { get; protected set; }
+    public Dictionary<CursorType, Cursors.Cursor> Cursors { get; protected set; }
 
     // Events
 
@@ -28,7 +28,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     protected virtual void Awake()
     {
-      Cursors = new Dictionary<CursorType, Cursor>();
+      Cursors = new Dictionary<CursorType, Cursors.Cursor>();
       foreach (var cursor in cursors)
       {
         Cursors.Add(cursor.Type, cursor);

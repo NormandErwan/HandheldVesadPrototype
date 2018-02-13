@@ -46,6 +46,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     // Interfaces properties
 
     public int Priority { get { return interactablePriority; } }
+    public IInteractable Parent { get; set; }
 
     public GameObject GameObject { get { return gameObject; } }
     public Vector2 Scale { get; set; }
@@ -97,6 +98,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public event Action<IInteractable> Interactable = delegate { };
 
     public event Action<IFocusable> Focused = delegate { };
+    public event Action<Item> Focused2 = delegate { };
 
     public event Action<ISelectable> Selectable = delegate { };
     public event Action<ISelectable> Selected = delegate { };
@@ -145,6 +147,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       {
         IsFocused = value;
         Focused(this);
+        Focused2(this);
         UpdateBackground();
       }
     }

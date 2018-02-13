@@ -1,7 +1,7 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using UnityEngine;
 
-namespace NormandErwan.MasterThesis.Experiment.Inputs
+namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 {
   public abstract class BaseCursor : MonoBehaviour, ICursor
   {

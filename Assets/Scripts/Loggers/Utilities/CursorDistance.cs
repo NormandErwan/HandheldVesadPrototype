@@ -4,12 +4,12 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers.Utilities
 {
   public class CursorDistance : PositionDistance
   {
-    public CursorDistance(Inputs.Cursor cursor) : base()
+    public CursorDistance(Inputs.Cursors.Cursor cursor) : base()
     {
       Cursor = cursor;
     }
 
-    public Inputs.Cursor Cursor { get; protected set; }
+    public Inputs.Cursors.Cursor Cursor { get; protected set; }
 
     protected override bool UpdateThisFrame()
     {

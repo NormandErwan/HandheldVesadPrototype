@@ -7,6 +7,7 @@
     CursorType Type { get; }
     bool IsActive { get; }
     bool IsVisible { get; }
+    bool IsFinger { get; }
     bool IsRightHanded { get; }
 
     // Methods

@@ -4,6 +4,7 @@ using NormandErwan.MasterThesis.Experiment.Experiment.States;
 using NormandErwan.MasterThesis.Experiment.Experiment.Task;
 using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
 using NormandErwan.MasterThesis.Experiment.Inputs;
+using NormandErwan.MasterThesis.Experiment.Inputs.Cursors;
 using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using UnityEngine;
 
@@ -36,10 +37,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     // Properties
 
-    protected Inputs.Cursor Index { get; set; }
+    protected Inputs.Cursors.Cursor Index { get; set; }
     protected ProjectedCursor ProjectedIndex { get; set; }
 
-    protected Inputs.Cursor Thumb { get; set; }
+    protected Inputs.Cursors.Cursor Thumb { get; set; }
     protected ProjectedCursor ProjectedThumb { get; set; }
 
     // Variables

@@ -48,6 +48,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     // Interfaces properties
 
     public int Priority { get { return interactablePriority; } }
+    public IInteractable Parent { get { return null; } }
 
     public bool IsInteractable { get; protected set; }
     public bool IsTransformable { get; protected set; }
@@ -55,6 +56,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public bool IsFocusable { get; protected set; }
     public bool IsFocused { get; protected set; }
 
+    public bool IsTransforming { get { return IsDragging || IsZooming; } }
     public bool IsDragging { get; protected set; }
     public bool IsZooming { get; protected set; }
 
@@ -113,6 +115,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     // Variables
 
     protected new BoxCollider collider;
+
+    protected Container focusedContainer;
+    protected Item focusedItem;
 
     protected Item selectedItem;
     protected bool ignoreNextItemSelected = false;
@@ -211,7 +216,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
           DraggingStopped(this);
         }
       }
-      SetElementsInteractables(false);
+      SetElementsInteractables(!IsDragging);
     }
 
     public void SetDragged(Vector3 translation)
@@ -244,7 +249,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
           ZoomingStopped(this);
         }
       }
-      SetElementsInteractables(false);
+      SetElementsInteractables(!IsZooming);
     }
 
     public void SetZoomed(Vector3 scaling, Vector3 translation)
@@ -370,13 +375,16 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         container.Configure();
         container.Display();
 
+        container.Parent = this;
         container.ItemClass = (ItemClass)GridGenerator.Containers[position.y, position.x].GetMainItemId();
         container.ItemFontSize = textSize.CurrentCondition.fontSize;
         container.ConfigureItems(GridGenerator.Containers[position.y, position.x].items);
 
+        container.Focused2 += Container_Focused;
         container.Selected2 += Container_Selected;
         foreach (var item in container.Elements)
         {
+          item.Focused2 += Item_Focused;
           item.Selected2 += Item_Selected;
         }
 
@@ -432,8 +440,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         }
         ItemSelected(container, selectedItem);
       }
-
-      SetElementsInteractables(false);
     }
 
     internal virtual void SetItemMoved(Container newContainer)
@@ -462,8 +468,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         ItemMoved(previousContainer, previousContainer, selectedItem, ItemMovedType.Error);
         SetItemSelected(selectedItem, previousContainer);
       }
-
-      SetElementsInteractables(false);
     }
 
     protected virtual void UnsubscribeFromElementEvents()
@@ -481,6 +485,26 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       }
     }
 
+    protected virtual void Item_Focused(Item item)
+    {
+      if (focusedItem != item)
+      {
+        if (focusedItem != null)
+        {
+          focusedItem.SetFocused(false);
+        }
+        if (focusedContainer != null)
+        {
+          focusedContainer.SetFocused(false);
+        }
+        focusedItem = item;
+      }
+      else if (!item.IsFocused)
+      {
+        focusedItem = null;
+      }
+    }
+
     protected virtual void Item_Selected(Item item)
     {
       if (ignoreNextItemSelected)
@@ -491,28 +515,60 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       ItemSelectSync(item);
     }
 
-    protected virtual void Container_Selected(Container newContainer)
+    protected virtual void Container_Focused(Container container)
     {
-      if (newContainer.IsSelected && selectedItem != null)
+      if (focusedItem != null)
+      {
+        if (focusedContainer == container)
+        {
+          focusedContainer.SetFocused(false);
+          focusedContainer = null;
+        }
+        else if (container.IsFocused)
+        {
+          container.SetFocused(false);
+        }
+      }
+      else if (focusedContainer != container)
+      {
+        if (focusedContainer != null)
+        {
+          focusedContainer.SetFocused(false);
+        }
+        focusedContainer = container;
+      }
+      else if (!container.IsFocused)
+      {
+        focusedContainer = null;
+      }
+    }
+
+    protected virtual void Container_Selected(Container container)
+    {
+      if (container.IsSelected && selectedItem != null)
       {
         Container previousContainer = GetContainer(selectedItem);
-        if (previousContainer != newContainer) // Move the item only if it's a different container
+        if (previousContainer != container) // Move the item only if it's a different container
         {
           // Update RemainingItemsToClassify and classification events
-          if (!newContainer.IsFull)
+          if (!container.IsFull)
           {
-            if (previousContainer.ItemClass != selectedItem.ItemClass && newContainer.ItemClass == selectedItem.ItemClass)
+            if (previousContainer.ItemClass != selectedItem.ItemClass && container.ItemClass == selectedItem.ItemClass)
             {
               RemainingItemsToClassify--;
             }
-            else if (previousContainer.ItemClass == selectedItem.ItemClass && newContainer.ItemClass != selectedItem.ItemClass)
+            else if (previousContainer.ItemClass == selectedItem.ItemClass && container.ItemClass != selectedItem.ItemClass)
             {
               RemainingItemsToClassify++;
             }
           }
 
           // Sync the item move
-          ItemMoveSync(newContainer);
+          ItemMoveSync(container);
+          if (container.IsLongPressable)
+          {
+            SetElementsInteractables(false); // Avoid the item to be selected right after being moved
+          }
 
           // Call Complete if all items are classified
           if (RemainingItemsToClassify == 0)
@@ -534,20 +590,29 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         container.SetInteractable(value);
         container.SetLongPressable(technique.CurrentCondition.useLeapInput);
         container.SetTappable(technique.CurrentCondition.useTouchInput);
-        if (value == false)
-        {
-          container.SetFocused(false); // Force defocus
-        }
 
         foreach (var item in container.Elements)
         {
           item.SetInteractable(value);
           item.SetLongPressable(technique.CurrentCondition.useLeapInput);
           item.SetTappable(technique.CurrentCondition.useTouchInput);
-          if (value == false)
-          {
-            item.SetFocused(false); // Force defocus
-          }
+        }
+      }
+
+      if (value == false)
+      {
+        DefocusElements();
+      }
+    }
+
+    protected virtual void DefocusElements()
+    {
+      foreach (var container in Elements)
+      {
+        container.SetFocused(false);
+        foreach (var item in container.Elements)
+        {
+          item.SetFocused(false);
         }
       }
     }

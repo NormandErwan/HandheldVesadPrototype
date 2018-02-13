@@ -26,6 +26,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     // Interfaces properties
 
     public int Priority { get { return interactablePriority; } }
+    public IInteractable Parent { get; set; }
 
     public bool IsInteractable { get; protected set; }
 
@@ -47,6 +48,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public event Action<IInteractable> Interactable = delegate { };
 
     public event Action<IFocusable> Focused = delegate { };
+    public event Action<Container> Focused2 = delegate { };
 
     public event Action<ISelectable> Selectable = delegate { };
     public event Action<ISelectable> Selected = delegate { };
@@ -89,6 +91,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       ElementScale = new Vector2(itemSize, itemSize);
       foreach (var item in Elements)
       {
+        item.Parent = this;
         item.Scale = ElementScale;
       }
 
@@ -122,15 +125,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       {
         IsFocused = value;
         Focused(this);
-
-        focusedItems = 0;
-        foreach (var item in Elements)
-        {
-          if (item.IsFocused)
-          {
-            focusedItems++;
-          }
-        }
+        Focused2(this);
         UpdateBackground();
       }
     }
@@ -188,8 +183,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         item.SetClassified(item.ItemClass == ItemClass);
         item.Configure();
 
-        item.Focused += Item_Focused;
-
         index++;
       }
     }
@@ -197,24 +190,12 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public override void Append(Item item)
     {
       item.SetClassified(item.ItemClass == ItemClass);
-      item.Focused += Item_Focused;
       base.Append(item);
-    }
-
-    public override void Remove(Item item)
-    {
-      item.Focused -= Item_Focused;
-      base.Remove(item);
     }
 
     protected virtual void UpdateBackground()
     {
       background.material = (IsFocused && focusedItems == 0) ? backgroundMaterial_Focused : backgroundMaterial;
-    }
-
-    protected virtual void Item_Focused(IFocusable item)
-    {
-      focusedItems++;
     }
   }
 }
