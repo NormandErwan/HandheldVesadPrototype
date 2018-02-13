@@ -1,135 +1,30 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.Task;
-using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
-using NormandErwan.MasterThesis.Experiment.Inputs;
 using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
+using NormandErwan.MasterThesis.Experiment.Loggers.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Loggers
 {
   public class ParticipantTrialsLogger : ExperimentBaseLogger
   {
-    protected class Variable
-    {
-      public string Name { get; protected set; }
-      public Stopwatch Time { get; protected set; }
-
-      public int Count { get; set; }
-      public float Distance { get; set; }
-      public float ProjectedDistance { get; set; }
-
-      public Variable(string name)
-      {
-        Name = name;
-        Time = new Stopwatch();
-        Reset();
-      }
-
-      public void Reset()
-      {
-        Time.Reset();
-
-        Count = 0;
-        Distance = 0;
-        ProjectedDistance = 0;
-      }
-
-      public List<string> Columns()
-      {
-        return new List<string>() { Name + "_count", Name + "_time", Name + "_distance", Name + "_projected_distance" };
-      }
-    }
-
-    protected class Distance
-    {
-      public bool Started { get; protected set; }
-      public float TotalDistance { get; protected set; }
-      public float CurrentDistance { get; protected set; }
-      public float PreviousDistance { get; protected set; }
-
-      protected Vector3 previousPosition;
-      protected Func<bool> updateThisFrame;
-      protected Func<float> getCurrentDistance;
-
-      public Distance(Func<bool> updateThisFrame, Func<Vector3> getTrackedPosition)
-      {
-        this.updateThisFrame = updateThisFrame;
-        getCurrentDistance = () =>
-        {
-          var position = getTrackedPosition();
-          var distance = (position - previousPosition).magnitude;
-          previousPosition = position;
-          return distance;
-        };
-        Reset();
-      }
-
-      public Distance(Func<bool> updateThisFrame, Func<float> getCurrentDistance)
-      {
-        this.updateThisFrame = updateThisFrame;
-        this.getCurrentDistance = getCurrentDistance;
-        Reset();
-      }
-
-      public void Reset()
-      {
-        Started = false;
-        TotalDistance = 0;
-        CurrentDistance = 0;
-        PreviousDistance = 0;
-      }
-
-      public void Update()
-      {
-        if (updateThisFrame())
-        {
-          CurrentDistance = getCurrentDistance();
-          if (!Started)
-          {
-            Started = true;
-          }
-          else
-          {
-            TotalDistance += Mathf.Abs(CurrentDistance - PreviousDistance);
-          }
-          PreviousDistance = CurrentDistance;
-        }
-      }
-    }
-
-    protected class CursorDistance : Distance
-    {
-      public CursorDistance(Inputs.Cursor cursor) 
-        : base(() => { return cursor.IsTracked; }, () => { return cursor.transform.position; })
-      {
-      }
-    }
-
-    protected class ProjectedCursorDistance : Distance
-    {
-      public ProjectedCursorDistance(ProjectedCursor projectedCursor)
-        : base(() => { return projectedCursor.IsOnGrid; }, () => { return projectedCursor.transform.position; })
-      {
-      }
-    }
-
     // Variables
 
     protected DateTime startDateTime;
 
-    protected Variable selections = new Variable("selections");
+    protected InteractionLogger selections = new InteractionLogger("selections");
     protected int deselections = 0;
     protected int errors = 0;
     protected int classifications = 0;
 
-    protected Variable pan = new Variable("pan");
-    protected Variable zoom = new Variable("zoom");
+    protected InteractionLogger pan = new InteractionLogger("pan");
+    protected InteractionLogger zoom = new InteractionLogger("zoom");
 
     protected CursorDistance indexDistance, thumbDistance;
     protected ProjectedCursorDistance projectedIndexDistance, projectedThumbDistance;
-    protected Distance headPhoneDistance;
+    protected AbsoluteHeadPhoneDistance absoluteHeadPhoneDistance;
+    protected SignedHeadPhoneDistance signedHeadPhoneDistance;
 
     // MonoBehaviour methods
 
@@ -142,13 +37,13 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
         if (selections.Time.IsRunning)
         {
-          selections.Distance += indexDistance.CurrentDistance;
-          selections.ProjectedDistance += projectedIndexDistance.CurrentDistance;
+          selections.Distance += indexDistance.Current;
+          selections.ProjectedDistance += projectedIndexDistance.Current;
         }
         if (pan.Time.IsRunning)
         {
-          pan.Distance += indexDistance.CurrentDistance;
-          pan.ProjectedDistance += projectedIndexDistance.CurrentDistance;
+          pan.Distance += indexDistance.Current;
+          pan.ProjectedDistance += projectedIndexDistance.Current;
         }
         if (zoom.Time.IsRunning)
         {
@@ -158,11 +53,12 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
             projectedThumbDistance.Update();
           }
 
-          zoom.Distance += indexDistance.CurrentDistance + thumbDistance.CurrentDistance;
-          zoom.ProjectedDistance += projectedIndexDistance.CurrentDistance + projectedThumbDistance.CurrentDistance;
+          zoom.Distance += indexDistance.Current + thumbDistance.Current;
+          zoom.ProjectedDistance += projectedIndexDistance.Current + projectedThumbDistance.Current;
         }
 
-        headPhoneDistance.Update();
+        absoluteHeadPhoneDistance.Update();
+        signedHeadPhoneDistance.Update();
       }
     }
 
@@ -184,13 +80,16 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       Columns.AddRange(new string[]{ "deselections", "errors", "classifications" });
       Columns.AddRange(pan.Columns());
       Columns.AddRange(zoom.Columns());
-      Columns.Add("head_phone_distance");
+      Columns.Add("absolute_head_phone_distance");
+      Columns.Add("signed_head_phone_distance");
 
       indexDistance = new CursorDistance(Index);
       thumbDistance = new CursorDistance(Thumb);
       projectedIndexDistance = new ProjectedCursorDistance(ProjectedIndex);
       projectedThumbDistance = new ProjectedCursorDistance(ProjectedThumb);
-      headPhoneDistance = new Distance(() => { return mobileDevice.IsTracking; }, () => { return (head.position - mobileDevice.transform.position).magnitude; });
+
+      absoluteHeadPhoneDistance = new AbsoluteHeadPhoneDistance(mobileDevice, head);
+      signedHeadPhoneDistance = new SignedHeadPhoneDistance(mobileDevice, head);
 
       base.Configure();
     }
@@ -217,7 +116,8 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         pan.Reset();
         zoom.Reset();
 
-        headPhoneDistance.Reset();
+        absoluteHeadPhoneDistance.Reset();
+        signedHeadPhoneDistance.Reset();
 
         // Add the first columns to the current row
         AddToRow(deviceController.ParticipantId);
@@ -252,7 +152,8 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         AddToRow(pan);
         AddToRow(zoom);
 
-        AddToRow(headPhoneDistance.TotalDistance);
+        AddToRow(absoluteHeadPhoneDistance.Total);
+        AddToRow(signedHeadPhoneDistance.Total.magnitude);
 
         WriteRow();
       }
@@ -315,7 +216,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       zoom.Time.Stop();
     }
 
-    protected virtual void AddToRow(Variable variable)
+    protected virtual void AddToRow(InteractionLogger variable)
     {
       AddToRow(variable.Count);
       AddToRow(variable.Time.Elapsed.TotalSeconds);
