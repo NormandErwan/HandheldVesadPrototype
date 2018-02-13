@@ -298,13 +298,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51d04981baca3da42b3e939a64eec146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactablePriority: 20
   itemClassText: {fileID: 102949051185255326}
   border: {fileID: 23939856244919554}
-  borderMaterial: {fileID: 2100000, guid: f0e16e6f56061bc4c901ef987aeaa5e5, type: 2}
-  borderMargins: 5
-  borderMaterial_Selected: {fileID: 2100000, guid: 408adcd45a901634a9934ec75b418ac9,
-    type: 2}
-  borderMargins_Selected: 15
   background: {fileID: 23397033672243848}
   classifiedMaterial: {fileID: 2100000, guid: 0a9e0615156122744a2ab6908e34133e, type: 2}
   focusedClassifiedMaterial: {fileID: 2100000, guid: 227d0fcd131d9ab4a823c20a8677cb02,

@@ -10,6 +10,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
   {
     // Editor fields
 
+    [SerializeField]
+    private int interactablePriority;
+
     [Header("Background")]
     [SerializeField]
     private Renderer background;
@@ -21,6 +24,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     private Material backgroundMaterial_Focused;
 
     // Interfaces properties
+
+    public int Priority { get { return interactablePriority; } }
 
     public bool IsInteractable { get; protected set; }
 
@@ -143,10 +148,13 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     {
       if (value == true)
       {
-        IsSelected = value;
+        IsSelected = true;
         Selected(this);
         Selected2(this);
+
         IsSelected = false;
+        Selected(this);
+        Selected2(this);
       }
     }
 

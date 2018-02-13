@@ -187,6 +187,7 @@ MonoBehaviour:
   elementMargin: {x: 4, y: 4}
   elementPrefab: {fileID: 114102820701016124, guid: 61698222a95f4734783382f651cd5cba,
     type: 2}
+  interactablePriority: 10
   background: {fileID: 23751585858085608}
   backgroundMaterial: {fileID: 2100000, guid: c9457f952e56b0749a7d861d78907922, type: 2}
   backgroundMaterial_Focused: {fileID: 2100000, guid: ee9e3ce13d60e834094b6714ca4a0801,

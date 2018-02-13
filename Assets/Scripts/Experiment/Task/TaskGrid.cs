@@ -32,6 +32,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     // Editor fields
 
+    [SerializeField]
+    private int interactablePriority;
+
     [Header("Task grid")]
     [SerializeField]
     private float scaleFactor = 0.0001f;
@@ -43,6 +46,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     private StateController stateController;
 
     // Interfaces properties
+
+    public int Priority { get { return interactablePriority; } }
 
     public bool IsInteractable { get; protected set; }
     public bool IsTransformable { get; protected set; }
@@ -488,7 +493,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     protected virtual void Container_Selected(Container newContainer)
     {
-      if (selectedItem != null)
+      if (newContainer.IsSelected && selectedItem != null)
       {
         Container previousContainer = GetContainer(selectedItem);
         if (previousContainer != newContainer) // Move the item only if it's a different container

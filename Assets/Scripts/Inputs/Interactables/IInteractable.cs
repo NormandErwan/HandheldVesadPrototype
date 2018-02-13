@@ -7,6 +7,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Interactables
     // Properties
 
     bool IsInteractable { get; }
+    int Priority { get; }
 
     // Events
 

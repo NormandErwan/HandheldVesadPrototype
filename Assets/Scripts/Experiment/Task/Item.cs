@@ -10,6 +10,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
   {
     // Editor fields
 
+    [SerializeField]
+    private int interactablePriority;
+
     [Header("Text")]
     [SerializeField]
     private TextMesh itemClassText;
@@ -41,6 +44,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     private Material focusedSelectedClassifiedMaterial;
 
     // Interfaces properties
+
+    public int Priority { get { return interactablePriority; } }
 
     public GameObject GameObject { get { return gameObject; } }
     public Vector2 Scale { get; set; }
