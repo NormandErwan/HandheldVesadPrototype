@@ -340,6 +340,10 @@ Prefab:
       propertyPath: stateController
       value: 
       objectReference: {fileID: 746225671}
+    - target: {fileID: 4814366719969154, guid: 8da6483971380fd418dac0b21a143fad, type: 2}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8da6483971380fd418dac0b21a143fad, type: 2}
   m_IsPrefabParent: 0
@@ -1236,7 +1240,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4443275701100482, guid: 61698222a95f4734783382f651cd5cba, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -0
+      value: -0.000030517578
       objectReference: {fileID: 0}
     - target: {fileID: 4443275701100482, guid: 61698222a95f4734783382f651cd5cba, type: 2}
       propertyPath: m_LocalPosition.z
@@ -1244,15 +1248,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4443275701100482, guid: 61698222a95f4734783382f651cd5cba, type: 2}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4443275701100482, guid: 61698222a95f4734783382f651cd5cba, type: 2}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4443275701100482, guid: 61698222a95f4734783382f651cd5cba, type: 2}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4443275701100482, guid: 61698222a95f4734783382f651cd5cba, type: 2}
       propertyPath: m_LocalRotation.w
@@ -1261,6 +1265,14 @@ Prefab:
     - target: {fileID: 4443275701100482, guid: 61698222a95f4734783382f651cd5cba, type: 2}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4443275701100482, guid: 61698222a95f4734783382f651cd5cba, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4443275701100482, guid: 61698222a95f4734783382f651cd5cba, type: 2}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 61698222a95f4734783382f651cd5cba, type: 2}

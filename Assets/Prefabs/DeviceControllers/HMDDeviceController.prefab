@@ -85,15 +85,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateController: {fileID: 0}
-  grid: {fileID: 0}
+  taskGrid: {fileID: 0}
+  taskGridMasks: {fileID: 0}
   hmdDeviceHUD: {fileID: 0}
-  rightLeapMotionHand: {fileID: 0}
-  rightIndexCursor: {fileID: 0}
-  leftLeapMotionHand: {fileID: 0}
-  leftIndexCursor: {fileID: 0}
   leapFingerCursorsInput: {fileID: 0}
-  maxSelectableDistance: 0.04
-  experimentDetailsLogger: {fileID: 0}
+  rightLeapHand: {fileID: 0}
+  leftLeapHand: {fileID: 0}
 --- !u!114 &114148178166964244
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -152,11 +149,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materials:
   - {fileID: 2100000, guid: f0e16e6f56061bc4c901ef987aeaa5e5, type: 2}
-  - {fileID: 2100000, guid: 408adcd45a901634a9934ec75b418ac9, type: 2}
   - {fileID: 2100000, guid: 0a9e0615156122744a2ab6908e34133e, type: 2}
   - {fileID: 2100000, guid: 227d0fcd131d9ab4a823c20a8677cb02, type: 2}
   - {fileID: 2100000, guid: 57c7d98b1acef0f49967632816a6cedb, type: 2}
   - {fileID: 2100000, guid: c7221b4879017a440a24f4c727142375, type: 2}
+  - {fileID: 2100000, guid: 8b65b2294d1a1ff4bae865bfd9f38c8c, type: 2}
+  - {fileID: 2100000, guid: 5868415ce6e2b9e418092e3bdc071d57, type: 2}
   - {fileID: 2100000, guid: 235726b5d2693a04899aad0f9b08aea3, type: 2}
   transparency: 0.9
 --- !u!114 &114586832952610446

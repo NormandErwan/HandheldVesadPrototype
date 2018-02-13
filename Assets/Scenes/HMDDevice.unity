@@ -152,6 +152,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1744866466497448, guid: 61698222a95f4734783382f651cd5cba, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 61698222a95f4734783382f651cd5cba, type: 2}
   m_IsPrefabParent: 0
@@ -193,6 +197,11 @@ Prefab:
     - target: {fileID: 4827977451641156, guid: fbbef59b3dd39404ca1cd8b91b4498c2, type: 2}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114230085306632826, guid: fbbef59b3dd39404ca1cd8b91b4498c2,
+        type: 2}
+      propertyPath: type
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fbbef59b3dd39404ca1cd8b91b4498c2, type: 2}
@@ -486,11 +495,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4814366719969154, guid: 8da6483971380fd418dac0b21a143fad,
     type: 2}
   m_PrefabInternal: {fileID: 272446988}
---- !u!1 &278493489 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1180324665479064, guid: 1af7da660e405ea4d88d276210dfa5c0,
-    type: 2}
-  m_PrefabInternal: {fileID: 891901921}
 --- !u!1001 &284785076
 Prefab:
   m_ObjectHideFlags: 0
@@ -791,11 +795,6 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 525235694}
   m_Script: {fileID: 11500000, guid: 12f836802674503449e925cf3e374774, type: 3}
---- !u!1 &585634731 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1986579595314124, guid: 1af7da660e405ea4d88d276210dfa5c0,
-    type: 2}
-  m_PrefabInternal: {fileID: 891901921}
 --- !u!114 &610893905 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114979179449275544, guid: b9264159c123e9f439134357a240dc36,
@@ -962,12 +961,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8658a426d2cdf00469db7cc976cefe9c, type: 2}
   m_IsPrefabParent: 0
---- !u!114 &672287416 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114755104426687954, guid: 8658a426d2cdf00469db7cc976cefe9c,
-    type: 2}
-  m_PrefabInternal: {fileID: 672287415}
-  m_Script: {fileID: 11500000, guid: 3388340920fb74244b080011dbb314f9, type: 3}
 --- !u!20 &684885293 stripped
 Camera:
   m_PrefabParentObject: {fileID: 20793800196714628, guid: 0708be0041bc5194590eefd165bbc5f3,
@@ -1241,76 +1234,6 @@ Prefab:
       objectReference: {fileID: 525235696}
     - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
         type: 2}
-      propertyPath: grid
-      value: 
-      objectReference: {fileID: 1802449817}
-    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
-        type: 2}
-      propertyPath: hmdDeviceHUD
-      value: 
-      objectReference: {fileID: 610893905}
-    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
-        type: 2}
-      propertyPath: rightLeapMotionHand
-      value: 
-      objectReference: {fileID: 2009448288}
-    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
-        type: 2}
-      propertyPath: rightIndexCursor
-      value: 
-      objectReference: {fileID: 891901925}
-    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
-        type: 2}
-      propertyPath: leftLeapMotionHand
-      value: 
-      objectReference: {fileID: 729497847}
-    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
-        type: 2}
-      propertyPath: leftIndexCursor
-      value: 
-      objectReference: {fileID: 1928900614}
-    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
-        type: 2}
-      propertyPath: leapFingerCursorsInput
-      value: 
-      objectReference: {fileID: 891901926}
-    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
-        type: 2}
-      propertyPath: experimentDetailsLogger
-      value: 
-      objectReference: {fileID: 672287416}
-    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
-        type: 2}
-      propertyPath: leftLeapHand
-      value: 
-      objectReference: {fileID: 2095439236}
-    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
-        type: 2}
-      propertyPath: rightLeapHand
-      value: 
-      objectReference: {fileID: 1724015122}
-    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
-        type: 2}
-      propertyPath: activateLeapHands
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
-        type: 2}
-      propertyPath: leftHand
-      value: 
-      objectReference: {fileID: 278493489}
-    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
-        type: 2}
-      propertyPath: rightHand
-      value: 
-      objectReference: {fileID: 585634731}
-    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
-        type: 2}
-      propertyPath: projectedCursorsSync
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
-        type: 2}
       propertyPath: taskGrid
       value: 
       objectReference: {fileID: 1802449817}
@@ -1319,6 +1242,26 @@ Prefab:
       propertyPath: taskGridMasks
       value: 
       objectReference: {fileID: 428960638}
+    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
+        type: 2}
+      propertyPath: hmdDeviceHUD
+      value: 
+      objectReference: {fileID: 610893905}
+    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
+        type: 2}
+      propertyPath: leapFingerCursorsInput
+      value: 
+      objectReference: {fileID: 891901926}
+    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
+        type: 2}
+      propertyPath: rightLeapHand
+      value: 
+      objectReference: {fileID: 1724015122}
+    - target: {fileID: 114030483370761412, guid: c83279399cead4249aca272be50a7ac0,
+        type: 2}
+      propertyPath: leftLeapHand
+      value: 
+      objectReference: {fileID: 2095439236}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c83279399cead4249aca272be50a7ac0, type: 2}
   m_IsPrefabParent: 0
@@ -1427,7 +1370,7 @@ Prefab:
     - target: {fileID: 114825696479755494, guid: 0e9e3a1020f3b0d408719d087b17f487,
         type: 2}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4007796356978886, guid: 0e9e3a1020f3b0d408719d087b17f487, type: 2}
       propertyPath: m_LocalPosition.z
@@ -2843,6 +2786,21 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4222087900461476, guid: a3b64898f2954384a989df0bbfd40e80, type: 2}
       propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114102835371396286, guid: a3b64898f2954384a989df0bbfd40e80,
+        type: 2}
+      propertyPath: useLeapInput
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114102835371396286, guid: a3b64898f2954384a989df0bbfd40e80,
+        type: 2}
+      propertyPath: useTouchInput
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114102835371396286, guid: a3b64898f2954384a989df0bbfd40e80,
+        type: 2}
+      propertyPath: showTaskGridOnlyOnMobileDevice
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
