@@ -646,7 +646,7 @@ MonoBehaviour:
   id: 2
   name: SMALL
   title: Petit
-  fontSize: 40
+  fontSize: 42
 --- !u!114 &114999698179949338
 MonoBehaviour:
   m_ObjectHideFlags: 1
