@@ -11,8 +11,16 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers.Utilities
       Head = head;
     }
 
+    // Properties
+
     public MobileDeviceTracking Phone { get; protected set; }
     public Transform Head { get; protected set; }
+
+    // Variables
+
+    protected Vector3 previous;
+
+    // Methods
 
     protected override bool UpdateThisFrame()
     {
@@ -26,7 +34,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers.Utilities
 
     protected override void UpdateTotal()
     {
-      Total += Current;
+      Total += Current - Previous;
     }
   }
 }
