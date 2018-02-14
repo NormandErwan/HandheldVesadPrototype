@@ -21,7 +21,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected virtual void LateUpdate()
     {
-      if (IsConfigured && stateController.CurrentState.Id == stateController.taskTrialState.Id)
+      if (IsConfigured && stateController.CurrentState == stateController.taskTrialState)
       {
         if (itemDeselected && !itemSelected && !itemMoved)
         {
@@ -159,14 +159,6 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       base.Configure();
     }
 
-    protected override void TaskGrid_Configured()
-    {
-    }
-
-    protected override void TaskGrid_Completed()
-    {
-    }
-
     protected override void TaskGrid_ItemSelected(Container container, Item item)
     {
       if (item.IsSelected)
@@ -192,22 +184,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       selectedItem = item;
     }
 
-    protected override void TaskGrid_DraggingStarted(IDraggable grid)
-    {
-    }
-
     protected override void TaskGrid_Dragging(IDraggable grid, Vector3 translation)
     {
       panning = true;
       panningTranslation = translation;
-    }
-
-    protected override void TaskGrid_DraggingStopped(IDraggable grid)
-    {
-    }
-
-    protected override void TaskGrid_ZoomingStarted(IZoomable grid)
-    {
     }
 
     protected override void TaskGrid_Zooming(IZoomable grid, Vector3 scaling, Vector3 translation)
@@ -215,10 +195,6 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       zooming = true;
       zoomingScaling = scaling;
       zoomingTranslation = translation;
-    }
-
-    protected override void TaskGrid_ZoomingStopped(IZoomable grid)
-    {
     }
 
     protected virtual void AddToRow(Container container)

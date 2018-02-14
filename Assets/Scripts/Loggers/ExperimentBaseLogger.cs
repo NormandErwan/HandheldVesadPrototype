@@ -3,7 +3,6 @@ using NormandErwan.MasterThesis.Experiment.Experiment;
 using NormandErwan.MasterThesis.Experiment.Experiment.States;
 using NormandErwan.MasterThesis.Experiment.Experiment.Task;
 using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
-using NormandErwan.MasterThesis.Experiment.Inputs;
 using NormandErwan.MasterThesis.Experiment.Inputs.Cursors;
 using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using UnityEngine;
@@ -130,18 +129,18 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       Configure();
     }
 
-    protected abstract void TaskGrid_Configured();
-    protected abstract void TaskGrid_Completed();
+    protected virtual void TaskGrid_Configured() { }
+    protected virtual void TaskGrid_Completed() { }
 
-    protected abstract void TaskGrid_ItemSelected(Container container, Item item);
-    protected abstract void TaskGrid_ItemMoved(Container oldContainer, Container newContainer, Item item, TaskGrid.ItemMovedType moveType);
+    protected virtual void TaskGrid_ItemSelected(Container container, Item item) { }
+    protected virtual void TaskGrid_ItemMoved(Container oldContainer, Container newContainer, Item item, TaskGrid.ItemMovedType moveType) { }
 
-    protected abstract void TaskGrid_DraggingStarted(IDraggable grid);
-    protected abstract void TaskGrid_Dragging(IDraggable grid, Vector3 translation);
-    protected abstract void TaskGrid_DraggingStopped(IDraggable grid);
+    protected virtual void TaskGrid_DraggingStarted(IDraggable grid) { }
+    protected virtual void TaskGrid_Dragging(IDraggable grid, Vector3 translation) { }
+    protected virtual void TaskGrid_DraggingStopped(IDraggable grid) { }
 
-    protected abstract void TaskGrid_ZoomingStarted(IZoomable grid);
-    protected abstract void TaskGrid_Zooming(IZoomable grid, Vector3 scaling, Vector3 translation);
-    protected abstract void TaskGrid_ZoomingStopped(IZoomable grid);
+    protected virtual void TaskGrid_ZoomingStarted(IZoomable grid) { }
+    protected virtual void TaskGrid_Zooming(IZoomable grid, Vector3 scaling, Vector3 translation) { }
+    protected virtual void TaskGrid_ZoomingStopped(IZoomable grid) { }
   }
 }

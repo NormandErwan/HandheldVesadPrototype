@@ -30,7 +30,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected virtual void LateUpdate()
     {
-      if (IsConfigured && stateController.CurrentState.Id == stateController.taskTrialState.Id)
+      if (IsConfigured && stateController.CurrentState == stateController.taskTrialState)
       {
         indexDistance.Update();
         projectedIndexDistance.Update();
@@ -96,7 +96,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     protected override void TaskGrid_Configured()
     {
-      if (stateController.CurrentState.Id == stateController.taskTrialState.Id)
+      if (stateController.CurrentState == stateController.taskTrialState)
       {
         PrepareRow();
 
