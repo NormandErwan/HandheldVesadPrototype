@@ -37,6 +37,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     public override void DeactivateCursors()
     {
+      base.DeactivateCursors();
       foreach (var cursor in Cursors)
       {
         cursor.Value.IsTracked = false;
