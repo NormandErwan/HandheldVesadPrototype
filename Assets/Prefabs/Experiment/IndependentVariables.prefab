@@ -417,7 +417,7 @@ MonoBehaviour:
   title: Difficile
   minimumAverageClassificationDistance: 2.5
   maximumAverageClassificationDistance: 2.7
-  numberOfItemsToClass: 10
+  numberOfItemsToClass: 5
 --- !u!114 &114102835371396286
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -436,6 +436,7 @@ MonoBehaviour:
     et d\xE9placer les disques."
   useLeapInput: 0
   useTouchInput: 1
+  useLookInput: 0
   showTaskGridOnlyOnMobileDevice: 1
 --- !u!114 &114158752525081080
 MonoBehaviour:
@@ -472,6 +473,7 @@ MonoBehaviour:
     directement avec votre index."
   useLeapInput: 1
   useTouchInput: 0
+  useLookInput: 0
   showTaskGridOnlyOnMobileDevice: 0
 --- !u!114 &114303898851726862
 MonoBehaviour:
@@ -540,6 +542,7 @@ MonoBehaviour:
     et d\xE9placer les disques."
   useLeapInput: 0
   useTouchInput: 1
+  useLookInput: 0
   showTaskGridOnlyOnMobileDevice: 0
 --- !u!114 &114501037082189576
 MonoBehaviour:
@@ -576,6 +579,7 @@ MonoBehaviour:
   instructions: 
   useLeapInput: 0
   useTouchInput: 1
+  useLookInput: 0
   showTaskGridOnlyOnMobileDevice: 0
 --- !u!114 &114712957325740358
 MonoBehaviour:
@@ -593,7 +597,7 @@ MonoBehaviour:
   title: Facile
   minimumAverageClassificationDistance: 1.25
   maximumAverageClassificationDistance: 1.45
-  numberOfItemsToClass: 10
+  numberOfItemsToClass: 5
 --- !u!114 &114759187420252978
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -608,7 +612,7 @@ MonoBehaviour:
   id: 1
   name: BIG
   title: Grand
-  fontSize: 48
+  fontSize: 50
 --- !u!114 &114784559623597272
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -626,6 +630,7 @@ MonoBehaviour:
   instructions: 
   useLeapInput: 0
   useTouchInput: 0
+  useLookInput: 0
   showTaskGridOnlyOnMobileDevice: 0
 --- !u!114 &114940950492825338
 MonoBehaviour:
@@ -641,7 +646,7 @@ MonoBehaviour:
   id: 2
   name: SMALL
   title: Petit
-  fontSize: 32
+  fontSize: 40
 --- !u!114 &114999698179949338
 MonoBehaviour:
   m_ObjectHideFlags: 1

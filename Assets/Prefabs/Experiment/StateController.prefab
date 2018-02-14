@@ -208,7 +208,7 @@ MonoBehaviour:
   experimentEndState: {fileID: 114855766242606984}
   taskTrainingState: {fileID: 114429863715970740}
   taskTrialState: {fileID: 114661546425955246}
-  TrialsPerCondition: 2
+  TrialsPerCondition: 1
   independentVariables:
   - {fileID: 0}
   - {fileID: 0}
@@ -224,7 +224,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5627d38ddd87084e825a08a58aef09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: ExperimentBeginState
+  id: 0
+  name: ExperimentBeginState
   title: "D\xE9but de l'exp\xE9rience"
   instructions: "Le but est de rendre tous les disques verts. Les disques rouges sont
     les disques mal class\xE9s. Vous devez les d\xE9placer pour les mettre dans la
@@ -241,7 +242,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5627d38ddd87084e825a08a58aef09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: TaskTrainingState
+  id: 1
+  name: TaskTrainingState
   title: "Entra\xEEnement"
   instructions: "Ceci est un entra\xEEnement. Prenez autant de temps que vous voulez
     pour vous familiariser avec la t\xE2che et la technique d'interaction."
@@ -270,7 +272,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5627d38ddd87084e825a08a58aef09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: RestState
+  id: 3
+  name: RestState
   title: Repos
   instructions: Vous pouvez enlever le casque et prendre une pause avant les prochains
     essais.
@@ -286,7 +289,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5627d38ddd87084e825a08a58aef09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: TaskTrialState
+  id: 2
+  name: TaskTrialState
   title: "Essai r\xE9el"
   instructions: "Ceci est un essai r\xE9el. D\xE9placez les disques pour les mettre
     tous en vert. Allez le plus vite possible en faisant le moins d'erreurs possible."
@@ -334,7 +338,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5627d38ddd87084e825a08a58aef09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: ExperimentEndState
+  id: 4
+  name: ExperimentEndState
   title: "Fin de l'exp\xE9rience"
   instructions: Merci de votre participation !
   activateTask: 0
