@@ -162,22 +162,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1198980758328702
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4773630737419822}
-  - component: {fileID: 114051823714680868}
-  m_Layer: 0
-  m_Name: Loggers
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1216099047910526
 GameObject:
   m_ObjectHideFlags: 1
@@ -310,7 +294,7 @@ GameObject:
   - component: {fileID: 114556149327564456}
   - component: {fileID: 114144970937663040}
   m_Layer: 5
-  m_Name: ServerHUD
+  m_Name: MonitorHUD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -562,7 +546,7 @@ Transform:
   m_Children:
   - {fileID: 224113550018389988}
   m_Father: {fileID: 4402858502294664}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4402858502294664
 Transform:
@@ -574,23 +558,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4773630737419822}
   - {fileID: 224873999866407996}
   - {fileID: 4117360705135272}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4773630737419822
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1198980758328702}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4402858502294664}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &114009706789623758
@@ -626,17 +596,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 'Participant id :'
---- !u!114 &114051823714680868
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1198980758328702}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32f1fca08794f9f48a8200271d7d6ce3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114094356854643574
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1329,9 +1288,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateController: {fileID: 0}
-  grid: {fileID: 0}
-  participantLogger: {fileID: 114051823714680868}
-  serverHUD: {fileID: 114144970937663040}
+  taskGrid: {fileID: 0}
+  monitorHUD: {fileID: 114144970937663040}
 --- !u!114 &114779574891830982
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2001,8 +1959,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 508.369, y: 0}
-  m_SizeDelta: {x: 1006.738, y: 0}
+  m_AnchoredPosition: {x: 437.1972, y: 0}
+  m_SizeDelta: {x: 864.3944, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &224258518931844256
 RectTransform:
@@ -2075,8 +2033,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -75, y: 0}
-  m_SizeDelta: {x: -150, y: 0}
+  m_AnchoredPosition: {x: -100, y: 0}
+  m_SizeDelta: {x: -200, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224461368085140552
 RectTransform:
@@ -2281,7 +2239,7 @@ RectTransform:
   m_Children:
   - {fileID: 224665199604490072}
   m_Father: {fileID: 4402858502294664}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
