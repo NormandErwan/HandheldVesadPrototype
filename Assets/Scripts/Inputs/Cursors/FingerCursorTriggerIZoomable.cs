@@ -70,13 +70,13 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
             {
               cursorPositions = new Vector3[4] {
                 zoomable.ProjectPosition(cursors[0].transform.position), zoomable.ProjectPosition(latestPositions[cursors[0]]),
-                zoomable.ProjectPosition(zoomable.DragToZoomPivot), zoomable.ProjectPosition(zoomable.DragToZoomPivot)
+                zoomable.Transform.position, zoomable.Transform.position
               };
             }
 
             // Computes scaling
-            var distance = (zoomable.ProjectPosition(cursorPositions[0] - cursorPositions[2])).magnitude;
-            var previousDistance = (zoomable.ProjectPosition(cursorPositions[1] - cursorPositions[3])).magnitude;
+            var distance = (cursorPositions[0] - cursorPositions[2]).magnitude;
+            var previousDistance = (cursorPositions[1] - cursorPositions[3]).magnitude;
             float scaleFactor = (previousDistance != 0) ? distance / previousDistance : 1f;
             Vector3 scaling = ClampScaling(zoomable, scaleFactor * Vector3.one);
 

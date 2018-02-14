@@ -61,7 +61,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
     public bool IsZooming { get; protected set; }
 
     public bool DragToZoom { get; protected set; }
-    public Vector3 DragToZoomPivot { get; protected set; }
 
     public Transform Transform { get { return transform; } }
     public GenericVector3<Range<float>> PositionRange { get; protected set; }
@@ -135,7 +134,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       collider = GetComponent<BoxCollider>();
       PositionRange = new GenericVector3<Range<float>>(new Range<float>(), new Range<float>(), new Range<float>());
       ScaleRange = new GenericVector3<Range<float>>(new Range<float>(), new Range<float>(), new Range<float>());
-      DragToZoomPivot = transform.position;
 
       DragToZoom = false;
       IsConfigured = false;
@@ -187,9 +185,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public Vector3 ProjectPosition(Vector3 position)
     {
-      var angle = Quaternion.FromToRotation(transform.forward, Vector3.forward);
-      var projection = Vector3.ProjectOnPlane(position, -transform.forward);
-      return angle * projection;
+      float distanceToGrid = Vector3.Dot(position - transform.position, -transform.forward);
+      return position + distanceToGrid * transform.forward;
     }
 
     public void SetDragging(bool value)

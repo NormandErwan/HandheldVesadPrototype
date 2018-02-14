@@ -9,7 +9,6 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Interactables
     // Properties
 
     bool DragToZoom { get; }
-    Vector3 DragToZoomPivot { get; }
 
     bool IsZooming { get; }
     GenericVector3<Range<float>> ScaleRange { get; }
