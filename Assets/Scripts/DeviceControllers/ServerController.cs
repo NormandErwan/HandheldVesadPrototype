@@ -51,7 +51,10 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     protected override void TaskGrid_Completed()
     {
       base.TaskGrid_Completed();
-      StateController.NextState();
+      if (StateController.CurrentState == StateController.taskTrialState)
+      {
+        StateController.NextState();
+      }
     }
 
     protected virtual void ServerHUD_BeginExperimentButtonPressed()
