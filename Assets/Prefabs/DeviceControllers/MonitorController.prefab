@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114216020874993580}
   - component: {fileID: 114978119515432736}
   m_Layer: 0
-  m_Name: ServerController
+  m_Name: MonitorController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
