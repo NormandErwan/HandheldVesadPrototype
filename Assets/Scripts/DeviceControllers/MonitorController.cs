@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 {
-  public class ServerController : DeviceController
+  public class MonitorController : DeviceController
   {
     // Editor fields
 
     [SerializeField]
-    private ServerHUD serverHUD;
+    private MonitorHUD monitorHUD;
 
     // MonoBehaviour methods
 
@@ -17,8 +17,8 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       base.Start();
 
-      serverHUD.BeginExperimentButtonPressed += ServerHUD_BeginExperimentButtonPressed;
-      serverHUD.NextStateButtonPressed += ServerHUD_NextStateButtonPressed;
+      monitorHUD.BeginExperimentButtonPressed += monitorHUD_BeginExperimentButtonPressed;
+      monitorHUD.NextStateButtonPressed += monitorHUD_NextStateButtonPressed;
 
       // TODO: remove, for debug testing only
       //StartCoroutine(StartTaskDebug());
@@ -28,8 +28,8 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       base.OnDestroy();
 
-      serverHUD.BeginExperimentButtonPressed -= ServerHUD_BeginExperimentButtonPressed;
-      serverHUD.NextStateButtonPressed -= ServerHUD_NextStateButtonPressed;
+      monitorHUD.BeginExperimentButtonPressed -= monitorHUD_BeginExperimentButtonPressed;
+      monitorHUD.NextStateButtonPressed -= monitorHUD_NextStateButtonPressed;
     }
 
     // DeviceController methods
@@ -43,7 +43,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     protected override void StateController_CurrentStateUpdated(State currentState)
     {
       base.StateController_CurrentStateUpdated(currentState);
-      serverHUD.UpdateInstructionsProgress(StateController);
+      monitorHUD.UpdateInstructionsProgress(StateController);
     }
 
     // Methods
@@ -57,23 +57,23 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       }
     }
 
-    protected virtual void ServerHUD_BeginExperimentButtonPressed()
+    protected virtual void monitorHUD_BeginExperimentButtonPressed()
     {
-      serverHUD.DeactivateExperimentConfiguration();
+      monitorHUD.DeactivateExperimentConfiguration();
 
       // Configure (sync) the experiment
-      ParticipantId = serverHUD.ParticipantId;
-      ConditionsOrdering = serverHUD.ConditionsOrdering;
-      ParticipantIsRightHanded = serverHUD.ParticipantIsRightHanded;
+      ParticipantId = monitorHUD.ParticipantId;
+      ConditionsOrdering = monitorHUD.ConditionsOrdering;
+      ParticipantIsRightHanded = monitorHUD.ParticipantIsRightHanded;
       OnConfigureExperimentSync();
 
       // Set the ordering in conditions (sync)
-      if (serverHUD.ConditionsOrdering == 1)
+      if (monitorHUD.ConditionsOrdering == 1)
       {
         var mainIndVar = StateController.independentVariables[0];
         mainIndVar.NextCondition();
       }
-      else if (serverHUD.ConditionsOrdering == 2)
+      else if (monitorHUD.ConditionsOrdering == 2)
       {
         var mainIndVar = StateController.independentVariables[0];
         mainIndVar.NextCondition();
@@ -84,7 +84,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       StateController.BeginExperiment();
     }
 
-    protected virtual void ServerHUD_NextStateButtonPressed()
+    protected virtual void monitorHUD_NextStateButtonPressed()
     {
       StateController.NextState();
     }

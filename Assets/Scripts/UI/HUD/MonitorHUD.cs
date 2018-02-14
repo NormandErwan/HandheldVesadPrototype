@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace NormandErwan.MasterThesis.Experiment.UI.HUD
 {
-  public class ServerHUD : MonoBehaviour
+  public class MonitorHUD : MonoBehaviour
   {
     // Editor Fields
 
