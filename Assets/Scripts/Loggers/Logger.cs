@@ -47,7 +47,7 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     public virtual void Configure()
     {
       Row = new List<string>(new string[Columns.Count]);
-      CurrentRowCompleted = false;
+      CurrentRowCompleted = true;
 
       Directory.CreateDirectory(dataPath);
       FilePath = Path.Combine(dataPath, Filename);
