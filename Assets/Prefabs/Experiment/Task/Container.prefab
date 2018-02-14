@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 114146252400711634}
   - component: {fileID: 65579507389361026}
   - component: {fileID: 54999969376545056}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 4574047328822632}
   - component: {fileID: 33140411578623696}
   - component: {fileID: 23751585858085608}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54,7 +54,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4176781208488272}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}

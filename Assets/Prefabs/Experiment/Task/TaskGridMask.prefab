@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4923498195538648}
   - component: {fileID: 33450320264563516}
   - component: {fileID: 23038749964086566}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: TaskGridMask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
