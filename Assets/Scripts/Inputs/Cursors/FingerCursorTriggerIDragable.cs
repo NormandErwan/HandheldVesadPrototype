@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 {
-  public class CursorTriggerIDraggable : CursorTriggerITransformable<IDraggable>
+  public class FingerCursorTriggerIDraggable : FingerCursorTriggerITransformable<IDraggable>
   {
     protected override void OnTriggerEnter(IDraggable draggable, Collider other)
     {

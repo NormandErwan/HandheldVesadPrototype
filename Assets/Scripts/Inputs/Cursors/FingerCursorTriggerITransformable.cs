@@ -4,22 +4,23 @@ using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 {
-  public abstract class CursorTriggerITransformable<T> : CursorTriggerIInteractable<T> where T : ITransformable
+  public abstract class FingerCursorTriggerITransformable<T> : CursorTriggerIInteractable<T, FingerCursor>
+    where T : ITransformable
   {
     // Variables
 
-    protected static Dictionary<ITransformable, Dictionary<Cursor, Vector3>> latestCursorPositions
-      = new Dictionary<ITransformable, Dictionary<Cursor, Vector3>>();
+    protected static Dictionary<ITransformable, Dictionary<FingerCursor, Vector3>> latestCursorPositions
+      = new Dictionary<ITransformable, Dictionary<FingerCursor, Vector3>>();
 
     // Methods
 
     protected override void OnTriggerEnter(T transformable, Collider other)
     {
-      if (Cursor.IsFinger && transformable.IsTransformable)
+      if (transformable.IsTransformable)
       {
         if (!latestCursorPositions.ContainsKey(transformable))
         {
-          latestCursorPositions.Add(transformable, new Dictionary<Cursor, Vector3>());
+          latestCursorPositions.Add(transformable, new Dictionary<FingerCursor, Vector3>());
         }
         latestCursorPositions[transformable][Cursor] = Cursor.transform.position;
       }
@@ -27,7 +28,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 
     protected override void OnTriggerExit(T transformable, Collider other)
     {
-      if (Cursor.IsFinger && latestCursorPositions.ContainsKey(transformable))
+      if (latestCursorPositions.ContainsKey(transformable))
       {
         latestCursorPositions[transformable].Remove(Cursor);
       }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 {
-  public class CursorTriggerILongPressable : CursorTriggerISelectable<ILongPressable>
+  public class FingerCursorTriggerILongPressable : FingerCursorTriggerISelectable<ILongPressable>
   {
     // Constants
 
@@ -18,7 +18,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 
     protected override void OnTriggerEnter(ILongPressable longPressable, Collider other)
     {
-      if (Cursor.IsFinger && longPressable.IsInteractable && longPressable.IsSelectable && longPressable.IsLongPressable)
+      if (longPressable.IsInteractable && longPressable.IsSelectable && longPressable.IsLongPressable)
       {
         longPressTimers.Add(longPressable, Time.time);
       }

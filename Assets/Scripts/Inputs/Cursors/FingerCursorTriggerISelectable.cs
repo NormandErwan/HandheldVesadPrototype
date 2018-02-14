@@ -2,7 +2,7 @@
 
 namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 {
-  public abstract class CursorTriggerISelectable<T> : CursorTriggerIInteractable<T> where T : ISelectable
+  public abstract class FingerCursorTriggerISelectable<T> : CursorTriggerIInteractable<T, FingerCursor> where T : ISelectable
   {
     protected bool CancelTimer(ISelectable selectable)
     {

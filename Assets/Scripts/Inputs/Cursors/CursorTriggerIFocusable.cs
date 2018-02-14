@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 {
-  public class CursorTriggerIFocusable : CursorTriggerIInteractable<IFocusable>
+  public class CursorTriggerIFocusable : CursorTriggerIInteractable<IFocusable, BaseCursor>
   {
     protected override void OnTriggerEnter(IFocusable focusable, Collider other)
     {

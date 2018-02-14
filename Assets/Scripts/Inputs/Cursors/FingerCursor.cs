@@ -1,13 +1,12 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using NormandErwan.MasterThesis.Experiment.Utilities;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 {
-  [RequireComponent(typeof(SphereCollider))]
-  public class Cursor : BaseCursor
+  [RequireComponent(typeof(Collider))]
+  public class FingerCursor : BaseCursor
   {
     // Editor fields
 
@@ -25,8 +24,8 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 
     // Variables
 
-    protected static Dictionary<ITransformable, Dictionary<Cursor, Vector3>> latestCursorPositions
-      = new Dictionary<ITransformable, Dictionary<Cursor, Vector3>>();
+    protected static Dictionary<ITransformable, Dictionary<FingerCursor, Vector3>> latestCursorPositions
+      = new Dictionary<ITransformable, Dictionary<FingerCursor, Vector3>>();
 
     protected SortedDictionary<TriggerType, SortedDictionary<int, List<Collider>>> triggeredColliders;
     protected List<ICursorTriggerIInteractable> interactableTriggers;
@@ -47,10 +46,10 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
       interactableTriggers = new List<ICursorTriggerIInteractable>()
       {
         new CursorTriggerIFocusable() { Cursor = this },
-        new CursorTriggerILongPressable() { Cursor = this },
-        new CursorTriggerITappable() { Cursor = this },
-        new CursorTriggerIZoomable() { Cursor = this },
-        new CursorTriggerIDraggable() { Cursor = this },
+        new FingerCursorTriggerILongPressable() { Cursor = this },
+        new FingerCursorTriggerITappable() { Cursor = this },
+        new FingerCursorTriggerIZoomable() { Cursor = this },
+        new FingerCursorTriggerIDraggable() { Cursor = this },
       };
 
       renderer = GetComponent<Renderer>();

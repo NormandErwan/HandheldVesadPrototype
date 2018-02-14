@@ -22,7 +22,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     public StateController StateController { get { return stateController; } set { stateController = value; } }
     public TaskGrid TaskGrid { get { return taskGrid; } set { taskGrid = value; } }
-    public virtual CursorsInput CursorsInput { get { return null; } }
+    public virtual FingerCursorsInput FingerCursorsInput { get { return null; } }
 
     public int ParticipantId { get; protected set; }
     public int ConditionsOrdering { get; protected set; }
@@ -152,10 +152,10 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     protected virtual void TaskGrid_Completed()
     {
       TaskGrid.Show(false);
-      if (CursorsInput != null)
+      if (FingerCursorsInput != null)
       {
-        CursorsInput.DeactivateCursors();
-        CursorsInput.enabled = false;
+        FingerCursorsInput.DeactivateCursors();
+        FingerCursorsInput.enabled = false;
       }
     }
 

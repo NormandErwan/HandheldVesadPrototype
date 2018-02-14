@@ -13,6 +13,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Variables
 
     public bool useTouchInput;
 
+    public bool useLookInput;
+
     public bool showTaskGridOnlyOnMobileDevice;
   }
 }

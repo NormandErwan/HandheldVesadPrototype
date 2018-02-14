@@ -3,12 +3,14 @@ using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 {
-  public abstract class CursorTriggerIInteractable<T> : ICursorTriggerIInteractable
+  public abstract class CursorTriggerIInteractable<T, U> : ICursorTriggerIInteractable
     where T : IInteractable
+    where U : BaseCursor
   {
     // Properties
 
-    public Cursor Cursor { get; set; }
+    public U Cursor { get; set; }
+    BaseCursor ICursorTriggerIInteractable.Cursor { get { return Cursor; } }
 
     // Methods
 

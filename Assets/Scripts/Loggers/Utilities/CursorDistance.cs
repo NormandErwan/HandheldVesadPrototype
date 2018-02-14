@@ -1,15 +1,16 @@
-﻿using UnityEngine;
+﻿using NormandErwan.MasterThesis.Experiment.Inputs.Cursors;
+using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Loggers.Utilities
 {
   public class CursorDistance : PositionDistance
   {
-    public CursorDistance(Inputs.Cursors.Cursor cursor) : base()
+    public CursorDistance(FingerCursor cursor) : base()
     {
       Cursor = cursor;
     }
 
-    public Inputs.Cursors.Cursor Cursor { get; protected set; }
+    public FingerCursor Cursor { get; protected set; }
 
     protected override bool UpdateThisFrame()
     {

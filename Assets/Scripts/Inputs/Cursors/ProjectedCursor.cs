@@ -11,7 +11,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
     // Editor fields
 
     [SerializeField]
-    private Cursor cursor;
+    private FingerCursor cursor;
 
     [SerializeField]
     protected GameObject projectionLine;
@@ -25,7 +25,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 
     // Properties
 
-    public Cursor Cursor { get { return cursor; } set { cursor = value; } }
+    public FingerCursor Cursor { get { return cursor; } set { cursor = value; } }
     public GameObject ProjectionLine { get { return projectionLine; } set { projectionLine = value; } }
 
     public bool IsOnGrid { get; protected set; }
@@ -43,15 +43,15 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
       SetActive(true);
       IsOnGrid = false;
 
-      deviceController.CursorsInput.Updated += CursorsInput_Updated;
-
+      deviceController.FingerCursorsInput.Updated += CursorsInput_Updated;
+      
       taskGrid = deviceController.TaskGrid;
       taskGrid.Configured += TaskGrid_Configured;
     }
 
     protected virtual void OnDestroy()
     {
-      deviceController.CursorsInput.Updated -= CursorsInput_Updated;
+      deviceController.FingerCursorsInput.Updated -= CursorsInput_Updated;
       taskGrid.Configured -= TaskGrid_Configured;
     }
 

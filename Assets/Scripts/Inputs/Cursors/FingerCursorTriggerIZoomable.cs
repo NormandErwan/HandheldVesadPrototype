@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 {
-  public class CursorTriggerIZoomable : CursorTriggerITransformable<IZoomable>
+  public class FingerCursorTriggerIZoomable : FingerCursorTriggerITransformable<IZoomable>
   {
     protected override void OnTriggerEnter(IZoomable zoomable, Collider other)
     {
       base.OnTriggerEnter(zoomable, other);
-      if (Cursor.IsFinger && zoomable.IsTransformable)
+      if (zoomable.IsTransformable)
       {
         if (latestCursorPositions[zoomable].Count == 2 && !zoomable.DragToZoom && !zoomable.IsZooming)
         {
@@ -54,7 +54,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
         if (zoomable.IsZooming)
         {
           var latestPositions = latestCursorPositions[zoomable];
-          var cursors = new List<Cursor>(latestPositions.Keys);
+          var cursors = new List<FingerCursor>(latestPositions.Keys);
           if (cursors[0] == Cursor) // Update only once per frame
           {
             // Set cursors list

@@ -1,24 +1,16 @@
-﻿using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
+﻿using NormandErwan.MasterThesis.Experiment.Inputs.Cursors;
+using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Inputs
 {
-  public abstract class CursorsInput : MonoBehaviour
+  public abstract class CursorsInput<T> : MonoBehaviour where T : BaseCursor
   {
-    // Constants
-
-    protected static readonly float cursorColliderRadiusFactor = 0.65f;
-
-    // Editor fields
-
-    [SerializeField]
-    private Cursors.Cursor[] cursors;
-
     // Properties
 
-    public Dictionary<CursorType, Cursors.Cursor> Cursors { get; protected set; }
+    public Dictionary<CursorType, T> Cursors { get; protected set; }
 
     // Events
 
@@ -28,11 +20,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     protected virtual void Awake()
     {
-      Cursors = new Dictionary<CursorType, Cursors.Cursor>();
-      foreach (var cursor in cursors)
-      {
-        Cursors.Add(cursor.Type, cursor);
-      }
+      Cursors = new Dictionary<CursorType, T>();
     }
 
     /// <summary>
@@ -47,19 +35,10 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     // Methods
 
-    public virtual void Configure(float maxSelectableDistance)
-    {
-      foreach (var cursor in Cursors)
-      {
-        cursor.Value.MaxSelectableDistance = maxSelectableDistance;
-      }
-    }
-
     public virtual void DeactivateCursors()
     {
       foreach (var cursor in Cursors)
       {
-        cursor.Value.IsTracked = false;
         cursor.Value.SetVisible(false);
         cursor.Value.transform.position = new Vector3(cursor.Value.transform.position.x, cursor.Value.transform.position.y, -10); // keep the cursor far away if not visible to activate OnTriggerExit
       }

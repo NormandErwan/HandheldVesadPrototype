@@ -1,11 +1,12 @@
 ﻿using Leap;
 using Leap.Unity;
+using NormandErwan.MasterThesis.Experiment.Inputs.Cursors;
 using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Inputs
 {
-  public class LeapFingerCursorsInput : CursorsInput
+  public class LeapFingerCursorsInput : FingerCursorsInput
   {
     // Editor fields
 
@@ -20,7 +21,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     public LeapServiceProvider LeapServiceProvider { get { return leapServiceProvider; } set { leapServiceProvider = value; } }
     public bool UseStabilizedPositions { get { return useStabilizedPositions; } set { useStabilizedPositions = value; } }
 
-    // CursorsInput methods
+    // Methods
 
     protected override void UpdateCursors()
     {
@@ -30,7 +31,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
         {
           var cursorType = GetCursorType(hand.IsRight, finger.Type);
 
-          Cursors.Cursor cursor;
+          FingerCursor cursor;
           if (Cursors.TryGetValue(cursorType, out cursor))
           {
             cursor.transform.position = (UseStabilizedPositions ? finger.StabilizedTipPosition : finger.TipPosition).ToVector3();

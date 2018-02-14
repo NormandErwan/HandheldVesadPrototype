@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 {
-  public class CursorTriggerITappable : CursorTriggerISelectable<ITappable>
+  public class FingerCursorTriggerITappable : FingerCursorTriggerISelectable<ITappable>
   {
     // Constants
 
@@ -26,12 +26,9 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 
     protected override void OnTriggerEnter(ITappable tappable, Collider other)
     {
-      if (Cursor.IsFinger)
+      if (tappable.IsInteractable && tappable.IsSelectable && tappable.IsTappable)
       {
-        if (tappable.IsInteractable && tappable.IsSelectable && tappable.IsTappable)
-        {
-          tapTimers.Add(tappable, Time.time);
-        }
+        tapTimers.Add(tappable, Time.time);
       }
     }
 

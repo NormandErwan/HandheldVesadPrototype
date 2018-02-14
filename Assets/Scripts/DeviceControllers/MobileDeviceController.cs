@@ -26,7 +26,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     // Properties
 
-    public override CursorsInput CursorsInput { get { return touchFingerCursorsInput; } }
+    public override FingerCursorsInput FingerCursorsInput { get { return touchFingerCursorsInput; } }
 
     // MonoBehaviour methods
 

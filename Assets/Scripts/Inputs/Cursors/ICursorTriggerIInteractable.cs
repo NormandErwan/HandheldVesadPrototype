@@ -4,7 +4,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 {
   public interface ICursorTriggerIInteractable
   {
-    Cursor Cursor { get; set; }
+    BaseCursor Cursor { get; }
 
     void OnTrigger(TriggerType triggerType, Collider other);
     void ProcessPriorityLists();

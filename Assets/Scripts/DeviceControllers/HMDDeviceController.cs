@@ -1,7 +1,7 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
 using NormandErwan.MasterThesis.Experiment.Experiment.Task;
-using NormandErwan.MasterThesis.Experiment.Experiment.Variables;
 using NormandErwan.MasterThesis.Experiment.Inputs;
+using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using NormandErwan.MasterThesis.Experiment.UI.HUD;
 using UnityEngine;
 
@@ -23,6 +23,9 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     [Header("Cursors")]
     [SerializeField]
+    private LookCursorInput lookCursorsInput;
+
+    [SerializeField]
     private LeapFingerCursorsInput leapFingerCursorsInput;
 
     [SerializeField]
@@ -33,13 +36,16 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     // Properties
 
-    public override CursorsInput CursorsInput { get { return leapFingerCursorsInput; } }
+    public override FingerCursorsInput FingerCursorsInput { get { return leapFingerCursorsInput; } }
 
     // Methods
 
     protected override void Start()
     {
       base.Start();
+
+      lookCursorsInput.enabled = false;
+      lookCursorsInput.TapWithRightHand = ParticipantIsRightHanded;
 
       leapFingerCursorsInput.Configure(maxSelectableDistance);
       leapFingerCursorsInput.enabled = false;
@@ -54,6 +60,12 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     public override void ActivateTask()
     {
       base.ActivateTask();
+
+      lookCursorsInput.enabled = technique.CurrentCondition.useLookInput;
+      foreach (var cursor in lookCursorsInput.Cursors)
+      {
+        cursor.Value.SetActive(cursor.Key == CursorType.Look && technique.CurrentCondition.useLookInput);
+      }
 
       leapFingerCursorsInput.enabled = true;
       foreach (var cursor in leapFingerCursorsInput.Cursors)

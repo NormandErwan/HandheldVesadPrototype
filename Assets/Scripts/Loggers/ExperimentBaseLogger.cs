@@ -37,10 +37,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
     // Properties
 
-    protected Inputs.Cursors.Cursor Index { get; set; }
+    protected FingerCursor Index { get; set; }
     protected ProjectedCursor ProjectedIndex { get; set; }
 
-    protected Inputs.Cursors.Cursor Thumb { get; set; }
+    protected FingerCursor Thumb { get; set; }
     protected ProjectedCursor ProjectedThumb { get; set; }
 
     // Variables
@@ -112,16 +112,16 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     {
       if (deviceController.ParticipantIsRightHanded)
       {
-        Index = deviceController.CursorsInput.Cursors[CursorType.RightIndex];
-        Thumb = deviceController.CursorsInput.Cursors[CursorType.RightThumb];
+        Index = deviceController.FingerCursorsInput.Cursors[CursorType.RightIndex];
+        Thumb = deviceController.FingerCursorsInput.Cursors[CursorType.RightThumb];
 
         ProjectedIndex = projectedRightIndex;
         ProjectedThumb = projectedRightThumb;
       }
       else
       {
-        Index = deviceController.CursorsInput.Cursors[CursorType.LeftIndex];
-        Thumb = deviceController.CursorsInput.Cursors[CursorType.LeftThumb];
+        Index = deviceController.FingerCursorsInput.Cursors[CursorType.LeftIndex];
+        Thumb = deviceController.FingerCursorsInput.Cursors[CursorType.LeftThumb];
 
         ProjectedIndex = projectedLeftIndex;
         ProjectedThumb = projectedLeftThumb;

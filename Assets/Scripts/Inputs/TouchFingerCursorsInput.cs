@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Inputs
 {
-  public class TouchFingerCursorsInput : CursorsInput
+  public class TouchFingerCursorsInput : FingerCursorsInput
   {
     // Constants
 
@@ -28,7 +28,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     protected Vector3 mouse1Position = Vector3.zero;
     protected bool updateCursor1;
 
-    // CursorsInput methods
+    // Methods
 
     protected override void UpdateCursors()
     {
