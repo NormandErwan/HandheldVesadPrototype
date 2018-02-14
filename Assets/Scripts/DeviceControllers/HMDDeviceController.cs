@@ -11,7 +11,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
   {
     // Constants
 
-    protected float maxSelectableDistance = 0f;
+    protected float maxSelectableDistance = 0.05f;
 
     // Editor fields
 
