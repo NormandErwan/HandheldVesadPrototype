@@ -1,3 +1,4 @@
+/packages/
 /App/
 /[Ll]ibrary/
 /[Tt]emp/
@@ -12,8 +13,8 @@
 /Assets/LeanTouch*
 /Assets/LeapMotion*
 /Assets/OvrvisionPro*
+/Assets/Logs*
 /Assets/*.rsp*
-/Assets/*.csv*
 
 # Visual Studio 2015 cache directory
 /.vs/
