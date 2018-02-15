@@ -33,7 +33,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
         else
         {
           // Computes the translation
-          var translation = draggable.ProjectPosition(Cursor.transform.position - latestCursorPositions[draggable][Cursor]);
+          var translation = draggable.ProjectPosition(Cursor.transform.position) - draggable.ProjectPosition(latestCursorPositions[draggable][Cursor]);
           translation = ClampTranslation(draggable, translation);
           if (translation != Vector3.zero)
           {
