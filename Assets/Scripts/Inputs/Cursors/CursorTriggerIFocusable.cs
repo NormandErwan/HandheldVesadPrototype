@@ -7,7 +7,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
   {
     protected override void OnTriggerEnter(IFocusable focusable, Collider other)
     {
-      if (focusable.IsInteractable)
+      if (focusable.IsInteractable && !focusable.IsFocused)
       {
         focusable.SetFocused(true);
       }
@@ -15,11 +15,12 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 
     protected override void OnTriggerStay(IFocusable focusable, Collider other)
     {
+      OnTriggerEnter(focusable, other);
     }
 
     protected override void OnTriggerExit(IFocusable focusable, Collider other)
     {
-      if (focusable.IsInteractable)
+      if (focusable.IsInteractable && focusable.IsFocused)
       {
         focusable.SetFocused(false);
       }

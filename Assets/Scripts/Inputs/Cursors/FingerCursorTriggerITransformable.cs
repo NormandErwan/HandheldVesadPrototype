@@ -16,7 +16,11 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 
     protected override void OnTriggerEnter(T transformable, Collider other)
     {
-      if (transformable.IsInteractable && transformable.IsTransformable)
+      if (!transformable.IsInteractable || !transformable.IsTransformable)
+      {
+        ClearCursor(transformable);
+      }
+      else
       {
         if (!latestCursorPositions.ContainsKey(transformable))
         {
@@ -24,23 +28,19 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
         }
         latestCursorPositions[transformable][Cursor] = Cursor.transform.position;
       }
-      else
-      {
-        RemoveCursor(transformable);
-      }
     }
 
     protected override void OnTriggerStay(T transformable, Collider other)
     {
       if (!transformable.IsInteractable || !transformable.IsTransformable)
       {
-        RemoveCursor(transformable);
+        ClearCursor(transformable);
       }
     }
 
     protected override void OnTriggerExit(T transformable, Collider other)
     {
-      RemoveCursor(transformable);
+      ClearCursor(transformable);
     }
 
     protected Vector3 Project(ITransformable transformable, Vector3 position)
@@ -72,7 +72,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
       return clampedScaling;
     }
 
-    private void RemoveCursor(ITransformable transformable)
+    private void ClearCursor(ITransformable transformable)
     {
       if (latestCursorPositions.ContainsKey(transformable))
       {

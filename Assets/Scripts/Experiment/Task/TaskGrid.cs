@@ -493,11 +493,14 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         {
           focusedContainer.SetFocused(false);
         }
+
         focusedItem = item;
+        ((ISelectable)item.Parent).SetSelectable(false); // Avoid the parent container of the item to be selected before the item
       }
       else if (!item.IsFocused)
       {
         focusedItem = null;
+        ((ISelectable)item.Parent).SetSelectable(true);
       }
     }
 
@@ -561,10 +564,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
           // Sync the item move
           ItemMoveSync(container);
-          if (container.IsLongPressable)
-          {
-            SetElementsInteractables(false); // Avoid the item to be selected right after being moved
-          }
 
           // Call Complete if all items are classified
           if (RemainingItemsToClassify == 0)
