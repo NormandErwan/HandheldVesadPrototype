@@ -8,7 +8,8 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
     protected override void OnTriggerEnter(IDraggable draggable, Collider other)
     {
       base.OnTriggerEnter(draggable, other);
-      if (draggable.IsTransformable && latestCursorPositions[draggable].Count > 1 && draggable.IsDragging)
+
+      if (latestCursorPositions.ContainsKey(draggable) && latestCursorPositions[draggable].Count > 1 && draggable.IsDragging)
       {
         draggable.SetDragging(false); // Only one finger can drag, cancel if more than one finger
       }
@@ -16,7 +17,9 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 
     protected override void OnTriggerStay(IDraggable draggable, Collider other)
     {
-      if (draggable.IsTransformable && latestCursorPositions.ContainsKey(draggable) && latestCursorPositions[draggable].Count == 1)
+      base.OnTriggerStay(draggable, other);
+
+      if (latestCursorPositions.ContainsKey(draggable) && latestCursorPositions[draggable].Count == 1)
       {
         var zoomable = other.GetComponent<IZoomable>();
         if (zoomable != null && zoomable.DragToZoom)
@@ -33,7 +36,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
         else
         {
           // Computes the translation
-          var translation = draggable.ProjectPosition(Cursor.transform.position) - draggable.ProjectPosition(latestCursorPositions[draggable][Cursor]);
+          var translation = Project(draggable, Cursor.transform.position) - Project(draggable, latestCursorPositions[draggable][Cursor]);
           translation = ClampTranslation(draggable, translation);
           if (translation != Vector3.zero)
           {
@@ -57,6 +60,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
     protected override void OnTriggerExit(IDraggable draggable, Collider other)
     {
       base.OnTriggerExit(draggable, other);
+
       if (latestCursorPositions.ContainsKey(draggable) && latestCursorPositions[draggable].Count == 0 && draggable.IsDragging)
       {
         draggable.SetDragging(false);

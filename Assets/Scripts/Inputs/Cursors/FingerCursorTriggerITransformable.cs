@@ -16,7 +16,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 
     protected override void OnTriggerEnter(T transformable, Collider other)
     {
-      if (transformable.IsTransformable)
+      if (transformable.IsInteractable && transformable.IsTransformable)
       {
         if (!latestCursorPositions.ContainsKey(transformable))
         {
@@ -24,14 +24,30 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
         }
         latestCursorPositions[transformable][Cursor] = Cursor.transform.position;
       }
+      else
+      {
+        RemoveCursor(transformable);
+      }
+    }
+
+    protected override void OnTriggerStay(T transformable, Collider other)
+    {
+      if (!transformable.IsInteractable || !transformable.IsTransformable)
+      {
+        RemoveCursor(transformable);
+      }
     }
 
     protected override void OnTriggerExit(T transformable, Collider other)
     {
-      if (latestCursorPositions.ContainsKey(transformable))
-      {
-        latestCursorPositions[transformable].Remove(Cursor);
-      }
+      RemoveCursor(transformable);
+    }
+
+    protected Vector3 Project(ITransformable transformable, Vector3 position)
+    {
+      float distanceToGrid = Vector3.Dot(position - transformable.Transform.position, -transformable.Transform.forward);
+      var projection = position + distanceToGrid * transformable.Transform.forward;
+      return Quaternion.Inverse(transformable.Transform.rotation) * projection;
     }
 
     protected Vector3 ClampTranslation(ITransformable transformable, Vector3 translation)
@@ -54,6 +70,14 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
           / zoomable.Transform.localScale[i];
       }
       return clampedScaling;
+    }
+
+    private void RemoveCursor(ITransformable transformable)
+    {
+      if (latestCursorPositions.ContainsKey(transformable))
+      {
+        latestCursorPositions[transformable].Remove(Cursor);
+      }
     }
   }
 }

@@ -21,6 +21,5 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Interactables
     // Methods
 
     void SetTransformable(bool value);
-    Vector3 ProjectPosition(Vector3 position);
   }
 }

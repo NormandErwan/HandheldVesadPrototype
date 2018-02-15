@@ -183,12 +183,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       Focused(this);
     }
 
-    public Vector3 ProjectPosition(Vector3 position)
-    {
-      float distanceToGrid = Vector3.Dot(position - transform.position, -transform.forward);
-      return position + distanceToGrid * transform.forward;
-    }
-
     public void SetDragging(bool value)
     {
       SetDraggingSync(value);
@@ -330,7 +324,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
       Mode = mode;
       DragToZoom = zoom && !pan;
-      SetTransformable(!select && (zoom || pan));
+      SetTransformable(zoom || pan);
       SetElementsInteractables(select);
     }
 

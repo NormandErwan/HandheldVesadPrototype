@@ -37,7 +37,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
         else if (Time.time - longPressTimers[longPressable] > longPressMinTime)
         {
           clearTimers = true;
-          if (longPressable.IsInteractable && longPressable.IsSelectable)
+          if (longPressable.IsInteractable && longPressable.IsSelectable && longPressable.IsLongPressable)
           {
             longPressable.SetSelected(true);
           }

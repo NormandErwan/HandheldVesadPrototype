@@ -71,7 +71,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
       {
         foreach (var tappable in tappedPriority.Value)
         {
-          if (tappable.IsInteractable && tappable.IsSelectable)
+          if (tappable.IsInteractable && tappable.IsSelectable && tappable.IsTappable)
           {
             firstTappable = tappable;
             break;

@@ -9,7 +9,8 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
     protected override void OnTriggerEnter(IZoomable zoomable, Collider other)
     {
       base.OnTriggerEnter(zoomable, other);
-      if (zoomable.IsTransformable)
+
+      if (latestCursorPositions.ContainsKey(zoomable))
       {
         if (latestCursorPositions[zoomable].Count == 2 && !zoomable.DragToZoom && !zoomable.IsZooming)
         {
@@ -24,14 +25,16 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 
     protected override void OnTriggerStay(IZoomable zoomable, Collider other)
     {
-      if (zoomable.IsTransformable && latestCursorPositions.ContainsKey(zoomable))
+      base.OnTriggerStay(zoomable, other);
+
+      if (latestCursorPositions.ContainsKey(zoomable))
       {
         if (latestCursorPositions[zoomable].Count == 1)
         {
           // Zoom with one finger if DragToZoom is true
           if (zoomable.DragToZoom && !zoomable.IsZooming)
           {
-            var translation = zoomable.ProjectPosition(Cursor.transform.position - latestCursorPositions[zoomable][Cursor]);
+            var translation = Project(zoomable, Cursor.transform.position - latestCursorPositions[zoomable][Cursor]);
             if (translation.magnitude > Cursor.MaxSelectableDistance)
             {
               zoomable.SetZooming(true);
@@ -58,19 +61,21 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
           if (cursors[0] == Cursor) // Update only once per frame
           {
             // Set cursors list
+            var projectedZoomable = Project(zoomable, zoomable.Transform.position);
+
             Vector3[] cursorPositions;
             if (!zoomable.DragToZoom)
             {
               cursorPositions = new Vector3[4] {
-                zoomable.ProjectPosition(cursors[0].transform.position), zoomable.ProjectPosition(latestPositions[cursors[0]]),
-                zoomable.ProjectPosition(cursors[1].transform.position), zoomable.ProjectPosition(latestPositions[cursors[1]])
+                Project(zoomable, cursors[0].transform.position), Project(zoomable, latestPositions[cursors[0]]),
+                Project(zoomable, cursors[1].transform.position), Project(zoomable, latestPositions[cursors[1]])
               };
             }
             else
             {
               cursorPositions = new Vector3[4] {
-                zoomable.ProjectPosition(cursors[0].transform.position), zoomable.ProjectPosition(latestPositions[cursors[0]]),
-                zoomable.Transform.position, zoomable.Transform.position
+                Project(zoomable, cursors[0].transform.position), Project(zoomable, latestPositions[cursors[0]]),
+                projectedZoomable, projectedZoomable
               };
             }
 
@@ -80,21 +85,19 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
             float scaleFactor = (previousDistance != 0) ? distance / previousDistance : 1f;
             Vector3 scaling = ClampScaling(zoomable, scaleFactor * Vector3.one);
 
+            // Apply zoom with a translation to keep the cursor on the same relative position on the zoomable
             if (scaling != Vector3.one)
             {
-              // Translate if it has scaled
-              var newPosition = cursorPositions[0] - scaleFactor * (cursorPositions[1] - zoomable.Transform.position);
-              var translation = newPosition - zoomable.Transform.position;
-              translation = ClampTranslation(zoomable, translation);
-
+              var newZoomablePosition = cursorPositions[0] - scaleFactor * (cursorPositions[1] - projectedZoomable);
+              var translation = ClampTranslation(zoomable, newZoomablePosition - projectedZoomable);
               zoomable.Zoom(scaling, translation);
             }
 
             // Update cursors
-            latestPositions[cursors[0]] = cursorPositions[0];
+            latestPositions[cursors[0]] = cursors[0].transform.position;
             if (!zoomable.DragToZoom)
             {
-              latestPositions[cursors[1]] = cursorPositions[2];
+              latestPositions[cursors[1]] = cursors[1].transform.position;
             }
           }
         }
@@ -104,7 +107,8 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
     protected override void OnTriggerExit(IZoomable zoomable, Collider other)
     {
       base.OnTriggerExit(zoomable, other);
-      if (Cursor.IsFinger && latestCursorPositions.ContainsKey(zoomable) && latestCursorPositions[zoomable].Count < 2 && zoomable.IsZooming)
+
+      if (latestCursorPositions.ContainsKey(zoomable) && latestCursorPositions[zoomable].Count < 2 && zoomable.IsZooming)
       {
         zoomable.SetZooming(false);
       }
