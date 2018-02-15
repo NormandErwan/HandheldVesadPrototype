@@ -27,8 +27,9 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
     protected static Dictionary<ITransformable, Dictionary<FingerCursor, Vector3>> latestCursorPositions
       = new Dictionary<ITransformable, Dictionary<FingerCursor, Vector3>>();
 
-    protected SortedDictionary<TriggerType, SortedDictionary<int, List<Collider>>> triggeredColliders;
     protected List<ICursorTriggerIInteractable> interactableTriggers;
+    protected SortedDictionary<TriggerType, SortedDictionary<int, List<Collider>>> triggeredColliders;
+    protected int triggeredCollidersSum = 0;
 
     protected new Renderer renderer;
     protected new Collider collider;
@@ -79,6 +80,9 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
       {
         trigger.ProcessPriorityLists();
       }
+
+      SetTriggering(triggeredCollidersSum > 0);
+      triggeredCollidersSum = 0;
     }
 
     protected virtual void OnTriggerEnter(Collider other)
@@ -120,6 +124,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
           triggeredColliders[triggerType].Add(interactable.Priority, new List<Collider>());
         }
         triggeredColliders[triggerType][interactable.Priority].Add(other);
+        triggeredCollidersSum++;
       }
     }
   }

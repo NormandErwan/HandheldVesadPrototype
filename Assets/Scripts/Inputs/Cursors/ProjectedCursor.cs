@@ -14,19 +14,36 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
     private FingerCursor cursor;
 
     [SerializeField]
-    protected GameObject projectionLine;
+    private DeviceController deviceController;
+
+    [Header("Projection Line")]
+    [SerializeField]
+    private GameObject projectionLine;
 
     [SerializeField]
-    private DeviceController deviceController;
+    private Renderer projectionLineMesh;
+
+    [SerializeField]
+    private Material defaultProjectionLineMaterial;
+
+    [SerializeField]
+    private Material triggeringProjectionLineMaterial;
+
+    [Header("Projected Cursor Meshs")]
+    [SerializeField]
+    private Renderer[] projectedCursorMeshs;
+
+    [SerializeField]
+    private Material defaultProjectedCursorMeshsMaterial;
+
+    [SerializeField]
+    private Material triggeringProjectedCursorMeshsMaterial;
 
     // ICursor properties
 
     public override CursorType Type { get { return cursor.Type; } }
 
     // Properties
-
-    public FingerCursor Cursor { get { return cursor; } set { cursor = value; } }
-    public GameObject ProjectionLine { get { return projectionLine; } set { projectionLine = value; } }
 
     public bool IsOnGrid { get; protected set; }
 
@@ -39,14 +56,14 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 
     protected virtual void Awake()
     {
-      SetVisible(false);
-      SetActive(true);
-      IsOnGrid = false;
-
       deviceController.FingerCursorsInput.Updated += CursorsInput_Updated;
       
       taskGrid = deviceController.TaskGrid;
       taskGrid.Configured += TaskGrid_Configured;
+
+      SetVisible(false);
+      SetActive(true);
+      IsOnGrid = false;
     }
 
     protected virtual void OnDestroy()
@@ -58,10 +75,10 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
     protected virtual void CursorsInput_Updated()
     {
       IsOnGrid = false;
-      if (Cursor.gameObject.activeSelf && Cursor.IsTracked)
+      if (cursor.gameObject.activeSelf && cursor.IsTracked)
       {
-        float cursorGridDistance = Vector3.Dot(Cursor.transform.position - taskGrid.transform.position, -taskGrid.transform.forward);
-        var position = Cursor.transform.position + cursorGridDistance * taskGrid.transform.forward;
+        float cursorGridDistance = Vector3.Dot(cursor.transform.position - taskGrid.transform.position, -taskGrid.transform.forward);
+        var position = cursor.transform.position + cursorGridDistance * taskGrid.transform.forward;
 
         var positionToGrid = position - taskGrid.transform.position;
         if (positionRanges.X.ContainsValue(positionToGrid.x) && positionRanges.Y.ContainsValue(positionToGrid.y))
@@ -69,11 +86,11 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
           IsOnGrid = true;
           transform.position = position;
           transform.rotation = taskGrid.transform.rotation;
-          ProjectionLine.transform.localScale = new Vector3(ProjectionLine.transform.localScale.x, cursorGridDistance, ProjectionLine.transform.localScale.z);
+          projectionLine.transform.localScale = new Vector3(projectionLine.transform.localScale.x, cursorGridDistance, projectionLine.transform.localScale.z);
         }
       }
 
-      IsVisible = Cursor.gameObject.activeSelf && Cursor.IsVisible && IsOnGrid;
+      IsVisible = cursor.gameObject.activeSelf && cursor.IsVisible && IsOnGrid;
       SetVisible(IsVisible);
     }
 
@@ -83,6 +100,12 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
       foreach (Transform child in transform)
       {
         child.gameObject.SetActive(value);
+      }
+
+      projectionLineMesh.material = (taskGrid.IsFocused) ? triggeringProjectionLineMaterial : defaultProjectionLineMaterial;
+      foreach (var projectedCursorMesh in projectedCursorMeshs)
+      {
+        projectedCursorMesh.material = (taskGrid.IsFocused) ? triggeringProjectedCursorMeshsMaterial : defaultProjectedCursorMeshsMaterial;
       }
     }
 

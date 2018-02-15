@@ -8,10 +8,6 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
     // ICursor properties
 
     public virtual CursorType Type { get; set; }
-
-    public virtual bool IsActive { get; protected set; }
-    public virtual bool IsVisible { get; protected set; }
-
     public bool IsFinger { get { return Type != CursorType.Look; } }
     public bool IsRightHanded
     {
@@ -30,6 +26,10 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
     public bool IsPinky { get { return Type == CursorType.LeftPinky || Type == CursorType.RightPinky; } }
     public bool IsRing { get { return Type == CursorType.LeftRing || Type == CursorType.RightRing; } }
 
+    public virtual bool IsActive { get; protected set; }
+    public virtual bool IsVisible { get; protected set; }
+    public virtual bool IsTriggering { get; protected set; }
+
     // ICursor methods
 
     public virtual void SetActive(bool value)
@@ -40,6 +40,11 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
     public virtual void SetVisible(bool value)
     {
       IsVisible = value;
+    }
+
+    public virtual void SetTriggering(bool value)
+    {
+      IsTriggering = value;
     }
   }
 }
