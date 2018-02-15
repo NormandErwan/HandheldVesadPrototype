@@ -10,7 +10,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       Configure,
       ActivateTask,
-      ToggleMode
+      ToggleTaskGridMode
     }
 
     // Constructors and destructor
@@ -68,7 +68,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       {
         deviceController.ActivateTask();
       }
-      else if (type == Type.ToggleMode)
+      else if (type == Type.ToggleTaskGridMode)
       {
         deviceController.TaskGrid.SetMode(interactionMode);
       }
@@ -91,7 +91,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     protected virtual void DeviceController_SetTaskGridModeSync(TaskGrid.InteractionMode interactionMode)
     {
-      type = Type.ToggleMode;
+      type = Type.ToggleTaskGridMode;
       this.interactionMode = interactionMode;
       SendToServer();
     }

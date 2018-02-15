@@ -324,9 +324,14 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public virtual void SetMode(InteractionMode mode)
     {
+      bool select = (mode & InteractionMode.Select) == InteractionMode.Select;
+      bool pan = (mode & InteractionMode.Pan) == InteractionMode.Pan;
+      bool zoom = (mode & InteractionMode.Zoom) == InteractionMode.Zoom;
+
       Mode = mode;
-      DragToZoom = (Mode & InteractionMode.Zoom) == InteractionMode.Zoom && (Mode & InteractionMode.Pan) != InteractionMode.Pan; // If Zoom and Pan
-      SetTransformable(Mode != InteractionMode.Select); // Deactivate transformable if Select only
+      DragToZoom = zoom && !pan;
+      SetTransformable(!select && (zoom || pan));
+      SetElementsInteractables(select);
     }
 
     public virtual Container GetContainer(Item item)
