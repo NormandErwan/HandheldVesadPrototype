@@ -432,8 +432,8 @@ MonoBehaviour:
   id: 1
   name: PHONE_ONLY
   title: "T\xE9l\xE9phone seul"
-  instructions: "Utilisez l'\xE9cran tactile du t\xE9l\xE9phone pour s\xE9lectionner
-    et d\xE9placer les disques."
+  instructions: "Utilisez votre index sur l'\xE9cran tactile du t\xE9l\xE9phone pour
+    s\xE9lectionner et d\xE9placer les disques."
   useLeapInput: 0
   useTouchInput: 1
   useLookInput: 0
@@ -538,8 +538,8 @@ MonoBehaviour:
   id: 2
   name: PHONE_IN_AR_OUT
   title: "R\xE9alit\xE9 augment\xE9e, interactions sur le t\xE9l\xE9phone"
-  instructions: "Utilisez l'\xE9cran tactile du t\xE9l\xE9phone pour s\xE9lectionner
-    et d\xE9placer les disques."
+  instructions: "Utilisez votre index sur l'\xE9cran tactile du t\xE9l\xE9phone pour
+    s\xE9lectionner et d\xE9placer les disques."
   useLeapInput: 0
   useTouchInput: 1
   useLookInput: 0

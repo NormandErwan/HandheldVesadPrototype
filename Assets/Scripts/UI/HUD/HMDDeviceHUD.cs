@@ -21,15 +21,31 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
     [SerializeField]
     private Text stateInstructionsText;
 
+    // Variables
+
+    protected StateController stateController;
+    protected IVTechnique technique;
+
     // Methods
 
-    public virtual void ShowContent(bool value)
+    protected virtual void Start()
+    {
+      ShowContent(false);
+    }
+
+    public void Configure(StateController stateController)
+    {
+      this.stateController = stateController;
+      technique = stateController.GetIndependentVariable<IVTechnique>();
+    }
+
+    public void ShowContent(bool value)
     {
       progressText.gameObject.SetActive(value);
       stateTextsParent.SetActive(value);
     }
 
-    public virtual void UpdateInstructionsProgress(StateController stateController)
+    public void UpdateInstructionsProgress()
     {
       progressText.text = "État courant : " + stateController.CurrentState.Title + " - "
           + "Progression : " + (stateController.StatesProgress * 100f / stateController.StatesTotal).ToString("F1") + "%";
@@ -37,11 +53,10 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
       stateTextsParent.SetActive(true);
       stateTitleText.text = stateController.CurrentState.Title;
       stateInstructionsText.text = stateController.CurrentState.Instructions;
-    }
-
-    protected virtual void Start()
-    {
-      ShowContent(false);
+      if (stateController.CurrentState.ActivateTask)
+      {
+        stateInstructionsText.text += "\n\n" + technique.CurrentCondition.instructions;
+      }
     }
   }
 }

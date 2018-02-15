@@ -45,10 +45,12 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       base.Start();
 
       lookCursorsInput.enabled = false;
-      lookCursorsInput.TapWithRightHand = ParticipantIsRightHanded;
+      lookCursorsInput.ParticipantIsRightHanded = ParticipantIsRightHanded;
 
       leapFingerCursorsInput.Configure(maxSelectableDistance);
       leapFingerCursorsInput.enabled = false;
+
+      hmdDeviceHUD.Configure(StateController);
 
       // TODO: remove, for debug testing only
       //ParticipantIsRightHanded = true;
@@ -83,7 +85,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       base.StateController_CurrentStateUpdated(currentState);
 
       hmdDeviceHUD.ShowContent(true);
-      hmdDeviceHUD.UpdateInstructionsProgress(StateController);
+      hmdDeviceHUD.UpdateInstructionsProgress();
     }
 
     protected override void TaskGrid_Configured()
