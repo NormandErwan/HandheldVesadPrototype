@@ -145,10 +145,9 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     protected virtual void StateController_CurrentStateUpdated(State currentState)
     {
-      // Clear the grid if it changed state without being completed
       if (TaskGrid.IsConfigured && !TaskGrid.IsCompleted)
       {
-        TaskGrid.SetCompleted();
+        TaskGrid.Show(false);
       }
     }
 
