@@ -302,12 +302,12 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       ConfigureSync(gridGenerator);
     }
 
-    public virtual void Complete()
+    public void Complete()
     {
       CompleteSync();
     }
 
-    public virtual void Show(bool value)
+    public void Show(bool value)
     {
       foreach (var container in Elements)
       {
@@ -316,19 +316,15 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       background.SetActive(value);
     }
 
-    public virtual void SetMode(InteractionMode mode)
+    public void SetMode(InteractionMode mode)
     {
-      bool select = (mode & InteractionMode.Select) == InteractionMode.Select;
-      bool pan = (mode & InteractionMode.Pan) == InteractionMode.Pan;
-      bool zoom = (mode & InteractionMode.Zoom) == InteractionMode.Zoom;
-
       Mode = mode;
-      DragToZoom = zoom && !pan;
-      SetTransformable(zoom || pan);
-      SetElementsInteractables(select);
+      DragToZoom = HasMode(InteractionMode.Zoom) && !HasMode(InteractionMode.Pan);
+      SetTransformable(HasMode(InteractionMode.Zoom) || HasMode(InteractionMode.Pan));
+      SetElementsInteractables(HasMode(InteractionMode.Select));
     }
 
-    public virtual Container GetContainer(Item item)
+    public Container GetContainer(Item item)
     {
       Container parentContainer = null;
       foreach (var container in Elements)
@@ -342,7 +338,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       return parentContainer;
     }
 
-    internal virtual void SetConfiguration(GridGenerator gridGenerator)
+    internal void SetConfiguration(GridGenerator gridGenerator)
     {
       // Init the variables and properties
       GridGenerator = gridGenerator;
@@ -404,7 +400,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       Configured();
     }
 
-    internal virtual void SetCompleted()
+    internal void SetCompleted()
     {
       SetInteractable(false);
       SetElementsInteractables(false);
@@ -413,7 +409,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       Completed();
     }
 
-    internal virtual void SetItemSelected(Item item, Container container)
+    internal void SetItemSelected(Item item, Container container)
     {
       // Deselect the previous selected item
       var previousSelectedItem = selectedItem;
@@ -438,7 +434,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       }
     }
 
-    internal virtual void SetItemMoved(Container newContainer)
+    internal void SetItemMoved(Container newContainer)
     {
       // Move the selected item only if it's the container is not full
       var previousContainer = GetContainer(selectedItem);
@@ -466,7 +462,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       }
     }
 
-    protected virtual void UnsubscribeFromElementEvents()
+    protected void UnsubscribeFromElementEvents()
     {
       if (IsConfigured)
       {
@@ -481,7 +477,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       }
     }
 
-    protected virtual void Item_Focused(Item item)
+    protected void Item_Focused(Item item)
     {
       if (focusedItem != item)
       {
@@ -504,7 +500,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       }
     }
 
-    protected virtual void Item_Selected(Item item)
+    protected void Item_Selected(Item item)
     {
       if (ignoreNextItemSelected)
       {
@@ -514,7 +510,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       ItemSelectSync(item);
     }
 
-    protected virtual void Container_Focused(Container container)
+    protected void Container_Focused(Container container)
     {
       if (focusedItem != null)
       {
@@ -542,7 +538,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       }
     }
 
-    protected virtual void Container_Selected(Container container)
+    protected void Container_Selected(Container container)
     {
       if (container.IsSelected && selectedItem != null)
       {
@@ -578,8 +574,10 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       }
     }
 
-    protected virtual void SetElementsInteractables(bool value)
+    protected void SetElementsInteractables(bool value)
     {
+      value = value && HasMode(InteractionMode.Select);
+
       foreach (var container in Elements)
       {
         container.SetInteractable(value);
@@ -600,7 +598,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       }
     }
 
-    protected virtual void DefocusElements()
+    protected void DefocusElements()
     {
       foreach (var container in Elements)
       {
@@ -612,7 +610,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       }
     }
 
-    protected virtual void UpdateTransformRanges()
+    protected void UpdateTransformRanges()
     {
       var itemSize = Elements[0].ElementScale.x;
       ScaleRange.X.Minimum = ScaleRange.Y.Minimum = scaleFactor * Mathf.Max(ElementScale.x / Scale.x, ElementScale.y / Scale.y);
@@ -627,6 +625,11 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       PositionRange.Y.Minimum = -positionMax.y;
       PositionRange.Y.Maximum = positionMax.y;
       PositionRange.Z.Minimum = PositionRange.Z.Maximum = transform.localPosition.z;
+    }
+
+    protected bool HasMode(InteractionMode mode)
+    {
+      return (Mode & mode) == mode;
     }
   }
 }
