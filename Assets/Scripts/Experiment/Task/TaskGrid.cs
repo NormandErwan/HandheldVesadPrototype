@@ -177,7 +177,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public void SetFocused(bool value)
     {
-      SetElementsInteractables(true);
+      SetElementsInteractables(true); // Restore the selections when the finger has left the grid
 
       IsFocused = value;
       Focused(this);
@@ -507,6 +507,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
         ignoreNextItemSelected = false;
         return;
       }
+      SetElementsInteractables(false); // Avoid other selections before the finger has left the grid
       ItemSelectSync(item);
     }
 
@@ -559,6 +560,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
           }
 
           // Sync the item move
+          SetElementsInteractables(false); // Avoid other selections before the finger has left the grid
           ItemMoveSync(container);
 
           // Call Complete if all items are classified
