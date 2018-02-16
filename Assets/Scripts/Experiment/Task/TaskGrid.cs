@@ -620,8 +620,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       ScaleRange.Z.Minimum = ScaleRange.Z.Maximum = transform.localScale.z;
 
       // Limit the grid position to the borders of the central container
-      var bla = Vector3.Scale(ElementScale, transform.lossyScale);
-      var positionMax = (LossyScale - bla) / 2;
+      var positionMax = (LossyScale - Vector3.Scale(ElementScale, scaleFactor * Vector3.one)) / 2;
       PositionRange.X.Minimum = -positionMax.x;
       PositionRange.X.Maximum = positionMax.x;
       PositionRange.Y.Minimum = -positionMax.y;
