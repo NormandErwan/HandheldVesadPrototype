@@ -97,7 +97,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       {
         mobileDeviceHUD.ToggleButtons(mobileDeviceHUD.ActivateTaskButton.gameObject);
       }
-      else
+      else if (currentState != StateController.experimentEndState)
       {
         mobileDeviceHUD.ToggleButtons(mobileDeviceHUD.NextStateButton.gameObject);
       }
