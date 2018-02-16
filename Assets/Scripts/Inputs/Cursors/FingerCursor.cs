@@ -21,6 +21,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 
     public bool IsTracked { get; set; }
     public float MaxSelectableDistance { get; set; }
+    public float MinTransformableDistance { get; set; }
 
     // Variables
 

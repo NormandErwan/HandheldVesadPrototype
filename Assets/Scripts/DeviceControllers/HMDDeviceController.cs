@@ -1,6 +1,7 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.States;
 using NormandErwan.MasterThesis.Experiment.Experiment.Task;
 using NormandErwan.MasterThesis.Experiment.Inputs;
+using NormandErwan.MasterThesis.Experiment.Inputs.Cursors;
 using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using NormandErwan.MasterThesis.Experiment.UI.HUD;
 using UnityEngine;
@@ -11,7 +12,8 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
   {
     // Constants
 
-    protected float maxSelectableDistance = 0f; // TaskGrid mode toggles between select and transform (drag, zoom)
+    protected const float minTransformableDistance = FingerCursorTriggerITappable.defaultMaxCursorDistance;
+    protected const float maxSelectableDistance = 0.01f;
 
     // Editor fields
 
@@ -47,7 +49,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       lookCursorsInput.enabled = false;
       lookCursorsInput.ParticipantIsRightHanded = ParticipantIsRightHanded;
 
-      leapFingerCursorsInput.Configure(maxSelectableDistance);
+      leapFingerCursorsInput.Configure(minTransformableDistance, maxSelectableDistance);
       leapFingerCursorsInput.enabled = false;
 
       hmdDeviceHUD.Configure(StateController);

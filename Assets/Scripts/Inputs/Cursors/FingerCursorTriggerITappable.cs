@@ -57,7 +57,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 
     protected override bool IsValid(ITappable tappable)
     {
-      return base.IsValid(tappable) && tappable.IsTappable;
+      return tappable.IsTappable && base.IsValid(tappable);
     }
   }
 }

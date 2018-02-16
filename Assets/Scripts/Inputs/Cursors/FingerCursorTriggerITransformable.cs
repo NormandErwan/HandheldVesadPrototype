@@ -43,13 +43,6 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
       ClearCursor(transformable);
     }
 
-    protected Vector3 Project(ITransformable transformable, Vector3 position)
-    {
-      float distanceToGrid = Vector3.Dot(position - transformable.Transform.position, -transformable.Transform.forward);
-      var projection = position + distanceToGrid * transformable.Transform.forward;
-      return Quaternion.Inverse(transformable.Transform.rotation) * projection;
-    }
-
     protected Vector3 ClampTranslation(ITransformable transformable, Vector3 translation)
     {
       Vector3 clampedTranslation = Vector3.zero;

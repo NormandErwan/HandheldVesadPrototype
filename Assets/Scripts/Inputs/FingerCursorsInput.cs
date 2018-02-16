@@ -27,10 +27,11 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     // Methods
 
-    public virtual void Configure(float maxSelectableDistance)
+    public virtual void Configure(float minTransformableDistance, float maxSelectableDistance)
     {
       foreach (var cursor in Cursors)
       {
+        cursor.Value.MinTransformableDistance = minTransformableDistance;
         cursor.Value.MaxSelectableDistance = maxSelectableDistance;
       }
     }

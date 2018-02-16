@@ -7,9 +7,14 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 {
   public abstract class FingerCursorTriggerISelectable<T> : CursorTriggerIInteractable<T, FingerCursor> where T : ISelectable
   {
+    // Constants
+
+    public const float defaultMaxCursorDistance = 0.002f; // in meters
+
     // Variables
 
     protected Dictionary<T, float> selectionTimers = new Dictionary<T, float>();
+    protected Dictionary<T, Vector3> cursorEnterPositions = new Dictionary<T, Vector3>();
     private SortedDictionary<int, List<T>> selected = new SortedDictionary<int, List<T>>(new DescendingComparer<int>());
 
     // Methods
@@ -29,6 +34,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
       else if (!selectionTimers.ContainsKey(selectable))
       {
         selectionTimers.Add(selectable, Time.time);
+        cursorEnterPositions.Add(selectable, Project(selectable, Cursor.transform.position));
       }
     }
 
@@ -44,7 +50,13 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 
     protected virtual bool IsValid(T selectable)
     {
-      return selectable.IsInteractable && selectable.IsSelectable;
+      bool valid = selectable.IsInteractable && selectable.IsSelectable;
+      if (cursorEnterPositions.ContainsKey(selectable))
+      {
+        var cursorDistance = (Project(selectable, Cursor.transform.position) - cursorEnterPositions[selectable]).magnitude;
+        valid = valid && (cursorDistance < Cursor.MaxSelectableDistance);
+      }
+      return valid;
     }
 
     protected void ClearCursorTimer(T selectable)
@@ -52,12 +64,13 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
       if (selectionTimers.ContainsKey(selectable))
       {
         selectionTimers.Remove(selectable);
+        cursorEnterPositions.Remove(selectable);
       }
     }
 
     protected void SetSelected(T selectable)
     {
-      selectionTimers.Remove(selectable);
+      ClearCursorTimer(selectable);
 
       if (!selected.ContainsKey(selectable.Priority))
       {

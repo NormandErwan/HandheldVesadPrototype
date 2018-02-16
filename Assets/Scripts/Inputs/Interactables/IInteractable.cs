@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Inputs.Interactables
 {
@@ -9,6 +10,8 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Interactables
     bool IsInteractable { get; }
     int Priority { get; }
     IInteractable Parent { get; }
+
+    Transform Transform { get; }
 
     // Events
 

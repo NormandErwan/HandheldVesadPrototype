@@ -1,6 +1,5 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Utilities;
 using System;
-using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Inputs.Interactables
 {
@@ -11,7 +10,6 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Interactables
     bool IsTransformable { get; }
     bool IsTransforming { get; }
 
-    Transform Transform { get; }
     GenericVector3<Range<float>> PositionRange { get; }
 
     // Events

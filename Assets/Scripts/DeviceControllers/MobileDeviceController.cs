@@ -4,6 +4,7 @@ using NormandErwan.MasterThesis.Experiment.UI.HUD;
 using UnityEngine;
 using System.Collections;
 using NormandErwan.MasterThesis.Experiment.Experiment.Task;
+using NormandErwan.MasterThesis.Experiment.Inputs.Cursors;
 
 namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 {
@@ -16,10 +17,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
     [SerializeField]
     private TouchFingerCursorsInput touchFingerCursorsInput;
-
-    [SerializeField]
-    [Range(0f, 0.05f)]
-    private float maxSelectableDistance = 0.001f;
 
     [SerializeField]
     private new Camera camera;
@@ -37,7 +34,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       camera.orthographic = true;
       camera.orthographicSize = 0.5f * TaskGrid.transform.localScale.y * (TaskGrid.ElementScale.y + TaskGrid.ElementMargin.y);
 
-      touchFingerCursorsInput.Configure(maxSelectableDistance);
+      touchFingerCursorsInput.Configure(FingerCursorTriggerITappable.defaultMaxCursorDistance, FingerCursorTriggerITappable.defaultMaxCursorDistance);
       touchFingerCursorsInput.enabled = false;
 
       mobileDeviceHUD.ActivateTaskButtonPressed += MobileDeviceHUD_ActivateTaskButtonPressed;

@@ -23,7 +23,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
 
     protected override bool IsValid(ILongPressable longPressable)
     {
-      return base.IsValid(longPressable) && longPressable.IsLongPressable;
+      return longPressable.IsLongPressable && base.IsValid(longPressable);
     }
   }
 }

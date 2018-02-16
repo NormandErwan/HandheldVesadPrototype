@@ -27,6 +27,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public int Priority { get { return interactablePriority; } }
     public IInteractable Parent { get; set; }
+    public Transform Transform { get { return transform; } }
 
     public bool IsInteractable { get; protected set; }
 

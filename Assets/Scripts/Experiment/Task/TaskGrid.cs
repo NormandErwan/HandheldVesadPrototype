@@ -28,7 +28,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     // Constants
 
-    protected int gridGenerationMaxNumber = 1000;
+    protected int gridGenerationMaxNumber = 10000;
 
     // Editor fields
 
@@ -620,7 +620,8 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       ScaleRange.Z.Minimum = ScaleRange.Z.Maximum = transform.localScale.z;
 
       // Limit the grid position to the borders of the central container
-      var positionMax = (LossyScale - Vector3.Scale(ElementScale, transform.lossyScale)) / 2;
+      var bla = Vector3.Scale(ElementScale, transform.lossyScale);
+      var positionMax = (LossyScale - bla) / 2;
       PositionRange.X.Minimum = -positionMax.x;
       PositionRange.X.Maximum = positionMax.x;
       PositionRange.Y.Minimum = -positionMax.y;
