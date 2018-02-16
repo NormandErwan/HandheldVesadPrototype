@@ -208,7 +208,7 @@ MonoBehaviour:
   experimentEndState: {fileID: 114855766242606984}
   taskTrainingState: {fileID: 114429863715970740}
   taskTrialState: {fileID: 114661546425955246}
-  TrialsPerCondition: 1
+  TrialsPerCondition: 2
   independentVariables:
   - {fileID: 0}
   - {fileID: 0}
