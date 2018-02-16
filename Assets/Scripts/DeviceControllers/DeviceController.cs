@@ -77,6 +77,13 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
         OnActivateTaskSync();
         TaskGrid.Configure();
       }
+      if (Input.GetKeyUp(KeyCode.S))
+      {
+        if (TaskGrid.IsConfigured)
+        {
+          TaskGrid.SetCompleted();
+        }
+      }
       if (Input.GetKeyUp(KeyCode.Space))
       {
         if (TaskGrid.IsConfigured)

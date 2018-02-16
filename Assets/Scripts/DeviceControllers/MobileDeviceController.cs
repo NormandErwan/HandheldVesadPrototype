@@ -75,7 +75,8 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
 
       if (technique.CurrentCondition.useLeapInput)
       {
-        mobileDeviceHUD.ToggleButtons(mobileDeviceHUD.TaskGridButtons);
+        mobileDeviceHUD.ToggleButtons(mobileDeviceHUD.TaskGridButtonParent);
+        mobileDeviceHUD.SetActiveTaskModeButton(TaskGrid.Mode);
       }
       if (technique.CurrentCondition.useTouchInput)
       {

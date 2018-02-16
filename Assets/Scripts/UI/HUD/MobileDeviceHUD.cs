@@ -1,5 +1,6 @@
 ﻿using NormandErwan.MasterThesis.Experiment.Experiment.Task;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,7 +17,7 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
     private Button nextStateButton;
 
     [SerializeField]
-    private GameObject taskGridButtons;
+    private GameObject taskGridButtonsParent;
 
     [SerializeField]
     private Button taskGridSelectModeButton;
@@ -32,7 +33,7 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
     public Button ActivateTaskButton { get { return activateTaskButton; } set { activateTaskButton = value; } }
     public Button NextStateButton { get { return nextStateButton; } set { nextStateButton = value; } }
 
-    public GameObject TaskGridButtons { get { return taskGridButtons; } set { taskGridButtons = value; } }
+    public GameObject TaskGridButtonParent { get { return taskGridButtonsParent; } set { taskGridButtonsParent = value; } }
     public Button TaskGridSelectModeButton { get { return taskGridSelectModeButton; } set { taskGridSelectModeButton = value; } }
     public Button TaskGridPanModeButton { get { return taskGridPanModeButton; } set { taskGridPanModeButton = value; } }
     public Button TaskGridZoomModeButton { get { return taskGridZoomModeButton; } set { taskGridZoomModeButton = value; } }
@@ -45,14 +46,16 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
 
     // Variables
 
-    protected Button[] taskGridButtonsList;
+    protected Dictionary<TaskGrid.InteractionMode, Button> taskGridButtons = new Dictionary<TaskGrid.InteractionMode, Button>();
     protected Color taskGridButtonNormalColor;
 
     // MonoBehaviour methods
 
-    protected virtual void Start()
+    protected void Start()
     {
-      taskGridButtonsList = new Button[] { TaskGridSelectModeButton, TaskGridPanModeButton, TaskGridZoomModeButton };
+      taskGridButtons.Add(TaskGrid.InteractionMode.Select, TaskGridSelectModeButton);
+      taskGridButtons.Add(TaskGrid.InteractionMode.Pan, TaskGridPanModeButton);
+      taskGridButtons.Add(TaskGrid.InteractionMode.Zoom, TaskGridZoomModeButton);
       taskGridButtonNormalColor = TaskGridSelectModeButton.colors.normalColor;
 
       ActivateTaskButton.onClick.AddListener(activateTaskButton_onClick);
@@ -64,7 +67,7 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
       HideAllButtons();
     }
 
-    protected virtual void OnDestroy()
+    protected void OnDestroy()
     {
       ActivateTaskButton.onClick.RemoveListener(activateTaskButton_onClick);
       NextStateButton.onClick.RemoveListener(nextStateButtonButton_onClick);
@@ -75,17 +78,27 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
 
     // Methods
 
-    public virtual void HideAllButtons()
+    public void HideAllButtons()
     {
       ActivateTaskButton.gameObject.SetActive(false);
       NextStateButton.gameObject.SetActive(false);
-      taskGridButtons.gameObject.SetActive(false);
+      taskGridButtonsParent.gameObject.SetActive(false);
     }
 
-    public virtual void ToggleButtons(GameObject button)
+    public void ToggleButtons(GameObject button)
     {
       HideAllButtons();
       button.SetActive(true);
+    }
+
+    public void SetActiveTaskModeButton(TaskGrid.InteractionMode interactionMode)
+    {
+      foreach (var taskGridButton in taskGridButtons)
+      {
+        var colors = taskGridButton.Value.colors;
+        colors.normalColor = (taskGridButton.Key == interactionMode) ? taskGridButton.Value.colors.pressedColor : taskGridButtonNormalColor;
+        taskGridButton.Value.colors = colors;
+      }
     }
 
     protected virtual void activateTaskButton_onClick()
@@ -100,30 +113,20 @@ namespace NormandErwan.MasterThesis.Experiment.UI.HUD
 
     protected virtual void selectModeButton_onClick()
     {
-      UpdateTaskGridButtonBackgrounds(TaskGridSelectModeButton);
+      SetActiveTaskModeButton(TaskGrid.InteractionMode.Select);
       TaskGridModeButtonPressed(TaskGrid.InteractionMode.Select);
     }
 
     protected virtual void panModeButton_onClick()
     {
-      UpdateTaskGridButtonBackgrounds(TaskGridPanModeButton);
+      SetActiveTaskModeButton(TaskGrid.InteractionMode.Pan);
       TaskGridModeButtonPressed(TaskGrid.InteractionMode.Pan);
     }
 
     protected virtual void zoomModeButton_onClick()
     {
-      UpdateTaskGridButtonBackgrounds(TaskGridZoomModeButton);
+      SetActiveTaskModeButton(TaskGrid.InteractionMode.Zoom);
       TaskGridModeButtonPressed(TaskGrid.InteractionMode.Zoom);
-    }
-
-    protected virtual void UpdateTaskGridButtonBackgrounds(Button activatedButton)
-    {
-      foreach (var taskGridButton in taskGridButtonsList)
-      {
-        var colors = taskGridButton.colors;
-        colors.normalColor = (taskGridButton == activatedButton) ? taskGridButton.colors.pressedColor : taskGridButtonNormalColor;
-        taskGridButton.colors = colors;
-      }
     }
   }
 }
