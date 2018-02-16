@@ -7,7 +7,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs.Cursors
   {
     // Constants
 
-    public static readonly float longPressMinTime = 0.5f; // in seconds
+    public const float longPressMinTime = 0.5f; // in seconds
 
     // Methods
 
