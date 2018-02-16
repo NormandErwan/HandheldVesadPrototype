@@ -58,7 +58,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
 
     public virtual void Configure()
     {
-      centerMask.transform.localScale = Vector3.Scale(taskGrid.ElementScale, taskGrid.transform.lossyScale) + maskScale;
+      centerMask.transform.localScale = Vector3.Scale(taskGrid.ElementScale + taskGrid.ElementMargin, taskGrid.transform.lossyScale) + maskScale;
       for (int i = 0; i < sideMasks.Length; i++)
       {
         sideMasks[i].transform.localPosition = Vector3.Scale((i / 2 == 0 ? 1 : -1) * sideMasksPositions[i % 2], taskGrid.LossyScale) + maskPositionOffset;
