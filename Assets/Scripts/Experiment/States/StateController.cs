@@ -179,7 +179,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.States
           TrialsProgress++;
           CurrentTrial = 1;
         }
-        else if (PreviousState.Id != taskTrainingState.Id)
+        else if (PreviousState.Id == taskTrialState.Id)
         {
           TrialsProgress++;
           CurrentTrial++;
