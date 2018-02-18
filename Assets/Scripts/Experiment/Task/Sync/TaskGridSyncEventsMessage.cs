@@ -10,9 +10,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
     {
       Completed,
       SetDragging,
-      Dragged,
       SetZooming,
-      Zoomed,
       ItemSelected,
       ItemMoved
     };
@@ -23,14 +21,12 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
     {
       TaskGrid = taskGrid;
       SendToServer = sendToServer;
+      ReadyToSend = false;
 
       TaskGrid.CompleteSync += TaskGrid_CompleteSync;
 
       TaskGrid.SetDraggingSync += TaskGrid_SetDraggingSync;
-      TaskGrid.DragSync += TaskGrid_DragSync;
-
       TaskGrid.SetZoomingSync += TaskGrid_SetZoomingSync;
-      TaskGrid.ZoomSync += TaskGrid_ZoomSync;
 
       TaskGrid.ItemSelectSync += TaskGrid_ItemSelectSync;
       TaskGrid.ItemMoveSync += TaskGrid_ItemMoveSync;
@@ -45,10 +41,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       TaskGrid.CompleteSync -= TaskGrid_CompleteSync;
 
       TaskGrid.SetDraggingSync -= TaskGrid_SetDraggingSync;
-      TaskGrid.DragSync -= TaskGrid_DragSync;
-
       TaskGrid.SetZoomingSync -= TaskGrid_SetZoomingSync;
-      TaskGrid.ZoomSync -= TaskGrid_ZoomSync;
 
       TaskGrid.ItemSelectSync -= TaskGrid_ItemSelectSync;
       TaskGrid.ItemMoveSync -= TaskGrid_ItemMoveSync;
@@ -58,6 +51,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 
     public override int SenderConnectionId { get { return senderConnectionId; } set { senderConnectionId = value; } }
     public override short MessageType { get { return MasterThesis.Experiment.MessageType.GridEvents; } }
+    public bool ReadyToSend { get; protected set; }
 
     protected TaskGrid TaskGrid { get; private set; }
     protected Action SendToServer { get; private set; }
@@ -87,17 +81,9 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
       {
         taskGrid.SetDragged(isDragging);
       }
-      else if (gridEvent == GridEvent.Dragged)
-      {
-        taskGrid.SetDragged(translation);
-      }
       else if (gridEvent == GridEvent.SetZooming)
       {
         taskGrid.SetZoomed(isZooming);
-      }
-      else if (gridEvent == GridEvent.Zoomed)
-      {
-        taskGrid.SetZoomed(scaling, translation);
       }
       else
       {
@@ -126,37 +112,18 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
     {
       this.isDragging = isDragging;
       gridEvent = GridEvent.SetDragging;
-      SendToServer();
+      ReadyToSend = true;
 
       TaskGrid.SetDragged(isDragging);
-    }
-
-    protected virtual void TaskGrid_DragSync(Vector3 translation)
-    {
-      this.translation = translation;
-      gridEvent = GridEvent.Dragged;
-      SendToServer();
-
-      TaskGrid.SetDragged(translation);
     }
 
     protected virtual void TaskGrid_SetZoomingSync(bool isZooming)
     {
       this.isZooming = isZooming;
       gridEvent = GridEvent.SetZooming;
-      SendToServer();
+      ReadyToSend = true;
 
       TaskGrid.SetZoomed(isZooming);
-    }
-
-    protected virtual void TaskGrid_ZoomSync(Vector3 scaling, Vector3 translation)
-    {
-      this.scaling = scaling;
-      this.translation = translation;
-      gridEvent = GridEvent.Zoomed;
-      SendToServer();
-
-      TaskGrid.SetZoomed(scaling, translation);
     }
 
     protected virtual void TaskGrid_ItemSelectSync(Item item)

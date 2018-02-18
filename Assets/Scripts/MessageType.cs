@@ -31,7 +31,11 @@ namespace NormandErwan.MasterThesis.Experiment
 
     public static short GridEvents { get { return (short)(Smallest + 5); } }
 
-    public static short ProjectedCursors { get { return (short)(Smallest + 6); } }
+    public static short GridDrag { get { return (short)(Smallest + 6); } }
+
+    public static short GridZoom { get { return (short)(Smallest + 7); } }
+
+    public static short ProjectedCursors { get { return (short)(Smallest + 8); } }
 
     /// <summary>
     /// See <see cref="DevicesSyncUnity.Messages.MessageType.Highest"/>.
@@ -47,8 +51,10 @@ namespace NormandErwan.MasterThesis.Experiment
       { IndependentVariables, "IndependentVariables" },
       { DeviceController, "DeviceController" },
       { GridConfigure, "GridConfigure" },
+      { GridEvents, "GridEvents" },
+      { GridDrag, "GridDrag" },
+      { GridZoom, "GridZoom" },
       { ProjectedCursors, "ProjectedCursors" },
-      { GridEvents, "GridEvents" }
     };
 
     // Methods
