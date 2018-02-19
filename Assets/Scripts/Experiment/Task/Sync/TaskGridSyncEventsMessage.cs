@@ -21,7 +21,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
     {
       TaskGrid = taskGrid;
       SendToServer = sendToServer;
-      ReadyToSend = false;
 
       TaskGrid.CompleteSync += TaskGrid_CompleteSync;
 
@@ -51,7 +50,6 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
 
     public override int SenderConnectionId { get { return senderConnectionId; } set { senderConnectionId = value; } }
     public override short MessageType { get { return MasterThesis.Experiment.MessageType.GridEvents; } }
-    public bool ReadyToSend { get; protected set; }
 
     protected TaskGrid TaskGrid { get; private set; }
     protected Action SendToServer { get; private set; }
@@ -112,7 +110,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
     {
       this.isDragging = isDragging;
       gridEvent = GridEvent.SetDragging;
-      ReadyToSend = true;
+      SendToServer();
 
       TaskGrid.SetDragged(isDragging);
     }
@@ -121,7 +119,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task.Sync
     {
       this.isZooming = isZooming;
       gridEvent = GridEvent.SetZooming;
-      ReadyToSend = true;
+      SendToServer();
 
       TaskGrid.SetZoomed(isZooming);
     }
