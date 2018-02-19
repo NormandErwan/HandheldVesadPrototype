@@ -13,13 +13,26 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
     protected bool itemSelected, itemDeselected, itemMoved, itemClassified;
     protected Container selectedContainer;
     protected Item selectedItem;
-    protected bool panning, zooming;
+    protected bool panningActivated, panning, zoomingActivated, zooming;
     protected Vector3 panningTranslation, zoomingTranslation;
-    protected Vector3 zoomingScaling = Vector3.one;
+    protected Vector3 zoomingScaling;
 
     // MonoBehaviour methods
 
-    protected virtual void LateUpdate()
+    protected override void Awake()
+    {
+      base.Awake();
+
+      ResetTaskGridEvents();
+      ResetPanning();
+      ResetZooming();
+
+      selectedItem = null;
+      selectedContainer = null;
+      panningActivated = zoomingActivated = false;
+    }
+
+    protected void LateUpdate()
     {
       if (IsConfigured && stateController.CurrentState == stateController.taskTrialState)
       {
@@ -50,9 +63,11 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         AddToRow((int)taskGrid.Mode);
         AddToRow(GetTaskGridModeName());
 
+        AddToRow(panningActivated);
         AddToRow(panning);
         AddToRow(panningTranslation);
 
+        AddToRow(zoomingActivated);
         AddToRow(zooming);
         AddToRow(zoomingScaling);
         AddToRow(zoomingTranslation);
@@ -83,24 +98,9 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
 
         WriteRow();
 
-        if (itemMoved || itemClassified)
-        {
-          selectedItem = null;
-          selectedContainer = null;
-        }
-        itemSelected = itemDeselected = itemMoved = itemClassified = false;
-
-        if (panning)
-        {
-          panning = false;
-          panningTranslation = Vector3.zero;
-        }
-        if (zooming)
-        {
-          zooming = false;
-          zoomingScaling = Vector3.one;
-          zoomingTranslation = Vector3.zero;
-        }
+        ResetTaskGridEvents();
+        ResetPanning();
+        ResetZooming();
       }
     }
 
@@ -125,10 +125,10 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         "grid_mode", "grid_mode_name"
       });
 
-      Columns.Add("panning");
+      Columns.AddRange(new string[] { "panningActivated", "panning" });
       AddVector3ToColumns("panning_translation");
 
-      Columns.Add("zooming");
+      Columns.AddRange(new string[] { "zoomingActivated", "zooming" });
       AddVector3ToColumns("zooming_scaling");
       AddVector3ToColumns("zooming_translation");
 
@@ -184,20 +184,40 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       selectedItem = item;
     }
 
+    protected override void TaskGrid_DraggingStarted(IDraggable grid)
+    {
+      panningActivated = true;
+    }
+
     protected override void TaskGrid_Dragging(IDraggable grid, Vector3 translation)
     {
       panning = true;
-      panningTranslation = translation;
+      panningTranslation += translation;
+    }
+
+    protected override void TaskGrid_DraggingStopped(IDraggable grid)
+    {
+      panningActivated = false;
+    }
+
+    protected override void TaskGrid_ZoomingStarted(IZoomable grid)
+    {
+      zoomingActivated = true;
     }
 
     protected override void TaskGrid_Zooming(IZoomable grid, Vector3 scaling, Vector3 translation)
     {
       zooming = true;
-      zoomingScaling = scaling;
-      zoomingTranslation = translation;
+      zoomingScaling = Vector3.Scale(zoomingScaling, scaling);
+      zoomingTranslation += translation;
     }
 
-    protected virtual void AddToRow(Container container)
+    protected override void TaskGrid_ZoomingStopped(IZoomable grid)
+    {
+      zoomingActivated = false;
+    }
+
+    protected void AddToRow(Container container)
     {
       if (container == null)
       {
@@ -210,12 +230,12 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
       }
     }
 
-    protected virtual void AddToRow(Item item)
+    protected void AddToRow(Item item)
     {
       AddToRow((item == null) ? "" : selectedContainer.Elements.IndexOf(item).ToString());
     }
 
-    protected virtual string GetTaskGridModeName()
+    protected string GetTaskGridModeName()
     {
       switch (taskGrid.Mode)
       {
@@ -223,6 +243,35 @@ namespace NormandErwan.MasterThesis.Experiment.Loggers
         case TaskGrid.InteractionMode.Pan: return "pan";
         case TaskGrid.InteractionMode.Zoom: return "zoom";
         default: return "all"; // Possibilities are only one mode activated or all of them
+      }
+    }
+
+    protected void ResetTaskGridEvents()
+    {
+      if (itemMoved || itemClassified)
+      {
+        selectedItem = null;
+        selectedContainer = null;
+      }
+      itemSelected = itemDeselected = itemMoved = itemClassified = false;
+    }
+
+    protected void ResetPanning()
+    {
+      if (panning)
+      {
+        panning = false;
+        panningTranslation = Vector3.zero;
+      }
+    }
+
+    protected void ResetZooming()
+    {
+      if (zooming)
+      {
+        zooming = false;
+        zoomingScaling = Vector3.one;
+        zoomingTranslation = Vector3.zero;
       }
     }
   }
