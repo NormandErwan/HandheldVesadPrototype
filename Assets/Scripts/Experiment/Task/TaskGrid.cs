@@ -4,6 +4,7 @@ using NormandErwan.MasterThesis.Experiment.Inputs.Interactables;
 using NormandErwan.MasterThesis.Experiment.UI.Grid;
 using NormandErwan.MasterThesis.Experiment.Utilities;
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
@@ -302,8 +303,10 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
       ConfigureSync(gridGenerator);
     }
 
-    public void Complete()
+    protected IEnumerator Complete()
     {
+      yield return new WaitForSeconds(3f);
+
       CompleteSync();
     }
 
