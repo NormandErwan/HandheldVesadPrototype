@@ -70,7 +70,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     {
       base.Configure(participantId, conditionsOrdering, participantIsRightHanded);
 
-      ParticipantIsRightHanded = true;
       lookCursorsInput.ParticipantIsRightHanded = ParticipantIsRightHanded;
       arucoLeapCalibration.ParticipantIsRightHanded = ParticipantIsRightHanded;
     }
