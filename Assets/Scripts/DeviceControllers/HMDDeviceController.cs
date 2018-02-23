@@ -36,9 +36,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     [SerializeField]
     private Renderer leftLeapHand;
 
-    [SerializeField]
-    private ArucoLeapCalibration arucoLeapCalibration;
-
     // Properties
 
     public override FingerCursorsInput FingerCursorsInput { get { return leapFingerCursorsInput; } }
@@ -55,8 +52,6 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
       leapFingerCursorsInput.TaskGrid = TaskGrid.transform;
       leapFingerCursorsInput.enabled = false;
 
-      arucoLeapCalibration.LeapFingerCursorsInput = leapFingerCursorsInput;
-
       hmdDeviceHUD.Configure(StateController);
 
       // TODO: remove, for debug testing only
@@ -69,9 +64,7 @@ namespace NormandErwan.MasterThesis.Experiment.DeviceControllers
     public override void Configure(int participantId, int conditionsOrdering, bool participantIsRightHanded)
     {
       base.Configure(participantId, conditionsOrdering, participantIsRightHanded);
-
       lookCursorsInput.ParticipantIsRightHanded = ParticipantIsRightHanded;
-      arucoLeapCalibration.ParticipantIsRightHanded = ParticipantIsRightHanded;
     }
 
     public override void ActivateTask()
