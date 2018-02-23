@@ -2349,10 +2349,10 @@ MonoBehaviour:
   _unlockHold: 303
   _moreRewind: 276
   _lessRewind: 275
-  _allowManualDeviceOffset: 0
-  _deviceOffsetYAxis: 0
-  _deviceOffsetZAxis: 0.12
-  _deviceTiltXAxis: 5
+  _allowManualDeviceOffset: 1
+  _deviceOffsetYAxis: -0.22
+  _deviceOffsetZAxis: 0.07
+  _deviceTiltXAxis: -30
 --- !u!114 &114968988554676000
 MonoBehaviour:
   m_ObjectHideFlags: 1
