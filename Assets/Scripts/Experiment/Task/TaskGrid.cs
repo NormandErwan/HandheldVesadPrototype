@@ -569,7 +569,7 @@ namespace NormandErwan.MasterThesis.Experiment.Experiment.Task
           // Call Complete if all items are classified
           if (RemainingItemsToClassify == 0)
           {
-            Complete();
+            StartCoroutine(Complete());
           }
         }
         else
