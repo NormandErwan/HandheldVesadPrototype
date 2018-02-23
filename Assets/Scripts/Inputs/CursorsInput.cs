@@ -37,10 +37,14 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
 
     public virtual void DeactivateCursors()
     {
-      foreach (var cursor in Cursors)
+      foreach (var cursorKeyValue in Cursors)
       {
-        cursor.Value.SetVisible(false);
-        cursor.Value.transform.position = new Vector3(cursor.Value.transform.position.x, cursor.Value.transform.position.y, -10); // keep the cursor far away if not visible to activate OnTriggerExit
+        var cursor = cursorKeyValue.Value;
+        if (!cursor.IsVisible)
+        {
+          cursor.SetVisible(false);
+          cursor.transform.position = new Vector3(cursor.transform.position.x, cursor.transform.position.y, -10); // keep the cursor far away if not visible to activate OnTriggerExit
+        }
       }
     }
 
