@@ -16,14 +16,10 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
     [SerializeField]
     private bool useStabilizedPositions;
 
-    [SerializeField]
-    private Vector3 cursorsPositionOffset = Vector3.zero;
-
     // Properties
 
     public LeapServiceProvider LeapServiceProvider { get { return leapServiceProvider; } set { leapServiceProvider = value; } }
     public bool UseStabilizedPositions { get { return useStabilizedPositions; } set { useStabilizedPositions = value; } }
-    public Vector3 CursorsPositionOffset { get { return cursorsPositionOffset; } set { cursorsPositionOffset = value; } }
     public Transform TaskGrid { get; set; }
 
     // Methods
@@ -39,8 +35,7 @@ namespace NormandErwan.MasterThesis.Experiment.Inputs
           FingerCursor cursor;
           if (Cursors.TryGetValue(cursorType, out cursor))
           {
-            cursor.transform.position = (UseStabilizedPositions ? finger.StabilizedTipPosition : finger.TipPosition).ToVector3() 
-              + (Quaternion.Inverse(TaskGrid.rotation) * CursorsPositionOffset);
+            cursor.transform.position = (UseStabilizedPositions ? finger.StabilizedTipPosition : finger.TipPosition).ToVector3();
             cursor.transform.forward = finger.Direction.ToVector3();
             cursor.transform.localScale = finger.Width * Vector3.one;
 
